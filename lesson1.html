@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lesson 1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        :root {
+          --ink: #1a1a2e;
+          --ink-soft: #3d3d5c;
+          --paper: #f7f5f0;
+          --paper-dark: #ede9e0;
+          --accent: #c0392b;
+          --accent-light: #e74c3c;
+          --gold: #d4a017;
+          --teal: #1a6b72;
+          --teal-light: #2a9d8f;
+          --warm-grey: #8c8476;
+          --border: #d4cfc6;
+          --white: #ffffff;
+          --phase-1: #2c3e6b;
+          --phase-2: #1a6b72;
+          --phase-3: #6b4226;
+          --phase-4: #3d6b2c;
+          --phase-5: #6b2c5a;
+        }
+      
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+        body {
+          font-family: 'DM Sans', sans-serif;
+          background: var(--paper);
+          color: var(--ink);
+          line-height: 1.6;
+        }
+      
+        /* ── HEADER ── */
+        .header {
+          background: var(--ink);
+          color: var(--white);
+          padding: 48px 40px 40px;
+          position: relative;
+          overflow: hidden;
+        }
+        .header::before {
+          content: '';
+          position: absolute;
+          top: -60px; right: -60px;
+          width: 280px; height: 280px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(192,57,43,0.25) 0%, transparent 70%);
+        }
+        .header::after {
+          content: '';
+          position: absolute;
+          bottom: -40px; left: 20%;
+          width: 180px; height: 180px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(26,107,114,0.2) 0%, transparent 70%);
+        }
+        .header-inner { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+        .header h1 {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(36px, 5vw, 58px);
+          font-weight: 900;
+          line-height: 1.05;
+          margin-bottom: 16px;
+        }
+        .header h1 em {
+          font-style: italic;
+          color: var(--accent-light);
+        }
+        .header-meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 24px;
+          margin-top: 24px;
+          padding-top: 24px;
+          border-top: 1px solid rgba(255,255,255,0.12);
+        }
+        .meta-chip {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          color: rgba(255,255,255,0.7);
+        }
+        .meta-chip .dot {
+          width: 6px; height: 6px;
+          border-radius: 50%;
+          background: var(--gold);
+          flex-shrink: 0;
+        }
+        .meta-chip strong { color: var(--white); }
+
+        /* ── OBJECTIVES BOX ── */
+  .objectives-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 40px;
+  }
+  .objectives-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 4px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 600px) {
+    .objectives-box { grid-template-columns: 1fr; }
+    .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; }
+  }
+  .obj-col h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--warm-grey);
+    margin-bottom: 10px;
+  }
+  .obj-list { list-style: none; }
+  .obj-list li {
+    font-size: 14px;
+    padding: 5px 0;
+    padding-left: 18px;
+    position: relative;
+    color: var(--ink-soft);
+    border-bottom: 1px dotted var(--border);
+  }
+  .obj-list li:last-child { border-bottom: none; }
+  .obj-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--teal-light);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+  }
+
+  /* ── PHASE ── */
+  .phase {
+    margin-bottom: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--white);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .phase-header {
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+  .phase-header::after {
+    content: '▾';
+    position: absolute;
+    right: 20px;
+    font-size: 18px;
+    color: rgba(255,255,255,0.6);
+    transition: transform 0.3s;
+  }
+  .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+
+  .phase-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    background: rgba(255,255,255,0.18);
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+  }
+  .phase-title-wrap {}
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .phase-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 2px;
+  }
+  .phase-body {
+    padding: 0 24px 24px;
+  }
+  .phase.collapsed .phase-body { display: none; }
+
+  /* phase colors */
+  .phase-1 .phase-header { background: var(--phase-1); }
+  .phase-2 .phase-header { background: var(--phase-2); }
+  .phase-3 .phase-header { background: var(--phase-3); }
+  .phase-4 .phase-header { background: var(--phase-4); }
+  .phase-5 .phase-header { background: var(--phase-5); }
+
+
+  /* ── ACTIVITY CARD ── */
+  .activity {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-top: 16px;
+    overflow: hidden;
+  }
+  .activity-head {
+    background: var(--paper);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .activity-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .activity-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .activity-src {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--warm-grey);
+    background: var(--paper-dark);
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .activity-time-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: var(--ink);
+    color: var(--white);
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .activity-body { padding: 16px; }
+
+  /* ── TEACHER SAYS / SCRIPT ── */
+  .teacher-says {
+    background: #eef4fb;
+    border-left: 3px solid #5b8dd9;
+    border-radius: 0 4px 4px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .teacher-says .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #5b8dd9;
+    margin-bottom: 6px;
+  }
+  .teacher-says p { color: var(--ink-soft); line-height: 1.6; }
+  .teacher-says em { font-style: italic; color: var(--ink); }
+
+  /* ── STUDENT RESPONSE ── */
+  .student-says {
+    background: #edf7f0;
+    border-left: 3px solid var(--teal-light);
+    border-radius: 0 4px 4px 0;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 14px;
+  }
+  .student-says .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 6px;
+  }
+
+  /* ── VOCAB TABLE ── */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0;
+  }
+  .vocab-table th {
+    background: var(--ink);
+    color: var(--white);
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table tr:nth-child(even) td { background: var(--paper); }
+  .vocab-table .eng { font-weight: 600; color: var(--ink); }
+  .vocab-table .de { color: var(--warm-grey); font-size: 13px; }
+  .vocab-table .pron {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--teal);
+  }
+
+  /* ── PHRASE BOX ── */
+  .phrase-box {
+    background: var(--ink);
+    color: var(--white);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 12px 0;
+  }
+  .phrase-box .phrase-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .phrase-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .phrase-row:last-child { border-bottom: none; }
+  .phrase-en { font-size: 15px; font-weight: 500; flex: 1; }
+  .phrase-de { font-size: 13px; color: rgba(255,255,255,0.5); flex: 1; }
+
+  /* ── TIP BOX ── */
+  .tip-box {
+    background: #fff9e6;
+    border: 1px solid #f0d060;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+    display: flex;
+    gap: 10px;
+  }
+  .tip-icon { font-size: 16px; flex-shrink: 0; }
+  .tip-text { color: #5a4500; line-height: 1.5; }
+  .tip-text strong { color: #3a2d00; }
+
+  /* ── WARNING BOX ── */
+  .warn-box {
+    background: #fff0f0;
+    border: 1px solid #f0a0a0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+    display: flex;
+    gap: 10px;
+  }
+  .warn-icon { font-size: 16px; flex-shrink: 0; }
+  .warn-text { color: #5a0000; line-height: 1.5; }
+
+  /* ── STEPS ── */
+  .steps { list-style: none; margin: 12px 0; }
+  .steps li {
+    display: flex;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px dotted var(--border);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .steps li:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--white);
+    background: var(--ink-soft);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+
+  /* ── DIVIDER ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-grey);
+    margin: 32px 0 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .note { font-size: 13px; color: var(--warm-grey); line-height: 1.5; margin: 8px 0; }
+
+
+  /* book ref tag colors */
+  .src-bp { background: #2c3e6b; color: white; }
+  .src-br { background: #6b2c1a; color: white; }
+  .src-you { background: #1a6b3a; color: white; }
+
+  /* icon colors per phase */
+  .icon-warmup { background: #e8ecf5; }
+  .icon-vocab { background: #e5f2f0; }
+  .icon-grammar { background: #fdf3e3; }
+  .icon-speaking { background: #f2ece8; }
+  .icon-wrap { background: #f0eaf3; }
+
+  p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+  strong { color: var(--ink); }
+
+</style>
+</head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+ 
+<!-- HEADER -->
+    <div class="header">
+        <div class="header-inner">
+        <h1>Lesson 1<br><em>Working Day</em></h1>
+        <div class="header-meta">
+            <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+            <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 (Unit 1)</div>
+        </div>
+        </div>
+    </div>
+
+
+<!-- OBJECTIVES -->
+    <div class="objectives-wrap">
+        <div class="objectives-box">
+        <div class="obj-col">
+            <h3>Goals</h3>
+            <ul class="obj-list">
+            <li>Talk about your work</li>
+            <li>Talk about your routine</li>
+            <li>Introduce your colleague</li>
+            </ul>
+        </div>
+        </div>
+    </div>
+
+
+  <!-- MAIN -->
+<div class="main">
+
+    <div class="main">
+
+        <!-- ══ PHASE 1 ══ -->
+        <div class="phase phase-1" id="ph1">
+          <div class="phase-header" onclick="togglePhase('ph1')">
+            <span class="phase-num">01</span>
+            <div class="phase-title-wrap">
+              <div class="phase-title">Warmup</div>
+            </div>
+          </div>
+          <div class="phase-body">
+      
+            <div class="activity">
+              <div class="activity-head">
+                <div class="activity-icon icon-warmup">👋</div>
+                <span class="activity-title">Ice-breaker</span>
+              </div>
+              <div class="activity-body">
+                <ul class="steps">
+                  <li><span class="step-num">1</span><em>What do you do at work exactly?</em></li>
+                  <li><span class="step-num">2</span><em>What time do you usually start work?</em></li>
+                  <li><span class="step-num">3</span><em>Do you have a lot of meetings?</em></li>
+                  <li><span class="step-num">2</span>Do you work with people from other countries?<em></em></li>
+                  
+                </ul>
+                <div class="tip-box">
+                  <span class="tip-icon">🛎️</span>
+                  <div class="tip-text"><strong>Nationalities</strong><br>
+                    We usually use a country name + <strong>-an / -ian / -ese / -ish</strong> to talk about nationality.<br>
+                    <br>For example:<br>
+                    <div class="row"><div class="col"><strong>Poland</strong> → Polish<br><strong>Italy</strong> → Italian</div><div class="col"><strong>Japan</strong> → Japanese<br><strong>Britain</strong> → British</div></div><br>
+                    👉 We say: <em>“I work with Italian clients.”</em> not <em>“I work with Italy clients.”</em></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ PHASE 2 ══ -->
+        <div class="phase phase-2" id="ph2">
+            <div class="phase-header" onclick="togglePhase('ph2')">
+            <span class="phase-num">02</span>
+            <div class="phase-title-wrap">
+                <div class="phase-title">Vocabulary: Jobs and tasks</div>
+                <div class="phase-sub"> BP A2 p.8, ex 2A and 2B</div>
+            </div>
+            </div>
+            <div class="phase-body">
+
+            <div class="activity">
+                <div class="activity-head">
+                <span class="activity-title">Task 2A</span>
+                <span class="activity-src src-bp">BP p.8</span>
+                </div>
+                <div class="activity-body">
+                <p>Read about two jobs. Choose a job (Sales Manager/Admin Assistant) to complete the descriptions.</p>
+
+                <div class="teacher-says">
+                    <div class="label">Text A</div>
+                    <p>I'm a(n) <input type="text">. I'm responsible for a team of five people. They often have meetings with customers. 
+                        They sometimes work in the office and <strong>call customers</strong> on the phone. At the end of the week, 
+                        they <strong>do research</strong> to find new clients. I sometimes <strong>go to meetings</strong> with important 
+                        customers, so l often <strong>travel for work</strong>. I <strong>analyse</strong> sales <strong>data</strong>, and I often 
+                        <strong>write reports</strong>. I also <strong>do research</strong> to find new clients. At the end of the day, I usually 
+                        <strong>make calls</strong> to the other managers and to my boss, who works in a different location. My office hours are 9 a.m. 
+                        to 5.30 p.m. but I'm so busy I never <strong>finish work</strong> before 5.30 p.m.</p>
+                </div>
+                <div class="teacher-says">
+                    <div class="label">Text B</div>
+                    <p>Elena is a(n) <input type="text">. She usually <strong>starts work</strong> at 7 o'clock and she always has a lot of work to do. 
+                        She <strong>answers the phone</strong> and <strong>makes calls</strong> or <strong>writes emails</strong>. She works with the 
+                        sales team and often <strong>processes orders</strong> for them. She sometimes <strong>goes to meetings</strong> and takes notes. She rarely <strong>travels for work.</strong></p>
+                </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <div class="activity-head">
+                <span class="activity-title">Task 2B</span>
+                <span class="activity-src src-br">BP p.8</span>
+                </div>
+                <div class="activity-body">
+                <p>Complete the expressions with words from task 2A.</p>
+                
+                <ol> <li><input type="text" size="7"> meetings</li> <li><input type="text" size="5"> customers</li> 
+                    <li>process <input type="text" size="7"></li> <li>do <input type="text" size="7"></li> 
+                    <li><input type="text" size="7"> calls</li> <li> <input type="text" size="7"> for work</li> 
+                    <li><input type="text" size="7"> (sales) data</li> <li>write <input type="text" size="7"> /emails</li> 
+                    <li>answer <input type="text" size="7"></li> <li><input type="text" size="7"> / <input type="text" size="7"> work</li>   </ol>
+                </div>
+            </div>
+            
+                <table class="vocab-table">
+                <thead>
+                    <tr>
+                    <th>English</th>
+                    <th>Українська</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td class="eng">call customers</td>
+                    <td class="de">дзвонити клієнтам</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">go to meetings</td>
+                    <td class="de">ходити на наради</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">travel for work</td>
+                    <td class="de">їздити у відрядження</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">analyse data</td>
+                    <td class="de">аналізувати дані</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">write reports</td>
+                    <td class="de">писати звіти</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">process orders</td>
+                    <td class="de">обробляти замовлення</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">answer the phone</td>
+                    <td class="de">відповідати на дзвінки</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">do research</td>
+                    <td class="de">проводити дослідження</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">make calls</td>
+                    <td class="de">телефонувати</td>
+                    </tr>
+                    <tr>
+                    <td class="eng">start / finish work</td>
+                    <td class="de">починати / закінчувати роботу</td>
+                    </tr>
+                </tbody>
+                </table>
+                <br>
+
+            <div class="tip-box">
+                <span class="tip-icon">🙋‍♀️</span>
+                <div class="tip-text"><strong>Which of these do you do at Mercedes?</strong><br>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+        <!-- ══ PHASE 3 ══ -->
+        <div class="phase phase-3" id="ph3">
+            <div class="phase-header" onclick="togglePhase('ph3')">
+            <span class="phase-num">03</span>
+            <div class="phase-title-wrap">
+                <div class="phase-title">Grammar: Facts and routines</div>
+                <div class="phase-sub">BP A2 p.9, Grammar box + ex.5</div>
+            </div>
+            </div>
+            <div class="phase-body">
+
+            <div class="warn-box">
+                🔵 100% — always <br>🔷 80% — usually<br>🔶 60% — often<br>🟡 40% — sometimes<br>🟠 20% — seldom / rarely<br>🔻 10% — hardly ever<br>🔴 0% — never
+            </div>
+
+            <div class="activity">
+                <div class="activity-head">
+                <span class="activity-title">How often do you...</span>
+                </div>
+                <div class="activity-body">
+                <ul>
+                    <li>do research? </li>
+                    <li>go to meetings? </li>
+                    <li>start work a t 8 o'clock? </li>
+                    <li>finish work a t 5 o'clock? </li>
+                    <li>write reports? </li>
+                    <li>write emails?</li>
+                    <li>analyse data?</li>
+                    <li>answer the phone?</li>
+                    <li>make calls?</li>
+                    <li>process orders?</li>
+                </ul></div>
+            </div>
+
+            <div class="activity">
+                <div class="activity-head">
+                <span class="activity-title">Task 4</span>
+                <span class="activity-src src-bp">BP p.9</span>
+                </div>
+                <div class="activity-body">
+                <p><strong>Complete the text with the correct form of the verb in brackets.</strong></p>
+                 
+                <p>
+                    Marek, Alberto, Ramona and I <input type="text" size="7"> (work) in a computer shop. Marek sells computers, but he <input type="text" size="7"> (not be) a Sales Assistant, he <input type="text" size="5"> (be) a Sales Manager. Alberto and Ramona <input type="text" size="7"> (be) IT Specialists. They' <input type="text" size="5"> (start) work at 9 o'clock. They <input type="text" size="7"> (not finish) work before 7 o'clock.<br>I <input type="text" size="7"> (analyse) sales reports, but I <input type="text" size="5"> (not be) a Sales Manager, I <input type="text" size="5"> (be) a Finance Officer.
+                 </p>
+            
+                </div>
+            </div>
+
+            <div class="activity">
+                <div class="activity-head">
+                <span class="activity-title">Task 5</span>
+                <span class="activity-src src-bp">BP p.9</span>
+                </div>
+                <div class="activity-body">
+                <p><strong>Put the words in order to make sentences.</strong></p>
+                 
+                 <ul class="steps">
+                    <li><span class="step-num">1</span>at / work / I / 8 o'clock / start /often </li>
+                    <li><input type="text" size="55"></li>
+                    <li><span class="step-num">2</span> always / we / call customers/ on Fridays</li>
+                    <li><input type="text" size="55"></li>
+                    <li><span class="step-num">3</span> sometimes / they / a team meeting / have</li>
+                    <li><input type="text" size="55"></li>
+                    <li><span class="step-num">4</span> after lunch / you / never / emails / write</li>
+                    <li><input type="text" size="55"></li>
+                    <li><span class="step-num">5</span> data / don't / they / analyse</li>
+                    <li><input type="text" size="55"></li>
+                    <li><span class="step-num">6</span> call / doesn't / she / customers / usually</li>
+                    <li><input type="text" size="55"></li>
+                  </ul>
+            
+                </div>
+            </div>
+
+            </div>
+        </div>
+
+        <!-- ══ PHASE 4 ══ -->
+        <div class="phase phase-4" id="ph4">
+            <div class="phase-header" onclick="togglePhase('ph4')">
+            <span class="phase-num">04</span>
+            <div class="phase-title-wrap">
+                <div class="phase-title">Speaking: Roleplay</div>
+            </div>
+            </div>
+            <div class="phase-body">
+
+            <div class="activity">
+                <div class="activity-head">
+                <div class="activity-icon icon-speaking">🗣️</div>
+                <span class="activity-title">Block A</span>
+                </div>
+                <div class="activity-body">
+                    <p><strong>Fill out the table below</strong></p>
+
+                    <ul class="steps">
+                        <li>Name:</li>
+                        <li>Office/location (city and place where you work):</li>
+                        <li>Job title:</li>
+                        <li>Department:</li>
+                        <li>Activities (what you do there):</li>
+                    </ul>
+
+                    <div class="tip-box"><div class="tip-text"><strong>I work in... <br> I am responsible for...</strong></div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <div class="activity-head">
+                <div class="activity-icon icon-speaking">🗣️</div>
+                <span class="activity-title">Block B - a new colleague</span>
+                </div>
+                <div class="activity-body">
+                    <div class="row"><div class="col"><div class="tip-box"><span class="tip-icon">👩</span><div class="tip-text"><strong>Svitlana</strong></div></div></div><div class="col"><div class="tip-box"><span class="tip-icon">👩</span><div class="tip-text"><strong>Priya</strong></div></div></div></div>
+                    
+                    <div class="student-says">
+                        <div class="label">Situation</div>
+                        <p>Priya is an engineer from India. She arrived to your office for a week. Introduce yourself and talk with her.</p>
+                    </div>
+
+                    <div class="row"><div class="col"><div class="tip-box"><span class="tip-icon">👩</span><div class="tip-text"><strong>Svitlana</strong></div></div></div><div class="col"><div class="tip-box"><span class="tip-icon">👨</span><div class="tip-text"><strong>Alex</strong></div></div></div></div>
+                    
+                    <div class="student-says">
+                        <div class="label">Situation</div>
+                        <p>Your office friend Alex sees a new person and asks you about Priya. Tell him what you know about her.</p>
+                    </div>
+
+                    <div class="teacher-says">
+                        <div class="label">Helpful phrases</div>
+                        <strong>Introducing yourself</strong>
+                        <p>Nice to meet you. / Nice to meet you too.<br>
+                            I'm [name]. I work in the development department.<br>
+                            I'm responsible for _ .</p>
+
+                        <strong>Routine</strong>
+                        <p>I usually... / I often... / I sometimes...<br>
+                            We have meetings every week with the international team.<br>
+                            I work with colleagues from India, Tunisia, Morocco and Slovakia.</p>
+
+                        <strong>To introduce someone else</strong>
+                        <p>This is [name]. <br>She/He works in... / She/He is from...<br>
+                            Do you know [name]?<br>
+                            No, I don't think so.</p>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            </div>
+            </div>
+
+            </div>
+
+
+
+
+
+
+
+
+            <script>
+                function togglePhase(id) {
+                  const el = document.getElementById(id);
+                  el.classList.toggle('collapsed');
+                }
+                </script>
+</body>
+</html>

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lessons</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0f;
+    --surface: #141416;
+    --surface2: #1c1c1f;
+    --border: #2a2a2e;
+    --border2: #3a3a3f;
+    --text: #e8e8ec;
+    --muted: #6b6b75;
+    --accent: #c8b8ff;
+    --accent-dim: #7c6aaa;
+    --accent-bg: rgba(200, 184, 255, 0.06);
+    --danger: #ff6b6b;
+    --green: #6bffb8;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 24px; width: 100%; }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+  }
+  header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .logo span { color: var(--accent); }
+
+  /* LOCK SCREEN */
+  #lock-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    gap: 40px;
+  }
+  .intro-text {
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+  }
+  .intro-text h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    line-height: 1.25;
+  }
+  .intro-text h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .intro-text p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-family: 'DM Mono', monospace;
+  }
+  .lock-box {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+  }
+  .lock-icon {
+    width: 52px;
+    height: 52px;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-dim);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 22px;
+  }
+  .lock-box h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .lock-box p {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .student-select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b75' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+  }
+  .student-select:focus { border-color: var(--accent-dim); }
+  .student-select option { background: #1c1c1f; }
+
+  .password-wrap {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .password-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    padding: 11px 44px 11px 14px;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .password-input:focus { border-color: var(--accent-dim); }
+  .password-input.error { border-color: var(--danger); animation: shake 0.3s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .toggle-pw {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 16px;
+    padding: 4px;
+    line-height: 1;
+  }
+  .toggle-pw:hover { color: var(--text); }
+
+  .error-msg {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--danger);
+    margin-top: -14px;
+    margin-bottom: 16px;
+    text-align: left;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  .btn-enter {
+    width: 100%;
+    background: var(--accent);
+    color: #0d0d0f;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-enter:hover { opacity: 0.88; }
+  .btn-enter:active { transform: scale(0.98); }
+
+  /* DASHBOARD */
+  #dashboard { display: none; flex: 1; padding: 40px 0 60px; }
+  #dashboard.visible { display: block; }
+
+  .dash-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 36px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .student-name {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .student-name span {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .btn-logout {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-logout:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+
+  .lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  .lesson-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .lesson-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-dim), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .lesson-card:hover {
+    border-color: var(--border2);
+    background: var(--surface2);
+    transform: translateY(-2px);
+  }
+  .lesson-card:hover::before { opacity: 1; }
+
+  .lesson-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .lesson-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .lesson-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .lesson-arrow {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    color: var(--border2);
+    font-size: 16px;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .lesson-card:hover .lesson-arrow {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  .lesson-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .followup-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-dim);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-dim);
+    border-radius: 5px;
+    padding: 4px 10px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .followup-btn:hover {
+    background: rgba(200, 184, 255, 0.14);
+    color: var(--accent);
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">Lessons <span>/</span> Portal</div>
+  </div>
+</header>
+
+<!-- LOCK SCREEN -->
+<div id="lock-screen">
+  <div class="intro-text">
+    <h1>Вітаю! 👋<br>Тут <em>твої уроки</em>.</h1>
+    <p>// Тут ти знайдеш матеріали з наших занять.<br>Вибери своє ім'я і введи пароль щоб потрапити до своєї сторінки.</p>
+  </div>
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <h2>Вибери себе</h2>
+
+    <select class="student-select" id="student-select">
+      <option value="">— хто ти? —</option>
+      <!-- ↓ ДОДАЙ СТУДЕНТІВ ТУТ ↓ -->
+      <option value="anna">Anna</option>
+      <option value="petro">Petro</option>
+      <option value="sofia">Sofia</option>
+      <!-- ↑ ДОДАЙ СТУДЕНТІВ ТУТ ↑ -->
+    </select>
+
+    <div class="password-wrap">
+      <input type="password" class="password-input" id="password-input" placeholder="пароль" autocomplete="off">
+      <button class="toggle-pw" id="toggle-pw" title="показати/сховати">👁</button>
+    </div>
+    <div class="error-msg" id="error-msg">невірний пароль</div>
+
+    <button class="btn-enter" id="btn-enter">Увійти →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="wrap">
+    <div class="dash-header">
+      <div class="student-name">
+        <span>your space</span>
+        <span id="display-name">—</span>
+      </div>
+      <button class="btn-logout" id="btn-logout">← вийти</button>
+    </div>
+
+    <div class="section-label">уроки</div>
+    <div class="lessons-grid" id="lessons-grid"></div>
+  </div>
+</div>
+
+<footer>
+  <p>lessons portal — private access only</p>
+</footer>
+
+<script>
+// ============================================================
+// НАЛАШТУВАННЯ — РЕДАГУЙ ТУТ
+// ============================================================
+const STUDENTS = {
+  anna: {
+    name: "Anna",
+    password: "sun2024",       // ← пароль Анни
+    lessons: [
+      { title: "Present Simple", date: "02.06.2025", file: "anna/lesson1.html", followup: "anna/followup1.pdf" },
+      { title: "Articles: a, an, the", date: "09.06.2025", file: "anna/lesson2.html" },
+      { title: "Vocabulary: Daily Routine", date: "16.06.2025", file: "anna/lesson3.html" },
+    ]
+  },
+  petro: {
+    name: "Petro",
+    password: "sky4321",       // ← пароль Петра
+    lessons: [
+      { title: "Past Simple vs Past Continuous", date: "01.06.2025", file: "petro/lesson1.html" },
+      { title: "Modal Verbs", date: "08.06.2025", file: "petro/lesson2.html" },
+    ]
+  },
+  sofia: {
+    name: "Sofia",
+    password: "moon007",       // ← пароль Софії
+    lessons: [
+      { title: "Conditionals: Zero & First", date: "03.06.2025", file: "sofia/lesson1.html" },
+    ]
+  }
+};
+// ============================================================
+
+let currentStudent = null;
+
+const lockScreen = document.getElementById('lock-screen');
+const dashboard = document.getElementById('dashboard');
+const studentSelect = document.getElementById('student-select');
+const passwordInput = document.getElementById('password-input');
+const togglePw = document.getElementById('toggle-pw');
+const errorMsg = document.getElementById('error-msg');
+const btnEnter = document.getElementById('btn-enter');
+const btnLogout = document.getElementById('btn-logout');
+const displayName = document.getElementById('display-name');
+const lessonsGrid = document.getElementById('lessons-grid');
+
+function tryLogin() {
+  const studentKey = studentSelect.value;
+  const pw = passwordInput.value;
+
+  if (!studentKey) {
+    studentSelect.style.borderColor = 'var(--danger)';
+    setTimeout(() => studentSelect.style.borderColor = '', 1000);
+    return;
+  }
+
+  const student = STUDENTS[studentKey];
+  if (!student || pw !== student.password) {
+    passwordInput.classList.add('error');
+    errorMsg.classList.add('show');
+    passwordInput.value = '';
+    setTimeout(() => passwordInput.classList.remove('error'), 400);
+    return;
+  }
+
+  // SUCCESS
+  errorMsg.classList.remove('show');
+  currentStudent = studentKey;
+  showDashboard(student);
+}
+
+function showDashboard(student) {
+  lockScreen.style.display = 'none';
+  dashboard.classList.add('visible');
+  displayName.textContent = student.name;
+
+  lessonsGrid.innerHTML = '';
+
+  if (!student.lessons || student.lessons.length === 0) {
+    lessonsGrid.innerHTML = '<div class="empty-state">// уроки ще немає</div>';
+    return;
+  }
+
+  student.lessons.forEach((lesson, i) => {
+    const card = document.createElement('div');
+    card.className = 'lesson-card';
+    const followupHtml = lesson.followup
+      ? `<a class="followup-btn" href="${lesson.followup}" target="_blank" onclick="event.stopPropagation()">📄 follow up</a>`
+      : `<span></span>`;
+    card.innerHTML = `
+      <div class="lesson-num">lesson ${String(i + 1).padStart(2, '0')}</div>
+      <div class="lesson-title">${lesson.title}</div>
+      <div class="lesson-footer">
+        <div class="lesson-date">${lesson.date}</div>
+        ${followupHtml}
+      </div>
+    `;
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('.followup-btn')) {
+        window.location.href = lesson.file;
+      }
+    });
+    lessonsGrid.appendChild(card);
+  });
+}
+
+function logout() {
+  currentStudent = null;
+  passwordInput.value = '';
+  studentSelect.value = '';
+  dashboard.classList.remove('visible');
+  lockScreen.style.display = 'flex';
+}
+
+btnEnter.addEventListener('click', tryLogin);
+passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+btnLogout.addEventListener('click', logout);
+studentSelect.addEventListener('change', () => {
+  studentSelect.style.borderColor = '';
+  errorMsg.classList.remove('show');
+});
+passwordInput.addEventListener('input', () => errorMsg.classList.remove('show'));
+togglePw.addEventListener('click', () => {
+  const isHidden = passwordInput.type === 'password';
+  passwordInput.type = isHidden ? 'text' : 'password';
+  togglePw.textContent = isHidden ? '🙈' : '👁';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 2</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1a2e;
+      --ink-soft: #3d3d5c;
+      --paper: #f7f5f0;
+      --paper-dark: #ede9e0;
+      --accent: #c0392b;
+      --accent-light: #e74c3c;
+      --gold: #d4a017;
+      --teal: #1a6b72;
+      --teal-light: #2a9d8f;
+      --warm-grey: #8c8476;
+      --border: #d4cfc6;
+      --white: #ffffff;
+      --phase-1: #2c3e6b;
+      --phase-2: #1a6b72;
+      --phase-3: #6b4226;
+      --phase-4: #3d6b2c;
+      --phase-5: #6b2c5a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--ink);
+      color: var(--white);
+      padding: 48px 40px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,57,43,0.25) 0%, transparent 70%);
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 20%;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(26,107,114,0.2) 0%, transparent 70%);
+    }
+    .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .header h1 em { font-style: italic; color: var(--accent-light); }
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .meta-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+    }
+    .meta-chip .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+    .meta-chip strong { color: var(--white); }
+
+    /* ── OBJECTIVES BOX ── */
+    .objectives-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 40px;
+    }
+    .objectives-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 4px;
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 700px) {
+      .objectives-box { grid-template-columns: 1fr; }
+      .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; }
+    }
+    .obj-col h3 {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--warm-grey);
+      margin-bottom: 10px;
+    }
+    .obj-list { list-style: none; }
+    .obj-list li {
+      font-size: 14px;
+      padding: 5px 0;
+      padding-left: 18px;
+      position: relative;
+      color: var(--ink-soft);
+      border-bottom: 1px dotted var(--border);
+    }
+    .obj-list li:last-child { border-bottom: none; }
+    .obj-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--teal-light);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 60px;
+    }
+
+    /* ── PHASE ── */
+    .phase {
+      margin-bottom: 40px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--white);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .phase-header {
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    .phase-header::after {
+      content: '▾';
+      position: absolute;
+      right: 20px;
+      font-size: 18px;
+      color: rgba(255,255,255,0.6);
+      transition: transform 0.3s;
+    }
+    .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+    .phase-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      background: rgba(255,255,255,0.18);
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
+    }
+    .phase-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+    .phase-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      margin-top: 2px;
+    }
+    .phase-time {
+      margin-left: auto;
+      margin-right: 32px;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+      white-space: nowrap;
+      background: rgba(0,0,0,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .phase-body { padding: 0 24px 24px; }
+    .phase.collapsed .phase-body { display: none; }
+
+    .phase-1 .phase-header { background: var(--phase-1); }
+    .phase-2 .phase-header { background: var(--phase-2); }
+    .phase-3 .phase-header { background: var(--phase-3); }
+    .phase-4 .phase-header { background: var(--phase-4); }
+    .phase-5 .phase-header { background: var(--phase-5); }
+
+    /* ── ACTIVITY ── */
+    .activity {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-top: 16px;
+      overflow: hidden;
+    }
+    .activity-head {
+      background: var(--paper);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .activity-icon {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .activity-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+    .activity-src {
+      margin-left: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--warm-grey);
+      background: var(--paper-dark);
+      padding: 3px 8px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .activity-time-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      background: var(--ink);
+      color: var(--white);
+      padding: 3px 8px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .activity-body { padding: 16px; }
+
+    /* ── TEACHER / STUDENT ── */
+    .teacher-says {
+      background: #eef4fb;
+      border-left: 3px solid #5b8dd9;
+      border-radius: 0 4px 4px 0;
+      padding: 12px 16px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .teacher-says .label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #5b8dd9;
+      margin-bottom: 6px;
+    }
+    .teacher-says p { color: var(--ink-soft); line-height: 1.6; }
+    .teacher-says em { font-style: italic; color: var(--ink); }
+
+    .student-says {
+      background: #edf7f0;
+      border-left: 3px solid var(--teal-light);
+      border-radius: 0 4px 4px 0;
+      padding: 12px 16px;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+    .student-says .label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      margin-bottom: 6px;
+    }
+    .student-says p { color: var(--ink-soft); line-height: 1.6; }
+
+    /* ── VOCAB TABLE ── */
+    .vocab-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 12px 0;
+    }
+    .vocab-table th {
+      background: var(--ink);
+      color: var(--white);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: var(--paper); }
+    .vocab-table .eng { font-weight: 600; color: var(--ink); }
+    .vocab-table .de { color: var(--warm-grey); font-size: 13px; }
+    .vocab-table .ans { color: var(--teal); font-style: italic; font-size: 13px; }
+
+    /* ── PHRASE BOX ── */
+    .phrase-box {
+      background: var(--ink);
+      color: var(--white);
+      border-radius: 4px;
+      padding: 16px 20px;
+      margin: 12px 0;
+    }
+    .phrase-box .phrase-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .phrase-row {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .phrase-row:last-child { border-bottom: none; }
+    .phrase-en { font-size: 15px; font-weight: 500; flex: 1; }
+    .phrase-de { font-size: 13px; color: rgba(255,255,255,0.5); flex: 1; }
+
+    /* ── TIP BOX ── */
+    .tip-box {
+      background: #fff9e6;
+      border: 1px solid #f0d060;
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin: 12px 0;
+      font-size: 14px;
+      display: flex;
+      gap: 10px;
+    }
+    .tip-icon { font-size: 16px; flex-shrink: 0; }
+    .tip-text { color: #5a4500; line-height: 1.5; }
+    .tip-text strong { color: #3a2d00; }
+
+    /* ── WARN BOX ── */
+    .warn-box {
+      background: #fff0f0;
+      border: 1px solid #f0a0a0;
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    /* ── STEPS ── */
+    .steps { list-style: none; margin: 12px 0; }
+    .steps li {
+      display: flex;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px dotted var(--border);
+      font-size: 14px;
+      line-height: 1.5;
+      align-items: flex-start;
+    }
+    .steps li:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--ink-soft);
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── ANSWER KEY ── */
+    .answer-key {
+      background: var(--paper-dark);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+    .answer-key .ak-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--warm-grey);
+      margin-bottom: 8px;
+    }
+    .answer-key ol { padding-left: 20px; }
+    .answer-key ol li { padding: 3px 0; color: var(--ink-soft); }
+    .answer-key ol li strong { color: var(--teal); }
+
+    /* ── WORD BOX ── */
+    .word-box {
+      background: var(--white);
+      border: 2px solid var(--teal-light);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 12px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .word-box-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      width: 100%;
+      margin-bottom: 4px;
+    }
+    .word-chip {
+      background: var(--teal-light);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    /* neutral variant for word-box used in fill-in exercises */
+    .word-box.neutral {
+      border-color: var(--border);
+    }
+    .word-box.neutral .word-chip {
+      background: var(--ink-soft);
+    }
+
+    /* ── EMAIL ── */
+    .email-block {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .email-header {
+      background: var(--paper-dark);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--warm-grey);
+    }
+    .email-header span { font-weight: 600; color: var(--ink); }
+    .email-body { padding: 14px; color: var(--ink-soft); line-height: 1.7; }
+
+    /* ── ANSWER REVEAL ── */
+    .reveal-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--warm-grey);
+      padding: 5px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+    .reveal-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .reveal-content { display: none; margin-top: 10px; }
+    .reveal-content.open { display: block; }
+
+    /* ── MISC ── */
+    .src-bp { background: #2c3e6b; color: white; }
+    .src-br { background: #6b2c1a; color: white; }
+    .src-you { background: #1a6b3a; color: white; }
+    .icon-warmup { background: #e8ecf5; }
+    .icon-vocab { background: #e5f2f0; }
+    .icon-grammar { background: #fdf3e3; }
+    .icon-speaking { background: #f2ece8; }
+    .icon-wrap { background: #f0eaf3; }
+
+    p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+    strong { color: var(--ink); }
+    ol.exercise { padding-left: 20px; }
+    ol.exercise li { font-size: 14px; color: var(--ink-soft); padding: 5px 0; border-bottom: 1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom: none; }
+    input[type="text"] { border: none; border-bottom: 1px solid var(--teal); background: transparent; font-size: 14px; color: var(--ink); padding: 1px 4px; outline: none; }
+    input[type="text"]:focus { border-bottom-color: var(--accent); }
+  </style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 2<br><em>A Work Plan</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 (Unit 1.2 + 1.3)</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES -->
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Review follow-up material from Lesson 1</li>
+        <li>Talk about work tasks and meeting types</li>
+        <li>Schedule a meeting by email and by phone</li>
+        <li>Ask and answer questions about the workplace</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>Adverbs of frequency — position review</li>
+        <li>Vocab: book, brief, agenda, budget, calculate, update</li>
+        <li>Scheduling phrases: Are you available / How about / Shall we</li>
+        <li>Questions: What / Where / How / When / Does / Do</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Review — Follow-up from Lesson 1</div>
+        <div class="phase-sub">Adverbs of frequency · Responsible for · It depends on</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Exercise 1 — Adverbs of frequency</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Insert the correct frequency word <strong>and</strong> put it in the right position in the sentence.</p>
+
+          <div class="word-box neutral">
+            <div class="word-box-label">choose from</div>
+            <span class="word-chip">sometimes</span>
+            <span class="word-chip">never</span>
+            <span class="word-chip">always</span>
+            <span class="word-chip">at 9 o'clock</span>
+            <span class="word-chip">rarely</span>
+            <span class="word-chip">every Friday</span>
+          </div>
+
+          <ol class="exercise">
+            <li>I <input type="text" size="7"> start work before 8. &nbsp;<em>(0%)</em></li>
+            <li>She <input type="text" size="7"> goes to meetings on Mondays. &nbsp;<em>(100%)</em></li>
+            <li>We <input type="text" size="7"> work from home on Fridays. &nbsp;<em>(~40%)</em></li>
+            <li>He is <input type="text" size="7"> late for meetings. &nbsp;<em>(~20%)</em></li>
+            <li>I write reports <input type="text" size="7">.</li>
+            <li>The team call starts <input type="text" size="7">.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev1')">show answers ▾</button>
+          <div class="reveal-content" id="rev1">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>I <strong>never</strong> start work before 8. <em>(before the verb)</em></li>
+                <li>She <strong>always</strong> goes to meetings on Mondays. <em>(before the verb)</em></li>
+                <li>We <strong>sometimes</strong> work from home on Fridays. <em>(before the verb)</em></li>
+                <li>He is <strong>rarely</strong> late for meetings. <em>(after to be)</em></li>
+                <li>I write reports <strong>every Friday</strong>. <em>(end of sentence)</em></li>
+                <li>The team call starts <strong>at 9 o'clock</strong>. <em>(end of sentence)</em></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Exercise 2 — Responsible for / It depends on</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the sentences using your own words. Speak, don't write.</p>
+          <ol class="exercise">
+            <li>In my job, I'm responsible for <strong>_______</strong>. <em>(name 2–3 real tasks from your company)</em></li>
+            <li>"Do you always attend meetings in English?" → Answer using <strong>It depends on…</strong></li>
+            <li>Make one sentence with <strong>go to meetings</strong> and one with <strong>attend meetings</strong>.</li>
+          </ol>
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text"><strong>Reminder:</strong> <em>responsible for</em> + <strong>-ing</strong> &nbsp;·&nbsp; <em>go to</em> = informal &nbsp;·&nbsp; <em>attend</em> = formal &nbsp;·&nbsp; <em>It depends on</em> + noun or when/what/who</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 2 ══ -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Vocabulary: Work tasks and meeting types</div>
+        <div class="phase-sub">BP A2 p.10, ex. 1–4</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Lead-in — Which tasks do you do? What meetings do you go to?</span>
+          <span class="activity-src src-bp">BP p.10</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at the lists below. Answer the questions out loud.</p>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="word-box">
+                <div class="word-box-label">Tasks — which do you do?</div>
+                <span class="word-chip">answer the phone</span>
+                <span class="word-chip">do research</span>
+                <span class="word-chip">go to meetings</span>
+                <span class="word-chip">make calls</span>
+                <span class="word-chip">process orders</span>
+                <span class="word-chip">travel for work</span>
+                <span class="word-chip">write reports</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="word-box">
+                <div class="word-box-label">Meeting types — which do you attend?</div>
+                <span class="word-chip">budget</span>
+                <span class="word-chip">client</span>
+                <span class="word-chip">management</span>
+                <span class="word-chip">planning</span>
+                <span class="word-chip">project</span>
+              </div>
+            </div>
+          </div>
+          <div class="tip-box">
+            <span class="tip-icon">🙋‍♀️</span>
+            <div class="tip-text">Make a sentence for each meeting type you attend: <em>"I usually go to planning meetings on Mondays."</em></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Task 3 — Match the word to the definition</span>
+          <span class="activity-src src-bp">BP p.10</span>
+        </div>
+        <div class="activity-body">
+          <p>Listen to the definition — say the word.</p>
+
+          <div class="word-box neutral">
+            <div class="word-box-label">words to identify</div>
+            <span class="word-chip">book</span>
+            <span class="word-chip">brief</span>
+            <span class="word-chip">agenda</span>
+            <span class="word-chip">budget</span>
+            <span class="word-chip">calculate</span>
+            <span class="word-chip">presentation</span>
+            <span class="word-chip">update</span>
+          </div>
+
+          <table class="vocab-table" style="margin-top: 12px;">
+            <thead><tr><th>Definition</th><th>Word</th></tr></thead>
+            <tbody>
+              <tr><td>to make a reservation</td><td class="ans"><input type="text" size="10"></td></tr>
+              <tr><td>instructions for a work task</td><td class="ans"><input type="text" size="10"></td></tr>
+              <tr><td>a list of things to talk about in a meeting</td><td class="ans"><input type="text" size="10"></td></tr>
+              <tr><td>a plan about money</td><td class="ans"><input type="text" size="10"></td></tr>
+              <tr><td>to work with numbers to find an answer</td><td class="ans"><input type="text" size="10"></td></tr>
+              <tr><td>a talk about a project or work task</td><td class="ans"><input type="text" size="10"></td></tr>
+              <tr><td>new information</td><td class="ans"><input type="text" size="10"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Task 4 — Fill in the gaps</span>
+          <span class="activity-src src-bp">BP p.10</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the sentences with the correct word.</p>
+
+          <div class="word-box neutral">
+            <div class="word-box-label">words in the box</div>
+            <span class="word-chip">brief</span>
+            <span class="word-chip">calculate</span>
+            <span class="word-chip">agenda</span>
+            <span class="word-chip">book</span>
+            <span class="word-chip">update</span>
+            <span class="word-chip">budget</span>
+          </div>
+
+          <ol class="exercise">
+            <li>She needs to _______ a room for ten people for the meeting.</li>
+            <li>Money isn't a problem. The _______ says we have $10,000 for the project.</li>
+            <li>The _______ says the meeting starts at 10 a.m. and we have five points to discuss.</li>
+            <li>The work isn't difficult. The _______ gives instructions about the job.</li>
+            <li>Jo and Sam have a new project. Their _______ about it was interesting.</li>
+            <li>How is your new job? Can you give me an _______ on it?</li>
+            <li>We need to prepare a budget. Please _______ the costs before the meeting.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev2')">show answers ▾</button>
+          <div class="reveal-content" id="rev2">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>book</strong></li>
+                <li><strong>budget</strong></li>
+                <li><strong>agenda</strong></li>
+                <li><strong>brief</strong></li>
+                <li><strong>update</strong></li>
+                <li><strong>update</strong></li>
+                <li><strong>calculate</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Reading + Scheduling phrases</div>
+        <div class="phase-sub">BP A2 p.11, ex. 5A + 6B</div>
+      </div>
+      <span class="phase-time">15 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Task 5A — Put the emails in the correct order</span>
+          <span class="activity-src src-bp">BP p.11</span>
+          <span class="activity-time-badge">7 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Read the five emails between David and Susan. Number them in the correct order (1–5).</p>
+
+          <div class="row g-2 mt-1">
+
+            <div class="col-md-6">
+              <div class="email-block">
+                <div class="email-header">✉️ &nbsp;<span>Email A</span> &nbsp;— Susan to David &nbsp; <span style="margin-left:auto">Order: <input type="text" size="2"></span></div>
+                <div class="email-body">Hi David,<br>Thanks for your message. I usually meet clients on Tuesdays and on Wednesday 27 March I have a management meeting all afternoon. How about Thursday 28 March at 11.00 a.m.? We can meet for an hour.<br><br>Best regards, Susan</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="email-block">
+                <div class="email-header">✉️ &nbsp;<span>Email B</span> &nbsp;— David to Susan &nbsp; <span style="margin-left:auto">Order: <input type="text" size="2"></span></div>
+                <div class="email-body">Hi Susan,<br>Sorry, I work at home on Thursday mornings. Is Thursday afternoon at 1.00 p.m. OK? Shall we meet in your office?<br><br>Best regards, David</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="email-block">
+                <div class="email-header">✉️ &nbsp;<span>Email C</span> &nbsp;— David to Susan &nbsp; <span style="margin-left:auto">Order: 1</span></div>
+                <div class="email-body">Hi Susan,<br>I hope you are well. As you know, we need to have a new project planning meeting by Friday 29 March. I'm available all day on Tuesday or Wednesday. Are you available on those days?<br><br>Best regards, David</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="email-block">
+                <div class="email-header">✉️ &nbsp;<span>Email D</span> &nbsp;— Susan to David &nbsp; <span style="margin-left:auto">Order: <input type="text" size="2"></span></div>
+                <div class="email-body">Hi Susan,<br>Perfect. See you at 2.00 p.m. on Thursday, in your office.<br><br>Best regards, David</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="email-block">
+                <div class="email-header">✉️ &nbsp;<span>Email E</span> &nbsp;— Susan to David &nbsp; <span style="margin-left:auto">Order: <input type="text" size="2"></span></div>
+                <div class="email-body">Hi David,<br>I have a planning meeting at 1.00 p.m. How about Thursday afternoon at 2.00 p.m.? We can meet in my office.<br><br>Best regards, Susan</div>
+              </div>
+            </div>
+
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev3')">show correct order ▾</button>
+          <div class="reveal-content" id="rev3">
+            <div class="answer-key">
+              <div class="ak-label">Correct order</div>
+              <ol>
+                <li><strong>C</strong> — David proposes Tuesday or Wednesday</li>
+                <li><strong>A</strong> — Susan: both days busy, suggests Thursday 11:00</li>
+                <li><strong>E</strong> — David: has meeting at 13:00, proposes 14:00</li>
+                <li><strong>B</strong> — Susan: works from home Thursday morning, suggests 13:00</li>
+                <li><strong>D</strong> — David confirms: Thursday 14:00 ✓</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="tip-box" style="margin-top: 14px;">
+            <span class="tip-icon">🙋‍♀️</span>
+            <div class="tip-text">After reading: <em>"Have you ever had this kind of situation? Trying to find a time that works for everyone? How do you usually do it — email or Teams?"</em></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Task 6B — Scheduling phrases</span>
+          <span class="activity-src src-bp">BP p.11</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the sentences with the correct word.</p>
+
+          <div class="word-box neutral">
+            <div class="word-box-label">words in the box</div>
+            <span class="word-chip">about</span>
+            <span class="word-chip">available</span>
+            <span class="word-chip">busy</span>
+            <span class="word-chip">date</span>
+            <span class="word-chip">fine</span>
+            <span class="word-chip">see</span>
+            <span class="word-chip">shall</span>
+            <span class="word-chip">then</span>
+          </div>
+
+          <ol class="exercise">
+            <li>We need to change the <input type="text" size="10"> of the new project planning meeting.</li>
+            <li>Are you <input type="text" size="10"> on Friday 29th, in the morning?</li>
+            <li>How <input type="text" size="10"> Friday afternoon?</li>
+            <li>Sorry, I'm afraid I'm <input type="text" size="10"> then.</li>
+            <li>Friday lunchtime is good. <input type="text" size="10"> we meet in your office?</li>
+            <li>I usually have lunch at 1 o'clock. How about <input type="text" size="10">?</li>
+            <li>Yes, that's <input type="text" size="10">. Then we can go to lunch for about an hour.</li>
+            <li><input type="text" size="10"> you then.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev4')">show answers ▾</button>
+          <div class="reveal-content" id="rev4">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>date</strong></li>
+                <li><strong>available</strong></li>
+                <li><strong>about</strong></li>
+                <li><strong>busy</strong></li>
+                <li><strong>Shall</strong></li>
+                <li><strong>then</strong></li>
+                <li><strong>fine</strong></li>
+                <li><strong>See</strong></li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="phrase-box">
+            <div class="phrase-label">Key scheduling phrases</div>
+            <div class="phrase-row">
+              <span class="phrase-en">Are you available on [day] at [time]?</span>
+              <span class="phrase-de">Ти вільна в [день] о [час]?</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">How about [day/time]?</span>
+              <span class="phrase-de">Як щодо [день/час]?</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Sorry, I'm afraid I'm busy then.</span>
+              <span class="phrase-de">Вибач, боюся що я зайнята тоді.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Shall we meet in your office?</span>
+              <span class="phrase-de">Зустрінемось у твоєму офісі?</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">That's fine. See you then.</span>
+              <span class="phrase-de">Добре. До зустрічі.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I'll send you the agenda before the meeting.</span>
+              <span class="phrase-de">Надішлю тобі план до зустрічі.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Speaking — Schedule a meeting</span>
+          <span class="activity-src src-bp">BP p.11</span>
+        </div>
+        <div class="activity-body">
+          <p> You are going to schedule a meeting.</p>
+
+          <div class="row g-3 mt-2">
+            <div class="col-md-6">
+              <div class="email-block">
+                <div class="email-header"><strong>Student A</strong></div>
+                <div class="email-body">
+                  You need to schedule a <strong>planning meeting</strong> by Friday 29 March with Student B.<br><br>
+                  Write an email:
+                  <ul style="margin-top:8px; padding-left:18px;">
+                    <li>Say that you need to have the meeting for one hour.</li>
+                    <li>Say when you are available.</li>
+                    <li>Ask when Student B is available.</li>
+                  </ul>
+                  <hr style="margin: 10px 0; border-color: var(--border);">
+                  <strong>Your schedule:</strong><br>
+                  Mon 25 Mar — At factory all day (every week)<br>
+                  Wed 27 Mar — Sales meeting (all day)<br>
+                  Thu 28 Mar — Management meeting (all day)<br>
+                  Tue 26 &amp; Fri 29 Mar — <em>free</em>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="email-block">
+                <div class="email-header"><strong>Student B</strong></div>
+                <div class="email-body">
+                  You need to schedule a <strong>budget meeting</strong> by Friday 29 March with Student A.<br><br>
+                  Write an email:
+                  <ul style="margin-top:8px; padding-left:18px;">
+                    <li>Say that you need to have the meeting for one hour.</li>
+                    <li>Say when you are available.</li>
+                    <li>Ask when Student A is available.</li>
+                  </ul>
+                  <hr style="margin: 10px 0; border-color: var(--border);">
+                  <strong>Your schedule:</strong><br>
+                  Tue 26 Mar — At the factory (every week)<br>
+                  Wed 27 Mar — Client meetings (all day)<br>
+                  Fri 29 Mar — Morning: working at home<br>
+                  Mon 25 &amp; Thu 28 Mar — <em>free</em>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tip-box" style="margin-top: 14px;">
+            <span class="tip-icon">💬</span>
+            <div class="tip-text">Use the scheduling phrases from above. Try to find a time that works for both of you.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 4 ══ -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Grammar: Questions</div>
+        <div class="phase-sub">BP A2 p.13, ex. 3 + 4A/4B</div>
+      </div>
+      <span class="phase-time">15 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="teacher-says">
+        <div class="label">Grammar note</div>
+        <p>Questions.<br> Головний нюанс: у питаннях з <em>do/does</em> основне дієслово без -s, навіть для he/she.</p>
+        <p><em>"She works"</em> → <em>"Does she work?"</em> — <strong>не</strong> "Does she works?"</p>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Task 3 — Word order: make questions</span>
+          <span class="activity-src src-bp">BP p.13</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Put the words in the correct order to make questions. Say the answer out loud.</p>
+          <ol class="exercise">
+            <li>are / working / your / what / hours / ? <br> <input type="text" size="60"></li> 
+            <li>office / your / workspaces / does / enough / have / ? <br> <input type="text" size="60"></li>
+            <li>have / an area / does / for relaxing / your office / ? <br> <input type="text" size="60"></li>
+            <li>gym / the / you / use / do / ? <br> <input type="text" size="60"></li>
+            <li>is / where / area / the kitchen / ? <br> <input type="text" size="60"></li>
+            <li>work / you / what / do / time / start / ? <br> <input type="text" size="60"></li>
+            <li>does / your / when / finish / day / ? <br> <input type="text" size="60"></li>
+            <li>your / does / have / company / a car park / ? <br> <input type="text" size="60"></li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev5')">show answers ▾</button>
+          <div class="reveal-content" id="rev5">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>What are your working hours?</strong></li>
+                <li><strong>Does your office have enough workspaces?</strong></li>
+                <li><strong>Does your office have an area for relaxing?</strong></li>
+                <li><strong>Do you use the gym?</strong></li>
+                <li><strong>Where is the kitchen area?</strong></li>
+                <li><strong>What time do you start work?</strong></li>
+                <li><strong>When does your day finish?</strong></li>
+                <li><strong>Does your company have a car park?</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Task 4A — Complete the questions + 4B — Match answers</span>
+          <span class="activity-src src-bp">BP p.13</span>
+          <span class="activity-time-badge">7 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete each question with the correct word. Then match it with the answer (a–h).</p>
+
+          <div class="word-box neutral">
+            <div class="word-box-label">question words</div>
+            <span class="word-chip">Does</span>
+            <span class="word-chip">Where</span>
+            <span class="word-chip">How long</span>
+            <span class="word-chip">What time</span>
+            <span class="word-chip">What</span>
+            <span class="word-chip">How often</span>
+            <span class="word-chip">Do</span>
+          </div>
+
+          <table class="vocab-table" style="margin-top: 12px;">
+            <thead>
+              <tr><th>#</th><th>Question</th><th>Answer (a–h)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td><input type="text" size="12"> <input type="text" size="3"> the gym?</td>
+                <td><input type="text" size="3"></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><input type="text" size="12"> the office have a kitchen area?</td>
+                <td><input type="text" size="3"></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><input type="text" size="12"> <input type="text" size="3"> you usually take a break?</td>
+                <td><input type="text" size="3"></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td><input type="text" size="12"> <input type="text" size="3"> the canteen's opening times?</td>
+                <td><input type="text" size="3"></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td><input type="text" size="12"> <input type="text" size="3"> your lunch break?</td>
+                <td><input type="text" size="3"></td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td><input type="text" size="12"> you usually work from home on Friday?</td>
+                <td><input type="text" size="3"></td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td><input type="text" size="12"> the office have a space for relaxing?</td>
+                <td><input type="text" size="3"></td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td><input type="text" size="12"> do you book a meeting room?</td>
+                <td><input type="text" size="3"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="word-box" style="margin-top: 14px;">
+            <div class="word-box-label">answers to match</div>
+            <span class="word-chip">a. About 11:00 a.m.</span>
+            <span class="word-chip">b. Yes, I do.</span>
+            <span class="word-chip">c. On the second floor.</span>
+            <span class="word-chip">d. 10:00 a.m. to 6:00 p.m. every day.</span>
+            <span class="word-chip">e. Yes, it does.</span>
+            <span class="word-chip">f. About 45 minutes.</span>
+            <span class="word-chip">g. About 2–3 times a week.</span>
+            <span class="word-chip">h. Yes, it has a quiet room with sofas.</span>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev6')">show answers ▾</button>
+          <div class="reveal-content" id="rev6">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>Where is</strong> the gym? → <strong>c</strong> (On the second floor.)</li>
+                <li><strong>Does</strong> the office have a kitchen area? → <strong>e</strong> (Yes, it does.)</li>
+                <li><strong>What time do</strong> you usually take a break? → <strong>a</strong> (About 11:00 a.m.)</li>
+                <li><strong>What are</strong> the canteen's opening times? → <strong>d</strong> (10:00 a.m. to 6:00 p.m.)</li>
+                <li><strong>How long is</strong> your lunch break? → <strong>f</strong> (About 45 minutes.)</li>
+                <li><strong>Do</strong> you usually work from home on Friday? → <strong>b</strong> (Yes, I do.)</li>
+                <li><strong>Does</strong> the office have a space for relaxing? → <strong>h</strong> (Yes, it has a quiet room with sofas.)</li>
+                <li><strong>How often</strong> do you book a meeting room? → <strong>g</strong> (About 2–3 times a week.)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 5 ══ -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Speaking: Scheduling roleplay + Wrap-up</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Roleplay — Schedule a call with Priya</span>
+          <span class="activity-src src-you">ROLEPLAY</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="row">
+            <div class="col-6">
+              <div class="tip-box"><span class="tip-icon">👩</span><div class="tip-text"><strong>Svitlana</strong></div></div>
+            </div>
+            <div class="col-6">
+              <div class="tip-box"><span class="tip-icon">👩🏽</span><div class="tip-text"><strong>Priya</strong><br>engineer, India</div></div>
+            </div>
+          </div>
+
+          <div class="student-says">
+            <div class="label">Situation</div>
+            <p>Priya needs to schedule a call to discuss the new wiring project. She writes to Svitlana on Teams. Use the scheduling phrases from Phase 3.</p>
+          </div>
+
+          <div class="teacher-says">
+            <div class="label">Teacher starts as Priya</div>
+            <p><em>"Hi! I need to schedule a call with you about the new wiring project. Are you available next week?"</em></p>
+          </div>
+
+          <ul class="steps">
+            <li><span class="step-num">1</span><strong>Round 1:</strong> Propose a time, negotiate, confirm.</li>
+            <li><span class="step-num">2</span><strong>Round 2:</strong> Swap roles.</li>
+            <li><span class="step-num">3</span><strong>Bonus:</strong> Add one sentence about what you'll do before the call — <em>"I'll prepare a brief / send you the agenda."</em></li>
+          </ul>
+
+          <div class="phrase-box">
+            <div class="phrase-label">Use these phrases</div>
+            <div class="phrase-row">
+              <span class="phrase-en">Are you available on…?</span>
+              <span class="phrase-de">Ти вільна в…?</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">How about [day] at [time]?</span>
+              <span class="phrase-de">Як щодо [день] о [час]?</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Sorry, I'm afraid I'm busy then.</span>
+              <span class="phrase-de">Вибач, я зайнята тоді.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">That's fine. See you then.</span>
+              <span class="phrase-de">Добре. До зустрічі.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I'll send you the agenda / brief before the call.</span>
+              <span class="phrase-de">Надішлю план / бриф до дзвінка.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-wrap">✅</div>
+          <span class="activity-title">Wrap-up</span>
+        </div>
+        <div class="activity-body">
+          <div class="teacher-says">
+            <p><em>"Your Indian colleague Raj writes: 'Hi, I'd like to schedule a call next week. Are you available?' — what do you write back?"</em></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HOMEWORK -->
+  <div style="background: var(--paper-dark); border: 1px solid var(--border); border-radius: 6px; padding: 20px 24px; margin-top: 8px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 16px;">📚 Homework</h2>
+
+    <ul class="steps">
+      <li><span class="step-num">1</span><strong>Write</strong> a short email (5–6 sentences) scheduling a meeting with an imaginary colleague. Use at least 3 phrases from the scheduling box.</li>
+      <li><span class="step-num">2</span><strong>Learn by heart:</strong>
+        <em>"Are you available on [day] at [time]?"</em> · <em>"Sorry, I'm afraid I'm busy then."</em> · <em>"That's fine. See you then."</em></li>
+      <li><span class="step-num">3</span><strong>Prepare answers</strong> for these questions — next lesson will be a short interview:
+        <em>Which department do you work in? · How do you get to work? · How long is your journey? · How often do you travel abroad?</em></li>
+    </ul>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+function togglePhase(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

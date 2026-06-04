@@ -438,6 +438,9 @@
         <span>your space</span>
         <span id="display-name">—</span>
       </div>
+       <a id="meet-btn" href="#" target="_blank" style="display:none; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6bffb8; background:rgba(107,255,184,0.06); border:1px solid rgba(107,255,184,0.3); border-radius:6px; padding:8px 16px; text-decoration:none;">
+  📹 join lesson
+</a>
       <button class="btn-logout" id="btn-logout">← вийти</button>
     </div>
 
@@ -455,25 +458,28 @@
 // НАЛАШТУВАННЯ — РЕДАГУЙ ТУТ
 // ============================================================
 const STUDENTS = {
-  anna: {
+  svitlana: {
     name: "Svitlana",
-    password: "sun2024",       
+    password: "sun2024",
+    meet: "https://meet.google.com/eor-nuun-xod"
     lessons: [
       { title: "Working Day", date: "19.05.2026", file: "svitlana/lesson1.html", followup: "svitlana/lesson1_followup.pdf" },
       { title: "A work plan", date: "22.05.2026", file: "svitlana/lesson2.html", followup: "svitlana/lesson2_followup.pdf" },
       { title: "Talking about People and Roles", date: "26.05.2026", file: "svitlana/lesson3.html", followup: "svitlana/lesson3_followup.pdf" },
     ]
   },
-  petro: {
+  volodymyr: {
     name: "Volodymyr",
-    password: "sky4321",       
+    password: "sky4321",
+    meet: "https://meet.google.com/hyp-tfzt-pmo"
     lessons: [
       { title: "Jobs in Tech", date: "04.06.2026", file: "volodymyr/lesson1.html" }
     ]
   },
-  sofia: {
+  yulia: {
     name: "Yulia",
-    password: "moon007",       
+    password: "moon007",
+    meet: "https://meet.google.com/ajr-dqpi-ffz"
     lessons: [
       { title: "Conditionals: Zero & First", date: "03.06.2025", file: "sofia/lesson1.html" },
     ]
@@ -523,6 +529,14 @@ function showDashboard(student) {
   lockScreen.style.display = 'none';
   dashboard.classList.add('visible');
   displayName.textContent = student.name;
+
+  const meetBtn = document.getElementById('meet-btn');
+if (student.meet) {
+  meetBtn.href = student.meet;
+  meetBtn.style.display = 'inline-flex';
+} else {
+  meetBtn.style.display = 'none';
+}
 
   lessonsGrid.innerHTML = '';
 

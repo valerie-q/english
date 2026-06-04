@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 1</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f1f3d;
+      --ink-soft: #253554;
+      --paper: #f0f4fa;
+      --paper-dark: #dde5f0;
+      --accent: #c8852a;
+      --accent-light: #e0a040;
+      --gold: #d4922f;
+      --teal: #1a3a6b;
+      --teal-light: #2a5298;
+      --warm-grey: #6b7a99;
+      --border: #ccd6e8;
+      --white: #ffffff;
+      --phase-1: #1a3a6b;
+      --phase-2: #2a5298;
+      --phase-3: #c8852a;
+      --phase-4: #1a3a6b;
+      --phase-5: #2a5298;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+
+    .header { background: var(--ink); color: var(--white); padding: 48px 40px 40px; position: relative; overflow: hidden; }
+    .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(200,133,42,0.28) 0%, transparent 70%); }
+    .header::after { content: ''; position: absolute; bottom: -40px; left: 20%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(42,82,152,0.3) 0%, transparent 70%); }
+    .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px, 5vw, 58px); font-weight: 900; line-height: 1.05; margin-bottom: 16px; }
+    .header h1 em { font-style: italic; color: var(--accent-light); }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7); }
+    .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .meta-chip strong { color: var(--white); }
+
+    .objectives-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .objectives-box { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 700px) { .objectives-box { grid-template-columns: 1fr; } .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; } }
+    .obj-col h3 { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .obj-list { list-style: none; }
+    .obj-list li { font-size: 14px; padding: 5px 0; padding-left: 18px; position: relative; color: var(--ink-soft); border-bottom: 1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom: none; }
+    .obj-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal-light); font-size: 12px; font-weight: 600; }
+
+    .main { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+
+    .phase { margin-bottom: 40px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; position: relative; }
+    .phase-header::after { content: '▾'; position: absolute; right: 20px; font-size: 18px; color: rgba(255,255,255,0.6); transition: transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+    .phase-num { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 20px; color: rgba(255,255,255,0.9); white-space: nowrap; }
+    .phase-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--white); line-height: 1.2; }
+    .phase-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .phase-time { margin-left: auto; margin-right: 32px; font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.8); white-space: nowrap; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; }
+    .phase-body { padding: 0 24px 24px; }
+    .phase.collapsed .phase-body { display: none; }
+    .phase-1 .phase-header { background: var(--phase-1); }
+    .phase-2 .phase-header { background: var(--phase-2); }
+    .phase-3 .phase-header { background: var(--phase-3); }
+    .phase-4 .phase-header { background: var(--phase-4); }
+    .phase-5 .phase-header { background: var(--phase-5); }
+
+    .activity { border: 1px solid var(--border); border-radius: 4px; margin-top: 16px; overflow: hidden; }
+    .activity-head { background: var(--paper); padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+    .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+    .activity-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+    .activity-src { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--warm-grey); background: var(--paper-dark); padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-time-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: var(--white); padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-body { padding: 16px; }
+
+    .teacher-says { background: #e8eef8; border-left: 3px solid #2a5298; border-radius: 0 4px 4px 0; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+    .teacher-says .label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #2a5298; margin-bottom: 6px; }
+    .teacher-says p { color: var(--ink-soft); line-height: 1.6; }
+    .teacher-says em { font-style: italic; color: var(--ink); }
+    .student-says { background: #eef2fb; border-left: 3px solid var(--teal-light); border-radius: 0 4px 4px 0; padding: 12px 16px; margin: 8px 0; font-size: 14px; }
+    .student-says .label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal-light); margin-bottom: 6px; }
+    .student-says p { color: var(--ink-soft); line-height: 1.6; }
+
+    .vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .vocab-table th { background: var(--ink); color: var(--white); padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; letter-spacing: 0.5px; }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: var(--paper); }
+    .vocab-table .eng { font-weight: 600; color: var(--ink); }
+    .vocab-table .de { color: var(--warm-grey); font-size: 13px; }
+    .vocab-table .ans { color: var(--teal); font-style: italic; font-size: 13px; }
+
+    .phrase-box { background: var(--ink); color: var(--white); border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+    .phrase-box .phrase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 10px; }
+    .phrase-row { display: flex; align-items: baseline; gap: 16px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .phrase-row:last-child { border-bottom: none; }
+    .phrase-en { font-size: 15px; font-weight: 500; flex: 1; }
+    .phrase-de { font-size: 13px; color: rgba(255,255,255,0.55); flex: 1; }
+
+    .tip-box { background: #fef6e8; border: 1px solid #e0a040; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; display: flex; gap: 10px; }
+    .tip-icon { font-size: 16px; flex-shrink: 0; }
+    .tip-text { color: #3a2800; line-height: 1.5; }
+    .tip-text strong { color: #2a1a00; }
+
+    .warn-box { background: #fdf0e8; border: 1px solid #e8c080; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; color: #5a3000; display: flex; gap: 10px; }
+
+    .steps { list-style: none; margin: 12px 0; }
+    .steps li { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px dotted var(--border); font-size: 14px; line-height: 1.5; align-items: flex-start; }
+    .steps li:last-child { border-bottom: none; }
+    .step-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--white); background: var(--ink-soft); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    .answer-key { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+    .answer-key .ak-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 8px; }
+    .answer-key ol { padding-left: 20px; }
+    .answer-key ol li { padding: 3px 0; color: var(--ink-soft); }
+    .answer-key ol li strong { color: var(--teal-light); }
+
+    .word-box { background: var(--white); border: 2px solid var(--teal-light); border-radius: 6px; padding: 12px 16px; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .word-box-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); width: 100%; margin-bottom: 4px; }
+    .word-chip { background: var(--teal-light); color: var(--white); font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+    .word-box.neutral { border-color: var(--border); }
+    .word-box.neutral .word-chip { background: var(--ink-soft); }
+
+    .reveal-btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; background: none; border: 1px solid var(--border); color: var(--warm-grey); padding: 5px 14px; border-radius: 20px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+    .reveal-btn:hover { border-color: var(--teal-light); color: var(--teal-light); }
+    .reveal-content { display: none; margin-top: 10px; }
+    .reveal-content.open { display: block; }
+
+    .speaking-box { border: 2px solid var(--teal); border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .speaking-box-header { background: var(--teal); padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+    .speaking-box-header span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.85); font-weight: 600; }
+    .speaking-box-body { background: var(--white); padding: 16px; }
+    .speaking-section { margin-bottom: 14px; }
+    .speaking-section:last-child { margin-bottom: 0; }
+    .speaking-section-title { font-size: 12px; font-weight: 700; color: var(--teal-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
+    .speaking-row { display: flex; gap: 12px; padding: 5px 0; border-bottom: 1px dotted var(--border); font-size: 14px; }
+    .speaking-row:last-child { border-bottom: none; }
+    .speaking-q { flex: 1; color: var(--ink); }
+    .speaking-a { flex: 1; color: var(--ink-soft); font-style: italic; }
+
+    .profile-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .profile-card-header { background: var(--paper-dark); padding: 8px 14px; font-size: 12px; font-weight: 600; color: var(--warm-grey); border-bottom: 1px solid var(--border); }
+    .profile-card table { width: 100%; font-size: 14px; }
+    .profile-card td { padding: 7px 14px; border-bottom: 1px solid var(--border); }
+    .profile-card td:first-child { font-weight: 600; color: var(--warm-grey); text-transform: uppercase; font-size: 11px; width: 130px; }
+    .profile-card td:last-child { color: var(--ink-soft); font-style: italic; }
+    .profile-card tr:last-child td { border-bottom: none; }
+
+    .src-bp { background: #1a3a6b; color: white; }
+    .src-you { background: #1a3a6b; color: white; }
+    .icon-warmup { background: #e8eef8; }
+    .icon-vocab { background: #e8eef8; }
+    .icon-grammar { background: #fef6e8; }
+    .icon-speaking { background: #eef2fb; }
+    .icon-wrap { background: #eef2fb; }
+
+    p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+    strong { color: var(--ink); }
+    ol.exercise { padding-left: 20px; }
+    ol.exercise li { font-size: 14px; color: var(--ink-soft); padding: 5px 0; border-bottom: 1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom: none; }
+
+    input[type="text"] { border: none; border-bottom: 1.5px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); padding: 2px 4px; outline: none; transition: border-color 0.2s; }
+    input[type="text"]:focus { border-bottom-color: var(--teal-light); }
+  </style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 1<br><em>Working Day</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 Unit 1.1</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Duration:</strong>&nbsp;60 min</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES -->
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Introduce yourself and talk about your job</li>
+        <li>Describe your daily tasks and routine</li>
+        <li>Use present simple for habits and facts</li>
+        <li>Talk about job titles and responsibilities</li>
+        <li>Learn key vocabulary for jobs and tasks</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>Jobs: I'm an analyst / She's a manager</li>
+        <li>Tasks: I check emails / I attend meetings</li>
+        <li>Frequency: usually / often / sometimes / never</li>
+        <li>Present simple: I work… / She works…</li>
+        <li>The -s ending: he works / she checks</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Warm-up — Your working day</div>
+        <div class="phase-sub">Getting started — real context</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-warmup">☀️</div>
+          <span class="activity-title">Discussion — What does your working day look like?</span>
+        </div>
+        <div class="activity-body">
+          <div class="teacher-says">
+            <p><em>"Tell me about your typical working day. What time do you start? What do you do first? What tasks do you have?"</em></p>
+          </div>
+
+          <div class="speaking-box">
+            <div class="speaking-box-header">
+              <span>Useful phrases to warm up</span>
+            </div>
+            <div class="speaking-box-body">
+              <div class="speaking-section">
+                <div class="speaking-section-title">Time & Routine</div>
+                <div class="speaking-row"><span class="speaking-q">I start work at…</span><span class="speaking-a">… eight o'clock / nine thirty</span></div>
+                <div class="speaking-row"><span class="speaking-q">I usually finish at…</span><span class="speaking-a">… five / six in the evening</span></div>
+                <div class="speaking-row"><span class="speaking-q">In the morning, I…</span><span class="speaking-a">… check my emails / have a coffee</span></div>
+              </div>
+              <div class="speaking-section">
+                <div class="speaking-section-title">Tasks</div>
+                <div class="speaking-row"><span class="speaking-q">I attend a lot of meetings.</span><span class="speaking-a">— me too / I don't</span></div>
+                <div class="speaking-row"><span class="speaking-q">I work with clients / colleagues.</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">I sometimes work from home.</span><span class="speaking-a"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text"><strong>Note:</strong> We use <em>present simple</em> for routines and habits — things that happen regularly. Not for what is happening right now.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 2 ══ -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">1.1 Vocabulary — Jobs and Tasks</div>
+        <div class="phase-sub">BP A2 p.8, ex. 1A + 1B — Jobs and tasks vocabulary</div>
+      </div>
+      <span class="phase-time">15 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📖</div>
+          <span class="activity-title">Exercise 1A — Match jobs to descriptions</span>
+          <span class="activity-src src-bp">BP p.8</span>
+          <span class="activity-time-badge">7 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Match each job (1–8) with the correct description (a–h). Read the pairs out loud.</p>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <table class="vocab-table">
+                <thead><tr><th>#</th><th>Job title</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td class="eng">Financial Analyst</td></tr>
+                  <tr><td>2</td><td class="eng">Sales Manager</td></tr>
+                  <tr><td>3</td><td class="eng">IT Specialist</td></tr>
+                  <tr><td>4</td><td class="eng">HR Assistant</td></tr>
+                  <tr><td>5</td><td class="eng">Office Manager</td></tr>
+                  <tr><td>6</td><td class="eng">Customer Service Rep</td></tr>
+                  <tr><td>7</td><td class="eng">Marketing Coordinator</td></tr>
+                  <tr><td>8</td><td class="eng">Project Manager</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="vocab-table">
+                <thead><tr><th>Letter</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr><td>a</td><td>manages office facilities and admin</td></tr>
+                  <tr><td>b</td><td>analyses financial data and reports</td></tr>
+                  <tr><td>c</td><td>helps recruit and support employees</td></tr>
+                  <tr><td>d</td><td>leads and coordinates projects</td></tr>
+                  <tr><td>e</td><td>manages a sales team and targets</td></tr>
+                  <tr><td>f</td><td>answers questions and helps customers</td></tr>
+                  <tr><td>g</td><td>supports computer systems and networks</td></tr>
+                  <tr><td>h</td><td>organises marketing campaigns</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev1')">show answers ▾</button>
+          <div class="reveal-content" id="rev1">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>1 → <strong>b</strong> — analyses financial data</li>
+                <li>2 → <strong>e</strong> — manages a sales team</li>
+                <li>3 → <strong>g</strong> — supports computer systems</li>
+                <li>4 → <strong>c</strong> — helps recruit employees</li>
+                <li>5 → <strong>a</strong> — manages office facilities</li>
+                <li>6 → <strong>f</strong> — answers questions, helps customers</li>
+                <li>7 → <strong>h</strong> — organises marketing campaigns</li>
+                <li>8 → <strong>d</strong> — leads and coordinates projects</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Exercise 1B — Daily tasks vocabulary</span>
+          <span class="activity-src src-bp">BP p.8</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete each sentence with the correct verb from the box.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">Word bank</div>
+            <span class="word-chip">attend</span>
+            <span class="word-chip">check</span>
+            <span class="word-chip">send</span>
+            <span class="word-chip">prepare</span>
+            <span class="word-chip">manage</span>
+            <span class="word-chip">visit</span>
+            <span class="word-chip">present</span>
+            <span class="word-chip">deal with</span>
+          </div>
+
+          <ol class="exercise">
+            <li>I <input type="text" size="12"> my emails every morning.</li>
+            <li>She <input type="text" size="12"> three or four meetings a week.</li>
+            <li>We <input type="text" size="12"> clients in other cities sometimes.</li>
+            <li>He <input type="text" size="12"> reports to the director every month.</li>
+            <li>I <input type="text" size="12"> a team of five people.</li>
+            <li>She often <input type="text" size="12"> reports and spreadsheets.</li>
+            <li>We <input type="text" size="12"> customer complaints in our department.</li>
+            <li>I <input type="text" size="12"> documents to colleagues every day.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev2')">show answers ▾</button>
+          <div class="reveal-content" id="rev2">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>check</strong></li>
+                <li><strong>attends</strong></li>
+                <li><strong>visit</strong></li>
+                <li><strong>presents</strong></li>
+                <li><strong>manage</strong></li>
+                <li><strong>prepares</strong></li>
+                <li><strong>deal with</strong></li>
+                <li><strong>send</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Grammar — Present Simple + The -s ending</div>
+        <div class="phase-sub">BP A2 p.9 — Facts and routines · Pronunciation: the -s ending</div>
+      </div>
+      <span class="phase-time">15 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Grammar box — Present Simple for facts and routines</span>
+          <span class="activity-src src-bp">BP p.9</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="phrase-box">
+            <div class="phrase-label">Present Simple — Forms</div>
+            <div class="phrase-row">
+              <span class="phrase-en">I / you / we / they → work</span>
+              <span class="phrase-de">base form — no change</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">he / she / it → works</span>
+              <span class="phrase-de">add <strong style="color:var(--accent-light)">-s</strong> (or -es / -ies)</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Negative: I don't work / She doesn't work</span>
+              <span class="phrase-de">use do/does + not</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Question: Do you work? / Does she work?</span>
+              <span class="phrase-de">invert do/does</span>
+            </div>
+          </div>
+
+          <div class="teacher-says">
+            <div class="label">Пояснення</div>
+            <p><strong>Present simple</strong> використовується для <em>рутин і фактів</em> — того, що відбувається регулярно: <em>"I check emails every day."</em></p>
+            <p style="margin-top:6px;">Важливо: <strong>he/she/it завжди отримує -s</strong>: <em>"She works."</em> Не <em>"She work."</em> Ця помилка дуже поширена!</p>
+          </div>
+
+          <div class="warn-box">
+            <span>⚠️</span>
+            <div><strong>Увага:</strong> "He don't work" — WRONG. Завжди: <em>"He doesn't work."</em> У запереченні й питанні -s прибирається, бо does вже показує he/she.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Exercise — Make correct sentences</span>
+          <span class="activity-src src-bp">BP p.9</span>
+        </div>
+        <div class="activity-body">
+          <p>Write the correct form of the verb. Then say the sentence out loud.</p>
+
+          <ol class="exercise">
+            <li>She (manage) <input type="text" size="16"> a team of ten people.</li>
+            <li>I (not / attend) <input type="text" size="22"> many meetings.</li>
+            <li>(he / work) <input type="text" size="22"> from home on Fridays?</li>
+            <li>They (visit) <input type="text" size="16"> clients every month.</li>
+            <li>She (not / send) <input type="text" size="22"> reports — her assistant does.</li>
+            <li>(you / check) <input type="text" size="22"> your emails in the morning?</li>
+            <li>He (prepare) <input type="text" size="16"> presentations for the director.</li>
+            <li>We (deal with) <input type="text" size="16"> international clients.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev3')">show answers ▾</button>
+          <div class="reveal-content" id="rev3">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>manages</strong></li>
+                <li><strong>don't attend</strong></li>
+                <li><strong>Does he work</strong></li>
+                <li><strong>visit</strong></li>
+                <li><strong>doesn't send</strong></li>
+                <li><strong>Do you check</strong></li>
+                <li><strong>prepares</strong></li>
+                <li><strong>deal with</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 4 ══ -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">1.1 Video + Listening — Working Day</div>
+        <div class="phase-sub">BP A2 p.8–9 — Video: Working day</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎬</div>
+          <span class="activity-title">Video — Watch and answer the questions</span>
+          <span class="activity-src src-bp">BP p.8</span>
+        </div>
+        <div class="activity-body">
+          <p>Watch the video. Answer the questions below.</p>
+
+          <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:6px; margin:12px 0;">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/9i6L2tdwdF4?si=HbJ0YLtfpxNKJjgz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <div class="activity-body">
+    <div class="word-box">
+      <div class="word-box-label">Job titles</div>
+      <span class="word-chip">Chief Executive Officer (CEO)</span>
+      <span class="word-chip">Senior Research Manager</span>
+      <span class="word-chip">Student Services Manager</span>
+    </div>
+    <ol class="exercise">
+      <li>Liz — <input type="text" size="30" placeholder="job title..."></li>
+      <li>Ellen — <input type="text" size="30" placeholder="job title..."></li>
+      <li>Muj — <input type="text" size="30" placeholder="job title..."></li>
+    </ol>
+    <button class="reveal-btn" onclick="toggleReveal('rev6a')">show answers ▾</button>
+    <div class="reveal-content" id="rev6a">
+      <div class="answer-key">
+        <div class="ak-label">Answer key</div>
+        <ol>
+          <li>Liz — <strong>Student Services Manager</strong></li>
+          <li>Ellen — <strong>Senior Research Manager</strong></li>
+          <li>Muj — <strong>Chief Executive Officer (CEO)</strong></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+        </div>
+      </div>
+
+      <div class="activity">
+  <div class="activity-head">
+    <div class="activity-icon icon-vocab">✅</div>
+    <span class="activity-title">6B — Tick the things each person does</span>
+    <span class="activity-src src-bp">BP p.8</span>
+    <span class="activity-time-badge">5 min</span>
+  </div>
+  <div class="activity-body">
+    <p>Watch the video again. Tick (✓) the things that each person does.</p>
+    <table class="vocab-table" style="text-align:center;">
+      <thead>
+        <tr>
+          <th style="text-align:left;">Who …</th>
+          <th style="background:#2a5298;">Liz</th>
+          <th style="background:#2a5298;">Ellen</th>
+          <th style="background:#2a5298;">Muj</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:left;">starts work at 7.30?</td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">finishes work at 5.30?</td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">travels to other countries for work?</td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">has lunch at 1 o'clock?</td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">analyses data?</td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">writes reports?</td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="reveal-btn" onclick="toggleReveal('rev6b')">show answers ▾</button>
+    <div class="reveal-content" id="rev6b">
+      <div class="answer-key">
+        <div class="ak-label">Answer key</div>
+        <p style="margin:4px 0;"><strong>Liz:</strong> starts work at 7.30 ✓ · has lunch at 1 o'clock ✓ · writes reports ✓</p>
+        <p style="margin:4px 0;"><strong>Ellen:</strong> finishes work at 5.30 ✓ · analyses data ✓ · writes reports ✓</p>
+        <p style="margin:4px 0;"><strong>Muj:</strong> travels to other countries ✓ · has lunch at 1 o'clock ✓</p>
+      </div>
+    </div>
+  </div>
+</div>
+        
+            
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 5 ══ -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Speaking — Introduce yourself + Wrap-up</div>
+        <div class="phase-sub">BP A2 p.8–9 — Introducing yourself and your job</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">🗣️</div>
+          <span class="activity-title">Task — Build your introduction</span>
+          <span class="activity-src src-bp">BP p.8–9</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Use the structure below to write your own introduction. Then say it out loud without reading.</p>
+
+          <div class="phrase-box">
+            <div class="phrase-label">Structure — talking about yourself and your job</div>
+            <div class="phrase-row">
+              <span class="phrase-en">My name is … and I'm a/an …</span>
+              <span class="phrase-de">ім'я + посада</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I work for … / I work at …</span>
+              <span class="phrase-de">компанія або місце роботи</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I work in the … department.</span>
+              <span class="phrase-de">відділ</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I usually … / I often … / I sometimes …</span>
+              <span class="phrase-de">щоденні завдання</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I'm responsible for …</span>
+              <span class="phrase-de">основна відповідальність</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I work with …</span>
+              <span class="phrase-de">команда або колеги</span>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-card-header">Your profile — say it out loud</div>
+            <table>
+              <tr><td>Name & job</td><td style="color:var(--border)">My name is ___ and I'm a/an ___</td></tr>
+              <tr><td>Company</td><td style="color:var(--border)">I work for ___</td></tr>
+              <tr><td>Department</td><td style="color:var(--border)">I work in the ___ department</td></tr>
+              <tr><td>Daily tasks</td><td style="color:var(--border)">I usually… / I often… / I sometimes…</td></tr>
+              <tr><td>Responsibility</td><td style="color:var(--border)">I'm responsible for…</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-wrap">✅</div>
+          <span class="activity-title">Wrap-up — Q&A about your working day</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="teacher-says">
+            <p><em>"I'm a journalist writing about people's working days. I want to ask you some questions. Are you ready?"</em></p>
+          </div>
+
+          <ul class="steps">
+            <li><span class="step-num">1</span>Teacher asks 4–5 questions from the list below. Student answers using full sentences.</li>
+            <li><span class="step-num">2</span>Then swap — student asks the teacher 2 questions.</li>
+          </ul>
+
+          <div class="speaking-box">
+            <div class="speaking-box-header">
+              <span>Interview questions — working day</span>
+            </div>
+            <div class="speaking-box-body">
+              <div class="speaking-row"><span class="speaking-q">What time do you start work?</span></div>
+              <div class="speaking-row"><span class="speaking-q">What do you do first in the morning?</span></div>
+              <div class="speaking-row"><span class="speaking-q">How many meetings do you attend in a week?</span></div>
+              <div class="speaking-row"><span class="speaking-q">Do you often work late?</span></div>
+              <div class="speaking-row"><span class="speaking-q">What is the most important task in your job?</span></div>
+              <div class="speaking-row"><span class="speaking-q">Do you work with international colleagues?</span></div>
+              <div class="speaking-row"><span class="speaking-q">What time do you finish work?</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HOMEWORK -->
+  <div style="background: var(--paper-dark); border: 1px solid var(--border); border-radius: 6px; padding: 20px 24px; margin-top: 8px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 16px; color: var(--ink);">📚 Homework</h2>
+    <ul class="steps">
+      <li><span class="step-num">1</span><strong>Write</strong> a short paragraph (5–7 sentences) about your typical working day — use at least 5 task verbs from today's lesson and at least 2 frequency adverbs (usually, often, sometimes, never).</li>
+      <li><span class="step-num">2</span><strong>Learn by heart:</strong> say these 3 times each without looking — <em>"She manages a team of ten people."</em> · <em>"I'm responsible for preparing reports."</em> · <em>"Do you often work from home?"</em></li>
+      <li><span class="step-num">3</span><strong>Prepare</strong> a 60-second spoken introduction (name, job, company, department, 3 daily tasks) — next lesson starts with you saying it from memory.</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+function togglePhase(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

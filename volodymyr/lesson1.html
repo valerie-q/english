@@ -1,1 +1,917 @@
-г
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 1 — Jobs in Tech</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2240;
+      --ink-soft: #3a4a6a;
+      --paper: #f5f7fc;
+      --paper-dark: #e8edf8;
+      --gold: #c88a10;
+      --teal: #2a5fa8;
+      --teal-light: #4a7fc8;
+      --warm-grey: #6a7a9a;
+      --border: #d0d8ec;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+
+    /* HEADER */
+    .header { background: #1a2e52; color: #fff; padding: 48px 40px 40px; position: relative; overflow: hidden; }
+    .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(90,143,232,0.3) 0%, transparent 70%); }
+    .header::after  { content: ''; position: absolute; bottom: -40px; left: 20%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(200,138,16,0.2) 0%, transparent 70%); }
+    .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px,5vw,58px); font-weight: 900; line-height: 1.05; margin-bottom: 16px; }
+    .header h1 em { font-style: italic; color: #f0c060; }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7); }
+    .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0c060; flex-shrink: 0; }
+    .meta-chip strong { color: #fff; }
+
+    /* OBJECTIVES */
+    .objectives-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .objectives-box { background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .obj-col h3 { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .obj-list { list-style: none; }
+    .obj-list li { font-size: 14px; padding: 5px 0 5px 18px; position: relative; color: var(--ink-soft); border-bottom: 1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom: none; }
+    .obj-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal-light); font-size: 12px; font-weight: 600; }
+
+    /* MAIN */
+    .main { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+
+    /* PHASE */
+    .phase { margin-bottom: 40px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; position: relative; }
+    .phase-header::after { content: '▾'; position: absolute; right: 20px; font-size: 18px; color: rgba(255,255,255,0.6); transition: transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+    .phase-num { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 20px; color: rgba(255,255,255,0.9); white-space: nowrap; }
+    .phase-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
+    .phase-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .phase-time { margin-left: auto; margin-right: 32px; font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.8); white-space: nowrap; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; }
+    .phase-body { padding: 0 24px 24px; background: var(--paper); }
+    .phase.collapsed .phase-body { display: none; }
+    .phase-1 .phase-header { background: #1e3a5f; }
+    .phase-2 .phase-header { background: #2a4a7a; }
+    .phase-3 .phase-header { background: #1a3a6e; }
+    .phase-4 .phase-header { background: #1e3a5f; }
+    .phase-5 .phase-header { background: #2a4a7a; }
+
+    /* ACTIVITY */
+    .activity { border: 1px solid var(--border); border-radius: 4px; margin-top: 16px; overflow: hidden; background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .activity-head { background: var(--paper-dark); padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+    .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; background: #eef3fb; }
+    .activity-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+    .activity-src { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: #1e3a6e; background: #dce6f5; border: 1px solid #b0c8ec; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-time-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-body { padding: 16px; background: var(--white); }
+
+    /* COMPONENTS */
+    .tip-box { background: #eef3fb; border: 1px solid #b0c8ec; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; display: flex; gap: 10px; }
+    .tip-icon { font-size: 16px; flex-shrink: 0; }
+    .tip-text { color: #2a3a5a; line-height: 1.5; }
+    .tip-text strong { color: var(--ink); }
+
+    .phrase-box { background: #1a2e52; border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+    .phrase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: #f0c060; margin-bottom: 10px; }
+    .phrase-row { display: flex; align-items: baseline; gap: 16px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .phrase-row:last-child { border-bottom: none; }
+    .phrase-en { font-size: 15px; font-weight: 500; flex: 1; color: #fff; }
+    .phrase-de { font-size: 13px; color: rgba(255,255,255,0.55); flex: 1; }
+
+    .speaking-box { border: 2px solid var(--teal); border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .speaking-box-header { background: #1e3a5f; padding: 10px 16px; }
+    .speaking-box-header span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 600; }
+    .speaking-box-body { background: var(--white); padding: 16px; }
+    .speaking-section { margin-bottom: 14px; }
+    .speaking-section:last-child { margin-bottom: 0; }
+    .speaking-section-title { font-size: 12px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
+    .speaking-row { display: flex; gap: 12px; padding: 5px 0; border-bottom: 1px dotted var(--border); font-size: 14px; color: var(--ink); }
+    .speaking-row:last-child { border-bottom: none; }
+
+    .word-box { background: var(--white); border: 2px solid var(--teal); border-radius: 6px; padding: 12px 16px; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .word-box-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); width: 100%; margin-bottom: 4px; }
+    .word-chip { background: #1e3a5f; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+
+    .answer-key { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+    .ak-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 8px; }
+    .answer-key ol { padding-left: 20px; }
+    .answer-key ol li { padding: 3px 0; color: var(--ink-soft); }
+    .answer-key ol li strong { color: var(--teal); }
+
+    .reveal-btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; background: none; border: 1px solid var(--border); color: var(--warm-grey); padding: 5px 14px; border-radius: 20px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+    .reveal-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .reveal-content { display: none; margin-top: 10px; }
+    .reveal-content.open { display: block; }
+
+    .vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .vocab-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; letter-spacing: 0.5px; }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--ink-soft); }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .vocab-table .eng { font-weight: 600; color: var(--ink); }
+
+    .match-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .match-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; }
+    .match-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--ink-soft); }
+    .match-table tr:last-child td { border-bottom: none; }
+    .match-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .match-table .num { font-family: 'DM Mono', monospace; font-weight: 600; color: var(--teal); width: 30px; }
+
+    .steps { list-style: none; margin: 12px 0; }
+    .steps li { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px dotted var(--border); font-size: 14px; align-items: flex-start; color: var(--ink-soft); }
+    .steps li:last-child { border-bottom: none; }
+    .step-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: #fff; background: var(--ink); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+    p:first-child { margin-top: 0; }
+    strong { color: var(--ink); }
+    ol.exercise { padding-left: 20px; }
+    ol.exercise li { font-size: 14px; color: var(--ink-soft); padding: 5px 0; border-bottom: 1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom: none; }
+    input[type="text"] { border: none; border-bottom: 1px solid var(--teal-light); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); outline: none; padding: 1px 4px; }
+    input[type="text"]:focus { border-bottom-color: #1a2e52; }
+
+    @media (max-width: 700px) {
+      .objectives-box { grid-template-columns: 1fr; }
+      .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 1<br><em>Jobs in Tech</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;B1–B2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;English for Tech — Lesson 1</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Duration:</strong>&nbsp;60 min</div>
+    </div>
+  </div>
+</div>
+
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Discuss popular jobs in the tech industry</li>
+        <li>Understand key vocabulary from the reading article</li>
+        <li>Review Present Simple vs Present Continuous</li>
+        <li>Practice pronouncing common tech job titles</li>
+        <li>Write and deliver a personal elevator pitch</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>Vocab: stakeholders, expertise, career path, from scratch, in a nutshell, optimize, specialize in</li>
+        <li>Grammar: Present Simple (facts/routines) vs Present Continuous (now/temporary)</li>
+        <li>Pitch phrases: I work as… / I help… / I'm in charge of… / Right now I am…</li>
+        <li>Pronunciation: software developer, QA engineer, UI/UX designer, DevOps, architect</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PHASE 1 -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Warm-up — Tech jobs brainstorm</div>
+      </div>
+      <span class="phase-time">5 min</span>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Discussion — What jobs exist in tech?</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Without looking anything up — what tech job titles do you know in English? List as many as you can.</p>
+          <div class="speaking-box" style="margin-top:14px">
+            <div class="speaking-box-header"><span>Discussion questions</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">1. Which of these jobs is closest to what you do?</div>
+              <div class="speaking-row">2. Which job sounds most interesting to you — and why?</div>
+              <div class="speaking-row">3. Have you ever worked with anyone in any of these roles?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- WARM-UP 2 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🐦</div>
+          <span class="activity-title">Warm-up 2 — Read the tweet & discuss</span>
+          <span class="activity-src">EfT p.11</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Read the tweet. Answer the questions below.</p>
+
+          <!-- Tweet component -->
+          <div style="border:1px solid #cfd9de;border-radius:12px;padding:16px 20px;max-width:520px;margin:14px 0;font-family:'DM Sans',sans-serif;background:#fff">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:40px;height:40px;border-radius:50%;background:#1da1f2;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0">C</div>
+                <div>
+                  <div style="font-weight:700;font-size:14px;color:#0f1419">Clement Mihailescu</div>
+                  <div style="font-size:13px;color:#536471">@clemmihai</div>
+                </div>
+              </div>
+              <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#1da1f2"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.849L1.254 2.25H8.08l4.259 5.636L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+            </div>
+            <div style="font-size:16px;color:#0f1419;line-height:1.7">
+              <p style="margin:0 0 12px">UX writers are <span style="text-decoration:underline;text-decoration-color:#f0c060;text-underline-offset:3px">underappreciated</span>.</p>
+              <p style="margin:0 0 12px">UX writing — all the text on the websites you interact with every day — <span style="text-decoration:underline;text-decoration-color:#f0c060;text-underline-offset:3px">is critical</span> to a product's quality.</p>
+              <p style="margin:0 0 12px">Good UX writing usually <span style="text-decoration:underline;text-decoration-color:#f0c060;text-underline-offset:3px">goes unnoticed</span>, because the user's experience is <span style="text-decoration:underline;text-decoration-color:#f0c060;text-underline-offset:3px">seamless</span>.</p>
+              <p style="margin:0">Bad UX writing leads to frustration and resentment.</p>
+            </div>
+            <div style="margin-top:14px;padding-top:12px;border-top:1px solid #eff3f4;border:1px solid #f0c060;border-radius:6px;padding:10px 14px;margin-top:14px">
+              <p style="margin:0 0 6px;font-size:13px;color:#536471"><strong style="color:#0f1419">Underappreciated</strong> — not appreciated enough.</p>
+              <p style="margin:0 0 6px;font-size:13px;color:#536471"><strong style="color:#0f1419">Be critical to</strong> — extremely important to the success of something.</p>
+              <p style="margin:0 0 6px;font-size:13px;color:#536471"><strong style="color:#0f1419">Go unnoticed</strong> — fail to attract any attention.</p>
+              <p style="margin:0;font-size:13px;color:#536471"><strong style="color:#0f1419">Seamless</strong> — perfect, smooth.</p>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:14px">
+            <div class="speaking-box-header"><span>Discussion</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What do you think UX writers do?</div>
+              <div class="speaking-row">Do you agree with the tweet?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Reading — Popular Jobs in Tech</div>
+        <div class="phase-sub">EfT Lesson 1 · pp. 12–16 · Ex. 1A, 1B, 2A, 2C, 3A, 3B</div>
+      </div>
+      <span class="phase-time">20 min</span>
+    </div>
+    <div class="phase-body">
+
+      <!-- ARTICLE -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📄</div>
+          <span class="activity-title">Reading text — Popular Jobs in Tech</span>
+          <span class="activity-src">EfT pp. 13–15</span>
+        </div>
+        <div class="activity-body">
+          <p style="font-size:13px;color:var(--warm-grey);margin-bottom:12px">Read the full article. Highlighted words are key vocabulary for this lesson.</p>
+          <div style="background:var(--paper);border:1px solid var(--border);border-radius:6px;padding:20px 24px;font-size:14px;line-height:1.8;color:var(--ink)">
+            <p style="font-weight:700;font-size:18px;color:var(--ink);margin-bottom:4px">POPULAR JOBS IN TECH</p>
+            <p style="font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;border-bottom:2px solid var(--teal);padding-bottom:8px">INTRODUCTION</p>
+            <p style="font-weight:600;color:var(--ink);margin-bottom:20px">The software industry is one of the fastest growing industries in the entire world, with new jobs appearing every year. Not only that, but a lot of the software jobs also don't require a university degree. Here are 5 popular new tech jobs you can learn to do <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">from scratch.</mark></p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+              <div>
+                <p style="font-weight:700;font-size:13px;letter-spacing:1px;color:var(--ink);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">01 · UX WRITER</p>
+                <p style="margin:0">A UX Writer helps create a great user experience through text. They are responsible for any text you read on landing pages, in contact forms, on buttons etc. Their texts must be <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">clear, concise,</mark> and useful. You <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">encounter</mark> the works of a UX writer every time you use an app or the internet. When they are doing their job well, you don't even notice it.</p>
+              </div>
+              <div>
+                <p style="font-weight:700;font-size:13px;letter-spacing:1px;color:var(--ink);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">02 · DATA SCIENTIST</p>
+                <p style="margin:0">Many people say that data science is the most attractive <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">career path</mark> of the 21st century. Data Scientists work directly with business <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">stakeholders</mark> to help them understand and use data for strategic needs. They collect, store and analyze data and create algorithms and predictive models. In order to qualify for a data scientist role you need to have <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">expertise</mark> in data modeling and be proficient in a range of programming languages.</p>
+              </div>
+              <div>
+                <p style="font-weight:700;font-size:13px;letter-spacing:1px;color:var(--ink);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">03 · WEB DEVELOPER</p>
+                <p style="margin:0"><mark style="background:#fde68a;padding:1px 3px;border-radius:2px">Despite</mark> what some people might think, the demand for qualified web developers keeps growing with each year. Because web development is evolving so quickly, web developers have <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">to keep up with</mark> the industry changes and learn how to <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">compete</mark> on the job market. Some choose to learn UI/UX design. Others <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">specialize in</mark> a specific niche such as platform development.</p>
+              </div>
+              <div>
+                <p style="font-weight:700;font-size:13px;letter-spacing:1px;color:var(--ink);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">04 · DEVOPS ENGINEER</p>
+                <p style="margin:0">You will have to learn <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">a broad range</mark> of technologies <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">from scratch</mark> including programming languages, operating systems, cloud computing, networking, and continuous Integration. DevOps engineers help <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">shorten</mark> development time, produce high-quality software and <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">optimize</mark> communication between developers, testers and system administrators.</p>
+              </div>
+              <div style="grid-column:1/-1">
+                <p style="font-weight:700;font-size:13px;letter-spacing:1px;color:var(--ink);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">05 · BLOCKCHAIN DEVELOPER</p>
+                <p style="margin:0">Blockchain technology is still hugely popular <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">these days</mark>. <mark style="background:#fde68a;padding:1px 3px;border-radius:2px">In a nutshell,</mark> a blockchain is a decentralized distributed ledger that helps perform various transactions. Businesses are excited to incorporate blockchain into their processes because it's a cost-efficient, transparent way of managing transactions. As a blockchain developer, you will need a solid knowledge of data structures and blockchain architecture.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 1A -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📖</div>
+          <span class="activity-title">Ex. 1A — What does "from scratch" mean?</span>
+          <span class="activity-src">EfT p.12</span>
+          <span class="activity-time-badge">2 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Read the introduction paragraph. Then answer:</p>
+          <p style="margin-top:10px"><strong>What is the meaning of "from scratch"?</strong></p>
+          <input type="text" size="50" placeholder="Your answer...">
+          <button class="reveal-btn" onclick="toggleReveal('rev1')">show answer ▾</button>
+          <div class="reveal-content" id="rev1">
+            <div class="answer-key">
+              <div class="ak-label">Answer</div>
+              <ol><li><strong>From scratch</strong> = from the very beginning, without any prior knowledge or preparation</li></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 1B -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔗</div>
+          <span class="activity-title">Ex. 1B — Match jobs to descriptions</span>
+          <span class="activity-src">EfT p.12</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Skim the article. Match each job title (1–5) with the correct description (a–e).</p>
+          <div class="row g-3 mt-1">
+            <div class="col-md-5">
+              <table class="match-table">
+                <thead><tr><th>#</th><th>Job title</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">1</td><td>UX Writer</td></tr>
+                  <tr><td class="num">2</td><td>Data Scientist</td></tr>
+                  <tr><td class="num">3</td><td>Web Developer</td></tr>
+                  <tr><td class="num">4</td><td>DevOps Engineer</td></tr>
+                  <tr><td class="num">5</td><td>Blockchain Developer</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-7">
+              <table class="match-table">
+                <thead><tr><th>Letter</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">a</td><td>Creates the texts that appear in the interface of websites and apps.</td></tr>
+                  <tr><td class="num">b</td><td>Designs and develops websites and web applications.</td></tr>
+                  <tr><td class="num">c</td><td>Oversees code releases and deployments and optimizes the development process.</td></tr>
+                  <tr><td class="num">d</td><td>Builds applications based on blockchain architecture or protocols.</td></tr>
+                  <tr><td class="num">e</td><td>Collects and analyses large data sets.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev2')">show answers ▾</button>
+          <div class="reveal-content" id="rev2">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>1 → <strong>a</strong></li>
+                <li>2 → <strong>e</strong></li>
+                <li>3 → <strong>b</strong></li>
+                <li>4 → <strong>c</strong></li>
+                <li>5 → <strong>d</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 2A -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Ex. 2A — Complete phrases with verbs</span>
+          <span class="activity-src">EfT p.15</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete each phrase using a verb from the box.</p>
+          <div class="word-box">
+            <div class="word-box-label">verb bank</div>
+            <span class="word-chip">Collect</span>
+            <span class="word-chip">Handle</span>
+            <span class="word-chip">Keep up with</span>
+            <span class="word-chip">Compete</span>
+            <span class="word-chip">Specialize in</span>
+            <span class="word-chip">Qualify</span>
+            <span class="word-chip">Shorten</span>
+            <span class="word-chip">Take on</span>
+          </div>
+          <ol class="exercise">
+            <li><input type="text" size="18"> user data.</li>
+            <li><input type="text" size="18"> for a job.</li>
+            <li><input type="text" size="18"> with other people.</li>
+            <li><input type="text" size="18"> a difficult task.</li>
+            <li><input type="text" size="18"> web development.</li>
+            <li><input type="text" size="18"> development time.</li>
+            <li><input type="text" size="18"> customer requests.</li>
+            <li><input type="text" size="18"> customer requests. <em style="font-size:12px;color:var(--warm-grey)">(synonym for #7)</em></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev3')">show answers ▾</button>
+          <div class="reveal-content" id="rev3">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>Collect</strong> user data</li>
+                <li><strong>Qualify</strong> for a job</li>
+                <li><strong>Compete</strong> with other people</li>
+                <li><strong>Take on</strong> a difficult task</li>
+                <li><strong>Specialize in</strong> web development</li>
+                <li><strong>Shorten</strong> development time</li>
+                <li><strong>Handle</strong> customer requests</li>
+                <li><strong>Keep up with</strong> customer requests</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 2C -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📚</div>
+          <span class="activity-title">Ex. 2C — Match words to definitions</span>
+          <span class="activity-src">EfT p.16</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Match each word or phrase (1–11) with its definition (a–k).</p>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <table class="match-table">
+                <thead><tr><th>#</th><th>Word / Phrase</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">1</td><td>Encounter</td></tr>
+                  <tr><td class="num">2</td><td>Career path</td></tr>
+                  <tr><td class="num">3</td><td>Stakeholders</td></tr>
+                  <tr><td class="num">4</td><td>Expertise</td></tr>
+                  <tr><td class="num">5</td><td>Despite</td></tr>
+                  <tr><td class="num">6</td><td>Core</td></tr>
+                  <tr><td class="num">7</td><td>Broad range</td></tr>
+                  <tr><td class="num">8</td><td>From scratch</td></tr>
+                  <tr><td class="num">9</td><td>Optimize</td></tr>
+                  <tr><td class="num">10</td><td>These days</td></tr>
+                  <tr><td class="num">11</td><td>In a nutshell</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="match-table">
+                <thead><tr><th>Letter</th><th>Definition</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">a</td><td>come across or experience something</td></tr>
+                  <tr><td class="num">b</td><td>expert knowledge and skills</td></tr>
+                  <tr><td class="num">c</td><td>from the very beginning</td></tr>
+                  <tr><td class="num">d</td><td>make something more effective</td></tr>
+                  <tr><td class="num">e</td><td>a wide variety</td></tr>
+                  <tr><td class="num">f</td><td>nowadays</td></tr>
+                  <tr><td class="num">g</td><td>in a few words</td></tr>
+                  <tr><td class="num">h</td><td>the way you progress in your work</td></tr>
+                  <tr><td class="num">i</td><td>in spite of</td></tr>
+                  <tr><td class="num">j</td><td>people with an interest in a certain business</td></tr>
+                  <tr><td class="num">k</td><td>fundamental</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev4')">show answers ▾</button>
+          <div class="reveal-content" id="rev4">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>1→<strong>a</strong> &nbsp; 2→<strong>h</strong> &nbsp; 3→<strong>j</strong> &nbsp; 4→<strong>b</strong> &nbsp; 5→<strong>i</strong> &nbsp; 6→<strong>k</strong></li>
+                <li>7→<strong>e</strong> &nbsp; 8→<strong>c</strong> &nbsp; 9→<strong>d</strong> &nbsp; 10→<strong>f</strong> &nbsp; 11→<strong>g</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 3A/3B -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🗣️</div>
+          <span class="activity-title">Ex. 3A / 3B — Discussion questions</span>
+          <span class="activity-src">EfT p.16</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discussion</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-section">
+                <div class="speaking-section-title">3A</div>
+                <div class="speaking-row">Which of these 5 jobs is the hardest to do? Which is the easiest? Why?</div>
+              </div>
+              <div class="speaking-section">
+                <div class="speaking-section-title">3B — Use the new vocabulary</div>
+                <div class="speaking-row">1. How do you keep up with what's going on in the world?</div>
+                <div class="speaking-row">2. How much time does it take to learn a new skill from scratch?</div>
+                <div class="speaking-row">3. Are you normally concise when you speak?</div>
+                <div class="speaking-row">4. What are some things you have a solid understanding of?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Grammar — Present Simple vs Present Continuous</div>
+        <div class="phase-sub">EfT Lesson 1 · pp. 17–23 · Ex. 1A–4A</div>
+      </div>
+      <span class="phase-time">15 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Ex. 1A — What tenses are used in the highlighted sentences?</span>
+          <span class="activity-src">EfT p.17</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start">
+            <div>
+              <p>Read the text. Identify the tense of each highlighted sentence.</p>
+              <div style="background:var(--paper);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:10px;font-size:14px;line-height:1.8;color:var(--ink)">
+                <p style="margin:0"><span style="color:#1a6fd4;font-weight:600">If you want to create an app, you need to perform market research first.</span> Who is your audience? Where do they live? What languages do they speak? What devices do they use? How much money do they spend? <span style="color:#1a6fd4;font-weight:600">In the U.S. an average iOS user spends roughly twice as much as an average Android user does.</span></p>
+                <p style="margin:10px 0 0">Try to imagine your ideal user. Visualize them. Where are they? <span style="color:#1a6fd4;font-weight:600">What are they doing at the moment?</span> Where do they work? How do they spend their free time? <span style="color:#1a6fd4;font-weight:600">What are they dreaming about?</span></p>
+              </div>
+              <p style="margin-top:12px"><strong>Which tense is used in the blue sentences — and why?</strong></p>
+              <input type="text" size="45" placeholder="Your answer...">
+            </div>
+            <img src="meme1.webp" alt="Brain meme — Present Continuous" style="width:200px;border-radius:8px;flex-shrink:0">
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('revG1')">show answer ▾</button>
+          <div class="reveal-content" id="revG1">
+            <div class="answer-key">
+              <div class="ak-label">Answer</div>
+              <ol>
+                <li>Blue sentences 1 & 2 → <strong>Present Simple</strong> — facts and general truths</li>
+                <li>Blue sentences 3 & 4 → <strong>Present Continuous</strong> — actions happening at a specific moment (imagining the user right now)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Grammar reference</span>
+        </div>
+        <div class="activity-body">
+          <div class="phrase-box">
+            <div class="phrase-label">Present Simple vs Present Continuous</div>
+            <div class="phrase-row">
+              <span class="phrase-en">Present Simple</span>
+              <span class="phrase-de">Facts, habits, routines → I work in digital marketing. She manages a team.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Present Continuous</span>
+              <span class="phrase-de">Happening now, temporary → I'm currently building a new app. We're expanding to the US.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">⚠️ Stative verbs</span>
+              <span class="phrase-de">know, understand, own, want, like, need, believe — never use in Continuous</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Ex. 4A — Choose the correct form</span>
+          <span class="activity-src">EfT p.22</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Choose the correct option and explain your choice out loud.</p>
+          <ol class="exercise">
+            <li>Harry (work) from home this week due to health problems.<br><small>a) work &nbsp; b) works &nbsp; c) is working &nbsp; d) are working</small></li>
+            <li>What (the clients / want)?<br><small>a) What does the clients want? &nbsp; b) What are the clients wanting? &nbsp; c) What are the clients want? &nbsp; d) What do the clients want?</small></li>
+            <li>We usually (discuss) these issues over Skype every Thursday morning.<br><small>a) discuss &nbsp; b) discusses &nbsp; c) is discussing &nbsp; d) are discussing</small></li>
+            <li>Dwight (learn) another programming language in order to find a new job.<br><small>a) learn &nbsp; b) learns &nbsp; c) is learning &nbsp; d) are learning</small></li>
+            <li>For some reason, her colleagues (not like) her.<br><small>a) don't like &nbsp; b) doesn't like &nbsp; c) are not liking &nbsp; d) is not liking</small></li>
+            <li>(Charlie / still / fix) these bugs?<br><small>a) Do Charlie still fix? &nbsp; b) Does Charlie still fix? &nbsp; c) Is Charlie still fixing? &nbsp; d) Are Charlie still fixing?</small></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev5')">show answers ▾</button>
+          <div class="reveal-content" id="rev5">
+            <div class="answer-key">
+              <div class="ak-label">Answer key + reason</div>
+              <ol>
+                <li><strong>is working</strong> — temporary this week (Continuous)</li>
+                <li><strong>What do the clients want?</strong> — "want" = stative verb</li>
+                <li><strong>discuss</strong> — regular action every Thursday (Simple)</li>
+                <li><strong>is learning</strong> — temporary ongoing action (Continuous)</li>
+                <li><strong>don't like</strong> — "like" = stative verb</li>
+                <li><strong>Does Charlie still fix</strong> — he/she/it → does (Simple)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎯</div>
+          <span class="activity-title">Quick practice — talk about your own work</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Tell 3–4 sentences about your work using both tenses. Start with what you do in general, then what you're working on right now.</p>
+          <div class="phrase-box">
+            <div class="phrase-label">Useful starters</div>
+            <div class="phrase-row">
+              <span class="phrase-en">I work in online marketing and app development.</span>
+              <span class="phrase-de">Present Simple — general fact</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I manage / I run / I handle…</span>
+              <span class="phrase-de">Present Simple — regular duties</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Right now I'm working on…</span>
+              <span class="phrase-de">Present Continuous — current project</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">We're currently expanding into the Western market.</span>
+              <span class="phrase-de">Present Continuous — ongoing change</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Pronunciation — Tech job titles</div>
+        <div class="phase-sub">EfT Lesson 1 · p. 24</div>
+      </div>
+      <span class="phase-time">5 min</span>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🗣️</div>
+          <span class="activity-title">Tech job titles — stress & pronunciation</span>
+          <span class="activity-src">EfT p.24</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Say each title out loud. The stressed syllable is shown in CAPS.</p>
+          <table class="vocab-table">
+            <thead><tr><th>Job title</th><th>Stress</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">Software developer</td><td>SOFT-ware de-VEL-op-er</td><td>«saaf·twehr» — not «soft-WEHR»</td></tr>
+              <tr><td class="eng">QA engineer</td><td>Q-A en-gi-NEER</td><td>Say each letter: «kyoo-ay»</td></tr>
+              <tr><td class="eng">Architect</td><td>AR-chi-tect</td><td>Stress on the first syllable</td></tr>
+              <tr><td class="eng">DevOps</td><td>DEV-ops</td><td>Short for Development + Operations</td></tr>
+              <tr><td class="eng">Business analyst</td><td>BUS-i-ness AN-a-lyst</td><td>«AN-a-lyst» — not «a-NAL-ist»</td></tr>
+              <tr><td class="eng">Machine learning expert</td><td>ma-CHINE LEARN-ing EX-pert</td><td>«machine» — stress on 2nd syllable</td></tr>
+              <tr><td class="eng">UI/UX designer</td><td>U-I / U-X de-SIGN-er</td><td>«you-eye» / «you-ex»</td></tr>
+              <tr><td class="eng">Marketer</td><td>MAR-ket-er</td><td>Stress on the first syllable</td></tr>
+              <tr><td class="eng">CEO / CTO / COO</td><td>Say each letter</td><td>«see-ee-oh» / «see-tee-oh» / «see-oh-oh»</td></tr>
+              <tr><td class="eng">Programmer</td><td>PRO-gram-mer</td><td>Stress on the first syllable</td></tr>
+            </tbody>
+          </table>
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">To check any word's pronunciation, type it into Google search followed by <strong>"pronunciation"</strong> — you'll get audio in both American and British English.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div>
+        <div class="phase-title">Speaking — Elevator Pitch</div>
+        <div class="phase-sub">EfT Lesson 1 · pp. 25–28 · Speaking & Soft Skills</div>
+      </div>
+      <span class="phase-time">15 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎤</div>
+          <span class="activity-title">What is an elevator pitch?</span>
+          <span class="activity-src">EfT p.25–26</span>
+          <span class="activity-time-badge">3 min</span>
+        </div>
+        <div class="activity-body">
+          <p>An elevator pitch is a short, clear, engaging intro about who you are and what you do — short enough to deliver in a 30-second elevator ride.</p>
+          <div class="phrase-box">
+            <div class="phrase-label">3 steps of a good elevator pitch</div>
+            <div class="phrase-row">
+              <span class="phrase-en">1. Who you are and what you do</span>
+              <span class="phrase-de">"My name's [name]. I run an online marketing agency."</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">2. The problem you solve</span>
+              <span class="phrase-de">"I help Western companies scale their digital presence in new markets."</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">3. Wrap up with a call to action</span>
+              <span class="phrase-de">"If you're looking to grow your app's user base, I'd love to connect."</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Draft your personal elevator pitch</span>
+          <span class="activity-src">EfT p.28</span>
+          <span class="activity-time-badge">7 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Use the phrases below to build your own pitch. Write notes first, then say it out loud.</p>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Useful phrases — pick and adapt</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-section">
+                <div class="speaking-section-title">Who you are</div>
+                <div class="speaking-row">I work in online marketing and app development.</div>
+                <div class="speaking-row">I work as a [marketer / product manager / developer]…</div>
+                <div class="speaking-row">I run / I manage / I co-founded…</div>
+              </div>
+              <div class="speaking-section">
+                <div class="speaking-section-title">What you do / what problem you solve</div>
+                <div class="speaking-row">I help [Western companies / startups / brands]…</div>
+                <div class="speaking-row">I'm in charge of… / I'm responsible for…</div>
+                <div class="speaking-row">I specialize in [user acquisition / app growth / digital campaigns].</div>
+              </div>
+              <div class="speaking-section">
+                <div class="speaking-section-title">What's happening now (Present Continuous)</div>
+                <div class="speaking-row">Right now I'm expanding into the Western market.</div>
+                <div class="speaking-row">We're currently developing a new app that…</div>
+                <div class="speaking-row">I'm looking to connect with [partners / clients] in…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎬</div>
+          <span class="activity-title">Roleplay — Networking event</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Imagine you're at a networking conference in London. You've just been introduced to a potential client. They ask: <strong>"Nice to meet you — what do you do?"</strong></p>
+          <p style="margin-top:8px">Deliver your elevator pitch. Then be ready for follow-up questions like:</p>
+          <div class="speaking-box" style="margin-top:12px">
+            <div class="speaking-box-header"><span>Possible follow-up questions</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What kind of apps do you build?</div>
+              <div class="speaking-row">What markets are you targeting?</div>
+              <div class="speaking-row">What results have you gotten for clients?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE BUFFER -->
+  <div class="phase phase-1" id="ph6">
+    <div class="phase-header" onclick="togglePhase('ph6')">
+      <span class="phase-num">+</span>
+      <div>
+        <div class="phase-title">If time allows — Extra activities</div>
+        <div class="phase-sub">EfT Lesson 1 · p. 15</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <!-- EX 2B -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔄</div>
+          <span class="activity-title">Ex. 2B — Match adjectives to their opposites</span>
+          <span class="activity-src">EfT p.15</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Match each adjective (1–5) with its opposite (a–e).</p>
+          <div class="row g-3 mt-1">
+            <div class="col-md-4">
+              <table class="match-table">
+                <thead><tr><th>#</th><th>Adjective</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">1</td><td>Cost-efficient</td></tr>
+                  <tr><td class="num">2</td><td>Transparent</td></tr>
+                  <tr><td class="num">3</td><td>Solid</td></tr>
+                  <tr><td class="num">4</td><td>Clear</td></tr>
+                  <tr><td class="num">5</td><td>Concise</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-4">
+              <table class="match-table">
+                <thead><tr><th>Letter</th><th>Opposite</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">a</td><td>secretive</td></tr>
+                  <tr><td class="num">b</td><td>unclear</td></tr>
+                  <tr><td class="num">c</td><td>lengthy</td></tr>
+                  <tr><td class="num">d</td><td>wasteful</td></tr>
+                  <tr><td class="num">e</td><td>shaky</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p style="margin-top:12px">Now use each adjective in a sentence about your own work or product.</p>
+          <button class="reveal-btn" onclick="toggleReveal('rev6')">show answers ▾</button>
+          <div class="reveal-content" id="rev6">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>1 → <strong>d</strong> (cost-efficient ↔ wasteful)</li>
+                <li>2 → <strong>a</strong> (transparent ↔ secretive)</li>
+                <li>3 → <strong>e</strong> (solid ↔ shaky)</li>
+                <li>4 → <strong>b</strong> (clear ↔ unclear)</li>
+                <li>5 → <strong>c</strong> (concise ↔ lengthy)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FREE SPEAKING -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🗣️</div>
+          <span class="activity-title">Free speaking — Describe your typical workday</span>
+          <span class="activity-time-badge">6 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Describe your typical workday in English. Try to use both Present Simple and Present Continuous naturally.</p>
+          <div class="speaking-box" style="margin-top:12px">
+            <div class="speaking-box-header"><span>Guide questions</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What time do you usually start work? What's the first thing you do?</div>
+              <div class="speaking-row">What tasks do you handle on a daily basis?</div>
+              <div class="speaking-row">What are you currently focusing on at work this week?</div>
+              <div class="speaking-row">Who do you usually interact with — clients, developers, a team?</div>
+              <div class="speaking-row">What's the most challenging part of your job these days?</div>
+            </div>
+          </div>
+          <div class="tip-box" style="margin-top:12px">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">Try to use at least 3 words from today's vocabulary: <strong>stakeholders, expertise, specialize in, keep up with, optimize, these days</strong>.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 4</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #2a1f0e; --ink-soft: #4a3a20; --paper: #fdf6e3; --paper-dark: #f5e9c8;
+      --accent: #c0392b; --amber: #d4820a; --amber-light: #f0a500; --amber-pale: #fef3d0;
+      --warm-grey: #8c7a5a; --border: #e0d0a8; --white: #ffffff;
+      --phase-1: #8b4513; --phase-2: #c97d20; --phase-3: #a05010;
+      --phase-4: #b06820; --phase-5: #7a3a0a;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+    .header { background:var(--ink); color:var(--white); padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .header::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle,rgba(212,130,10,0.3) 0%,transparent 70%); }
+    .header::after  { content:''; position:absolute; bottom:-40px; left:20%; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(192,57,43,0.2) 0%,transparent 70%); }
+    .header-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,56px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .header h1 em { font-style:italic; color:var(--amber-light); }
+    .header-meta { display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+    .meta-chip .dot { width:6px; height:6px; border-radius:50%; background:var(--amber-light); flex-shrink:0; }
+    .meta-chip strong { color:var(--white); }
+    .objectives-wrap { max-width:1100px; margin:0 auto; padding:32px 40px; }
+    .objectives-box { background:var(--white); border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:4px; padding:24px 28px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:700px){.objectives-box{grid-template-columns:1fr}.header,.objectives-wrap,.main{padding-left:20px;padding-right:20px}}
+    .obj-col h3 { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:10px; }
+    .obj-list { list-style:none; }
+    .obj-list li { font-size:14px; padding:5px 0 5px 18px; position:relative; color:var(--ink-soft); border-bottom:1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom:none; }
+    .obj-list li::before { content:'✓'; position:absolute; left:0; color:var(--amber); font-size:12px; font-weight:600; }
+    .main { max-width:1100px; margin:0 auto; padding:0 40px 60px; }
+    .phase { margin-bottom:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .phase-header { padding:18px 24px; display:flex; align-items:center; gap:16px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:20px; font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase-num { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:4px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); line-height:1.2; }
+    .phase-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .phase-body { padding:0 24px 24px; }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-1 .phase-header{background:var(--phase-1)} .phase-2 .phase-header{background:var(--phase-2)}
+    .phase-3 .phase-header{background:var(--phase-3)} .phase-4 .phase-header{background:var(--phase-4)}
+    .phase-5 .phase-header{background:var(--phase-5)}
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:16px; overflow:hidden; }
+    .activity-head { background:var(--paper); padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
+    .activity-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .activity-title { font-weight:600; font-size:14px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:var(--warm-grey); background:var(--paper-dark); padding:3px 8px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:16px; }
+    .note-box { background:var(--amber-pale); border-left:3px solid var(--amber); border-radius:0 4px 4px 0; padding:12px 16px; margin:12px 0; font-size:14px; color:var(--ink-soft); line-height:1.6; }
+    .note-box em { font-style:italic; color:var(--ink); }
+    .vocab-table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
+    .vocab-table th { background:var(--ink); color:var(--white); padding:8px 12px; text-align:left; font-weight:500; font-size:12px; }
+    .vocab-table td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--paper); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+    .vocab-table .ans { color:var(--amber); font-style:italic; font-size:13px; }
+    .phrase-box { background:var(--ink); color:var(--white); border-radius:4px; padding:16px 20px; margin:12px 0; }
+    .phrase-box .phrase-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--amber-light); margin-bottom:10px; }
+    .phrase-row { display:flex; align-items:baseline; gap:16px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .phrase-row:last-child { border-bottom:none; }
+    .phrase-en { font-size:15px; font-weight:500; flex:1; }
+    .phrase-de { font-size:13px; color:rgba(255,255,255,0.5); flex:1; }
+    .steps { list-style:none; margin:12px 0; }
+    .steps li { display:flex; gap:14px; padding:10px 0; border-bottom:1px dotted var(--border); font-size:14px; line-height:1.5; align-items:flex-start; }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--white); background:var(--amber); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:12px 16px; margin:12px 0; font-size:13px; }
+    .answer-key .ak-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .answer-key ol { padding-left:20px; }
+    .answer-key ol li { padding:3px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--amber); }
+    .word-box { background:var(--white); border:2px solid var(--amber); border-radius:6px; padding:12px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--amber); width:100%; margin-bottom:4px; }
+    .word-chip { background:var(--amber); color:var(--white); font-size:13px; font-weight:600; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .word-box.neutral { border-color:var(--border); }
+    .word-box.neutral .word-chip { background:var(--ink-soft); }
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:11px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:5px 14px; border-radius:20px; cursor:pointer; margin-top:10px; transition:all 0.2s; }
+    .reveal-btn:hover { border-color:var(--amber); color:var(--amber); }
+    .reveal-content { display:none; margin-top:10px; }
+    .reveal-content.open { display:block; }
+    .interview-exchange { border-radius:4px; overflow:hidden; margin:8px 0; }
+    .interview-q { background:var(--ink); color:var(--white); padding:10px 16px; font-size:14px; display:flex; gap:10px; }
+    .interview-q .speaker { font-family:'DM Mono',monospace; font-size:10px; color:var(--amber-light); letter-spacing:1px; white-space:nowrap; margin-top:2px; }
+    .interview-space { background:var(--amber-pale); border:1px solid var(--border); border-top:none; padding:14px 16px; font-size:14px; color:var(--warm-grey); font-style:italic; min-height:40px; }
+    .grammar-box { border:2px solid var(--amber); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .grammar-box-header { background:var(--amber); padding:10px 16px; }
+    .grammar-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--white); font-weight:600; }
+    .grammar-box-body { background:var(--white); padding:16px; }
+    .grammar-row { display:flex; gap:12px; padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; align-items:baseline; }
+    .grammar-row:last-child { border-bottom:none; }
+    .grammar-plus { color:#2a7a2a; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-minus { color:var(--accent); font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-q { color:var(--amber); font-weight:700; flex-shrink:0; width:16px; }
+    .phone-script { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .phone-header { background:var(--paper-dark); padding:8px 16px; font-family:'DM Mono',monospace; font-size:11px; color:var(--warm-grey); border-bottom:1px solid var(--border); }
+    .phone-line { display:flex; gap:12px; padding:9px 16px; border-bottom:1px solid var(--border); font-size:14px; }
+    .phone-line:last-child { border-bottom:none; }
+    .phone-line:nth-child(even) { background:var(--paper); }
+    .phone-speaker { font-family:'DM Mono',monospace; font-size:10px; color:var(--amber); font-weight:600; white-space:nowrap; width:80px; flex-shrink:0; margin-top:1px; }
+    .phone-text { color:var(--ink-soft); line-height:1.5; }
+    .phone-text strong { color:var(--ink); }
+    .src-bp{background:#8b4513;color:white} .src-you{background:#a05010;color:white}
+    .icon-warmup{background:#fef0d0} .icon-vocab{background:#fdf3e0}
+    .icon-grammar{background:#fef8ec} .icon-speaking{background:#fdebd0}
+    .icon-wrap{background:#fdf3e0}
+    p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:14px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom:none; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 4<br><em>Doing Business</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 Unit 1.5 + 2.1 + 2.2</div>
+    </div>
+  </div>
+</div>
+
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Talk about your job and travel</li>
+        <li>Vocabulary: orders, deliveries, quantities</li>
+        <li>Grammar: countable / uncountable nouns</li>
+        <li>Grammar: can / can't for possibility</li>
+        <li>Phone English — place and take an order</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>order, delivery, supplier, quantity, stock</li>
+        <li>How many / How much / a lot of / some / any</li>
+        <li>Can you deliver by Monday? / Sorry, we can't.</li>
+        <li>Phone phrases: I'd like to order… / I'll confirm…</li>
+        <li>How long is your journey? / I travel to… / It depends on…</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Interview — U-Trav-L Magazine</div>
+        <div class="phase-sub">BP A2 1.5</div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">🎙️</div>
+          <span class="activity-title">Answer the journalist's questions about your job and travel</span>
+          <span class="activity-src src-bp">BP p.16</span>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Vocabulary: Orders and deliveries</div>
+        <div class="phase-sub">BP A2 p.18, ex. 2A/2B + countable/uncountable</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📦</div>
+          <span class="activity-title">Task 2A/2B — Key vocabulary</span>
+          <span class="activity-src src-bp">BP p.18</span>
+        </div>
+        <div class="activity-body">
+          <p>Read the text. Are the bold words verbs or nouns?</p>
+          <div class="note-box">Jangle <em><strong>delivers</strong></em> meals to customers from their favourite restaurants. You can <em><strong>order</strong></em> your food on our website or with our app. The <em><strong>supplier</strong></em> prepares your food and our rider <em><strong>delivers</strong></em> it to you. We make <em><strong>deliveries</strong></em> every day of the year.</div>
+          <table class="vocab-table" style="margin-top:12px;">
+            <thead><tr><th>Word</th><th>Verb or Noun?</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">delivers</td><td></td><td></td></tr>
+              <tr><td class="eng">order (v)</td><td></td><td></td></tr>
+              <tr><td class="eng">order (n)</td><td></td><td></td></tr>
+              <tr><td class="eng">supplier</td><td></td><td></td></tr>
+              <tr><td class="eng">deliveries</td><td></td><td></td></tr>
+            </tbody>
+          </table>
+          <button class="reveal-btn" onclick="toggleReveal('rev0')">show answers ▾</button>
+          <div class="reveal-content" id="rev0">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>delivers</strong> — verb — доставляти</li>
+              <li><strong>order (v)</strong> — verb — замовляти</li>
+              <li><strong>order (n)</strong> — noun — замовлення</li>
+              <li><strong>supplier</strong> — noun — постачальник</li>
+              <li><strong>deliveries</strong> — noun — доставки</li>
+            </ol></div>
+          </div>
+
+          <p style="margin-top:16px;"><strong>2B — Complete the sentences:</strong></p>
+          <div class="word-box neutral"><div class="word-box-label">words in the box</div>
+            <span class="word-chip">order</span><span class="word-chip">delivers</span>
+            <span class="word-chip">deliveries</span><span class="word-chip">supplier</span><span class="word-chip">order</span>
+          </div>
+          <ol class="exercise">
+            <li>We often _______ food with the Jangle app. It's quick and easy.</li>
+            <li>Jangle _______ food to homes and offices.</li>
+            <li>Jangle makes thousands of _______ every day.</li>
+            <li>Jangle isn't a food _______, it's a delivery service.</li>
+            <li>They place a big _______ with Jangle every Friday.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev1')">show answers ▾</button>
+          <div class="reveal-content" id="rev1">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>order</strong></li><li><strong>delivers</strong></li><li><strong>deliveries</strong></li>
+              <li><strong>supplier</strong></li><li><strong>order</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Grammar — Countable / Uncountable + how many / much</span>
+          <span class="activity-src src-bp">BP p.18–19</span>
+        </div>
+        <div class="activity-body">
+            <p style="margin-top:16px;"><strong>Ex. 3 — Read the text about a distribution centre. Match the questions (a–d) with the paragraphs (1–4).</strong></p>
+
+          <div class="word-box"><div class="word-box-label">questions to match</div>
+            <span class="word-chip">a. How many products do you have here?</span>
+            <span class="word-chip">b. What does a distribution centre do?</span>
+            <span class="word-chip">c. How much food do the supermarkets order?</span>
+            <span class="word-chip">d. How many people work at the distribution centre?</span>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--paper-dark);padding:8px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);">
+              <img src="" alt="Jess Patel" style="width:48px;height:48px;border-radius:50%;object-fit:cover;background:var(--border);">
+              <div><div style="font-weight:600;font-size:14px;color:var(--ink);">Jess Patel</div><div style="font-size:12px;color:var(--warm-grey);">Distribution Centre Manager</div></div>
+            </div>
+            <div style="padding:16px;">
+              <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;">
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">1 ___</span>
+                <p style="margin:0;">We prepare the orders and deliver them to our supermarkets in each region. We have fifteen regional centres in the country. The supermarkets send their orders via the online platform. We don't have <strong>much</strong> time to prepare <strong>an</strong> order. Our delivery trucks leave here the next day with the order.</p>
+              </div>
+              <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;">
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">2 ___</span>
+                <p style="margin:0;">We have over 400 warehouse workers and about fifty drivers here. It's <strong>a</strong> big centre. We deliver food to supermarkets in the London area and operate twenty-four hours a day.</p>
+              </div>
+              <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;">
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">3 ___</span>
+                <p style="margin:0;">We have over 2,000 products including <strong>some</strong> fresh fruit and vegetables, drinks, tinned food, rice, pasta, cereals and cleaning products. We sell <strong>a lot of</strong> bananas. It's the top-selling product.</p>
+              </div>
+              <div style="display:flex;gap:8px;align-items:flex-start;">
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">4 ___</span>
+                <p style="margin:0;">It depends on the size and location of the store. For example, <strong>a lot of</strong> office workers and tourists use the small city-centre shops. <strong>A</strong> customer usually wants <strong>a</strong> sandwich or <strong>some</strong> sushi for lunch, or <strong>some</strong> snacks and water. <strong>Not many</strong> customers buy fresh fish and meat.</p>
+              </div>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_match')">show answers ▾</button>
+          <div class="reveal-content" id="rev_match">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li>1 → <strong>b</strong> — What does a distribution centre do?</li>
+              <li>2 → <strong>d</strong> — How many people work here?</li>
+              <li>3 → <strong>a</strong> — How many products do you have?</li>
+              <li>4 → <strong>c</strong> — How much food do supermarkets order?</li>
+            </ol></div>
+          </div>
+          <div class="grammar-box">
+            <div class="grammar-box-header"><span>Things you CAN count vs CANNOT count</span></div>
+            <div class="grammar-box-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p style="font-weight:600;color:var(--ink);margin-bottom:8px;">✓ Countable</p>
+                  <p style="font-size:13px;">a sandwich, <strong>an</strong> order, <strong>a</strong> delivery</p>
+                  <p style="font-size:13px;margin-top:6px;"><strong>How many</strong> deliveries do you have?</p>
+                  <p style="font-size:13px;">We have <strong>a lot of</strong> / <strong>not many</strong> / <strong>some</strong> deliveries.</p>
+                  <p style="font-size:13px;">We don't have <strong>any</strong> deliveries on Saturday.</p>
+                </div>
+                <div class="col-md-6">
+                  <p style="font-weight:600;color:var(--ink);margin-bottom:8px;">✗ Uncountable</p>
+                  <p style="font-size:13px;">coffee, food, fruit, information, money, time</p>
+                  <p style="font-size:13px;margin-top:6px;"><strong>How much</strong> coffee do you sell?</p>
+                  <p style="font-size:13px;">We sell <strong>a lot of</strong> coffee.</p>
+                  <p style="font-size:13px;">We don't sell <strong>much</strong> / <strong>any</strong> coffee.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+
+          <p style="margin-top:16px;"><strong>Ex. 4B — Complete with a lot of / any / much / many:</strong></p>
+          <div class="word-box neutral"><div class="word-box-label">choose from</div>
+            <span class="word-chip">a lot of</span><span class="word-chip">any</span>
+            <span class="word-chip">much</span><span class="word-chip">many</span>
+          </div>
+          <ol class="exercise">
+            <li>Our company sells _______ T-shirts in the summer.</li>
+            <li>The shop doesn't sell _______ winter jackets, only summer ones.</li>
+            <li>The factory makes _______ coffee. It's a big export for us.</li>
+            <li>We don't make _______ money doing this. We do it for free.</li>
+            <li>We don't eat _______ pasta. Only a small amount.</li>
+            <li>This shop doesn't sell _______ jumpers. Maybe one or two a week.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev2')">show answers ▾</button>
+          <div class="reveal-content" id="rev2">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>a lot of</strong></li><li><strong>many</strong></li><li><strong>a lot of</strong></li>
+              <li><strong>much</strong></li><li><strong>much</strong></li><li><strong>many</strong></li>
+            </ol></div>
+          </div>
+
+          <p style="margin-top:16px;"><strong>Ex. 6 — how many or how much? Then match answers (a–f):</strong></p>
+          <div class="word-box neutral"><div class="word-box-label">many or much?</div>
+            <span class="word-chip">many</span><span class="word-chip">much</span>
+          </div>
+          <ol class="exercise">
+            <li>How _______ people work in your company?</li>
+            <li>How _______ money do you spend on travel each week?</li>
+            <li>How _______ emails do you receive every day?</li>
+            <li>How _______ time do you have for lunch?</li>
+            <li>How _______ coffee do you drink every day?</li>
+            <li>How _______ hours do you work each week?</li>
+          </ol>
+          <div class="word-box" style="margin-top:8px;"><div class="word-box-label">match with these answers</div>
+            <span class="word-chip">a. On some days, I don't get any. When busy, a lot.</span>
+            <span class="word-chip">b. A lot. Train costs £50 a week!</span>
+            <span class="word-chip">c. Not many. About 20 in office.</span>
+            <span class="word-chip">d. About 40 a week, Mon–Fri.</span>
+            <span class="word-chip">e. Not much. About 30 min.</span>
+            <span class="word-chip">f. A lot! Helps me concentrate.</span>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev3')">show answers ▾</button>
+          <div class="reveal-content" id="rev3">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>many</strong> → c</li><li><strong>much</strong> → b</li><li><strong>many</strong> → a</li>
+              <li><strong>much</strong> → e</li><li><strong>much</strong> → f</li><li><strong>many</strong> → d</li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEO 7A -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎬</div>
+          <span class="activity-title">Video 7A — The Good Eating Company</span>
+          <span class="activity-src src-bp">BP p.19</span>
+        </div>
+        <div class="activity-body">
+
+          <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:6px;margin:0 0 16px;background:var(--paper-dark);display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--warm-grey);">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/MGD6tbtWmes?si=XMkwsXawF2F-qp6U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+          </div>
+
+          <p><strong>7A — Watch the video introduction. What do The Good Eating Company do?</strong></p>
+
+          <p style="margin-top:14px;"><strong>7B — Watch the complete video. Complete the information about the company.</strong></p>
+          <div style="border:1px solid var(--border);border-radius:6px;padding:16px;background:var(--white);margin:12px 0;font-size:14px;color:var(--ink-soft);line-height:1.9;">
+            They run around <sup>1</sup>_______ cafés and restaurants. <sup>2</sup>_______ people work at Maxwell's café. The café serves breakfast, lunch and snacks. They sell <sup>3</sup>_______ different types of coffee and also serve over <sup>4</sup>_______ cups of coffee a week. They have lots of different suppliers. They get about <sup>5</sup>_______ deliveries a week. To make their food, they use over <sup>6</sup>_______ kilos of potatoes, thirty kilos of carrots, ten kilos of lettuce and <sup>7</sup>_______ eggs per week.
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_video')">show answers ▾</button>
+          <div class="reveal-content" id="rev_video">
+            <div class="answer-key"><div class="ak-label">Answer key — 7B</div><ol>
+              <li><strong>200</strong></li>
+              <li><strong>15</strong></li>
+              <li><strong>8</strong></li>
+              <li><strong>500</strong></li>
+              <li><strong>15</strong></li>
+              <li><strong>100</strong></li>
+              <li><strong>400</strong></li>
+            </ol></div>
+          </div>
+
+          <p style="margin-top:16px;"><strong>7C — Watch the video again. Choose the correct option.</strong></p>
+          <ol class="exercise">
+            <li>Jodie is <em>Operations Manager / CEO</em> at The Good Eating Company.</li>
+            <li>The Good Eating Company have cafes in London and <em>Scotland / Ireland</em>.</li>
+            <li>Maxwell is a <em>Chef / Café Manager</em> at The Good Eating Company.</li>
+            <li>The café <em>sells a lot of / doesn't sell many</em> flat whites.</li>
+            <li>The Good Eating Company like to use <em>international / local</em> suppliers.</li>
+            <li>Jodie speaks to <em>delivery companies / suppliers</em> on the phone.</li>
+            <li>Fresh produce arrives in the <em>morning / afternoon</em>.</li>
+            <li>For lunch customers buy sandwiches, salads, fruit and <em>hot dishes / dessert</em>.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_7c')">show answers ▾</button>
+          <div class="reveal-content" id="rev_7c">
+            <div class="answer-key"><div class="ak-label">Answer key — 7C</div><ol>
+              <li><strong>Operations Manager</strong></li>
+              <li><strong>Ireland</strong></li>
+              <li><strong>Café Manager</strong></li>
+              <li><strong>sells a lot of</strong></li>
+              <li><strong>local</strong></li>
+              <li><strong>suppliers</strong></li>
+              <li><strong>morning</strong></li>
+              <li><strong>hot dishes</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 3 — LISTENING + PHONE -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Listening + Phone English</div>
+        <div class="phase-sub">BP A2 p.20 — An order by phone · ex. 2A/2B/3 + can/can't + roleplay</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- LISTENING 2A -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎧</div>
+          <span class="activity-title">Listening 2A — An order by phone</span>
+          <span class="activity-src src-bp">BP p.20</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at the catalogue for Eco Boxes. Then listen to the phone call.</p>
+
+          <!-- AUDIO PLAYER -->
+          <audio controls style="width:100%;margin:12px 0;border-radius:4px;">
+            <source src="audio/2.01.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--ink);color:white;padding:8px 14px;font-size:12px;font-weight:600;letter-spacing:0.5px;">ECOBOXES: Takeaway boxes</div>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead>
+                <tr style="background:var(--paper-dark);">
+                  <th style="padding:7px 12px;text-align:left;border-bottom:1px solid var(--border);color:var(--warm-grey);font-weight:600;font-size:11px;text-transform:uppercase;">Product</th>
+                  <th style="padding:7px 12px;text-align:left;border-bottom:1px solid var(--border);color:var(--warm-grey);font-weight:600;font-size:11px;text-transform:uppercase;">Reference No.</th>
+                  <th style="padding:7px 12px;text-align:left;border-bottom:1px solid var(--border);color:var(--warm-grey);font-weight:600;font-size:11px;text-transform:uppercase;">Size</th>
+                  <th style="padding:7px 12px;text-align:left;border-bottom:1px solid var(--border);color:var(--warm-grey);font-weight:600;font-size:11px;text-transform:uppercase;">Colour</th>
+                  <th style="padding:7px 12px;text-align:left;border-bottom:1px solid var(--border);color:var(--warm-grey);font-weight:600;font-size:11px;text-transform:uppercase;">Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding:7px 12px;border-bottom:1px solid var(--border);">Small box</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;">TGB01</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);">57 × 115 × 75 mm</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);">Two colours</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);">25 units</td></tr>
+                <tr style="background:var(--paper);"><td style="padding:7px 12px;border-bottom:1px solid var(--border);">Medium box</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;">TGB02</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);">62 × 145 × 95 mm</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);">Two colours</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);">20 units</td></tr>
+                <tr><td style="padding:7px 12px;">Big box</td><td style="padding:7px 12px;font-family:'DM Mono',monospace;">TGB03</td><td style="padding:7px 12px;">70 × 225 × 95 mm</td><td style="padding:7px 12px;">Two colours</td><td style="padding:7px 12px;">10 units</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p><strong>What information does the customer need from Eco Boxes?</strong></p>
+          <div class="interview-space" style="min-height:50px;">Your answer:</div>
+
+          <p style="margin-top:16px;"><strong>2B — Listen again. Choose the correct option (1–8).</strong></p>
+          <audio controls style="width:100%;margin:8px 0 12px;border-radius:4px;">
+            <source src="audio/2.01.mp3" type="audio/mpeg">
+          </audio>
+
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--paper-dark);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);">PRODUCT PRICES</div>
+            <div style="padding:14px;font-size:13px;">
+              <div style="display:grid;grid-template-columns:120px 1fr;gap:4px 16px;color:var(--ink-soft);">
+                <span style="font-weight:600;color:var(--ink);">Small Box</span><span>TGB01 &nbsp;<sup>1</sup><em>£2.50 / 2.60</em></span>
+                <span style="font-weight:600;color:var(--ink);">Medium Box</span><span>TGB02 &nbsp;<sup>2</sup><em>£2.00 / 3.00</em></span>
+                <span style="font-weight:600;color:var(--ink);">Big Box</span><span>TGB03 &nbsp;<sup>3</sup><em>£2.00 / 3.00</em></span>
+                <span style="font-weight:600;color:var(--ink);">Colours</span><span><sup>4</sup><em>natural / black / white / beige</em></span>
+                <span style="font-weight:600;color:var(--ink);">Quantity</span><span><sup>5</sup><em>400 / 500</em> TGB01 and <sup>6</sup><em>400 / 500</em> TGB02</span>
+                <span style="font-weight:600;color:var(--ink);">Delivery date</span><span><sup>7</sup><em>Monday 25th / 26th</em></span>
+                <span style="font-weight:600;color:var(--ink);">Total cost</span><span><sup>8</sup><em>£115 / 150</em></span>
+                <span style="font-weight:600;color:var(--ink);">Delivery</span><span>free of charge</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_2b')">show answers ▾</button>
+          <div class="reveal-content" id="rev_2b">
+            <div class="answer-key"><div class="ak-label">Answer key — 2B</div><ol>
+              <li><strong>£2.50</strong></li>
+              <li><strong>£2.00</strong></li>
+              <li><strong>£3.00</strong></li>
+              <li><strong>natural</strong></li>
+              <li><strong>500</strong> TGB01</li>
+              <li><strong>400</strong> TGB02</li>
+              <li><strong>Monday 25th</strong></li>
+              <li><strong>£115</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+      <!-- TASK 3 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📞</div>
+          <span class="activity-title">Task 3 — Complete the phone phrases</span>
+          <span class="activity-src src-bp">BP p.20</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete each phrase. Then mark: <strong>C</strong> = Customer or <strong>S</strong> = Salesperson.</p>
+          <div class="word-box neutral"><div class="word-box-label">words in the box</div>
+            <span class="word-chip">speaking</span><span class="word-chip">order</span><span class="word-chip">have</span>
+            <span class="word-chip">much</span><span class="word-chip">delivery</span><span class="word-chip">many</span>
+            <span class="word-chip">deliver</span><span class="word-chip">sorry</span><span class="word-chip">confirm</span><span class="word-chip">much</span>
+          </div>
+          <ol class="exercise">
+            <li>Eco Boxes. Laura _______. How can I help you? &nbsp; [ C / S ]</li>
+            <li>I'd like to _______ some of your new takeaway boxes. &nbsp; [ C / S ]</li>
+            <li>Do you _______ the product reference numbers? &nbsp; [ C / S ]</li>
+            <li>How _______ are the three boxes? &nbsp; [ C / S ]</li>
+            <li>How much does _______ cost? &nbsp; [ C / S ]</li>
+            <li>How _______ boxes do you need? &nbsp; [ C / S ]</li>
+            <li>Can you _______ by Monday 26th? &nbsp; [ C / S ]</li>
+            <li>I'm very _______, we can't. We don't have any in stock. &nbsp; [ C / S ]</li>
+            <li>Certainly, I'll _______ your order on the system. &nbsp; [ C / S ]</li>
+            <li>How _______ is that in total? &nbsp; [ C / S ]</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev4')">show answers ▾</button>
+          <div class="reveal-content" id="rev4">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>speaking</strong> — S</li><li><strong>order</strong> — C</li><li><strong>have</strong> — S</li>
+              <li><strong>much</strong> — C</li><li><strong>delivery</strong> — C</li><li><strong>many</strong> — S</li>
+              <li><strong>deliver</strong> — C</li><li><strong>sorry</strong> — S</li>
+              <li><strong>confirm</strong> — S</li><li><strong>much</strong> — C</li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">📐</div>
+          <span class="activity-title">Grammar — CAN / CAN'T for possibility</span>
+          <span class="activity-src src-bp">BP p.21</span>
+        </div>
+        <div class="activity-body">
+          <div class="grammar-box">
+            <div class="grammar-box-header"><span>CAN / CAN'T</span></div>
+            <div class="grammar-box-body">
+              <div class="grammar-row"><span class="grammar-plus">+</span><span>We <strong>can</strong> deliver the order on Monday. &nbsp;·&nbsp; I <strong>can</strong> call you back in 10 minutes.</span></div>
+              <div class="grammar-row"><span class="grammar-minus">−</span><span>They <strong>can't</strong> deliver today. &nbsp;·&nbsp; I'm sorry, we <strong>can't</strong> — we don't have any in stock.</span></div>
+              <div class="grammar-row"><span class="grammar-q">?</span><span><strong>Can</strong> you deliver by Monday? &nbsp;→&nbsp; Yes, we <strong>can</strong>. / Sorry, we <strong>can't</strong>.</span></div>
+            </div>
+          </div>
+          <div class="note-box" style="margin-top:10px;">
+            <strong>Note:</strong> can/can't never changes — no -s for he/she. After can, the verb has no -s and no <em>to</em>: <em>She <strong>can deliver</strong></em> (not "cans" or "can to deliver").
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">🎭</div>
+          <span class="activity-title">Roleplay — Phone order</span>
+          <span class="activity-src src-you">ROLEPLAY</span>
+        </div>
+        <div class="activity-body">
+          <p>Use the example call below as a guide.</p>
+          <div class="phone-script">
+            <div class="phone-header">📞 EXAMPLE CALL</div>
+            <div class="phone-line"><span class="phone-speaker">SUPPLIER</span><span class="phone-text">Good morning, ConnectTech, Laura speaking. How can I help you?</span></div>
+            <div class="phone-line"><span class="phone-speaker">CUSTOMER</span><span class="phone-text"><em>I'd like to order some cable connectors, please.</em></span></div>
+            <div class="phone-line"><span class="phone-speaker">SUPPLIER</span><span class="phone-text">Of course. Do you have the product reference number?</span></div>
+            <div class="phone-line"><span class="phone-speaker">CUSTOMER</span><span class="phone-text"><em>Yes, it's CC-4471.</em></span></div>
+            <div class="phone-line"><span class="phone-speaker">SUPPLIER</span><span class="phone-text">How many do you need?</span></div>
+            <div class="phone-line"><span class="phone-speaker">CUSTOMER</span><span class="phone-text"><em>I need 500 units. Can you deliver by Friday?</em></span></div>
+            <div class="phone-line"><span class="phone-speaker">SUPPLIER</span><span class="phone-text">I'm very sorry, we can't — we don't have that many in stock. We can deliver 300 by Friday and the rest by Monday.</span></div>
+            <div class="phone-line"><span class="phone-speaker">CUSTOMER</span><span class="phone-text"><em>OK, that's fine. How much is that in total?</em></span></div>
+            <div class="phone-line"><span class="phone-speaker">SUPPLIER</span><span class="phone-text">It's €180. Shall I confirm your order on the system?</span></div>
+            <div class="phone-line"><span class="phone-speaker">CUSTOMER</span><span class="phone-text"><em>Yes please. Thank you.</em></span></div>
+          </div>
+          <ul class="steps" style="margin-top:14px;">
+            <li><span class="step-num">1</span><strong>Round 1:</strong> You are the customer. Call the supplier and place your order for parts.</li>
+            <li><span class="step-num">2</span><strong>Round 2:</strong> You are the supplier (Laura speaking). Answer the phone and take the order. Use: <em>How many? / I'm afraid we can't / I'll confirm your order.</em></li>
+          </ul>
+          <div class="phrase-box" style="margin-top:14px;">
+            <div class="phrase-label">Key phone phrases</div>
+            <div class="phrase-row"><span class="phrase-en">[Company]. [Name] speaking.</span><span class="phrase-de">відповідь на дзвінок</span></div>
+            <div class="phrase-row"><span class="phrase-en">I'd like to order…</span><span class="phrase-de">Я хотіла б замовити…</span></div>
+            <div class="phrase-row"><span class="phrase-en">Do you have the reference number?</span><span class="phrase-de">У вас є артикул?</span></div>
+            <div class="phrase-row"><span class="phrase-en">Can you deliver by [date]?</span><span class="phrase-de">Ви можете доставити до [дати]?</span></div>
+            <div class="phrase-row"><span class="phrase-en">I'm very sorry, we can't.</span><span class="phrase-de">На жаль, ми не можемо.</span></div>
+            <div class="phrase-row"><span class="phrase-en">We don't have any in stock.</span><span class="phrase-de">Цього немає на складі.</span></div>
+            <div class="phrase-row"><span class="phrase-en">How much is that in total?</span><span class="phrase-de">Скільки це загалом?</span></div>
+            <div class="phrase-row"><span class="phrase-en">I'll confirm your order on the system.</span><span class="phrase-de">Я підтверджу замовлення в системі.</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Extra practice — a / an / some + speaking</div>
+        <div class="phase-sub">BP A2 p.19, ex. 5</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 5 — Complete with a, an or some</span>
+          <span class="activity-src src-bp">BP p.19</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box neutral"><div class="word-box-label">choose from</div>
+            <span class="word-chip">a</span><span class="word-chip">an</span><span class="word-chip">some</span>
+          </div>
+          <ol class="exercise">
+            <li>This is _______ old warehouse but _______ people still work here.</li>
+            <li>He usually has _______ sandwich and _______ fruit for lunch.</li>
+            <li>The truck arrives in _______ hour to deliver to _______ UK cities.</li>
+            <li>I write _______ email to _______ customer in England every week.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev5')">show answers ▾</button>
+          <div class="reveal-content" id="rev5">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>an</strong> old warehouse / <strong>some</strong> people</li>
+              <li><strong>a</strong> sandwich / <strong>some</strong> fruit</li>
+              <li><strong>an</strong> hour / <strong>some</strong> UK cities</li>
+              <li><strong>an</strong> email / <strong>a</strong> customer</li>
+            </ol></div>
+          </div>
+          <div class="note-box" style="margin-top:10px;">
+            <strong>an hour</strong> — because "h" is silent, the word starts with a vowel sound /aʊ/. Same rule: <em>an honest person, an MBA.</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">💬</div>
+          <span class="activity-title">Speaking — quantities about your work</span>
+        </div>
+        <div class="activity-body">
+          <p>Answer these questions about your work at Mercedes. Use full sentences with: <em>a lot of / not many / not much / some / any.</em></p>
+          <ol class="exercise">
+            <li>How many emails do you receive every day?</li>
+            <li>How much time do you spend in meetings each week?</li>
+            <li>How many suppliers does your department work with?</li>
+            <li>How many people are in your team?</li>
+            <li>How much time do you spend on the phone with international colleagues?</li>
+            <li>Do you have any English-speaking colleagues in your building?</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+function togglePhase(id){const el=document.getElementById(id);el.classList.toggle('collapsed');}
+function toggleReveal(id){const el=document.getElementById(id);el.classList.toggle('open');const btn=el.previousElementSibling;btn.textContent=el.classList.contains('open')?'hide answers ▴':'show answers ▾';}
+</script>
+</body>
+</html>

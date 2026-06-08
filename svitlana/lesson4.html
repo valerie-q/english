@@ -116,6 +116,7 @@
     ol.exercise { padding-left:20px; }
     ol.exercise li { font-size:14px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); }
     ol.exercise li:last-child { border-bottom:none; }
+    input[type="text"] { border:none; border-bottom:1px solid var(--amber); background:transparent; font-size:14px; color:var(--ink); padding:2px 4px; outline:none; }
   </style>
 </head>
 <body>
@@ -199,11 +200,11 @@
           <table class="vocab-table" style="margin-top:12px;">
             <thead><tr><th>Word</th><th>Verb or Noun?</th><th>Meaning</th></tr></thead>
             <tbody>
-              <tr><td class="eng">delivers</td><td></td><td></td></tr>
-              <tr><td class="eng">order (v)</td><td></td><td></td></tr>
-              <tr><td class="eng">order (n)</td><td></td><td></td></tr>
-              <tr><td class="eng">supplier</td><td></td><td></td></tr>
-              <tr><td class="eng">deliveries</td><td></td><td></td></tr>
+              <tr><td class="eng">delivers</td><td><input type="text" size="10"></td><td><input type="text" size="10"></td></tr>
+              <tr><td class="eng">order (v)</td><td><input type="text" size="10"></td><td><input type="text" size="10"></td></tr>
+              <tr><td class="eng">order (n)</td><td><input type="text" size="10"></td><td><input type="text" size="10"></td></tr>
+              <tr><td class="eng">supplier</td><td><input type="text" size="10"></td><td><input type="text" size="10"></td></tr>
+              <tr><td class="eng">deliveries</td><td><input type="text" size="10"></td><td><input type="text" size="10"></td></tr>
             </tbody>
           </table>
           <button class="reveal-btn" onclick="toggleReveal('rev0')">show answers ▾</button>
@@ -223,11 +224,11 @@
             <span class="word-chip">deliveries</span><span class="word-chip">supplier</span><span class="word-chip">order</span>
           </div>
           <ol class="exercise">
-            <li>We often _______ food with the Jangle app. It's quick and easy.</li>
-            <li>Jangle _______ food to homes and offices.</li>
-            <li>Jangle makes thousands of _______ every day.</li>
-            <li>Jangle isn't a food _______, it's a delivery service.</li>
-            <li>They place a big _______ with Jangle every Friday.</li>
+            <li>We often <input type="text" size="15"> food with the Jangle app. It's quick and easy.</li>
+            <li>Jangle <input type="text" size="15"> food to homes and offices.</li>
+            <li>Jangle makes thousands of <input type="text" size="15"> every day.</li>
+            <li>Jangle isn't a food <input type="text" size="15">, it's a delivery service.</li>
+            <li>They place a big <input type="text" size="15"> with Jangle every Friday.</li>
           </ol>
           <button class="reveal-btn" onclick="toggleReveal('rev1')">show answers ▾</button>
           <div class="reveal-content" id="rev1">
@@ -261,19 +262,19 @@
             </div>
             <div style="padding:16px;">
               <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;">
-                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">1 ___</span>
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">1 <input type="text" size="3"></span>
                 <p style="margin:0;">We prepare the orders and deliver them to our supermarkets in each region. We have fifteen regional centres in the country. The supermarkets send their orders via the online platform. We don't have <strong>much</strong> time to prepare <strong>an</strong> order. Our delivery trucks leave here the next day with the order.</p>
               </div>
               <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;">
-                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">2 ___</span>
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">2 <input type="text" size="3"></span>
                 <p style="margin:0;">We have over 400 warehouse workers and about fifty drivers here. It's <strong>a</strong> big centre. We deliver food to supermarkets in the London area and operate twenty-four hours a day.</p>
               </div>
               <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;">
-                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">3 ___</span>
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">3 <input type="text" size="3"></span>
                 <p style="margin:0;">We have over 2,000 products including <strong>some</strong> fresh fruit and vegetables, drinks, tinned food, rice, pasta, cereals and cleaning products. We sell <strong>a lot of</strong> bananas. It's the top-selling product.</p>
               </div>
               <div style="display:flex;gap:8px;align-items:flex-start;">
-                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">4 ___</span>
+                <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--amber);color:white;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-top:2px;">4 <input type="text" size="3"></span>
                 <p style="margin:0;">It depends on the size and location of the store. For example, <strong>a lot of</strong> office workers and tourists use the small city-centre shops. <strong>A</strong> customer usually wants <strong>a</strong> sandwich or <strong>some</strong> sushi for lunch, or <strong>some</strong> snacks and water. <strong>Not many</strong> customers buy fresh fish and meat.</p>
               </div>
             </div>
@@ -318,12 +319,12 @@
             <span class="word-chip">much</span><span class="word-chip">many</span>
           </div>
           <ol class="exercise">
-            <li>Our company sells _______ T-shirts in the summer.</li>
-            <li>The shop doesn't sell _______ winter jackets, only summer ones.</li>
-            <li>The factory makes _______ coffee. It's a big export for us.</li>
-            <li>We don't make _______ money doing this. We do it for free.</li>
-            <li>We don't eat _______ pasta. Only a small amount.</li>
-            <li>This shop doesn't sell _______ jumpers. Maybe one or two a week.</li>
+            <li>Our company sells <input type="text" size="8"> T-shirts in the summer.</li>
+            <li>The shop doesn't sell <input type="text" size="8"> winter jackets, only summer ones.</li>
+            <li>The factory makes <input type="text" size="8"> coffee. It's a big export for us.</li>
+            <li>We don't make <input type="text" size="8"> money doing this. We do it for free.</li>
+            <li>We don't eat <input type="text" size="8"> pasta. Only a small amount.</li>
+            <li>This shop doesn't sell <input type="text" size="8"> jumpers. Maybe one or two a week.</li>
           </ol>
           <button class="reveal-btn" onclick="toggleReveal('rev2')">show answers ▾</button>
           <div class="reveal-content" id="rev2">
@@ -338,12 +339,12 @@
             <span class="word-chip">many</span><span class="word-chip">much</span>
           </div>
           <ol class="exercise">
-            <li>How _______ people work in your company?</li>
-            <li>How _______ money do you spend on travel each week?</li>
-            <li>How _______ emails do you receive every day?</li>
-            <li>How _______ time do you have for lunch?</li>
-            <li>How _______ coffee do you drink every day?</li>
-            <li>How _______ hours do you work each week?</li>
+            <li><input type="text" size="3">       How <input type="text" size="8"> people work in your company?</li>
+            <li><input type="text" size="3">       How <input type="text" size="8"> money do you spend on travel each week?</li>
+            <li><input type="text" size="3">       How <input type="text" size="8"> emails do you receive every day?</li>
+            <li><input type="text" size="3">       How <input type="text" size="8"> time do you have for lunch?</li>
+            <li><input type="text" size="3">       How <input type="text" size="8"> coffee do you drink every day?</li>
+            <li><input type="text" size="3">       How <input type="text" size="8"> hours do you work each week?</li>
           </ol>
           <div class="word-box" style="margin-top:8px;"><div class="word-box-label">match with these answers</div>
             <span class="word-chip">a. On some days, I don't get any. When busy, a lot.</span>
@@ -373,16 +374,14 @@
         <div class="activity-body">
 
           <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:6px;margin:0 0 16px;background:var(--paper-dark);display:flex;align-items:center;justify-content:center;">
-            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--warm-grey);">
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/MGD6tbtWmes?si=XMkwsXawF2F-qp6U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
           </div>
 
           <p><strong>7A — Watch the video introduction. What do The Good Eating Company do?</strong></p>
 
           <p style="margin-top:14px;"><strong>7B — Watch the complete video. Complete the information about the company.</strong></p>
           <div style="border:1px solid var(--border);border-radius:6px;padding:16px;background:var(--white);margin:12px 0;font-size:14px;color:var(--ink-soft);line-height:1.9;">
-            They run around <sup>1</sup>_______ cafés and restaurants. <sup>2</sup>_______ people work at Maxwell's café. The café serves breakfast, lunch and snacks. They sell <sup>3</sup>_______ different types of coffee and also serve over <sup>4</sup>_______ cups of coffee a week. They have lots of different suppliers. They get about <sup>5</sup>_______ deliveries a week. To make their food, they use over <sup>6</sup>_______ kilos of potatoes, thirty kilos of carrots, ten kilos of lettuce and <sup>7</sup>_______ eggs per week.
+            They run around <sup>1 </sup><input type="text" size="10"> cafés and restaurants. <sup>2 </sup><input type="text" size="10"> people work at Maxwell's café. The café serves breakfast, lunch and snacks. They sell <sup>3 </sup><input type="text" size="10"> different types of coffee and also serve over <sup>4 </sup><input type="text" size="10"> cups of coffee a week. They have lots of different suppliers. They get about <sup>5 </sup><input type="text" size="10"> deliveries a week. To make their food, they use over <sup>6 </sup><input type="text" size="10"> kilos of potatoes, thirty kilos of carrots, ten kilos of lettuce and <sup>7 </sup><input type="text" size="10"> eggs per week.
           </div>
 
           <button class="reveal-btn" onclick="toggleReveal('rev_video')">show answers ▾</button>
@@ -450,10 +449,7 @@
           <p>Look at the catalogue for Eco Boxes. Then listen to the phone call.</p>
 
           <!-- AUDIO PLAYER -->
-          <audio controls style="width:100%;margin:12px 0;border-radius:4px;">
-            <source src="audio/2.01.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-          </audio>
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004843&color=%23f2d5d6&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_2_01-3" title="BP_A2_CB_Tk_2_01" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_2_01</a></div>
 
           <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
             <div style="background:var(--ink);color:white;padding:8px 14px;font-size:12px;font-weight:600;letter-spacing:0.5px;">ECOBOXES: Takeaway boxes</div>
@@ -479,9 +475,7 @@
           <div class="interview-space" style="min-height:50px;">Your answer:</div>
 
           <p style="margin-top:16px;"><strong>2B — Listen again. Choose the correct option (1–8).</strong></p>
-          <audio controls style="width:100%;margin:8px 0 12px;border-radius:4px;">
-            <source src="audio/2.01.mp3" type="audio/mpeg">
-          </audio>
+
 
           <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
             <div style="background:var(--paper-dark);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);">PRODUCT PRICES</div>
@@ -523,22 +517,18 @@
         </div>
         <div class="activity-body">
           <p>Complete each phrase. Then mark: <strong>C</strong> = Customer or <strong>S</strong> = Salesperson.</p>
-          <div class="word-box neutral"><div class="word-box-label">words in the box</div>
-            <span class="word-chip">speaking</span><span class="word-chip">order</span><span class="word-chip">have</span>
-            <span class="word-chip">much</span><span class="word-chip">delivery</span><span class="word-chip">many</span>
-            <span class="word-chip">deliver</span><span class="word-chip">sorry</span><span class="word-chip">confirm</span><span class="word-chip">much</span>
-          </div>
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004864&color=%23f2d5d6&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_2_02-4" title="BP_A2_CB_Tk_2_02" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_2_02</a></div>
           <ol class="exercise">
-            <li>Eco Boxes. Laura _______. How can I help you? &nbsp; [ C / S ]</li>
-            <li>I'd like to _______ some of your new takeaway boxes. &nbsp; [ C / S ]</li>
-            <li>Do you _______ the product reference numbers? &nbsp; [ C / S ]</li>
-            <li>How _______ are the three boxes? &nbsp; [ C / S ]</li>
-            <li>How much does _______ cost? &nbsp; [ C / S ]</li>
-            <li>How _______ boxes do you need? &nbsp; [ C / S ]</li>
-            <li>Can you _______ by Monday 26th? &nbsp; [ C / S ]</li>
-            <li>I'm very _______, we can't. We don't have any in stock. &nbsp; [ C / S ]</li>
-            <li>Certainly, I'll _______ your order on the system. &nbsp; [ C / S ]</li>
-            <li>How _______ is that in total? &nbsp; [ C / S ]</li>
+            <li>Eco Boxes. Laura <input type="text" size="10">. How can I help you? &nbsp; [ C / S ]</li>
+            <li>I'd like to <input type="text" size="10"> some of your new takeaway boxes. &nbsp; [ C / S ]</li>
+            <li>Do you <input type="text" size="10"> the product reference numbers? &nbsp; [ C / S ]</li>
+            <li>How <input type="text" size="10"> are the three boxes? &nbsp; [ C / S ]</li>
+            <li>How much does <input type="text" size="10"> cost? &nbsp; [ C / S ]</li>
+            <li>How <input type="text" size="10"> boxes do you need? &nbsp; [ C / S ]</li>
+            <li>Can you <input type="text" size="10"> by Monday 26th? &nbsp; [ C / S ]</li>
+            <li>I'm very <input type="text" size="10">, we can't. We don't have any in stock. &nbsp; [ C / S ]</li>
+            <li>Certainly, I'll <input type="text" size="10"> your order on the system. &nbsp; [ C / S ]</li>
+            <li>How <input type="text" size="10"> is that in total? &nbsp; [ C / S ]</li>
           </ol>
           <button class="reveal-btn" onclick="toggleReveal('rev4')">show answers ▾</button>
           <div class="reveal-content" id="rev4">
@@ -636,10 +626,10 @@
             <span class="word-chip">a</span><span class="word-chip">an</span><span class="word-chip">some</span>
           </div>
           <ol class="exercise">
-            <li>This is _______ old warehouse but _______ people still work here.</li>
-            <li>He usually has _______ sandwich and _______ fruit for lunch.</li>
-            <li>The truck arrives in _______ hour to deliver to _______ UK cities.</li>
-            <li>I write _______ email to _______ customer in England every week.</li>
+            <li>This is <input type="text" size="6"> old warehouse but <input type="text" size="6"> people still work here.</li>
+            <li>He usually has <input type="text" size="6"> sandwich and <input type="text" size="6"> fruit for lunch.</li>
+            <li>The truck arrives in <input type="text" size="6"> hour to deliver to <input type="text" size="6"> UK cities.</li>
+            <li>I write <input type="text" size="6"> email to <input type="text" size="6"> customer in England every week.</li>
           </ol>
           <button class="reveal-btn" onclick="toggleReveal('rev5')">show answers ▾</button>
           <div class="reveal-content" id="rev5">

@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 2 — Human Skills</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2240;
+      --ink-soft: #3a4a6a;
+      --paper: #f5f7fc;
+      --paper-dark: #e8edf8;
+      --gold: #c88a10;
+      --teal: #2a5fa8;
+      --teal-light: #4a7fc8;
+      --warm-grey: #6a7a9a;
+      --border: #d0d8ec;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+
+    .header { background: #1a2e52; color: #fff; padding: 48px 40px 40px; position: relative; overflow: hidden; }
+    .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(90,143,232,0.3) 0%, transparent 70%); }
+    .header::after  { content: ''; position: absolute; bottom: -40px; left: 20%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(200,138,16,0.2) 0%, transparent 70%); }
+    .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px,5vw,58px); font-weight: 900; line-height: 1.05; margin-bottom: 16px; }
+    .header h1 em { font-style: italic; color: #f0c060; }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7); }
+    .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0c060; flex-shrink: 0; }
+    .meta-chip strong { color: #fff; }
+
+    .objectives-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .objectives-box { background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .obj-col h3 { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .obj-list { list-style: none; }
+    .obj-list li { font-size: 14px; padding: 5px 0 5px 18px; position: relative; color: var(--ink-soft); border-bottom: 1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom: none; }
+    .obj-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal-light); font-size: 12px; font-weight: 600; }
+
+    .main { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+
+    .phase { margin-bottom: 40px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; position: relative; }
+    .phase-header::after { content: '▾'; position: absolute; right: 20px; font-size: 18px; color: rgba(255,255,255,0.6); transition: transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+    .phase-num { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 20px; color: rgba(255,255,255,0.9); white-space: nowrap; }
+    .phase-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
+    .phase-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .phase-time { margin-left: auto; margin-right: 32px; font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.8); white-space: nowrap; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; }
+    .phase-body { padding: 0 24px 24px; background: var(--paper); }
+    .phase.collapsed .phase-body { display: none; }
+    .phase-1 .phase-header { background: #1e3a5f; }
+    .phase-2 .phase-header { background: #2a4a7a; }
+    .phase-3 .phase-header { background: #1a3a6e; }
+    .phase-4 .phase-header { background: #1e3a5f; }
+    .phase-5 .phase-header { background: #2a4a7a; }
+    .phase-6 .phase-header { background: #1a3a6e; }
+    .phase-7 .phase-header { background: #1e3a5f; }
+
+    .activity { border: 1px solid var(--border); border-radius: 4px; margin-top: 16px; overflow: hidden; background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .activity-head { background: var(--paper-dark); padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+    .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; background: #eef3fb; }
+    .activity-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+    .activity-src { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: #1e3a6e; background: #dce6f5; border: 1px solid #b0c8ec; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-time-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-body { padding: 16px; background: var(--white); }
+
+    .tip-box { background: #eef3fb; border: 1px solid #b0c8ec; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; display: flex; gap: 10px; }
+    .tip-icon { font-size: 16px; flex-shrink: 0; }
+    .tip-text { color: #2a3a5a; line-height: 1.5; }
+    .tip-text strong { color: var(--ink); }
+
+    .phrase-box { background: #1a2e52; border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+    .phrase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: #f0c060; margin-bottom: 10px; }
+    .phrase-row { display: flex; align-items: baseline; gap: 16px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .phrase-row:last-child { border-bottom: none; }
+    .phrase-en { font-size: 15px; font-weight: 500; flex: 1; color: #fff; }
+    .phrase-de { font-size: 13px; color: rgba(255,255,255,0.55); flex: 1; }
+
+    .speaking-box { border: 2px solid var(--teal); border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .speaking-box-header { background: #1e3a5f; padding: 10px 16px; }
+    .speaking-box-header span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 600; }
+    .speaking-box-body { background: var(--white); padding: 16px; }
+    .speaking-section { margin-bottom: 14px; }
+    .speaking-section:last-child { margin-bottom: 0; }
+    .speaking-section-title { font-size: 12px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
+    .speaking-row { display: flex; gap: 12px; padding: 5px 0; border-bottom: 1px dotted var(--border); font-size: 14px; color: var(--ink); }
+    .speaking-row:last-child { border-bottom: none; }
+
+    .word-box { background: var(--white); border: 2px solid var(--teal); border-radius: 6px; padding: 12px 16px; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .word-box-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); width: 100%; margin-bottom: 4px; }
+    .word-chip { background: #1e3a5f; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+
+    .answer-key { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+    .ak-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 8px; }
+    .answer-key ol { padding-left: 20px; }
+    .answer-key ol li { padding: 3px 0; color: var(--ink-soft); }
+    .answer-key ol li strong { color: var(--teal); }
+
+    .reveal-btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; background: none; border: 1px solid var(--border); color: var(--warm-grey); padding: 5px 14px; border-radius: 20px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+    .reveal-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .reveal-content { display: none; margin-top: 10px; }
+    .reveal-content.open { display: block; }
+
+    .vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .vocab-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; letter-spacing: 0.5px; }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--ink-soft); }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .vocab-table .eng { font-weight: 600; color: var(--ink); }
+
+    .steps { list-style: none; margin: 12px 0; }
+    .steps li { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px dotted var(--border); font-size: 14px; align-items: flex-start; color: var(--ink-soft); }
+    .steps li:last-child { border-bottom: none; }
+    .step-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: #fff; background: var(--ink); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    /* Quote cards for agree/disagree */
+    .quote-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+    .quote-card { background: #1a2e52; border-radius: 8px; padding: 16px 18px; position: relative; }
+    .quote-card::before { content: '"'; font-family: 'Playfair Display', serif; font-size: 48px; color: rgba(240,192,96,0.3); position: absolute; top: 4px; left: 12px; line-height: 1; }
+    .quote-card p { font-size: 14px; color: #e8eaf0; line-height: 1.6; padding-left: 16px; margin: 0; }
+    .quote-card .quote-num { font-family: 'DM Mono', monospace; font-size: 10px; color: #f0c060; margin-bottom: 8px; letter-spacing: 2px; }
+
+    /* Scenario card */
+    .scenario-card { background: var(--paper-dark); border: 2px dashed var(--border); border-radius: 8px; padding: 20px; margin: 12px 0; }
+    .scenario-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .scenario-text { font-size: 15px; color: var(--ink); line-height: 1.7; font-style: italic; }
+
+    /* Google case study block */
+    .google-case { border-radius: 8px; overflow: hidden; margin: 12px 0; border: 1px solid var(--border); }
+    .google-case-header { background: #fff; padding: 16px 20px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid var(--border); }
+    .google-logo { display: flex; align-items: center; gap: 4px; }
+    .google-logo span { font-size: 22px; font-weight: 700; }
+    .google-logo .g-blue { color: #4285F4; }
+    .google-logo .g-red { color: #EA4335; }
+    .google-logo .g-yellow { color: #FBBC05; }
+    .google-logo .g-green { color: #34A853; }
+    .google-case-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--warm-grey); }
+    .google-case-meta strong { color: var(--ink); display: block; font-size: 13px; margin-bottom: 2px; }
+    .google-case-body { background: #fafbff; padding: 20px; font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
+    .google-case-body p { margin: 0 0 12px; }
+    .google-case-body p:last-child { margin: 0; }
+    .google-case-body strong { color: var(--ink); }
+    .google-case-body em { color: var(--teal); font-style: normal; font-weight: 600; }
+
+    /* Video placeholder */
+    .video-placeholder { background: #0f1c33; border-radius: 8px; overflow: hidden; margin: 12px 0; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; position: relative; }
+    .video-placeholder iframe { width: 100%; height: 100%; border: none; }
+
+    p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+    p:first-child { margin-top: 0; }
+    strong { color: var(--ink); }
+    ol.exercise { padding-left: 20px; }
+    ol.exercise li { font-size: 14px; color: var(--ink-soft); padding: 5px 0; border-bottom: 1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom: none; }
+
+    /* Mood image */
+    .mood-img-wrap { text-align: center; margin: 12px 0; }
+    .mood-img-wrap img { max-width: 420px; width: 100%; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+    @media (max-width: 700px) {
+      .objectives-box { grid-template-columns: 1fr; }
+      .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; }
+      .quote-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 2<br><em>Human Skills</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;B1–B2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Topic:</strong>&nbsp;Soft Skills & Hybrid Culture</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Duration:</strong>&nbsp;60 min</div>
+    </div>
+  </div>
+</div>
+
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Discuss the concept of "human skills" vs hard skills</li>
+        <li>Understand trust as a leadership metric</li>
+        <li>Explore hybrid team culture through a real Google case</li>
+        <li>Practice expressing opinions on complex workplace topics</li>
+        <li>Review Past Simple vs Present Perfect in context</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>Vocab: toxic, trustworthiness, empathy, confrontation, peer review, morale, promote, mandate, alienate</li>
+        <li>Phrases: when the chips are down, hit your numbers, point to the same person, psychological safety, cognitive vs affective trust</li>
+        <li>Grammar: Past Simple vs Present Perfect</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PHASE 1 — WARM-UP -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Warm-up</div>
+      </div>
+      <span class="phase-time">5 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🐶</div>
+          <span class="activity-title">How's your mood today?</span>
+          <span class="activity-time-badge">2 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Pick a picture that best describes how you feel today and explain why.</p>
+          <div class="mood-img-wrap">
+            <img src="mood_dogs.jpg" alt="How's your mood today — pick a dog">
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Discussion — Human skills at work</span>
+          <span class="activity-time-badge">3 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Think & discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What are the top 3 soft skills a Head of Product needs most — and why?</div>
+              <div class="speaking-row">Can soft skills be learned, or are they something you either have or don't?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 2 — VIDEO -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Video — Simon Sinek</div>
+        <div class="phase-sub">"There's NO Such Thing as Soft Skills"</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">▶️</div>
+          <span class="activity-title">Watch the video</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Watch the video. As you watch, think about: <strong>What is Simon Sinek's main argument?</strong></p>
+          <div class="video-placeholder">
+            <!-- paste your iframe here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">❓</div>
+          <span class="activity-title">Comprehension questions</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>What does Sinek say is wrong with the term "soft skills"? What does he prefer to call them?</li>
+            <li>What two axes did the Navy SEALs use to evaluate people? How did they define each one?</li>
+            <li>Who is a "toxic team member" according to Sinek? Why is this person dangerous?</li>
+            <li>Why do companies accidentally promote the wrong people into leadership?</li>
+            <li>What human skills does Sinek mention specifically? Can you name at least three?</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_comp')">show answers ▾</button>
+          <div class="reveal-content" id="rev_comp">
+            <div class="answer-key">
+              <div class="ak-label">Key points</div>
+              <ol>
+                <li>"Soft skills" suggests they're easy — he prefers <strong>"human skills"</strong></li>
+                <li><strong>Performance</strong> (hit your numbers) vs <strong>Trust</strong> (what kind of person are you)</li>
+                <li>A <strong>high performer of low trust</strong> — damages team morale and culture</li>
+                <li>We have <strong>million metrics for performance, zero for trustworthiness</strong> — so we keep promoting the wrong people</li>
+                <li>Listening, <strong>empathy</strong>, patience, having difficult conversations, <strong>effective confrontation</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 3 — VOCABULARY -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Vocabulary — from the video</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📚</div>
+          <span class="activity-title">Key words & phrases</span>
+        </div>
+        <div class="activity-body">
+          <table class="vocab-table">
+            <thead><tr><th>Word / Phrase</th><th>Meaning</th><th>From the video</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">Toxic</td><td>harmful to people around them</td><td>"a toxic team member"</td></tr>
+              <tr><td class="eng">Trustworthiness</td><td>the quality of being reliable and honest</td><td>"zero metrics to measure trustworthiness"</td></tr>
+              <tr><td class="eng">Empathy</td><td>the ability to understand others' feelings</td><td>"human skills include empathy"</td></tr>
+              <tr><td class="eng">Confrontation</td><td>a direct disagreement or difficult conversation</td><td>"effective confrontations"</td></tr>
+              <tr><td class="eng">Peer review</td><td>evaluation by colleagues at the same level</td><td>"I'm a big fan of peer reviews"</td></tr>
+              <tr><td class="eng">Morale</td><td>confidence and enthusiasm of a group</td><td>"greater morale out of everybody else"</td></tr>
+              <tr><td class="eng">Promote</td><td>move someone to a higher position</td><td>"we accidentally keep promoting toxic people"</td></tr>
+            </tbody>
+          </table>
+
+          <div class="phrase-box" style="margin-top:16px">
+            <div class="phrase-label">Phrases from the video</div>
+            <div class="phrase-row">
+              <span class="phrase-en">When the chips are down</span>
+              <span class="phrase-de">in a difficult or critical situation</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Hit your numbers</span>
+              <span class="phrase-de">achieve your performance targets</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">They'll all point to the same person</span>
+              <span class="phrase-de">everyone immediately agrees on who it is</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">At stake</span>
+              <span class="phrase-de">at risk, in danger of being lost</span>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:16px">
+            <div class="speaking-box-header"><span>Use the vocabulary</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Have you ever worked with someone who was a high performer but low trust? What made them toxic?</div>
+              <div class="speaking-row">Who on a team you've worked with would everyone "point to" as the most trusted person?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 4 — AGREE/DISAGREE -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Discussion — Agree or Disagree?</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">⚡</div>
+          <span class="activity-title">React to these statements from the video</span>
+        </div>
+        <div class="activity-body">
+          <p>Do you agree or disagree? Explain your reasoning. Try to use vocabulary from the previous section.</p>
+
+          <div class="quote-cards">
+            <div class="quote-card">
+              <div class="quote-num">01</div>
+              <p>A high performer of low trust is a toxic team member — and it's better to have a medium performer you can trust.</p>
+            </div>
+            <div class="quote-card">
+              <div class="quote-num">02</div>
+              <p>We have a million metrics to measure performance and zero metrics to measure trustworthiness.</p>
+            </div>
+            <div class="quote-card">
+              <div class="quote-num">03</div>
+              <p>We promote people because they hit their numbers and then expect them to know how to lead — which is nonsense.</p>
+            </div>
+            <div class="quote-card">
+              <div class="quote-num">04</div>
+              <p>If you teach human skills, people will learn them. Just because you're good at finance doesn't mean you're good at leading a finance team.</p>
+            </div>
+          </div>
+
+          <div class="tip-box" style="margin-top: 16px">
+            <span class="tip-icon">💬</span>
+            <div class="tip-text">
+              Useful phrases for agreeing/disagreeing:<br>
+              <strong>"I completely agree because…"</strong> &nbsp;·&nbsp; <strong>"That's a fair point, but…"</strong> &nbsp;·&nbsp; <strong>"In my experience…"</strong> &nbsp;·&nbsp; <strong>"I'd push back on that — I think…"</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 5 — PRE-READING VOCAB + GOOGLE CASE -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div>
+        <div class="phase-title">Case Study — Google on Hybrid Culture</div>
+        <div class="phase-sub">Reading + Pre-reading vocabulary</div>
+      </div>
+      <span class="phase-time">12 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔑</div>
+          <span class="activity-title">Pre-reading vocabulary — guess the meaning</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Before reading — can you guess what these words mean from context?</p>
+          <table class="vocab-table">
+            <thead><tr><th>Word</th><th>Context clue</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">Psychological safety</td><td>"vital for business effectiveness"</td><td>feeling safe to take risks and speak up without fear</td></tr>
+              <tr><td class="eng">Cognitive trust</td><td>"clear expectations around job competence"</td><td>trust based on someone's skills and reliability</td></tr>
+              <tr><td class="eng">Affective trust</td><td>"stronger interpersonal relationships"</td><td>trust based on emotional connection and care</td></tr>
+              <tr><td class="eng">Alienate</td><td>"risk alienating talent"</td><td>to make someone feel excluded or unwelcome</td></tr>
+              <tr><td class="eng">Mandate</td><td>"mandates for full-time office returns"</td><td>an official order or requirement</td></tr>
+              <tr><td class="eng">Accountability</td><td>"culture of responsibility and accountability"</td><td>being responsible for your actions and results</td></tr>
+              <tr><td class="eng">Intentional</td><td>"intentional efforts and shared values"</td><td>done on purpose, with a clear plan</td></tr>
+            </tbody>
+          </table>
+
+          <div class="speaking-box" style="margin-top:14px">
+            <div class="speaking-box-header"><span>Before you read — predict</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Do you think trust is harder to build in a remote team than in person — why?</div>
+              <div class="speaking-row">What's the difference between trusting someone's competence and trusting them as a person?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📄</div>
+          <span class="activity-title">Reading — Building Trust in Hybrid Teams</span>
+          <span class="activity-src">Think with Google · 2024</span>
+          <span class="activity-time-badge">7 min</span>
+        </div>
+        <div class="activity-body">
+
+          <!-- Google case study block -->
+          <div class="google-case">
+            <div class="google-case-header">
+              <div class="google-logo">
+                <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span>
+              </div>
+              <div class="google-case-meta">
+                <strong>Building company culture, trust and connection for hybrid workers</strong>
+                Natasha Tamiru · Think with Google · February 2024
+              </div>
+            </div>
+            <div class="google-case-body">
+              <p>Hybrid working has profoundly reshaped our approach to work-life balance and wellbeing. The shift towards flexibility has brought notable benefits, such as increased productivity and access to global talent. But it also presents challenges — mental health, loneliness, and <strong>hampered career progression</strong> are increasingly familiar issues.</p>
+
+              <p>While the benefits of flexible working are far too great to return to the ways of old, it's become apparent that there's <em>no one-size-fits-all approach</em>. Instead, we must thoughtfully design our workspaces to address the needs of both organisations and the individuals who work for them.</p>
+
+              <p>For organisations and leadership, a core challenge of the shift towards flexible work is that they've had to rethink how they manage teams and measure their performance. It's often a <strong>lack of trust</strong> — whether in employees or the process itself — that leads to mandates for full-time office returns and excessive employee monitoring. However, such measures risk <em>alienating talent</em> and jeopardising the psychological safety vital for business effectiveness.</p>
+
+              <p>At Google, we've made hybrid work by establishing <strong>clear rules of engagement</strong> — set office days, core hours for meetings, and protocols for video calls. These rules help build <em>cognitive trust</em> (clear expectations around job competence and results) but also <em>affective trust</em> (stronger interpersonal relationships within teams). Both are key drivers of psychological safety.</p>
+
+              <p>Teams and individuals can thrive in any setting as long as organisations foster a strong, positive culture led by <strong>intentional efforts and shared values</strong>. But that won't materialise by itself. <em>It has to be designed for</em> and built into every aspect of your workspace.</p>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:14px">
+            <div class="speaking-box-header"><span>After reading</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Sinek says trust is key. Google says the same. But how does Google actually measure or build it — is their approach enough?</div>
+              <div class="speaking-row">Which do you think matters more in a hybrid team — cognitive trust or affective trust?</div>
+              <div class="speaking-row">Does your company have "rules of engagement" for hybrid work? What works, what doesn't?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 6 — GRAMMAR -->
+  <div class="phase phase-6" id="ph6">
+    <div class="phase-header" onclick="togglePhase('ph6')">
+      <span class="phase-num">06</span>
+      <div>
+        <div class="phase-title">Grammar — Past Simple vs Present Perfect</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Grammar reference — from the video</span>
+        </div>
+        <div class="activity-body">
+          <div class="phrase-box">
+            <div class="phrase-label">Past Simple vs Present Perfect</div>
+            <div class="phrase-row">
+              <span class="phrase-en">Past Simple</span>
+              <span class="phrase-de">completed action at a specific time → "I <u>spent</u> time with the Navy SEALs." / "In 2016, Apple <u>opened</u> their API."</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Present Perfect</span>
+              <span class="phrase-de">past action with present relevance, or experience → "I <u>have spent</u> over a decade leading programmes." / "<u>Have</u> you ever <u>tried</u> to dictate an email?"</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">⚠️ Key difference</span>
+              <span class="phrase-de">Past Simple = when? is clear or important. Present Perfect = when? doesn't matter, or the result matters now.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Choose the correct form</span>
+          <span class="activity-time-badge">7 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Choose the correct tense and explain your choice.</p>
+          <ol class="exercise">
+            <li>I ______ (work) in product management for over 10 years.<br><small>a) worked &nbsp; b) have worked</small></li>
+            <li>Our team ______ (launch) the new app last March.<br><small>a) launched &nbsp; b) has launched</small></li>
+            <li>______ you ever ______ (deal) with a toxic team member?<br><small>a) Did you ever deal &nbsp; b) Have you ever dealt</small></li>
+            <li>We ______ (not establish) clear rules of engagement yet.<br><small>a) didn't establish &nbsp; b) haven't established</small></li>
+            <li>Sinek ______ (spend) time with the Navy SEALs and ______ (learn) a lot about trust.<br><small>a) spent / learned &nbsp; b) has spent / has learned</small></li>
+            <li>The company ______ (move) to a hybrid model since 2021.<br><small>a) moved &nbsp; b) has moved</small></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_gram')">show answers ▾</button>
+          <div class="reveal-content" id="rev_gram">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>have worked</strong> — still ongoing, no specific time</li>
+                <li><strong>launched</strong> — specific time (last March)</li>
+                <li><strong>Have you ever dealt</strong> — life experience, no specific time</li>
+                <li><strong>haven't established</strong> — not done yet, relevant now</li>
+                <li><strong>spent / learned</strong> — completed event, specific past context</li>
+                <li><strong>has moved</strong> — change that started in past, still relevant</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 7 — BUFFER -->
+  <div class="phase phase-7" id="ph7">
+    <div class="phase-header" onclick="togglePhase('ph7')">
+      <span class="phase-num">+</span>
+      <div>
+        <div class="phase-title">If time allows — Scenario</div>
+      </div>
+      <span class="phase-time">5 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎯</div>
+          <span class="activity-title">What would you do?</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="scenario-card">
+            <div class="scenario-label">Scenario</div>
+            <p class="scenario-text">You have a developer on your team who consistently misses deadlines and struggles to communicate with colleagues. However, when they do deliver — the quality of their work is outstanding. Your team is frustrated. What do you do?</p>
+          </div>
+          <div class="tip-box" style="margin-top:12px">
+            <span class="tip-icon">💬</span>
+            <div class="tip-text">Think about Sinek's performance vs trust matrix. Where does this person sit? What would a good leader do?</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HOMEWORK -->
+  <div style="background: #1a2e52; border-radius: 8px; padding: 24px 28px; margin-top: 8px;">
+    <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#f0c060; margin:0 0 12px">📚 Homework</p>
+    <ul class="steps">
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">1</span><span><strong style="color:#fff">Read:</strong> the full Google article on hybrid culture — link below. As you read, note 2-3 ideas you agree or disagree with.</span></li>
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">2</span><span><strong style="color:#fff">Write:</strong> 3–5 sentences — "How do you build trust in your team?" Use vocabulary from today's lesson.</span></li>
+    </ul>
+    <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.12)">
+      <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin:0 0 8px">Reading link</p>
+      <a href="https://business.google.com/us/think/future-of-marketing/hybrid-working-company-culture/" target="_blank" style="color:#9bb3ff; font-size:13px; word-break:break-all;">business.google.com — Building company culture, trust and connection for hybrid workers</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

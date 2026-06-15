@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 3 — A News Organisation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2240;
+      --ink-soft: #3a4a6a;
+      --paper: #f5f7fc;
+      --paper-dark: #e8edf8;
+      --gold: #c88a10;
+      --teal: #2a5298;
+      --teal-light: #4a7fc8;
+      --warm-grey: #6a7a9a;
+      --border: #d0d8ec;
+      --white: #ffffff;
+      --phase-1: #1e3a5f;
+      --phase-2: #2a4a7a;
+      --phase-3: #1a3a6e;
+      --phase-4: #1e3a5f;
+      --phase-5: #2a4a7a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+
+    .header { background: #1a2e52; color: #fff; padding: 48px 40px 40px; position: relative; overflow: hidden; }
+    .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(90,143,232,0.3) 0%, transparent 70%); }
+    .header::after  { content: ''; position: absolute; bottom: -40px; left: 20%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(200,138,16,0.2) 0%, transparent 70%); }
+    .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px,5vw,58px); font-weight: 900; line-height: 1.05; margin-bottom: 16px; }
+    .header h1 em { font-style: italic; color: #f0c060; }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7); }
+    .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0c060; flex-shrink: 0; }
+    .meta-chip strong { color: #fff; }
+
+    .objectives-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .objectives-box { background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .obj-col h3 { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .obj-list { list-style: none; }
+    .obj-list li { font-size: 14px; padding: 5px 0 5px 18px; position: relative; color: var(--ink-soft); border-bottom: 1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom: none; }
+    .obj-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal-light); font-size: 12px; font-weight: 600; }
+
+    .main { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+
+    .phase { margin-bottom: 40px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; position: relative; }
+    .phase-header::after { content: '▾'; position: absolute; right: 20px; font-size: 18px; color: rgba(255,255,255,0.6); transition: transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+    .phase-num { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 20px; color: rgba(255,255,255,0.9); white-space: nowrap; }
+    .phase-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
+    .phase-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .phase-time { margin-left: auto; margin-right: 32px; font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.8); white-space: nowrap; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; }
+    .phase-body { padding: 0 24px 24px; background: var(--paper); }
+    .phase.collapsed .phase-body { display: none; }
+    .phase-1 .phase-header { background: var(--phase-1); }
+    .phase-2 .phase-header { background: var(--phase-2); }
+    .phase-3 .phase-header { background: var(--phase-3); }
+    .phase-4 .phase-header { background: var(--phase-4); }
+    .phase-5 .phase-header { background: var(--phase-5); }
+
+    .activity { border: 1px solid var(--border); border-radius: 4px; margin-top: 16px; overflow: hidden; background: var(--white); }
+    .activity-head { background: var(--paper-dark); padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; background: #eef3fb; }
+    .activity-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+    .activity-src { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: #1e3a6e; background: #dce6f5; border: 1px solid #b0c8ec; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-time-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-body { padding: 16px; }
+
+    .teacher-says { background: #e8eef8; border-left: 3px solid #2a5298; border-radius: 0 4px 4px 0; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+    .teacher-says .label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #2a5298; margin-bottom: 6px; }
+    .teacher-says p { color: var(--ink-soft); line-height: 1.6; }
+    .teacher-says em { font-style: italic; color: var(--ink); }
+
+    .tip-box { background: #eef3fb; border: 1px solid #b0c8ec; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; display: flex; gap: 10px; }
+    .tip-icon { font-size: 16px; flex-shrink: 0; }
+    .tip-text { color: #2a3a5a; line-height: 1.5; }
+    .tip-text strong { color: var(--ink); }
+
+    .phrase-box { background: #1a2e52; border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+    .phrase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: #f0c060; margin-bottom: 10px; }
+    .phrase-row { display: flex; align-items: baseline; gap: 16px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .phrase-row:last-child { border-bottom: none; }
+    .phrase-en { font-size: 14px; font-weight: 500; flex: 1; color: #fff; }
+    .phrase-de { font-size: 13px; color: rgba(255,255,255,0.55); flex: 1; }
+
+    .word-box { background: var(--white); border: 2px solid var(--teal); border-radius: 6px; padding: 12px 16px; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .word-box-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); width: 100%; margin-bottom: 4px; }
+    .word-chip { background: #1e3a5f; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+
+    .answer-key { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+    .ak-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 8px; }
+    .answer-key ol { padding-left: 20px; }
+    .answer-key ol li { padding: 3px 0; color: var(--ink-soft); }
+    .answer-key ol li strong { color: var(--teal); }
+
+    .reveal-btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; background: none; border: 1px solid var(--border); color: var(--warm-grey); padding: 5px 14px; border-radius: 20px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+    .reveal-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .reveal-content { display: none; margin-top: 10px; }
+    .reveal-content.open { display: block; }
+
+    .vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .vocab-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--ink-soft); }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .vocab-table .eng { font-weight: 600; color: var(--ink); }
+
+    .steps { list-style: none; margin: 12px 0; }
+    .steps li { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px dotted var(--border); font-size: 14px; align-items: flex-start; color: var(--ink-soft); }
+    .steps li:last-child { border-bottom: none; }
+    .step-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: #fff; background: var(--ink); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    .speaking-box { border: 2px solid var(--teal); border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .speaking-box-header { background: #1e3a5f; padding: 10px 16px; }
+    .speaking-box-header span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 600; }
+    .speaking-box-body { background: var(--white); padding: 16px; }
+    .speaking-row { display: flex; gap: 12px; padding: 6px 0; border-bottom: 1px dotted var(--border); font-size: 14px; color: var(--ink); }
+    .speaking-row:last-child { border-bottom: none; }
+
+    /* Dept grid */
+    .dept-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+    .dept-card { background: #1e3a5f; border-radius: 6px; padding: 14px 16px; color: #fff; }
+    .dept-name { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #f0c060; margin-bottom: 8px; }
+    .dept-body { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+    .dept-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .dept-chip { background: rgba(255,255,255,0.12); font-size: 11px; padding: 2px 8px; border-radius: 20px; color: rgba(255,255,255,0.7); }
+
+    /* Speakers grid for 3A */
+    .speakers-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 16px 0; }
+    .speaker-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; text-align: center; }
+    .speaker-photo { width: 100%; aspect-ratio: 1; background: var(--paper-dark); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    .speaker-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .speaker-name { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600; color: var(--ink); padding: 6px 8px 2px; }
+    .speaker-num { font-size: 10px; color: var(--warm-grey); padding-bottom: 4px; }
+    .speaker-role { padding: 6px 8px; border-top: 1px solid var(--border); }
+    .speaker-role input { width: 100%; border: none; border-bottom: 1.5px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink); padding: 2px 0; outline: none; text-align: center; }
+    .speaker-role input:focus { border-bottom-color: var(--teal); }
+
+    p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+    p:first-child { margin-top: 0; }
+    strong { color: var(--ink); }
+    ol.exercise { padding-left: 20px; }
+    ol.exercise li { font-size: 14px; color: var(--ink-soft); padding: 6px 0; border-bottom: 1px dotted var(--border); line-height: 1.6; }
+    ol.exercise li:last-child { border-bottom: none; }
+    input[type="text"] { border: none; border-bottom: 1.5px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); padding: 2px 4px; outline: none; transition: border-color 0.2s; }
+    input[type="text"]:focus { border-bottom-color: var(--teal); }
+
+    /* mood img */
+    .mood-img-wrap { background: var(--paper-dark); border: 2px dashed var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 180px; margin: 12px 0; color: var(--warm-grey); font-size: 13px; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+
+    /* iframe wrap */
+    .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 6px; margin: 12px 0; background: #0f1c33; }
+    .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .video-placeholder-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: rgba(255,255,255,0.5); font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; }
+
+    .scenario-card { background: var(--paper-dark); border: 2px dashed var(--border); border-radius: 8px; padding: 20px; margin: 12px 0; }
+    .scenario-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .scenario-text { font-size: 15px; color: var(--ink); line-height: 1.7; font-style: italic; }
+
+    @media (max-width: 700px) {
+      .objectives-box { grid-template-columns: 1fr; }
+      .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; }
+      .dept-grid { grid-template-columns: 1fr 1fr; }
+      .speakers-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 3<br><em>A News Organisation</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;B1+</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP B1+ Unit 1.1</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Duration:</strong>&nbsp;60 min</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES -->
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Discuss company departments and what they do</li>
+        <li>Understand job roles at a real news organisation</li>
+        <li>Use vocabulary for roles and responsibilities</li>
+        <li>Describe your own job using new expressions</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>Departments: finance, HR, marketing, operations…</li>
+        <li>Key phrases: involves, lead, make sure, running</li>
+        <li>Prepositions: report to, in charge of, responsible for…</li>
+        <li>Collocations: cash flow, supply chain, brand image…</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══ PHASE 1 — WARM-UP ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Warm-up</div>
+      </div>
+      <span class="phase-time">5 min</span>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🐾</div>
+          <span class="activity-title">Name 3 things that...</span>
+          <span class="activity-time-badge">2 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="mood-img-wrap"><img src="n.jpg"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PHASE 2 — LEAD-IN ══ -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Lead-in — Company Departments</div>
+        <div class="phase-sub">BP B1+ p.8 — Exercise 1</div>
+      </div>
+      <span class="phase-time">12 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🏢</div>
+          <span class="activity-title">Exercise 1 — What does each department do?</span>
+          <span class="activity-src">BP p.8</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>These are some typical departments in a company. What do you think each one does? Use the key words and phrases in the box to help you.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">Departments</div>
+            <span class="word-chip">Finance</span>
+            <span class="word-chip">Human Resources</span>
+            <span class="word-chip">Marketing</span>
+            <span class="word-chip">Operations</span>
+            <span class="word-chip">Production</span>
+            <span class="word-chip">Sales</span>
+          </div>
+
+          <div class="word-box" style="border-color: var(--border);">
+            <div class="word-box-label" style="color: var(--warm-grey);">Key words & phrases</div>
+            <span class="word-chip" style="background: #2a4a7a;">brand image</span>
+            <span class="word-chip" style="background: #2a4a7a;">cash flow</span>
+            <span class="word-chip" style="background: #2a4a7a;">customer service</span>
+            <span class="word-chip" style="background: #2a4a7a;">health and safety</span>
+            <span class="word-chip" style="background: #2a4a7a;">invoicing</span>
+            <span class="word-chip" style="background: #2a4a7a;">manufacturing</span>
+            <span class="word-chip" style="background: #2a4a7a;">pricing</span>
+            <span class="word-chip" style="background: #2a4a7a;">promotion</span>
+            <span class="word-chip" style="background: #2a4a7a;">quality control</span>
+            <span class="word-chip" style="background: #2a4a7a;">recruitment</span>
+            <span class="word-chip" style="background: #2a4a7a;">supply chain</span>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_depts')">show suggested answers ▾</button>
+          <div class="reveal-content" id="rev_depts">
+          <div class="dept-grid">
+            <div class="dept-card">
+              <div class="dept-name">Finance</div>
+              <div class="dept-body">Manages the company's money — income, expenses, and planning.</div>
+              <div class="dept-chips">
+                <span class="dept-chip">cash flow</span>
+                <span class="dept-chip">invoicing</span>
+                <span class="dept-chip">pricing</span>
+              </div>
+            </div>
+            <div class="dept-card">
+              <div class="dept-name">Human Resources</div>
+              <div class="dept-body">Looks after employees — hiring, training, wellbeing.</div>
+              <div class="dept-chips">
+                <span class="dept-chip">recruitment</span>
+                <span class="dept-chip">health and safety</span>
+              </div>
+            </div>
+            <div class="dept-card">
+              <div class="dept-name">Marketing</div>
+              <div class="dept-body">Builds the company's image and attracts customers.</div>
+              <div class="dept-chips">
+                <span class="dept-chip">brand image</span>
+                <span class="dept-chip">promotion</span>
+              </div>
+            </div>
+            <div class="dept-card">
+              <div class="dept-name">Operations</div>
+              <div class="dept-body">Keeps the business running day-to-day.</div>
+              <div class="dept-chips">
+                <span class="dept-chip">supply chain</span>
+                <span class="dept-chip">health and safety</span>
+              </div>
+            </div>
+            <div class="dept-card">
+              <div class="dept-name">Production</div>
+              <div class="dept-body">Makes the product or delivers the service.</div>
+              <div class="dept-chips">
+                <span class="dept-chip">manufacturing</span>
+                <span class="dept-chip">quality control</span>
+              </div>
+            </div>
+            <div class="dept-card">
+              <div class="dept-name">Sales</div>
+              <div class="dept-body">Sells products or services and manages client relationships.</div>
+              <div class="dept-chips">
+                <span class="dept-chip">customer service</span>
+                <span class="dept-chip">pricing</span>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top: 16px;">
+            <div class="speaking-box-header"><span>Discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Can you name any other departments? Does your company have departments that aren't on the list?</div>
+              <div class="speaking-row">Which departments do you think do the most important work — and why? Does it depend on the type of company?</div>
+            </div>
+          </div>
+
+          <div class="tip-box" style="margin-top: 12px;">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">In a finance company like yours — which of these departments would be the biggest? Which would be smallest or might not exist at all?</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 3 — VIDEO ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Video — A News Organisation</div>
+        <div class="phase-sub">BP B1+ p.8 — Exercises 2A, 2B, 3A, 3B, 4, 5</div>
+      </div>
+      <span class="phase-time">22 min</span>
+    </div>
+    <div class="phase-body">
+
+      <!-- 2A + 2B pre-watch -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💭</div>
+          <span class="activity-title">Exercises 2A & 2B — Before you watch</span>
+          <span class="activity-src">BP p.8</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>2A.</strong> Would you like to work for a news organisation? What do you imagine it is like?</p>
+
+          <p><strong>2B.</strong> In what ways do you think working for a news organisation is…</p>
+          <div class="word-box" style="margin: 10px 0 6px;">
+            <div class="word-box-label">Think about each one</div>
+            <span class="word-chip">stressful</span>
+            <span class="word-chip">glamorous</span>
+            <span class="word-chip">interesting</span>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev2b')">show ideas ▾</button>
+          <div class="reveal-content" id="rev2b">
+            <div class="answer-key">
+              <div class="ak-label">Possible ideas</div>
+              <ol>
+                <li><strong>Stressful</strong> — tight deadlines, breaking news at any hour, pressure to be first and accurate</li>
+                <li><strong>Glamorous</strong> — travel, meeting public figures, on-screen presence, high-profile events</li>
+                <li><strong>Interesting</strong> — constant variety, learning about new topics every day, real-world impact</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEO iframe -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">▶️</div>
+          <span class="activity-title">Watch the video — A news organisation</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Watch and complete exercises 3A and 4 below.</p>
+          <div class="video-wrap">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/By3p8bAXEv4?si=OlBqnQO0lDcXKUv9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3A — match speakers -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">👤</div>
+          <span class="activity-title">Exercise 3A — Match speakers with job titles</span>
+          <span class="activity-src">BP p.8</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Watch the video and match the five speakers with their job titles. Write the job title under each person.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">Job titles</div>
+            <span class="word-chip">Director of Human Resources</span>
+            <span class="word-chip">Finance Supervisor</span>
+            <span class="word-chip">News Editor</span>
+            <span class="word-chip">Programme Director</span>
+            <span class="word-chip">News Reporter</span>
+          </div>
+
+          <div class="speakers-grid">
+            <div class="speaker-card">
+              <div class="speaker-photo"><img src="1.png"></div>
+              <div class="speaker-name">Arti Lukha</div>
+              <div class="speaker-num">Speaker 1</div>
+              <div class="speaker-role"><input type="text" placeholder="job title..."></div>
+            </div>
+            <div class="speaker-card">
+              <div class="speaker-photo"><img src="2.png"></div>
+              <div class="speaker-name">Nick Thatcher</div>
+              <div class="speaker-num">Speaker 2</div>
+              <div class="speaker-role"><input type="text" placeholder="job title..."></div>
+            </div>
+            <div class="speaker-card">
+              <div class="speaker-photo"><img src="3.png"></div>
+              <div class="speaker-name">John Roberts</div>
+              <div class="speaker-num">Speaker 3</div>
+              <div class="speaker-role"><input type="text" placeholder="job title..."></div>
+            </div>
+            <div class="speaker-card">
+              <div class="speaker-photo"><img src="4.png"></div>
+              <div class="speaker-name">Melanie Tansey</div>
+              <div class="speaker-num">Speaker 4</div>
+              <div class="speaker-role"><input type="text" placeholder="job title..."></div>
+            </div>
+            <div class="speaker-card">
+              <div class="speaker-photo"><img src="5.png"></div>
+              <div class="speaker-name">Ray Snelling</div>
+              <div class="speaker-num">Speaker 5</div>
+              <div class="speaker-role"><input type="text" placeholder="job title..."></div>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev3a')">show answers ▾</button>
+          <div class="reveal-content" id="rev3a">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>Arti Lukha — <strong>News Reporter</strong></li>
+                <li>Nick Thatcher — <strong>News Editor</strong></li>
+                <li>John Roberts — <strong>Programme Director</strong></li>
+                <li>Melanie Tansey — <strong>Director of Human Resources</strong></li>
+                <li>Ray Snelling — <strong>Finance Supervisor</strong></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- 3B -->
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dotted var(--border);">
+            <p><strong>3B.</strong> Which of these people probably work closely together on a daily basis? Why do you think so?</p>
+            <div class="teacher-says" style="margin-top: 10px;">
+              <div class="label">Think about it</div>
+              <p><em>Who depends on who? For example — does the News Reporter work with the News Editor? Does Finance work with everyone or mostly with management?</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 4 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Exercise 4 — Watch again. One word per gap.</span>
+          <span class="activity-src">BP p.8</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Watch the video again and complete the information. Use <strong>one word</strong> in each gap.</p>
+          <ol class="exercise">
+            <li>It is important that individuals and teams understand their <input type="text" size="12"> and responsibilities.</li>
+            <li>Staff in the newsroom are responsible for <input type="text" size="12"> the teams gathering news globally.</li>
+            <li>Arti gives a(n) <input type="text" size="12"> the task of covering a news story.</li>
+            <li>Nick works with a camera <input type="text" size="12"> to make sure they are getting the right pictures.</li>
+            <li>John's role is to lead the production <input type="text" size="14">.</li>
+            <li>He describes his job as similar to the <input type="text" size="12"> of an orchestra.</li>
+            <li>The HR director has several strategic and <input type="text" size="12"> priorities.</li>
+            <li>Ray says it's important to make sure the <input type="text" size="12"> come in on time.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev4')">show answers ▾</button>
+          <div class="reveal-content" id="rev4">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>roles</strong></li>
+                <li><strong>coordinating</strong></li>
+                <li><strong>editor / journalist</strong></li>
+                <li><strong>operator</strong></li>
+                <li><strong>team / department</strong></li>
+                <li><strong>conductor</strong></li>
+                <li><strong>operational</strong></li>
+                <li><strong>invoices / payments</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 5 — adapted -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Exercise 5 — Discussion</span>
+          <span class="activity-src">BP p.8</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Think & discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which of these five jobs do you think you'd enjoy most — and which least? Why?</div>
+              <div class="speaking-row">Ray (Finance Supervisor) says making sure invoices come in on time is key. Does that sound familiar? What are the most stressful parts of finance work for you?</div>
+              <div class="speaking-row">John compares his role to a conductor of an orchestra. How would you describe your own role — what image or comparison comes to mind?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 4 — VOCABULARY ══ -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Vocabulary — Roles & Responsibilities</div>
+        <div class="phase-sub">BP B1+ p.8–9 — Exercises 6, 7, 8, 9</div>
+      </div>
+      <span class="phase-time">18 min</span>
+    </div>
+    <div class="phase-body">
+
+      <!-- Exercise 6 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📚</div>
+          <span class="activity-title">Exercise 6 — Complete extracts from the video</span>
+          <span class="activity-src">BP p.8</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>What do the words in the box mean? Complete the extracts using the words and phrases below.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">Word bank</div>
+            <span class="word-chip">involves</span>
+            <span class="word-chip">lead</span>
+            <span class="word-chip">make sure</span>
+            <span class="word-chip">running</span>
+          </div>
+
+          <ol class="exercise">
+            <li>My job <input type="text" size="10"> newsgathering for a major news organisation.</li>
+            <li>My role as Programme Director is to <input type="text" size="8"> the production team.</li>
+            <li>I'm responsible for <input type="text" size="10"> the human resources team.</li>
+            <li>We need to <input type="text" size="12"> we're getting cash in.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev6')">show answers ▾</button>
+          <div class="reveal-content" id="rev6">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>involves</strong></li>
+                <li><strong>lead</strong></li>
+                <li><strong>running</strong></li>
+                <li><strong>make sure</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 7 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔗</div>
+          <span class="activity-title">Exercise 7 — Prepositions for job descriptions</span>
+          <span class="activity-src">BP p.9</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at these expressions people use to talk about their jobs. Complete the expressions in bold using the prepositions in the box.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">Prepositions</div>
+            <span class="word-chip">after</span>
+            <span class="word-chip">for</span>
+            <span class="word-chip">of</span>
+            <span class="word-chip">of</span>
+            <span class="word-chip">to</span>
+            <span class="word-chip">with</span>
+            <span class="word-chip">with</span>
+          </div>
+
+          <ol class="exercise">
+            <li>I <strong>report</strong> <input type="text" size="5"> the IT Director.</li>
+            <li>I'm the <strong>Head</strong> <input type="text" size="5"> Sales.</li>
+            <li>I <strong>work closely</strong> <input type="text" size="5"> the Head of Marketing.</li>
+            <li>I <strong>look</strong> <input type="text" size="8"> the company website.</li>
+            <li>I <strong>take care</strong> <input type="text" size="5"> the export documentation.</li>
+            <li>I'm <strong>responsible</strong> <input type="text" size="5"> coordinating the production team.</li>
+            <li>I'm <strong>in charge</strong> <input type="text" size="5"> the research and development team.</li>
+            <li>I <strong>coordinate</strong> <input type="text" size="8"> all departments to ensure customer satisfaction.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev7')">show answers ▾</button>
+          <div class="reveal-content" id="rev7">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>to</strong> — report to</li>
+                <li><strong>of</strong> — Head of</li>
+                <li><strong>with</strong> — work closely with</li>
+                <li><strong>after</strong> — look after</li>
+                <li><strong>of</strong> — take care of</li>
+                <li><strong>for</strong> — responsible for</li>
+                <li><strong>of</strong> — in charge of</li>
+                <li><strong>with</strong> — coordinate with</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grammar note — verb + preposition collocations -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Language focus — Verb + Preposition collocations</span>
+          <span class="activity-time-badge">3 min</span>
+        </div>
+        <div class="activity-body">
+          <p>The expressions in Exercise 7 are fixed — the preposition is part of the phrase and doesn't change. You need to learn them as <strong>chunks</strong>, not word by word.</p>
+
+          <div class="phrase-box">
+            <div class="phrase-label">Learn these as fixed chunks</div>
+            <div class="phrase-row">
+              <span class="phrase-en">report <u>to</u> sb</span>
+              <span class="phrase-de">I report to the CFO. — напрямок підпорядкування</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Head <u>of</u> sth</span>
+              <span class="phrase-de">I'm the Head of Finance. — посада + відділ</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">work closely <u>with</u> sb</span>
+              <span class="phrase-de">I work closely with the operations team.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">look <u>after</u> sth</span>
+              <span class="phrase-de">I look after the accounts. — доглядати, відповідати</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">take care <u>of</u> sth</span>
+              <span class="phrase-de">I take care of the budget. — схоже на look after</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">responsible <u>for</u> sth / doing</span>
+              <span class="phrase-de">I'm responsible for managing cash flow.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">in charge <u>of</u> sth</span>
+              <span class="phrase-de">I'm in charge of the finance team. — сильніше ніж responsible</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">coordinate <u>with</u> sb</span>
+              <span class="phrase-de">I coordinate with all departments.</span>
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">⚠️</span>
+            <div class="tip-text">
+              <strong>Типові помилки:</strong><br>
+              ✗ I'm responsible <s>of</s> the team. → ✓ responsible <strong>for</strong><br>
+              ✗ I report <s>to</s> Sales. → ✓ I'm the Head <strong>of</strong> Sales.<br>
+              ✗ I'm in charge <s>for</s> it. → ✓ in charge <strong>of</strong>
+            </div>
+          </div>
+
+          <div style="margin-top: 12px;">
+            <p><strong>Quick drill — say it without looking:</strong></p>
+            <ol class="exercise">
+              <li>Who do you report ___?</li>
+              <li>I'm in charge ___ the budget planning.</li>
+              <li>She's responsible ___ recruiting new staff.</li>
+              <li>I work closely ___ the operations director.</li>
+              <li>He looks ___ the company accounts.</li>
+            </ol>
+            <button class="reveal-btn" onclick="toggleReveal('rev_gram')">show answers ▾</button>
+            <div class="reveal-content" id="rev_gram">
+              <div class="answer-key">
+                <div class="ak-label">Answers</div>
+                <ol>
+                  <li>report <strong>to</strong></li>
+                  <li>in charge <strong>of</strong></li>
+                  <li>responsible <strong>for</strong></li>
+                  <li>work closely <strong>with</strong></li>
+                  <li>looks <strong>after</strong></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 8 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📝</div>
+          <span class="activity-title">Exercise 8 — Complete job descriptions</span>
+          <span class="activity-src">BP p.9</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Read how two more people at the news organisation describe their jobs. Complete the texts using words from Exercises 6 and 7. Use one word in each gap.</p>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div style="background: var(--paper-dark); border-radius: 6px; padding: 16px; border: 1px solid var(--border);">
+                <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; color: var(--warm-grey); margin-bottom:10px;">FRANCES MULLAN — Head of Marketing</p>
+                <p style="font-size:13px; line-height:1.9; color: var(--ink-soft);">
+                  My name's Frances Mullan. I'm the Head of Marketing.
+                  I <sup>1</sup><input type="text" size="6"> a small team of two marketing managers
+                  and a video producer. Our work <sup>2</sup><input type="text" size="8"> a variety of
+                  marketing strategies to promote the business, including events,
+                  social media and printed advertising. I'm in <sup>3</sup><input type="text" size="6">
+                  of attracting new customers, retaining existing customers and
+                  positioning the business as innovative and creative.
+                  I <sup>4</sup><input type="text" size="8"> directly to the Head of Strategy.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div style="background: var(--paper-dark); border-radius: 6px; padding: 16px; border: 1px solid var(--border);">
+                <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; color: var(--warm-grey); margin-bottom:10px;">DONOVAN PARSONS — Camera Operator</p>
+                <p style="font-size:13px; line-height:1.9; color: var(--ink-soft);">
+                  My name's Donovan Parsons. I'm a camera operator and I take
+                  <sup>5</sup><input type="text" size="6"> of the camera equipment.
+                  I'm <sup>6</sup><input type="text" size="12"> for interpreting what the director
+                  wants to happen and putting it on screen.
+                  I <sup>7</sup><input type="text" size="8"> closely with other technical departments,
+                  such as lighting and sound. We're in a live television environment
+                  so we have to <sup>8</sup><input type="text" size="12"> we can do the job under pressure.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev8')">show answers ▾</button>
+          <div class="reveal-content" id="rev8">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <p style="color:var(--ink-soft); margin-bottom:6px;"><strong>Frances:</strong> 1. lead · 2. involves · 3. charge · 4. report</p>
+              <p style="color:var(--ink-soft);"><strong>Donovan:</strong> 5. care · 6. responsible · 7. work · 8. make sure</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 9 — adapted -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎯</div>
+          <span class="activity-title">Exercise 9 — Describe a job using today's vocabulary</span>
+          <span class="activity-src">BP p.9 · adapted</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="scenario-card">
+            <div class="scenario-label">Your task</div>
+            <p class="scenario-text">Imagine you're a CFO of a mid-size company being interviewed for a business podcast. Describe your role in 5–6 sentences using as many expressions from today as possible. What do you lead? What are you responsible for? Who do you report to? What does your work involve?</p>
+          </div>
+
+          <div class="phrase-box" style="margin-top: 12px;">
+            <div class="phrase-label">Useful structures — use these</div>
+            <div class="phrase-row">
+              <span class="phrase-en">My role involves…</span>
+              <span class="phrase-de">what your job includes</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I'm responsible for…</span>
+              <span class="phrase-de">your main duties</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I report to…</span>
+              <span class="phrase-de">your manager / the board</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I work closely with…</span>
+              <span class="phrase-de">other departments or people</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I'm in charge of…</span>
+              <span class="phrase-de">your team or area</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I need to make sure that…</span>
+              <span class="phrase-de">key priorities</span>
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">Try to speak for 60–90 seconds without stopping.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE + — BUFFER ══ -->
+  <div class="phase phase-5" id="ph_buf">
+    <div class="phase-header" onclick="togglePhase('ph_buf')">
+      <span class="phase-num">+</span>
+      <div>
+        <div class="phase-title">If time allows — Extra activities</div>
+        <div class="phase-sub">Roleplay · Spot the mistake · Speaking challenge</div>
+      </div>
+      <span class="phase-time">15 min</span>
+    </div>
+    <div class="phase-body">
+
+      <!-- A — Roleplay -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎭</div>
+          <span class="activity-title">A — Roleplay: Show me around</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="scenario-card">
+            <div class="scenario-label">Situation</div>
+            <p class="scenario-text">I'm a new employee joining your company today. You're showing me around and introducing me to different departments. Explain what each department does, who leads it, and how it connects to your work in finance.</p>
+          </div>
+          <div class="teacher-says">
+            <div class="label">Teacher plays</div>
+            <p><em>"So, what's this department? What do they do here? Who do they report to? How do you work with them?"</em></p>
+          </div>
+          <div class="tip-box">
+            <span class="tip-icon">🎯</span>
+            <div class="tip-text">Use as many expressions from today as possible: <strong>in charge of · responsible for · report to · work closely with · involves · make sure</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B — Spot the mistake -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔍</div>
+          <span class="activity-title">B — Spot the mistake</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Each sentence has one mistake — a wrong preposition or wrong word. Find it and correct it.</p>
+          <ol class="exercise">
+            <li>I'm the Head for the Finance Department.</li>
+            <li>She reports of the CEO every Monday morning.</li>
+            <li>I'm responsible of managing the company's cash flow.</li>
+            <li>He's in charge for the supply chain operations.</li>
+            <li>I work closely to the Head of Marketing on campaigns.</li>
+            <li>My job includes newsgathering for a major organisation.</li>
+            <li>I take care for all export documentation.</li>
+            <li>We need to do sure the invoices come in on time.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_mistakes')">show answers ▾</button>
+          <div class="reveal-content" id="rev_mistakes">
+            <div class="answer-key">
+              <div class="ak-label">Corrections</div>
+              <ol>
+                <li>Head <strong>of</strong> the Finance Department</li>
+                <li>reports <strong>to</strong> the CEO</li>
+                <li>responsible <strong>for</strong> managing</li>
+                <li>in charge <strong>of</strong> the supply chain</li>
+                <li>work closely <strong>with</strong> the Head of Marketing</li>
+                <li>My job <strong>involves</strong> newsgathering</li>
+                <li>take care <strong>of</strong> all export documentation</li>
+                <li>we need to <strong>make sure</strong> the invoices come in</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C — Speaking challenge -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🗣️</div>
+          <span class="activity-title">C — Speaking challenge: in their shoes</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Answer each question <strong>from the perspective of the person named</strong> — not yourself. Use vocabulary from today.</p>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Speak as this person for 30–45 seconds each</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row"><strong>Ray Snelling (Finance Supervisor)</strong> — How would you describe your role to someone outside the company? What does your day involve?</div>
+              <div class="speaking-row"><strong>Melanie Tansey (Director of HR)</strong> — What are you in charge of? Who do you work closely with? What are your priorities?</div>
+              <div class="speaking-row"><strong>John Roberts (Programme Director)</strong> — You compared your job to a conductor. Can you explain that comparison and describe what running your team actually means day-to-day?</div>
+            </div>
+          </div>
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">This is harder than talking about yourself — you have to recall what they said in the video AND use today's language. That's the point.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 5 — WRAP-UP ══ -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div>
+        <div class="phase-title">Wrap-up & Homework</div>
+      </div>
+      <span class="phase-time">3 min</span>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✅</div>
+          <span class="activity-title">Quick review — what do you remember?</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Without looking — can you say…</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">3 phrases from today for describing responsibilities</div>
+              <div class="speaking-row">What department deals with cash flow and invoicing?</div>
+              <div class="speaking-row">How would you say "I manage the finance team" using today's vocabulary — in 3 different ways?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOMEWORK -->
+  <div style="background: #1a2e52; border-radius: 8px; padding: 24px 28px; margin-top: 8px;">
+    <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#f0c060; margin:0 0 12px">📚 Homework</p>
+    <ul class="steps">
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">1</span><span><strong style="color:#fff">Write</strong> a short job description of your own role (5–8 sentences). Use at least 5 expressions from exercises 6 and 7: <em>involves / lead / make sure / running / report to / in charge of / responsible for / work closely with…</em></span></li>
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">2</span><span><strong style="color:#fff">Learn these 4 collocations</strong> — know what they mean and use them in a sentence: <em>cash flow · supply chain · brand image · quality control</em></span></li>
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">3</span><span><strong style="color:#fff">Prepare</strong> a 60-second spoken description of one colleague's job — using "she/he" forms and the vocabulary from today. We start next lesson with this.</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

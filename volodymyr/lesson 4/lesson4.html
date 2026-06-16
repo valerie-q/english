@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 4 — How to Build a Startup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2240;
+      --ink-soft: #3a4a6a;
+      --paper: #f5f7fc;
+      --paper-dark: #e8edf8;
+      --gold: #c88a10;
+      --teal: #2a5fa8;
+      --teal-light: #4a7fc8;
+      --warm-grey: #6a7a9a;
+      --border: #d0d8ec;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+
+    .header { background: #1a2e52; color: #fff; padding: 48px 40px 40px; position: relative; overflow: hidden; }
+    .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(90,143,232,0.3) 0%, transparent 70%); }
+    .header::after  { content: ''; position: absolute; bottom: -40px; left: 20%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(200,138,16,0.2) 0%, transparent 70%); }
+    .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px,5vw,58px); font-weight: 900; line-height: 1.05; margin-bottom: 16px; }
+    .header h1 em { font-style: italic; color: #f0c060; }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7); }
+    .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0c060; flex-shrink: 0; }
+    .meta-chip strong { color: #fff; }
+
+    .objectives-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .objectives-box { background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .obj-col h3 { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .obj-list { list-style: none; }
+    .obj-list li { font-size: 14px; padding: 5px 0 5px 18px; position: relative; color: var(--ink-soft); border-bottom: 1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom: none; }
+    .obj-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal-light); font-size: 12px; font-weight: 600; }
+
+    .main { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+
+    .phase { margin-bottom: 40px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; position: relative; }
+    .phase-header::after { content: '▾'; position: absolute; right: 20px; font-size: 18px; color: rgba(255,255,255,0.6); transition: transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+    .phase-num { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 20px; color: rgba(255,255,255,0.9); white-space: nowrap; }
+    .phase-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
+    .phase-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .phase-time { margin-left: auto; margin-right: 32px; font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.8); white-space: nowrap; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; }
+    .phase-body { padding: 0 24px 24px; background: var(--paper); }
+    .phase.collapsed .phase-body { display: none; }
+    .phase-1 .phase-header { background: #1e3a5f; }
+    .phase-2 .phase-header { background: #2a4a7a; }
+    .phase-3 .phase-header { background: #1a3a6e; }
+    .phase-4 .phase-header { background: #1e3a5f; }
+    .phase-5 .phase-header { background: #2a4a7a; }
+    .phase-6 .phase-header { background: #1a3a6e; }
+
+    .activity { border: 1px solid var(--border); border-radius: 4px; margin-top: 16px; overflow: hidden; background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .activity-head { background: var(--paper-dark); padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+    .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; background: #eef3fb; }
+    .activity-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+    .activity-src { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: #1e3a6e; background: #dce6f5; border: 1px solid #b0c8ec; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-time-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-body { padding: 16px; background: var(--white); }
+
+    .tip-box { background: #eef3fb; border: 1px solid #b0c8ec; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; display: flex; gap: 10px; }
+    .tip-icon { font-size: 16px; flex-shrink: 0; }
+    .tip-text { color: #2a3a5a; line-height: 1.5; }
+    .tip-text strong { color: var(--ink); }
+
+    .phrase-box { background: #1a2e52; border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+    .phrase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: #f0c060; margin-bottom: 10px; }
+    .phrase-row { display: flex; align-items: baseline; gap: 16px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .phrase-row:last-child { border-bottom: none; }
+    .phrase-en { font-size: 15px; font-weight: 500; flex: 1; color: #fff; }
+    .phrase-de { font-size: 13px; color: rgba(255,255,255,0.55); flex: 1; }
+
+    .speaking-box { border: 2px solid var(--teal); border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .speaking-box-header { background: #1e3a5f; padding: 10px 16px; }
+    .speaking-box-header span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 600; }
+    .speaking-box-body { background: var(--white); padding: 16px; }
+    .speaking-row { padding: 6px 0; border-bottom: 1px dotted var(--border); font-size: 14px; color: var(--ink); }
+    .speaking-row:last-child { border-bottom: none; }
+
+    .reveal-btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; background: none; border: 1px solid var(--border); color: var(--warm-grey); padding: 5px 14px; border-radius: 20px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+    .reveal-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .reveal-content { display: none; margin-top: 10px; }
+    .reveal-content.open { display: block; }
+
+    .answer-key { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+    .ak-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 8px; }
+    .answer-key ol, .answer-key ul { padding-left: 20px; }
+    .answer-key li { padding: 3px 0; color: var(--ink-soft); }
+    .answer-key li strong { color: var(--teal); }
+
+    .word-box { background: var(--white); border: 2px solid var(--teal); border-radius: 6px; padding: 12px 16px; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .word-box-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); width: 100%; margin-bottom: 4px; }
+    .word-chip { background: #1e3a5f; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+
+    .fill-text { background: var(--paper); border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; font-size: 14px; line-height: 2.2; color: var(--ink); margin: 12px 0; }
+    .fill-input { border: none; border-bottom: 2px solid var(--teal-light); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); outline: none; padding: 0 4px; min-width: 130px; }
+    .fill-input:focus { border-bottom-color: var(--gold); }
+
+    .match-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .match-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; }
+    .match-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--ink-soft); }
+    .match-table tr:last-child td { border-bottom: none; }
+    .match-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .match-table .num { font-family: 'DM Mono', monospace; font-weight: 600; color: var(--teal); width: 30px; }
+
+    .vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .vocab-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--ink-soft); }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .vocab-table .eng { font-weight: 600; color: var(--ink); }
+    .vocab-table .ua { color: var(--teal); font-style: italic; }
+
+    /* Tweet component */
+    .tweet-card { border: 1px solid #cfd9de; border-radius: 12px; padding: 16px 20px; max-width: 520px; margin: 14px 0; background: #fff; }
+    .tweet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .tweet-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 18px; flex-shrink: 0; }
+    .tweet-author { margin-left: 10px; }
+    .tweet-author strong { display: block; font-size: 14px; color: #0f1419; }
+    .tweet-author span { font-size: 13px; color: #536471; }
+    .tweet-x { fill: #000; width: 20px; height: 20px; }
+    .tweet-body { font-size: 15px; color: #0f1419; line-height: 1.7; }
+    .tweet-body u { text-decoration-color: #f0c060; text-underline-offset: 3px; }
+    .tweet-vocab { margin-top: 12px; padding: 10px 14px; border: 1px solid #f0c060; border-radius: 6px; }
+    .tweet-vocab p { font-size: 13px; color: #536471; margin: 0 0 4px; }
+    .tweet-vocab p:last-child { margin: 0; }
+    .tweet-vocab strong { color: #0f1419; }
+
+    /* Teacher tip */
+    .teacher-tip { background: #f5f5f5; border-radius: 10px; padding: 16px 18px; margin: 12px 0; }
+    .teacher-tip-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .teacher-tip-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+    .teacher-tip-name strong { display: block; font-size: 13px; font-weight: 800; color: var(--ink); letter-spacing: 0.3px; }
+    .teacher-tip-name span { font-size: 12px; color: var(--warm-grey); }
+    .teacher-tip-body { font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+    .teacher-tip-body strong { color: var(--ink); }
+    .teacher-tip-q { font-weight: 700; color: var(--ink); margin-bottom: 6px; font-size: 14px; }
+
+    /* Claude block */
+    .claude-reading { background: var(--paper); border: 1px solid var(--border); border-radius: 6px; padding: 20px 24px; font-size: 14px; line-height: 1.8; color: var(--ink-soft); margin: 12px 0; }
+    .claude-reading p { margin: 0 0 12px; }
+    .claude-reading p:last-child { margin: 0; }
+    .claude-reading strong { color: var(--ink); }
+    .claude-badge { display: inline-flex; align-items: center; gap: 6px; background: #1a1a2e; color: #fff; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+    .claude-badge span { color: #f0c060; }
+
+    /* Article text */
+    .article-text { background: var(--paper); border: 1px solid var(--border); border-radius: 6px; padding: 20px 24px; font-size: 14px; line-height: 1.8; color: var(--ink-soft); margin: 12px 0; }
+    .article-text p { margin: 0 0 12px; }
+    .article-text p:last-child { margin: 0; }
+    .article-text strong { color: var(--ink); }
+    .article-text mark { background: #fde68a; padding: 1px 3px; border-radius: 2px; }
+
+    .mood-img-wrap { margin: 12px 0; }
+    .mood-img-wrap img { max-width: 420px; width: 100%; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+    ol.exercise { padding-left: 20px; }
+    ol.exercise li { font-size: 14px; color: var(--ink-soft); padding: 5px 0; border-bottom: 1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom: none; }
+    p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+    p:first-child { margin-top: 0; }
+    strong { color: var(--ink); }
+
+    @media (max-width: 700px) {
+      .objectives-box { grid-template-columns: 1fr; }
+      .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 4<br><em>How to Build a Startup</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;B1–B2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Duration:</strong>&nbsp;60 min</div>
+    </div>
+  </div>
+</div>
+
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Discuss startup culture vs big companies</li>
+        <li>Learn 7 modern English phrases from AI news</li>
+        <li>Read and understand a startup article</li>
+        <li>Learn key startup vocabulary</li>
+        <li>Practice "market" expressions in context</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>Phrases: just dropped, state-of-the-art, game changer, my early impressions are, with safeguards, too powerful to release, without losing the plot</li>
+        <li>Vocab: pain point, scalable, pivot, incubator, jack-of-all-trades, prospective, at stake, bring on board</li>
+        <li>Market expressions: corner the market, go-to-market strategy, beat someone to market, in the market for</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PHASE 1 — WARM-UP -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Warm-up</div>
+      </div>
+      <span class="phase-time">7 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🖼️</div>
+          <span class="activity-title">Try, do or skip?</span>
+          <span class="activity-time-badge">2 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="mood-img-wrap">
+            <img src="tds.jpg">
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🐦</div>
+          <span class="activity-title">Warm-up — Startup vs big company</span>
+          <span class="activity-src">EfT p.32</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>What are the advantages of working at a startup as opposed to working at a big company? Look at the tweet and talk about the pros it mentions. Do you agree with what it says?</p>
+
+          <div class="tweet-card">
+            <div class="tweet-header">
+              <div style="display:flex;align-items:center">
+                <div class="tweet-avatar">J</div>
+                <div class="tweet-author">
+                  <strong>Jack Altman</strong>
+                  <span>@jaltma · 4d</span>
+                </div>
+              </div>
+              <svg class="tweet-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.849L1.254 2.25H8.08l4.259 5.636L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+              </svg>
+            </div>
+            <div class="tweet-body">
+              Advantages startups have over big companies:<br><br>
+              — Tend to be much more focused<br>
+              — Employees are more energized and inspired<br>
+              — Less to lose = much higher <u>risk tolerance</u><br>
+              — Internal communication costs are near zero<br>
+              — Employees' interests are more naturally <u>aligned</u> with company's
+            </div>
+            <div class="tweet-vocab">
+              <p><strong>To be aligned</strong> — to be in agreement with.</p>
+              <p><strong>Risk tolerance</strong> — the amount of loss an investor is ready to handle.</p>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:14px">
+            <div class="speaking-box-header"><span>Discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Have you ever worked at a startup? How was it different from a larger company?</div>
+              <div class="speaking-row">Do you agree that employees at startups are more aligned with company goals? Why / why not?</div>
+              <div class="speaking-row">Are you more of a "startup person" or a "big company person"?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 2 — READING -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Reading — How to Build a Startup</div>
+        <div class="phase-sub">EfT Lesson 2 · pp. 33–35 · Ex. 1A, 1B, 1C</div>
+      </div>
+      <span class="phase-time">18 min</span>
+    </div>
+    <div class="phase-body">
+
+      <!-- ARTICLE -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📄</div>
+          <span class="activity-title">Article — Popular Jobs in Tech / Startup Culture</span>
+          <span class="activity-src">EfT pp. 33–34</span>
+        </div>
+        <div class="activity-body">
+          <div class="article-text">
+            <p>Did you ever dream of building your own startup? Even if you didn't, startup mentality and startup culture are very popular topics in the tech world. Steve Jobs even once said that Apple is the biggest startup on the planet. Today we'll talk about why startup culture is so influential and what it takes to build your own successful startup.</p>
+
+            <p>Many startups have values that even big businesses are trying to adopt such as: quickly adapting to change, demanding high levels of involvement and engagement from all co-workers, having open, honest and transparent relationships between teams and management, and thinking outside the box and finding innovative, <mark>cost-effective</mark> solutions to customers' problems.</p>
+
+            <p>Even if you're planning on creating your own business, thinking like an entrepreneur can be very beneficial for your personal development and career growth. So what qualities do you need to have to get your business off the ground?</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 1A -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔍</div>
+          <span class="activity-title">Ex. 1A — Find the words that mean:</span>
+          <span class="activity-src">EfT p.33</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Read the first three paragraphs of the article and find words that match these definitions.</p>
+          <ol class="exercise">
+            <li>Able to be seen through clearly → <input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;min-width:140px" type="text"></li>
+            <li>Adjusting → <input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;min-width:140px" type="text"></li>
+            <li>Start developing something successfully → <input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;min-width:140px" type="text"></li>
+            <li>Desire to take active part in something → <input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;min-width:140px" type="text"></li>
+            <li>With an optimal balance of value to price → <input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;min-width:140px" type="text"></li>
+            <li>Giving good results → <input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;min-width:140px" type="text"></li>
+            <li>Business founder → <input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;min-width:140px" type="text"></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev1a')">show answers ▾</button>
+          <div class="reveal-content" id="rev1a">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>transparent</strong></li>
+                <li><strong>adapting</strong></li>
+                <li><strong>get your business off the ground</strong></li>
+                <li><strong>engagement</strong></li>
+                <li><strong>cost-effective</strong></li>
+                <li><strong>beneficial</strong></li>
+                <li><strong>entrepreneur</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 1B -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📝</div>
+          <span class="activity-title">Ex. 1B — Match headlines to paragraphs</span>
+          <span class="activity-src">EfT p.34</span>
+          <span class="activity-time-badge">6 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the text with the right headline for each paragraph (1–4). Can you think of any other steps you'd have to plan when building a startup?</p>
+
+          <div class="word-box">
+            <div class="word-box-label">headline bank</div>
+            <span class="word-chip">Prepare your pitch</span>
+            <span class="word-chip">Develop a vision for your product</span>
+            <span class="word-chip">Put together a great team</span>
+            <span class="word-chip">Think about the logistics</span>
+          </div>
+
+          <table class="match-table" style="margin-top:12px">
+            <thead><tr><th>#</th><th>Headline</th><th>Paragraph</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="num">1</td>
+                <td><input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:200px" type="text" placeholder="headline..."></td>
+                <td style="font-size:13px">It all starts with a good idea. Ask yourself: What customer <mark>pain point</mark> can I solve? Which gaps in the market can our business fill? Is our solution elegant and <mark>scalable</mark>? Can we <mark>pivot</mark> if we have to?</td>
+              </tr>
+              <tr>
+                <td class="num">2</td>
+                <td><input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:200px" type="text" placeholder="headline..."></td>
+                <td style="font-size:13px">As a leader, you need <mark>to be in charge of</mark> people to hire. Very often new businesses are formed by a couple of friends who have known each other for years and share the same mindset. However, as your company grows you will have to <mark>bring</mark> new people <mark>on board</mark>. It is important that your new employees are the right match for the company. That means they not only have the right skill set for the job but also share the same motivation and passion for your common vision and goals.</td>
+              </tr>
+              <tr>
+                <td class="num">3</td>
+                <td><input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:200px" type="text" placeholder="headline..."></td>
+                <td style="font-size:13px">Where will you be located as a business? What <mark>expenses</mark> will you have to <mark>take into account</mark>? What annual budget will you need? A CEO is a bit of a <mark>jack-of-all-trades</mark> at least during the early stages of the startup. What can help you though is an incubator. Incubators are non-profit organizations or individuals which provide new businesses with a range of possibilities such as access to low-cost equipment, mentorship, help with marketing, PR and pitching, living accommodation, networking opportunities and helping the startup find <mark>prospective</mark> investors.
+                </td>
+              </tr>
+              <tr>
+                <td class="num">4</td>
+                <td><input style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:200px" type="text" placeholder="headline..."></td>
+                <td style="font-size:13px">If you ever <mark>come across</mark> someone important (say, a potential mentor or shareholder) you want to be able to deliver a <mark>concise</mark> informative speech about yourself / your product or your company. That's what pitching is all about. By getting your idea out there to people who can fund you and mentor you in the future can be scary because there's a lot <mark>at stake</mark>. However, it is important to pitch as many people as possible. Even if you don't get a partnership or a contract, every pitch can be a source of <mark>valuable</mark> learning for the future and the people you give it to may even suggest useful tips or make you see things from a different perspective.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev1b')">show answers ▾</button>
+          <div class="reveal-content" id="rev1b">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>Develop a vision for your product</strong></li>
+                <li><strong>Put together a great team</strong></li>
+                <li><strong>Think about the logistics</strong></li>
+                <li><strong>Prepare your pitch</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISCUSSION after reading -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Discussion — after reading</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Talk about it</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which of the 4 steps do you think is the hardest when building a startup — and why?</div>
+              <div class="speaking-row">The article says every pitch is a "source of valuable learning." Do you agree? Have you ever pitched an idea that didn't work out?</div>
+              <div class="speaking-row">The article mentions thinking like an entrepreneur even inside a big company. How does that look in your work as Head of Product?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 1C -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔗</div>
+          <span class="activity-title">Ex. 1C — Match highlighted words to definitions</span>
+          <span class="activity-src">EfT p.35</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Match each word or phrase (1–13) with its definition (a–m). Then say a sentence using each one.</p>
+          <div class="row g-3">
+            <div class="col-md-5">
+              <table class="match-table">
+                <thead><tr><th>#</th><th>Word / Phrase</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">1</td><td>Pain point</td></tr>
+                  <tr><td class="num">2</td><td>Scalable</td></tr>
+                  <tr><td class="num">3</td><td>Pivot</td></tr>
+                  <tr><td class="num">4</td><td>To be in charge of</td></tr>
+                  <tr><td class="num">5</td><td>Bring (someone) on board</td></tr>
+                  <tr><td class="num">6</td><td>Expenses</td></tr>
+                  <tr><td class="num">7</td><td>Take into account</td></tr>
+                  <tr><td class="num">8</td><td>Annual</td></tr>
+                  <tr><td class="num">9</td><td>Jack of all trades</td></tr>
+                  <tr><td class="num">10</td><td>Prospective</td></tr>
+                  <tr><td class="num">11</td><td>Come across</td></tr>
+                  <tr><td class="num">12</td><td>Concise</td></tr>
+                  <tr><td class="num">13</td><td>At stake</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-7">
+              <table class="match-table">
+                <thead><tr><th>Letter</th><th>Definition</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">a</td><td>Having an ability to grow bigger</td></tr>
+                  <tr><td class="num">b</td><td>Ask someone to join the team</td></tr>
+                  <tr><td class="num">c</td><td>Change the course of the existing strategy</td></tr>
+                  <tr><td class="num">d</td><td>A problem that a business/service can solve</td></tr>
+                  <tr><td class="num">e</td><td>Encounter</td></tr>
+                  <tr><td class="num">f</td><td>Likely to happen</td></tr>
+                  <tr><td class="num">g</td><td>Short and informative</td></tr>
+                  <tr><td class="num">h</td><td>At risk</td></tr>
+                  <tr><td class="num">i</td><td>Yearly</td></tr>
+                  <tr><td class="num">j</td><td>Consider</td></tr>
+                  <tr><td class="num">k</td><td>Someone who can handle many different responsibilities</td></tr>
+                  <tr><td class="num">l</td><td>Costs</td></tr>
+                  <tr><td class="num">m</td><td>To be the main person responsible for something</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev1c')">show answers ▾</button>
+          <div class="reveal-content" id="rev1c">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>→<strong>d</strong> больова точка клієнта &nbsp;</li> 
+                <li>→<strong>a</strong> здатний до масштабування &nbsp; </li>
+                <li>→<strong>c</strong> змінити напрямок стратегії &nbsp; </li>
+                <li>→<strong>m</strong> відповідати за щось  &nbsp; </li>
+                <li>→<strong>b</strong> залучити когось до команди &nbsp; </li>
+                <li>→<strong>l</strong> витрати &nbsp; </li>
+                <li>→<strong>j</strong> брати до уваги</li>
+                <li>→<strong>i</strong> щорічний &nbsp; </li>
+                <li>→<strong>k</strong> майстер на всі руки &nbsp; </li>
+                <li>→<strong>f</strong> потенційний, майбутній &nbsp; </li>
+                <li>→<strong>e</strong> зустріти, натрапити на &nbsp; </li>
+                <li>→<strong>g</strong> стислий, лаконічний &nbsp; </li>
+                <li>→<strong>h</strong> під загрозою</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 3 — GRAMMAR -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Grammar — Past Simple & Present Perfect</div>
+        <div class="phase-sub">EfT Lesson 2 · pp. 37–40 · Ex. 1, 2A, 2B, 2C, 3</div>
+      </div>
+      <span class="phase-time">20 min</span>
+    </div>
+    <div class="phase-body">
+
+      <!-- MEME + EXERCISE 1 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">😄</div>
+          <span class="activity-title">Exercise 1 — Find time markers in the text</span>
+          <span class="activity-src">EfT p.37</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="mood-img-wrap">
+            <img src="ti.jpg" alt="Grammar meme">
+          </div>
+
+          <p style="margin-top:14px">Read the text below. Find the time markers used with <strong>Past Simple</strong> and <strong>Present Perfect</strong>.</p>
+
+          <div style="display:flex;gap:16px;margin:10px 0 14px">
+            <div style="flex:1;background:var(--paper-dark);border-radius:4px;padding:10px 14px;font-size:14px">
+              <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--warm-grey);display:block;margin-bottom:6px">PAST SIMPLE</span>
+              <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:120px;color:var(--ink)"> ,
+              <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:120px;color:var(--ink)">
+            </div>
+            <div style="flex:1;background:var(--paper-dark);border-radius:4px;padding:10px 14px;font-size:14px">
+              <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--warm-grey);display:block;margin-bottom:6px">PRESENT PERFECT</span>
+              <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:90px;color:var(--ink)"> ,
+              <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:90px;color:var(--ink)"> ,
+              <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:90px;color:var(--ink)">
+            </div>
+          </div>
+
+          <div class="article-text">
+            <p>It's awkward. How many times <mark>have you caught</mark> yourself thinking aloud? Have you ever received this "are you crazy?" look? Now, we have an excuse, Voice UI. "I was just talking to my smartphone." Just <mark>a few years ago people thought</mark> that a guy talking to his phone was crazy, but now hardly anyone would care.</p>
+            <p>At the same time a study by Creative Strategies shows that while 98% of iPhone users <mark>have used Siri</mark>, fewer than 10% are comfortable talking to Siri in public. Typical usage is either at home (39%) or while driving in their car (51%).</p>
+            <p>By the way, <mark>have you ever tried</mark> to write or dictate an email using Siri while you're driving? Not a great experience, right?</p>
+            <p>In fact, up until now, about 99% of VUI usage <mark>has been</mark> about asking very simple questions or giving easy instructions, like: "Alexa, Turn on my kitchen lights." / "Okay Google, Play During Times of War by the Talking Heads" / "Hey Siri, Does Santa Claus Exist?"</p>
+            <p>There are plenty of visual elements that are missing in VUI compared to GUI. Like visual text, structure, composition, underlining typos or grammatical mistakes or inserting links. VUI just <mark>hasn't evolved</mark> enough for the complex tasks yet.</p>
+            <p>In 2016, Apple and Google <mark>opened</mark> their voice API's to application developers. This means that you can use Siri / Google Voice services to create a companion VUI for your GUI inside your iOS and Android applications.</p>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_ex1')">show answers ▾</button>
+          <div class="reveal-content" id="rev_ex1">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <p><strong>Past Simple:</strong> a few years ago, In 2016</p>
+              <p><strong>Present Perfect:</strong> have you caught / have used / have you ever tried / has been / hasn't evolved (up until now, ever)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAST SIMPLE REFERENCE -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Past Simple — form & use</span>
+          <span class="activity-src">EfT p.38</span>
+        </div>
+        <div class="activity-body">
+          <p style="margin-bottom:12px">We use it when we speak about a <strong>finished period of time</strong>. <em>When I was a student I worked in an electronics store.</em></p>
+
+          <div class="tip-box">
+            <span class="tip-icon">⏱️</span>
+            <div class="tip-text"><strong>Time markers:</strong> yesterday, the day before yesterday, the other day, last night/week/month/year, 2 days ago, in 1984.</div>
+          </div>
+
+          <table style="width:100%;border-collapse:collapse;margin-top:14px;font-size:14px">
+            <thead>
+              <tr style="background:var(--ink)">
+                <th style="color:#fff;padding:10px 14px;text-align:left;width:30%">FORM</th>
+                <th style="color:#fff;padding:10px 14px;text-align:left">Rule</th>
+                <th style="color:#fff;padding:10px 14px;text-align:left">Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:var(--white)">
+                <td style="padding:10px 14px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border);vertical-align:top">+</td>
+                <td style="padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink-soft)">
+                  <span style="color:#2a7a2a;font-weight:600">Regular verbs:</span> add <strong>-ed</strong> to the base form.<br>
+                  <span style="color:#2a7a2a;font-weight:600">Irregular verbs:</span> use the special past form.
+                </td>
+                <td style="padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;font-style:italic;color:var(--ink-soft)">
+                  start + ed → <strong style="color:var(--teal)">started</strong><br><em>It started in the 1950s.</em><br><br>
+                  rise → rose → risen<br><em>When "television" <strong style="color:var(--teal)">rose</strong> to prominence in America's living rooms.</em>
+                </td>
+              </tr>
+              <tr style="background:var(--paper-dark)">
+                <td style="padding:10px 14px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border);vertical-align:top">−</td>
+                <td style="padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink-soft)">Use <strong style="color:#aa2222">didn't (did not)</strong> before the base form of the verb.</td>
+                <td style="padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;font-style:italic;color:var(--ink-soft)"><em>Time-shifting of television <strong style="color:var(--teal)">didn't exist</strong>.</em></td>
+              </tr>
+              <tr style="background:var(--white)">
+                <td style="padding:10px 14px;font-weight:700;color:var(--teal);vertical-align:top">?</td>
+                <td style="padding:10px 14px;vertical-align:top;color:var(--ink-soft)">
+                  Use <strong style="color:#aa2222">did</strong> before the base form.<br>
+                  With verb <strong>to be (was/were)</strong> just change the word order.
+                </td>
+                <td style="padding:10px 14px;vertical-align:top;font-style:italic;color:var(--ink-soft)">
+                  <em><strong style="color:var(--teal)">Did</strong> you watch the new iPhone presentation last night?</em><br>
+                  <em><strong style="color:var(--teal)">Was</strong> it interesting?</em>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRESENT PERFECT REFERENCE -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Present Perfect — form & use</span>
+          <span class="activity-src">EfT pp.38–39</span>
+        </div>
+        <div class="activity-body">
+          <p style="margin-bottom:12px">We use it when we speak about an <strong>unfinished period of time</strong> (from past until now). <em>I have worked as a software engineer at this company for 6 years.</em></p>
+
+          <table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:14px">
+            <thead>
+              <tr style="background:var(--ink)">
+                <th style="color:#fff;padding:10px 14px;text-align:left;width:30%">FORM</th>
+                <th style="color:#fff;padding:10px 14px;text-align:left">Rule</th>
+                <th style="color:#fff;padding:10px 14px;text-align:left">Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:var(--white)">
+                <td style="padding:10px 14px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border);vertical-align:top">+</td>
+                <td style="padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink-soft)">
+                  <strong style="color:#2a7a2a">have/has + past participle</strong><br><br>
+                  Regular verbs: add -ed.<br>
+                  Irregular verbs: use the special form.
+                </td>
+                <td style="padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;font-style:italic;color:var(--ink-soft)">
+                  <em>I <strong style="color:var(--teal)">have worked</strong> at this company for 6 years.</em><br>
+                  <em>I <strong style="color:var(--teal)">have done</strong> all my tasks for today, I'm ready to go home.</em>
+                </td>
+              </tr>
+              <tr style="background:var(--paper-dark)">
+                <td style="padding:10px 14px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border);vertical-align:top">−</td>
+                <td style="padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink-soft)">Use <strong style="color:#aa2222">haven't/hasn't (have/has not)</strong> before the base form.</td>
+                <td style="padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;font-style:italic;color:var(--ink-soft)"><em>I <strong style="color:var(--teal)">haven't</strong> had breakfast today yet. I really need some coffee.</em></td>
+              </tr>
+              <tr style="background:var(--white)">
+                <td style="padding:10px 14px;font-weight:700;color:var(--teal);vertical-align:top">?</td>
+                <td style="padding:10px 14px;vertical-align:top;color:var(--ink-soft)">Use <strong style="color:#aa2222">have/has</strong> at the beginning of the sentence, before the subject.</td>
+                <td style="padding:10px 14px;vertical-align:top;font-style:italic;color:var(--ink-soft)"><em><strong style="color:var(--teal)">Have</strong> you ever been to India?</em></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- TIME MARKERS TABLE -->
+          <p style="font-weight:600;font-size:13px;color:var(--ink);margin-bottom:8px;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase">Time markers</p>
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <thead>
+              <tr style="background:var(--ink)">
+                <th style="color:#fff;padding:8px 12px;text-align:left;width:80px">Marker</th>
+                <th style="color:#fff;padding:8px 12px;text-align:left">Example</th>
+                <th style="color:#fff;padding:8px 12px;text-align:left">Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:var(--white)"><td style="padding:8px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">already</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">Have you already received the specifications?</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">It has happened before this time; you don't need to wait for it now.</td></tr>
+              <tr style="background:var(--paper-dark)"><td style="padding:8px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">yet</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">No, I haven't received them yet.</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">It hasn't happened; you need to wait for it.</td></tr>
+              <tr style="background:var(--white)"><td style="padding:8px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">just</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">Wait, I've just got an email.</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">Right now, or very short time before.</td></tr>
+              <tr style="background:var(--paper-dark)"><td style="padding:8px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">ever</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">Have you ever worked in this language?</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">Any time before now.</td></tr>
+              <tr style="background:var(--white)"><td style="padding:8px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">never</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">No, I have never used it.</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">At no time before now.</td></tr>
+              <tr style="background:var(--paper-dark)"><td style="padding:8px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">for</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">Yes, I've worked in it for two years now.</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">For — a period of time.</td></tr>
+              <tr style="background:var(--white)"><td style="padding:8px 12px;font-weight:700;color:var(--teal)">since</td><td style="padding:8px 12px;color:var(--ink-soft);font-style:italic">Yes, I've worked in it since 2017.</td><td style="padding:8px 12px;color:var(--ink-soft)">Since — a point in time.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EXERCISE 2A -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Ex. 2A — Choose the correct form</span>
+          <span class="activity-src">EfT p.40</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>I <span style="color:var(--teal);font-weight:600">haven't bought / didn't buy</span> any new books recently.</li>
+            <li>Two of my teammates <span style="color:var(--teal);font-weight:600">have left / left</span> the company last week.</li>
+            <li>We <span style="color:var(--teal);font-weight:600">have spent / spent</span> a lot of time fixing this issue last night.</li>
+            <li><span style="color:var(--teal);font-weight:600">Have you ever won / Did you ever win</span> a competition?</li>
+            <li>We <span style="color:var(--teal);font-weight:600">have finished / finished</span> the sprint on Friday.</li>
+            <li>Who is this guy? I <span style="color:var(--teal);font-weight:600">have never met / never met</span> him before.</li>
+            <li>I <span style="color:var(--teal);font-weight:600">have never been / never was</span> to the USA.</li>
+            <li>Jeff isn't at the office this week. He <span style="color:var(--teal);font-weight:600">has gone / went</span> on a business trip.</li>
+            <li>We have lots of new ideas. We <span style="color:var(--teal);font-weight:600">have been / were</span> on a huge conference.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev2a')">show answers ▾</button>
+          <div class="reveal-content" id="rev2a">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>haven't bought</strong> — "recently" → no specific time → Present Perfect</li>
+                <li><strong>left</strong> — "last week" → specific time → Past Simple</li>
+                <li><strong>spent</strong> — "last night" → specific time → Past Simple</li>
+                <li><strong>Have you ever won</strong> — "ever" → life experience → Present Perfect</li>
+                <li><strong>finished</strong> — "on Friday" → specific time → Past Simple</li>
+                <li><strong>have never met</strong> — "never" → Present Perfect</li>
+                <li><strong>have never been</strong> — "never" → Present Perfect</li>
+                <li><strong>has gone</strong> — result still relevant now (he's still away) → Present Perfect</li>
+                <li><strong>have been</strong> — recent experience, result relevant now → Present Perfect</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXERCISE 2B -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Ex. 2B — Choose "for" or "since"</span>
+          <span class="activity-src">EfT p.40</span>
+          <span class="activity-time-badge">3 min</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>I have been interested in technology <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:60px"> I was a child.</li>
+            <li>We can trust Jim with it, he has worked in this area <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:40px"> six years now.</li>
+            <li>They have been in this meeting room <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:40px"> 3 hours and they haven't finished yet.</li>
+            <li>He has lived in Ireland <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:40px"> over 5 years now <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:40px"> he started working at Google.</li>
+            <li>He's my best friend, I have known him <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:40px"> school.</li>
+            <li>Tom hasn't been that much fun <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:40px"> he got married.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev2b_gram')">show answers ▾</button>
+          <div class="reveal-content" id="rev2b_gram">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>since</strong> — point in time (when I was a child)</li>
+                <li><strong>for</strong> — period of time (six years)</li>
+                <li><strong>for</strong> — period of time (3 hours)</li>
+                <li><strong>for</strong> over 5 years / <strong>since</strong> he started working at Google</li>
+                <li><strong>since</strong> — point in time (school)</li>
+                <li><strong>since</strong> — point in time (he got married)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXERCISE 2C -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Ex. 2C — Put verbs in the correct tense</span>
+          <span class="activity-src">EfT p.40</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>— (you/ever/be) to California?<br>— Yes, I (be) there two years ago.</li>
+            <li>— When (you/relocate) the headquarters?<br>— Last year, as soon as we (finish) redecorating the new building.</li>
+            <li>— (you/already/meet) the new project manager?<br>— Yes, I (see) him at lunch time yesterday. He seems nice.</li>
+            <li>— (you/ever/work) from home?<br>— Yes, I (spend) a couple of years working as a freelancer in my twenties.</li>
+            <li>We (have) a lot of tasks last night. I (come) home at midnight.</li>
+            <li>I don't think he is a good fit for the job. He (never/work) in this position before.</li>
+            <li>Do you know what happened to Tom? He (send) me the report yet.</li>
+            <li>I (work) at this company for 3 years. (I still work here).</li>
+            <li>I (work) at this company for 3 years. (I don't work here anymore).</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev2c')">show answers ▾</button>
+          <div class="reveal-content" id="rev2c">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>Have you ever been</strong> / Yes, I <strong>was</strong> there two years ago.</li>
+                <li>When <strong>did you relocate</strong>? / as soon as we <strong>finished</strong></li>
+                <li><strong>Have you already met</strong>? / Yes, I <strong>saw</strong> him yesterday.</li>
+                <li><strong>Have you ever worked</strong>? / Yes, I <strong>spent</strong> a couple of years…</li>
+                <li>We <strong>had</strong> a lot of tasks / I <strong>came</strong> home at midnight.</li>
+                <li>He <strong>has never worked</strong> in this position before.</li>
+                <li>He <strong>hasn't sent</strong> me the report yet.</li>
+                <li>I <strong>have worked</strong> at this company for 3 years. (still here → Present Perfect)</li>
+                <li>I <strong>worked</strong> at this company for 3 years. (left → Past Simple)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXERCISE 3 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🗣️</div>
+          <span class="activity-title">Ex. 3 — Complete so they're true for you</span>
+          <span class="activity-src">EfT p.40</span>
+          <span class="activity-time-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the sentences so that they're true for you. Use Past Simple and Present Perfect.</p>
+          <ol class="exercise">
+            <li>I have <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:120px"> since <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:140px"></li>
+            <li>I haven't <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:120px"> since <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:140px"></li>
+            <li>I haven't <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:120px"> yet <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:100px"></li>
+            <li>I <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:140px"> when I was in school</li>
+            <li>Two years ago, I <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:200px"></li>
+            <li>I <input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:14px;outline:none;padding:0 4px;width:140px"> yesterday</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 4 — VOCABULARY -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Vocabulary — Market expressions</div>
+        <div class="phase-sub">EfT Lesson 2 · p.36 · Annglish Tip + Ex. 2A + Ex. 2B</div>
+      </div>
+      <span class="phase-time">13 min</span>
+    </div>
+    <div class="phase-body">
+
+      <!-- TEACHER TIP -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💡</div>
+          <span class="activity-title">Teacher Tip — Startup funding</span>
+          <span class="activity-src">EfT p.36</span>
+        </div>
+        <div class="activity-body">
+          <div class="teacher-tip">
+            <div class="teacher-tip-header">
+              <div class="teacher-tip-avatar">T</div>
+              <div class="teacher-tip-name">
+                <strong>TEACHER TIP</strong>
+                <span>English for Tech</span>
+              </div>
+            </div>
+            <div class="teacher-tip-body">
+              <p class="teacher-tip-q">Who can I get help from?</p>
+              <p>You're gonna need help from people that have industry experience and skills. That's where <strong>incubators</strong> and <strong>accelerators</strong> come in. Incubators help startups discover an idea and create a business plan for executing that idea. Accelerators, on the other hand, help startups with already existing MVPs to grow and develop quicker.</p>
+              <p class="teacher-tip-q" style="margin-top:12px">Where can I get money from?</p>
+              <p>You can choose to either raise <strong>VC funding</strong> (this will involve preparing lots of <strong>pitch decks</strong> for venture capitalists and trying to convince them to invest into your business) or <strong>bootstrap</strong> your startup (if you have enough startup capital).</p>
+            </div>
+          </div>
+
+          <div class="phrase-box" style="margin-top:14px">
+            <div class="phrase-label">Key terms from the tip</div>
+            <div class="phrase-row">
+              <span class="phrase-en">Incubator</span>
+              <span class="phrase-de">інкубатор — helps startups develop an idea and build a business plan</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Accelerator</span>
+              <span class="phrase-de">акселератор — helps startups with existing MVP grow faster</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">VC funding</span>
+              <span class="phrase-de">венчурне фінансування — investment from venture capitalists</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Pitch deck</span>
+              <span class="phrase-de">презентація для інвесторів — slides used to pitch your startup</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Bootstrap</span>
+              <span class="phrase-de">розвиватись без зовнішніх інвестицій — fund your startup yourself</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">MVP</span>
+              <span class="phrase-de">Minimum Viable Product — перша робоча версія продукту</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 2A -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Ex. 2A — Answer the questions</span>
+          <span class="activity-src">EfT p.36</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discussion</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">1. Are you currently in the market for anything? What is it?</div>
+              <div class="speaking-row">2. Can you explain in your own words what marketers do?</div>
+              <div class="speaking-row">3. Can you give examples of companies that managed to corner the market? How did they do it?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 2B -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Ex. 2B — Expressions with the word "market"</span>
+          <span class="activity-src">EfT p.36</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the sentences with the correct market expression from the box.</p>
+          <div class="word-box">
+            <div class="word-box-label">expression bank</div>
+            <span class="word-chip">corner the market</span>
+            <span class="word-chip">on the market</span>
+            <span class="word-chip">break into a market</span>
+            <span class="word-chip">marketer</span>
+            <span class="word-chip">beat (someone) to market</span>
+            <span class="word-chip">market economy</span>
+            <span class="word-chip">in the market for</span>
+            <span class="word-chip">go-to-market strategy</span>
+          </div>
+
+          <div class="fill-text">
+            1. The United States is a <input class="fill-input" size="16"> where the prices are determined by the rules of supply and demand.<br><br>
+            2. They were planning to release their app next month but their competitors <input class="fill-input" size="16"> them <input class="fill-input" size="12">.<br><br>
+            3. This is the best solution <input class="fill-input" size="12"> right now.<br><br>
+            4. A company always takes a risk when it tries to <input class="fill-input" size="14"> a new <input class="fill-input" size="10">.<br><br>
+            5. We need to create a strong <input class="fill-input" size="20"> if we want our product to be successful from the first day of the launch.<br><br>
+            6. That company has <input class="fill-input" size="16"> and become the leading desktop manufacturer in the industry.<br><br>
+            7. I'm <input class="fill-input" size="14"> for a new pair of headphones.<br><br>
+            8. Have you considered hiring a <input class="fill-input" size="12"> to help you with promoting your services?
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev2b')">show answers ▾</button>
+          <div class="reveal-content" id="rev2b">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>market economy</strong></li>
+                <li><strong>beat</strong> them <strong>to market</strong></li>
+                <li><strong>on the market</strong></li>
+                <li><strong>break into</strong> a new <strong>market</strong></li>
+                <li><strong>go-to-market strategy</strong></li>
+                <li><strong>cornered the market</strong></li>
+                <li><strong>in the market for</strong></li>
+                <li><strong>marketer</strong></li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:16px">
+            <div class="speaking-box-header"><span>Use the expressions</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which company do you think has cornered the market in your industry right now?</div>
+              <div class="speaking-row">Have you ever had to create a go-to-market strategy? What did it include?</div>
+              <div class="speaking-row">Has a competitor ever beaten you to market? What happened?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

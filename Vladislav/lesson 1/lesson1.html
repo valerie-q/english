@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 1 — Remote Work & Team Culture</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2240;
+      --ink-soft: #3a4a6a;
+      --paper: #f5f7fc;
+      --paper-dark: #e8edf8;
+      --gold: #c88a10;
+      --teal: #2a5fa8;
+      --teal-light: #4a7fc8;
+      --warm-grey: #6a7a9a;
+      --border: #d0d8ec;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+
+    /* HEADER */
+    .header { background: #1a2e52; color: #fff; padding: 48px 40px 40px; position: relative; overflow: hidden; }
+    .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(90,143,232,0.3) 0%, transparent 70%); }
+    .header::after  { content: ''; position: absolute; bottom: -40px; left: 20%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(200,138,16,0.2) 0%, transparent 70%); }
+    .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px,5vw,54px); font-weight: 900; line-height: 1.05; margin-bottom: 16px; }
+    .header h1 em { font-style: italic; color: #f0c060; }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7); }
+    .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0c060; flex-shrink: 0; }
+    .meta-chip strong { color: #fff; }
+
+    /* OBJECTIVES */
+    .objectives-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .objectives-box { background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .obj-col h3 { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .obj-list { list-style: none; }
+    .obj-list li { font-size: 14px; padding: 5px 0 5px 18px; position: relative; color: var(--ink-soft); border-bottom: 1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom: none; }
+    .obj-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal-light); font-size: 12px; font-weight: 600; }
+
+    /* MAIN */
+    .main { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+
+    /* PHASE */
+    .phase { margin-bottom: 40px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; position: relative; }
+    .phase-header::after { content: '▾'; position: absolute; right: 20px; font-size: 18px; color: rgba(255,255,255,0.6); transition: transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+    .phase-num { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 20px; color: rgba(255,255,255,0.9); white-space: nowrap; }
+    .phase-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
+    .phase-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .phase-time { margin-left: auto; margin-right: 32px; font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.8); white-space: nowrap; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; }
+    .phase-body { padding: 0 24px 24px; background: var(--paper); }
+    .phase.collapsed .phase-body { display: none; }
+    .phase-1 .phase-header { background: #1e3a5f; }
+    .phase-2 .phase-header { background: #2a4a7a; }
+    .phase-3 .phase-header { background: #1a3a6e; }
+    .phase-4 .phase-header { background: #1e3a5f; }
+    .phase-5 .phase-header { background: #2a4a7a; }
+
+    /* ACTIVITY */
+    .activity { border: 1px solid var(--border); border-radius: 4px; margin-top: 16px; overflow: hidden; background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .activity-head { background: var(--paper-dark); padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+    .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; background: #eef3fb; }
+    .activity-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+    .activity-src { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: #1e3a6e; background: #dce6f5; border: 1px solid #b0c8ec; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-time-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-body { padding: 16px; background: var(--white); }
+
+    /* SPEAKING BOX */
+    .speaking-box { border: 2px solid var(--teal); border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .speaking-box-header { background: #1e3a5f; padding: 10px 16px; }
+    .speaking-box-header span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 600; }
+    .speaking-box-body { background: var(--white); padding: 16px; }
+    .speaking-row { padding: 7px 0; border-bottom: 1px dotted var(--border); font-size: 14px; color: var(--ink); }
+    .speaking-row:last-child { border-bottom: none; }
+
+    /* PHRASE BOX */
+    .phrase-box { background: #1a2e52; border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+    .phrase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: #f0c060; margin-bottom: 10px; }
+    .phrase-row { display: flex; align-items: baseline; gap: 16px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .phrase-row:last-child { border-bottom: none; }
+    .phrase-en { font-size: 15px; font-weight: 500; flex: 1; color: #fff; }
+    .phrase-de { font-size: 13px; color: rgba(255,255,255,0.55); flex: 1; }
+
+    /* TIP BOX */
+    .tip-box { background: #eef3fb; border: 1px solid #b0c8ec; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; display: flex; gap: 10px; }
+    .tip-icon { font-size: 16px; flex-shrink: 0; }
+    .tip-text { color: #2a3a5a; line-height: 1.5; }
+    .tip-text strong { color: var(--ink); }
+
+    /* TEACHER TIP */
+    .teacher-tip { background: #f5f5f5; border-radius: 10px; padding: 16px 18px; margin: 12px 0; }
+    .teacher-tip-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .teacher-tip-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+    .teacher-tip-name strong { display: block; font-size: 13px; font-weight: 800; color: var(--ink); letter-spacing: 0.3px; }
+    .teacher-tip-name span { font-size: 12px; color: var(--warm-grey); }
+    .teacher-tip-body { font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+    .teacher-tip-body strong { color: var(--ink); }
+
+    /* ARTICLE TEXT */
+    .article-text { background: var(--paper); border: 1px solid var(--border); border-radius: 6px; padding: 20px 24px; font-size: 14px; line-height: 1.9; color: var(--ink-soft); margin: 12px 0; }
+    .article-text p { margin: 0 0 14px; }
+    .article-text p:last-child { margin: 0; }
+    .article-text strong { color: var(--ink); }
+    .article-text mark { background: #fde68a; padding: 1px 3px; border-radius: 2px; }
+    .article-section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 10px; }
+
+    /* REVEAL */
+    .reveal-btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; background: none; border: 1px solid var(--border); color: var(--warm-grey); padding: 5px 14px; border-radius: 20px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+    .reveal-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .reveal-content { display: none; margin-top: 10px; }
+    .reveal-content.open { display: block; }
+
+    /* ANSWER KEY */
+    .answer-key { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+    .ak-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 8px; }
+    .answer-key ol, .answer-key ul { padding-left: 20px; }
+    .answer-key li { padding: 3px 0; color: var(--ink-soft); }
+    .answer-key li strong { color: var(--teal); }
+
+    /* WORD BOX */
+    .word-box { background: var(--white); border: 2px solid var(--teal); border-radius: 6px; padding: 12px 16px; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .word-box-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); width: 100%; margin-bottom: 4px; }
+    .word-chip { background: #1e3a5f; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+
+    /* FILL */
+    .fill-text { background: var(--paper); border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; font-size: 14px; line-height: 2.4; color: var(--ink); margin: 12px 0; }
+    .fill-input { border: none; border-bottom: 2px solid var(--teal-light); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); outline: none; padding: 0 4px; min-width: 130px; }
+    .fill-input:focus { border-bottom-color: var(--gold); }
+
+    /* MATCH TABLE */
+    .match-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .match-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; }
+    .match-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--ink-soft); }
+    .match-table tr:last-child td { border-bottom: none; }
+    .match-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .match-table .num { font-family: 'DM Mono', monospace; font-weight: 600; color: var(--teal); width: 30px; }
+
+    /* VOCAB TABLE */
+    .vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .vocab-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--ink-soft); }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .vocab-table .eng { font-weight: 600; color: var(--ink); }
+    .vocab-table .ua { color: var(--teal); font-style: italic; }
+
+    /* IMAGE PLACEHOLDER */
+    .img-placeholder { width: 100%; max-width: 480px; height: 260px; background: var(--paper-dark); border: 2px dashed var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 12px 0; }
+    .img-placeholder span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--warm-grey); }
+
+    /* GRAMMAR TABLE */
+    .gram-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+    .gram-table th { background: var(--ink); color: #fff; padding: 10px 14px; text-align: left; }
+    .gram-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--ink-soft); }
+    .gram-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .gram-table .label { font-weight: 700; color: var(--teal); white-space: nowrap; }
+
+    ol.exercise { padding-left: 20px; }
+    ol.exercise li { font-size: 14px; color: var(--ink-soft); padding: 6px 0; border-bottom: 1px dotted var(--border); line-height: 1.8; }
+    ol.exercise li:last-child { border-bottom: none; }
+    p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+    p:first-child { margin-top: 0; }
+    strong { color: var(--ink); }
+
+    @media (max-width: 700px) {
+      .objectives-box { grid-template-columns: 1fr; }
+      .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; }
+      .phase-time { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 1<br><em>Remote Work Killed<br>Team Culture. Agree?</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;B2</div>
+    </div>
+  </div>
+</div>
+
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Get to know each other + assess speaking level</li>
+        <li>Discuss remote work from a personal angle</li>
+        <li>Read and react to a Google expert's take</li>
+        <li>Expand vocabulary around hybrid work & teams</li>
+        <li>Check grammar comfort zone</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ─────────────────────────────────────────────────────
+       PHASE 1 -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Getting to Know You</div>
+        <div class="phase-sub">Ice-breaker · speaking warm-up</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-body">
+          <img src="wu.jpg">
+        </div>
+      </div>
+
+      <!-- ABOUT YOU -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">👤</div>
+          <span class="activity-title">About You </span>
+        </div>
+        <div class="activity-body">
+          <p>We'll kick off every lesson with a few minutes of free conversation. Today, let's start simple.</p>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Talk about it</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Tell me a bit about yourself — what do you do, and what does your typical workday look like?</div>
+              <div class="speaking-row">How long have you been working in IT? What's changed the most since you started?</div>
+              <div class="speaking-row">How would you describe your English right now — what do you feel confident about, and what do you find frustrating?</div>
+              <div class="speaking-row">What's your goal with English at work — meetings, presentations, written communication, something else?</div>
+              <div class="speaking-row">Have you ever had to speak English under pressure at work? What happened?</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       PHASE 2 — DISCUSSION: REMOTE WORK -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Discussion — Remote Work & Team Culture</div>
+        <div class="phase-sub">Opinion · personal experience · debate</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Opening question</span>
+        </div>
+        <div class="activity-body">
+          <div class="tip-box">
+            <span class="tip-icon">❝</span>
+            <div class="tip-text" style="font-size:16px; font-style:italic; color: var(--ink);">Remote work killed team culture.<br><span style="font-size:13px; color: var(--warm-grey); font-style: normal;">Do you agree, disagree, or is it more complicated than that?</span></div>
+          </div>
+          <p>Give your first reaction — don't overthink it. We'll dig deeper in a moment.</p>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🧭</div>
+          <span class="activity-title">Your experience with remote / hybrid work</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Do you work remotely, in the office, or hybrid? Was that your choice or the company's?</div>
+              <div class="speaking-row">Has working remotely made you feel more or less connected to your team?</div>
+              <div class="speaking-row">What kinds of tasks do you do better alone? What needs to be done together in person?</div>
+              <div class="speaking-row">Have you ever had a conflict or misunderstanding with a colleague that you think wouldn't have happened face-to-face?</div>
+              <div class="speaking-row">What do companies get wrong when they try to do remote work?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">⚔️</div>
+          <span class="activity-title">Debate — take a side</span>
+        </div>
+        <div class="activity-body">
+          <p>Now argue the <strong>opposite</strong> of your first answer. If you agreed the statement was true — now defend remote work. If you disagreed — now argue that it really has damaged team culture.</p>
+          <div class="tip-box">
+            <span class="tip-icon">🎯</span>
+            <div class="tip-text"><strong>Why?</strong> Being able to argue both sides is a key skill in business English — for meetings, negotiations, and pitches.</div>
+          </div>
+          <div class="phrase-box">
+            <div class="phrase-label">Useful phrases for disagreeing naturally</div>
+            <div class="phrase-row">
+              <span class="phrase-en">I see your point, but…</span>
+              <span class="phrase-de">Розумію тебе, але…</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">That's one way to look at it. Another angle is…</span>
+              <span class="phrase-de">Є й інший погляд…</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I'd push back on that a little.</span>
+              <span class="phrase-de">Я б трохи поперечив.</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">It depends on the context, doesn't it?</span>
+              <span class="phrase-de">Все залежить від контексту, чи не так?</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Fair point — although…</span>
+              <span class="phrase-de">Справедливо — хоча…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       PHASE 3 — READING: GOOGLE ARTICLE
+  ──────────────────────────────────────────────────────── -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Reading — What Google Says</div>
+        <div class="phase-sub">Natasha Tamiru · Google Workspace · Feb 2024</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- PART 1 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📄</div>
+          <span class="activity-title">Part 1 — The big picture</span>
+        </div>
+        <div class="activity-body">
+          <div class="article-text">
+            <span class="article-section-label">Natasha Tamiru · Google · Feb 2024</span>
+            <p>Hybrid working has profoundly reshaped our approach to work-life balance and wellbeing. The shift towards flexibility has brought notable benefits, such as increased productivity and access to global talent. But it also presents challenges: <mark>mental health</mark>, <mark>loneliness</mark>, and <mark>hampered career progression</mark> are increasingly familiar issues — and particularly acute for those entering the workforce for the first time.</p>
+            <p>Having spent over a decade leading organisational transformation programmes for Google's clients, I have seen these implications unfold first-hand. And while the benefits of flexible working are far too great to return to the ways of old, it's become apparent that there's no one-size-fits-all approach available. Instead, we must thoughtfully <mark>design</mark> our (virtual) workspaces to address the needs of both organisations and the individuals who work for them.</p>
+          </div>
+          <div class="speaking-box" style="margin-top:14px">
+            <div class="speaking-box-header"><span>React</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">The author mentions "hampered career progression" as a downside of remote work. Do you feel this is true in your experience?</div>
+              <div class="speaking-row">She says there's "no one-size-fits-all approach." What would your ideal hybrid policy look like if you were designing it for your team?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📄</div>
+          <span class="activity-title">Part 2 — Designing for different workspaces</span>
+        </div>
+        <div class="activity-body">
+          <div class="article-text">
+            <p>One thing is certain: we shouldn't try to replicate what works face-to-face in an online setting. Back-to-back virtual meetings are much more exhausting than when you're all sitting in the office together, so they should be used more <mark>deliberately</mark>.</p>
+            <p>It really helps to think about <mark>asynchronous</mark> (working independently at one's own pace) and <mark>synchronous</mark> (working together in real-time) methods — and use both to accommodate different working styles. A real benefit of people working virtually is that they're away from distractions and can do deep work, so it's good to be intentional about how and when to utilise that.</p>
+            <p>It's often a lack of <mark>trust</mark> — whether in employees or the process itself — that leads to mandates for full-time office returns and excessive employee monitoring. However, such measures risk <mark>alienating</mark> talent and jeopardising the <mark>psychological safety</mark> vital for business effectiveness.</p>
+          </div>
+          <div class="speaking-box" style="margin-top:14px">
+            <div class="speaking-box-header"><span>React</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">The author distinguishes between async and sync work. How does your team currently use each? Is the balance right?</div>
+              <div class="speaking-row">"Psychological safety" — what does that mean to you in a team context? Have you worked somewhere that had it or lacked it?</div>
+              <div class="speaking-row">She says monitoring employees backfires. Do you agree? Have you ever felt monitored too closely?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 3 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📄</div>
+          <span class="activity-title">Part 3 — Trust: cognitive vs affective</span>
+        </div>
+        <div class="activity-body">
+          <div class="article-text">
+            <p>At Google, we've made hybrid work by establishing clear rules of engagement — from set office days and core hours, to protocols for video calls. These rules help build two kinds of trust:</p>
+            <p><strong>Cognitive trust</strong> — trust based on job competence, meeting objectives, delivering results.<br>
+            <strong>Affective trust</strong> — trust built through stronger interpersonal relationships within teams.</p>
+            <p>Both are key drivers of <mark>psychological safety</mark>. Teams and individuals can thrive in any setting — virtual or physical — as long as organisations foster a strong, positive culture led by intentional efforts and shared values. But that won't materialise by itself. <strong>It has to be designed for.</strong></p>
+          </div>
+          <div class="speaking-box" style="margin-top:14px">
+            <div class="speaking-box-header"><span>Final reaction</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which type of trust — cognitive or affective — do you think is harder to build remotely?</div>
+              <div class="speaking-row">The article ends with "it has to be designed for." Who is responsible for that design — leadership, HR, or each individual team?</div>
+              <div class="speaking-row">After reading all three parts — has your opinion from the beginning of the lesson changed at all?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       PHASE 4 — VOCABULARY
+  ──────────────────────────────────────────────────────── -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Vocabulary — Key Words from the Article</div>
+        <div class="phase-sub">Meaning · usage · your own sentences</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📖</div>
+          <span class="activity-title">Match words to definitions</span>
+        </div>
+        <div class="activity-body">
+          <p>Match each word (1–8) with its definition (a–h).</p>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <table class="match-table">
+                <thead><tr><th>#</th><th>Word</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">1</td><td>hampered </td></tr>
+                  <tr><td class="num">2</td><td>conducive</td></tr>
+                  <tr><td class="num">3</td><td>rapport</td></tr>
+                  <tr><td class="num">4</td><td>foster</td></tr>
+                  <tr><td class="num">5</td><td>alienate</td></tr>
+                  <tr><td class="num">6</td><td>deliberately</td></tr>
+                  <tr><td class="num">7</td><td>acute</td></tr>
+                  <tr><td class="num">8</td><td>mandate</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-8">
+              <table class="match-table">
+                <thead><tr><th>Letter</th><th>Definition</th></tr></thead>
+                <tbody>
+                  <tr><td class="num">a</td><td>to encourage or develop something over time</td></tr>
+                  <tr><td class="num">b</td><td>intentionally; on purpose</td></tr>
+                  <tr><td class="num">c</td><td>slowed down or made more difficult</td></tr>
+                  <tr><td class="num">d</td><td>an official order or instruction</td></tr>
+                  <tr><td class="num">e</td><td>creating a feeling of being unwanted or excluded</td></tr>
+                  <tr><td class="num">f</td><td>a close, harmonious relationship</td></tr>
+                  <tr><td class="num">g</td><td>severe or intense</td></tr>
+                  <tr><td class="num">h</td><td>providing the right conditions for something to happen</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev_vocab1')">show answers ▾</button>
+          <div class="reveal-content" id="rev_vocab1">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>→ <strong>c</strong> — hampered = slowed down</li>
+                <li>→ <strong>h</strong> — conducive = right conditions</li>
+                <li>→ <strong>f</strong> — rapport = harmonious relationship</li>
+                <li>→ <strong>a</strong> — foster = encourage over time</li>
+                <li>→ <strong>e</strong> — alienate = make feel excluded</li>
+                <li>→ <strong>b</strong> — deliberately = on purpose</li>
+                <li>→ <strong>g</strong> — acute = severe</li>
+                <li>→ <strong>d</strong> — mandate = official order</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Use the words in context</span>
+        </div>
+        <div class="activity-body">
+          <p>Fill in the gaps with the correct word from the box.</p>
+          <div class="word-box">
+            <div class="word-box-label">word bank</div>
+            <span class="word-chip">foster</span>
+            <span class="word-chip">conducive</span>
+            <span class="word-chip">mandate</span>
+            <span class="word-chip">alienate</span>
+            <span class="word-chip">hampered</span>
+            <span class="word-chip">rapport</span>
+            <span class="word-chip">acute</span>
+            <span class="word-chip">deliberately</span>
+          </div>
+          <div class="fill-text">
+            1. The lack of proper tools has <input class="fill-input" size="12"> our team's ability to collaborate remotely.<br><br>
+            2. Open-plan offices aren't always <input class="fill-input" size="12"> to deep, focused work.<br><br>
+            3. Building <input class="fill-input" size="10"> with a new client takes time — especially over video calls.<br><br>
+            4. Good managers actively <input class="fill-input" size="10"> a culture of trust and transparency.<br><br>
+            5. Forcing everyone back to the office might <input class="fill-input" size="10"> the most independent workers.<br><br>
+            6. We <input class="fill-input" size="14"> scheduled this meeting at the end of the week to give everyone time to prepare.<br><br>
+            7. The problem of communication gaps becomes more <input class="fill-input" size="8"> when teams are spread across time zones.<br><br>
+            8. The company issued a <input class="fill-input" size="10"> requiring all employees to be in the office on Tuesdays and Thursdays.
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev_vocab2')">show answers ▾</button>
+          <div class="reveal-content" id="rev_vocab2">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>hampered</strong></li>
+                <li><strong>conducive</strong></li>
+                <li><strong>rapport</strong></li>
+                <li><strong>foster</strong></li>
+                <li><strong>alienate</strong></li>
+                <li><strong>deliberately</strong></li>
+                <li><strong>acute</strong></li>
+                <li><strong>mandate</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       PHASE 5 — GRAMMAR CHECK
+  ──────────────────────────────────────────────────────── -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div>
+        <div class="phase-title">Grammar Check</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+
+
+      <!-- GRAMMAR 1: PP vs PS -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🕐</div>
+          <span class="activity-title">Ex. 1 — Present Perfect or Past Simple?</span>
+        </div>
+        <div class="activity-body">
+          <p>Choose the correct form. Both options may look possible — think about <em>when</em> and <em>whether it's finished</em>.</p>
+          <ol class="exercise">
+            <li>Our team <span style="color:var(--teal);font-weight:600">switched / has switched</span> to fully remote in 2020.</li>
+            <li>I <span style="color:var(--teal);font-weight:600">worked / have worked</span> from home for three years now.</li>
+            <li><span style="color:var(--teal);font-weight:600">Did you ever try / Have you ever tried</span> managing a fully remote team?</li>
+            <li>We <span style="color:var(--teal);font-weight:600">lost / have lost</span> two great engineers last quarter because of the return-to-office policy.</li>
+            <li>She <span style="color:var(--teal);font-weight:600">just sent / has just sent</span> the async update, so we don't need a call.</li>
+            <li>I <span style="color:var(--teal);font-weight:600">never met / have never met</span> half of my team in person.</li>
+            <li>The company <span style="color:var(--teal);font-weight:600">introduced / has introduced</span> the hybrid policy when the CEO changed — back in 2022.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_g1')">show answers ▾</button>
+          <div class="reveal-content" id="rev_g1">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>switched</strong> — "in 2020" = specific finished time → Past Simple</li>
+                <li><strong>have worked</strong> — "for three years now" = still happening → Present Perfect</li>
+                <li><strong>Have you ever tried</strong> — "ever" = life experience → Present Perfect</li>
+                <li><strong>lost</strong> — "last quarter" = finished time period → Past Simple</li>
+                <li><strong>has just sent</strong> — "just" = very recently, result relevant now → Present Perfect</li>
+                <li><strong>have never met</strong> — "never" = up to now → Present Perfect</li>
+                <li><strong>introduced</strong> — "back in 2022" = specific finished time → Past Simple</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAMMAR 2: CONDITIONALS -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔀</div>
+          <span class="activity-title">Ex. 2 — Conditionals in context</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the sentences using the correct conditional form of the verb in brackets.</p>
+          <ol class="exercise">
+            <li>If companies <input class="fill-input" size="14" type="text" placeholder="(not monitor)"> their employees so closely, they <input class="fill-input" size="14" type="text" placeholder="(retain)"> more talent.</li>
+            <li>If you <input class="fill-input" size="12" type="text" placeholder="(work)"> remotely right now, what <input class="fill-input" size="12" type="text" placeholder="(be)"> the hardest part?</li>
+            <li>If we <input class="fill-input" size="14" type="text" placeholder="(design)"> the onboarding better, the new hire <input class="fill-input" size="16" type="text" placeholder="(not feel)"> so isolated.</li>
+            <li>Remote work <input class="fill-input" size="12" type="text" placeholder="(be)"> much easier if we all <input class="fill-input" size="12" type="text" placeholder="(have)"> overlap hours.</li>
+            <li>If I <input class="fill-input" size="14" type="text" placeholder="(know)"> the answer, I <input class="fill-input" size="12" type="text" placeholder="(tell)"> you — but I genuinely don't.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_g2')">show answers ▾</button>
+          <div class="reveal-content" id="rev_g2">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>didn't monitor</strong> / <strong>would retain</strong> — 2nd conditional (hypothetical present)</li>
+                <li><strong>were working</strong> / <strong>would be</strong> — 2nd conditional</li>
+                <li><strong>had designed</strong> / <strong>wouldn't have felt</strong> — 3rd conditional (past regret)</li>
+                <li><strong>would be</strong> / <strong>had</strong> — 2nd conditional</li>
+                <li><strong>knew</strong> / <strong>would tell</strong> — 2nd conditional</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAMMAR 3: OPEN SPEAKING -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🗣️</div>
+          <span class="activity-title">Ex. 3 — Say it in your own words</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete these sentences so they're true for you. Speak naturally — no writing needed.</p>
+          <ol class="exercise">
+            <li>If I could redesign the way my team communicates, I would&nbsp;&nbsp;<span style="color:var(--teal)">_______</span>.</li>
+            <li>I've never&nbsp;&nbsp;<span style="color:var(--teal)">_______</span>&nbsp;&nbsp;at work, but I'd like to try.</li>
+            <li>If remote work hadn't happened, I think I would have&nbsp;&nbsp;<span style="color:var(--teal)">_______</span>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- GRAMMAR 4: ERROR CORRECTION -->
+<div class="activity">
+    <div class="activity-head">
+      <div class="activity-icon">🔍</div>
+      <span class="activity-title">Ex. 4 — Spot the mistake & fix it</span>
+    </div>
+    <div class="activity-body">
+      <p>Each sentence has one grammar mistake. Find it and correct it.</p>
+      <ol class="exercise">
+        <li>I am working here since 2019. <input class="fill-input" size="30" type="text" placeholder="correction..."></li>
+        <li>She didn't went to the standup yesterday. <input class="fill-input" size="30" type="text" placeholder="correction..."></li>
+        <li>If I will have more time, I would learn a new framework. <input class="fill-input" size="30" type="text" placeholder="correction..."></li>
+        <li>We have finished the sprint last Friday. <input class="fill-input" size="30" type="text" placeholder="correction..."></li>
+        <li>He is more experienced than me, but I work here more longer. <input class="fill-input" size="30" type="text" placeholder="correction..."></li>
+        <li>I never met a developer who don't care about code quality. <input class="fill-input" size="30" type="text" placeholder="correction..."></li>
+        <li>The team is work remotely since the pandemic. <input class="fill-input" size="30" type="text" placeholder="correction..."></li>
+      </ol>
+      <button class="reveal-btn" onclick="toggleReveal('rev_g4')">show answers ▾</button>
+      <div class="reveal-content" id="rev_g4">
+        <div class="answer-key">
+          <div class="ak-label">Answer key</div>
+          <ol>
+            <li><strong>I have worked</strong> here since 2019. — since = Present Perfect, not continuous</li>
+            <li>She <strong>didn't go</strong> to the standup yesterday. — after didn't, base form</li>
+            <li>If I <strong>had</strong> more time, I would learn a new framework. — 2nd conditional: no "will" in if-clause</li>
+            <li>We <strong>finished</strong> the sprint last Friday. — "last Friday" = specific time → Past Simple</li>
+            <li>I work here <strong>longer</strong>. — no "more" with -er comparatives</li>
+            <li>I have <strong>never met</strong> a developer who <strong>doesn't</strong> care. — Present Perfect + 3rd person -s</li>
+            <li>The team <strong>has been working</strong> remotely since the pandemic. — since = Perfect, not simple continuous</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- GRAMMAR 5: SENTENCE TRANSFORMATION -->
+  <div class="activity">
+    <div class="activity-head">
+      <div class="activity-icon">🔄</div>
+      <span class="activity-title">Ex. 5 — Rewrite without changing the meaning</span>
+    </div>
+    <div class="activity-body">
+      <p>Rewrite each sentence using the word in bold. Don't change the meaning.</p>
+      <ol class="exercise">
+        <li>The last time I worked in an office was in 2021.<br>
+        <strong>SINCE</strong> → I <input class="fill-input" size="35" type="text" placeholder="..."> 2021.</li>
+  
+        <li>It's possible that remote work will become the norm everywhere.<br>
+        <strong>MIGHT</strong> → Remote work <input class="fill-input" size="35" type="text" placeholder="..."></li>
+  
+        <li>She started learning TypeScript two years ago and she still does it.<br>
+        <strong>FOR</strong> → She <input class="fill-input" size="35" type="text" placeholder="..."> two years.</li>
+  
+        <li>It wasn't necessary for him to come to the office, but he did.<br>
+        <strong>HAVE</strong> → He <input class="fill-input" size="35" type="text" placeholder="..."> to the office, but he did.</li>
+  
+        <li>They built the whole feature without any help from senior devs.<br>
+        <strong>THEMSELVES</strong> → They built the whole feature <input class="fill-input" size="25" type="text" placeholder="..."></li>
+  
+        <li>My manager always forgets to share the meeting notes.<br>
+        <strong>NEVER</strong> → My manager <input class="fill-input" size="35" type="text" placeholder="..."></li>
+      </ol>
+      <button class="reveal-btn" onclick="toggleReveal('rev_g5')">show answers ▾</button>
+      <div class="reveal-content" id="rev_g5">
+        <div class="answer-key">
+          <div class="ak-label">Answer key</div>
+          <ol>
+            <li>I <strong>haven't worked in an office since</strong> 2021.</li>
+            <li>Remote work <strong>might become the norm everywhere.</strong></li>
+            <li>She <strong>has been learning TypeScript for</strong> two years.</li>
+            <li>He <strong>didn't have to come</strong> to the office, but he did.</li>
+            <li>They built the whole feature <strong>by themselves.</strong></li>
+            <li>My manager <strong>never remembers to share</strong> the meeting notes.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- GRAMMAR 6: SPOT THE DIFFERENCE -->
+  <div class="activity">
+    <div class="activity-head">
+      <div class="activity-icon">⚖️</div>
+      <span class="activity-title">Ex. 6 — Same words, different meaning</span>
+    </div>
+    <div class="activity-body">
+      <p>These pairs look similar but mean something different. Can you explain the difference?</p>
+      <ol class="exercise">
+        <li>
+          <strong>A.</strong> I worked at that startup for two years.<br>
+          <strong>B.</strong> I've worked at that startup for two years.<br>
+          <input class="fill-input" style="min-width:90%;margin-top:6px" type="text" placeholder="What's the difference?">
+        </li>
+        <li>
+          <strong>A.</strong> If we hire more devs, we'll ship faster.<br>
+          <strong>B.</strong> If we hired more devs, we'd ship faster.<br>
+          <input class="fill-input" style="min-width:90%;margin-top:6px" type="text" placeholder="What's the difference?">
+        </li>
+        <li>
+          <strong>A.</strong> She's working on the backend today.<br>
+          <strong>B.</strong> She works on the backend.<br>
+          <input class="fill-input" style="min-width:90%;margin-top:6px" type="text" placeholder="What's the difference?">
+        </li>
+      </ol>
+      <button class="reveal-btn" onclick="toggleReveal('rev_g6')">show answers ▾</button>
+      <div class="reveal-content" id="rev_g6">
+        <div class="answer-key">
+          <div class="ak-label">Answer key</div>
+          <ol>
+            <li><strong>A</strong> = I don't work there anymore (finished). <strong>B</strong> = I still work there now.</li>
+            <li><strong>A</strong> = realistic plan or real possibility. <strong>B</strong> = hypothetical — we probably won't, but imagine if we did.</li>
+            <li><strong>A</strong> = just today, temporary. <strong>B</strong> = her usual role, permanent habit.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

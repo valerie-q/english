@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 5</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:          #33322b;
+      --ink-soft:     #504d35;
+      --paper:        #f9f7ee;
+      --paper-dark:   #eeead8;
+      --accent:       #cfbb23;
+      --accent-dark:  #a59837;
+      --accent-light: #fadd00;
+      --olive:        #7a733d;
+      --olive-dark:   #504d35;
+      --warm-grey:    #7a733d;
+      --border:       #ddd8b0;
+      --white:        #ffffff;
+      --phase-1:      #504d35;
+      --phase-2:      #7a733d;
+      --phase-3:      #a59837;
+      --phase-4:      #33322b;
+      --phase-5:      #cfbb23;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+
+    .header { background:var(--ink); color:var(--white); padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .header::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle,rgba(207,187,35,0.3) 0%,transparent 70%); }
+    .header::after  { content:''; position:absolute; bottom:-40px; left:20%; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(122,115,61,0.25) 0%,transparent 70%); }
+    .header-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,56px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .header h1 em { font-style:italic; color:var(--accent-light); }
+    .header-meta { display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+    .meta-chip .dot { width:6px; height:6px; border-radius:50%; background:var(--accent-light); flex-shrink:0; }
+    .meta-chip strong { color:var(--white); }
+
+    .objectives-wrap { max-width:1100px; margin:0 auto; padding:32px 40px; }
+    .objectives-box { background:var(--white); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:4px; padding:24px 28px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:700px){.objectives-box{grid-template-columns:1fr}.header,.objectives-wrap,.main{padding-left:20px;padding-right:20px}}
+    .obj-col h3 { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:10px; }
+    .obj-list { list-style:none; }
+    .obj-list li { font-size:14px; padding:5px 0 5px 18px; position:relative; color:var(--ink-soft); border-bottom:1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom:none; }
+    .obj-list li::before { content:'✓'; position:absolute; left:0; color:var(--accent-dark); font-size:12px; font-weight:600; }
+
+    .main { max-width:1100px; margin:0 auto; padding:0 40px 60px; }
+
+    .phase { margin-bottom:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .phase-header { padding:18px 24px; display:flex; align-items:center; gap:16px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:20px; font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase-num { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:4px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); line-height:1.2; }
+    .phase-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .phase-body { padding:0 24px 24px; }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-1 .phase-header{background:var(--phase-1)} .phase-2 .phase-header{background:var(--phase-2)}
+    .phase-3 .phase-header{background:var(--phase-3)} .phase-4 .phase-header{background:var(--phase-4)}
+    .phase-5 .phase-header{background:var(--phase-5); color:var(--ink);}
+    .phase-5 .phase-num { background:rgba(0,0,0,0.15); color:var(--ink); }
+    .phase-5 .phase-title { color:var(--ink); }
+    .phase-5 .phase-sub { color:rgba(0,0,0,0.55); }
+    .phase-5 .phase-header::after { color:rgba(0,0,0,0.4); }
+
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:16px; overflow:hidden; }
+    .activity-head { background:var(--paper); padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
+    .activity-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .activity-title { font-weight:600; font-size:14px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:var(--warm-grey); background:var(--paper-dark); padding:3px 8px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:16px; }
+
+    .note-box { background:#f5f2d8; border-left:3px solid var(--accent); border-radius:0 4px 4px 0; padding:12px 16px; margin:12px 0; font-size:14px; color:var(--ink-soft); line-height:1.6; }
+    .note-box em { font-style:italic; color:var(--ink); }
+
+    .vocab-table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
+    .vocab-table th { background:var(--ink); color:var(--white); padding:8px 12px; text-align:left; font-weight:500; font-size:12px; }
+    .vocab-table td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--paper); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+    .vocab-table .ans { color:var(--accent-dark); font-style:italic; font-size:13px; }
+
+    .phrase-box { background:var(--ink); color:var(--white); border-radius:4px; padding:16px 20px; margin:12px 0; }
+    .phrase-box .phrase-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent-light); margin-bottom:10px; }
+    .phrase-row { display:flex; align-items:baseline; gap:16px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .phrase-row:last-child { border-bottom:none; }
+    .phrase-en { font-size:15px; font-weight:500; flex:1; }
+    .phrase-de { font-size:13px; color:rgba(255,255,255,0.5); flex:1; }
+
+    .steps { list-style:none; margin:12px 0; }
+    .steps li { display:flex; gap:14px; padding:10px 0; border-bottom:1px dotted var(--border); font-size:14px; line-height:1.5; align-items:flex-start; }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--white); background:var(--accent-dark); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:12px 16px; margin:12px 0; font-size:13px; }
+    .answer-key .ak-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .answer-key ol { padding-left:20px; }
+    .answer-key ol li { padding:3px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--accent-dark); }
+
+    .word-box { background:var(--white); border:2px solid var(--accent); border-radius:6px; padding:12px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--accent-dark); width:100%; margin-bottom:4px; }
+    .word-chip { background:var(--accent-dark); color:var(--white); font-size:13px; font-weight:600; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .word-box.neutral { border-color:var(--border); }
+    .word-box.neutral .word-chip { background:var(--ink-soft); }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:11px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:5px 14px; border-radius:20px; cursor:pointer; margin-top:10px; transition:all 0.2s; }
+    .reveal-btn:hover { border-color:var(--accent-dark); color:var(--accent-dark); }
+    .reveal-content { display:none; margin-top:10px; }
+    .reveal-content.open { display:block; }
+
+    .grammar-box { border:2px solid var(--accent); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .grammar-box-header { background:var(--accent); padding:10px 16px; }
+    .grammar-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); font-weight:600; }
+    .grammar-box-body { background:var(--white); padding:16px; }
+    .grammar-row { display:flex; gap:12px; padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; align-items:baseline; }
+    .grammar-row:last-child { border-bottom:none; }
+    .grammar-plus  { color:#3a6e2a; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-minus { color:#b03020; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-q     { color:var(--accent-dark); font-weight:700; flex-shrink:0; width:16px; }
+
+    .phone-script { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .phone-header { background:var(--paper-dark); padding:8px 16px; font-family:'DM Mono',monospace; font-size:11px; color:var(--warm-grey); border-bottom:1px solid var(--border); }
+    .phone-line { display:flex; gap:12px; padding:9px 16px; border-bottom:1px solid var(--border); font-size:14px; }
+    .phone-line:last-child { border-bottom:none; }
+    .phone-line:nth-child(even) { background:var(--paper); }
+    .phone-speaker { font-family:'DM Mono',monospace; font-size:10px; color:var(--accent-dark); font-weight:600; white-space:nowrap; width:80px; flex-shrink:0; margin-top:1px; }
+    .phone-text { color:var(--ink-soft); line-height:1.5; }
+
+    /* speaking box */
+    .speaking-box { border:2px solid var(--accent-dark); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .speaking-box-header { background:var(--accent-dark); padding:10px 16px; }
+    .speaking-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--white); font-weight:600; }
+    .speaking-box-body { background:var(--white); padding:16px; }
+    .speaking-section { margin-bottom:14px; }
+    .speaking-section:last-child { margin-bottom:0; }
+    .speaking-section-title { font-size:12px; font-weight:700; color:var(--accent-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; font-family:'DM Mono',monospace; }
+    .speaking-row { display:flex; gap:12px; padding:5px 0; border-bottom:1px dotted var(--border); font-size:14px; }
+    .speaking-row:last-child { border-bottom:none; }
+    .speaking-q { flex:1; color:var(--ink); }
+    .speaking-a { flex:1; color:var(--ink-soft); font-style:italic; }
+
+    /* email block */
+    .email-block { border:1px solid var(--border); border-radius:4px; overflow:hidden; margin:12px 0; font-size:14px; }
+    .email-header { background:var(--paper-dark); padding:8px 14px; font-size:12px; color:var(--warm-grey); border-bottom:1px solid var(--border); display:flex; gap:8px; align-items:center; }
+    .email-header span { font-weight:600; color:var(--ink); }
+    .email-body { padding:14px; color:var(--ink-soft); line-height:1.7; }
+
+    /* faq block */
+    .faq-block { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .faq-header { background:var(--accent-dark); color:var(--white); padding:8px 14px; font-weight:600; font-size:13px; }
+    .faq-item { padding:12px 14px; border-bottom:1px solid var(--border); font-size:14px; }
+    .faq-item:last-child { border-bottom:none; }
+    .faq-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:600; color:var(--accent-dark); margin-bottom:4px; }
+    .faq-text { color:var(--ink-soft); line-height:1.6; }
+    .faq-text strong { color:var(--ink); }
+
+    input[type="text"] { border:none; border-bottom:1px solid var(--accent-dark); background:transparent; font-size:14px; color:var(--ink); padding:2px 4px; outline:none; }
+
+    .src-bp  { background:#504d35; color:white; }
+    .src-you { background:#7a733d; color:white; }
+    .icon-warmup  { background:#f5f2d8; }
+    .icon-vocab   { background:#f0edcc; }
+    .icon-grammar { background:#f5f2d8; }
+    .icon-speaking{ background:#edeab8; }
+    .icon-wrap    { background:#f0edcc; }
+
+    p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:14px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom:none; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 5<br><em>Doing Business II</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 Unit 2.1 + 2.3 + 2.4</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES -->
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Finish countable/uncountable + can/can't from Lesson 4</li>
+        <li>Complete phone order roleplay</li>
+        <li>Reading: email enquiries and FAQs</li>
+        <li>Grammar: There is / There are</li>
+        <li>Work Skills: Making agreements</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>How many / How much / a lot of / some / any</li>
+        <li>Can/can't — possibility</li>
+        <li>exchange, refund, return, purchase, discount</li>
+        <li>There is/are · There isn't/aren't · Is there / Are there?</li>
+        <li>Agreement phrases: How about…? / Does the price include…?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Finishing Lesson 4 — Quantities + Can/Can't</div>
+        <div class="phase-sub">BP A2 p.18–19 ex. 4B, 5, 6 · p.20 grammar + roleplay</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">📐</div>
+          <span class="activity-title">Grammar — Countable / Uncountable</span>
+          <span class="activity-src src-bp">BP p.18</span>
+        </div>
+        <div class="activity-body">
+          <div class="grammar-box">
+            <div class="grammar-box-header"><span>Things you CAN count vs CANNOT count</span></div>
+            <div class="grammar-box-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p style="font-weight:600;color:var(--ink);margin-bottom:8px;">✓ Countable — a/an · many · a lot of · some · any</p>
+                  <p style="font-size:13px;"><strong>How many</strong> deliveries do you have?</p>
+                  <p style="font-size:13px;">We have <strong>a lot of</strong> / <strong>not many</strong> / <strong>some</strong> deliveries.</p>
+                  <p style="font-size:13px;">We don't have <strong>any</strong> deliveries on Saturday.</p>
+                </div>
+                <div class="col-md-6">
+                  <p style="font-weight:600;color:var(--ink);margin-bottom:8px;">✗ Uncountable — much · a lot of · some · any</p>
+                  <p style="font-size:13px;"><strong>How much</strong> coffee do you sell?</p>
+                  <p style="font-size:13px;">We sell <strong>a lot of</strong> / <strong>not much</strong> coffee.</p>
+                  <p style="font-size:13px;">We don't sell <strong>any</strong> coffee on weekends.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top:14px;"><strong>Ex. 4B — Complete with a lot of / any / much / many:</strong></p>
+          <div class="word-box neutral"><div class="word-box-label">choose from</div>
+            <span class="word-chip">a lot of</span><span class="word-chip">any</span>
+            <span class="word-chip">much</span><span class="word-chip">many</span>
+          </div>
+          <ol class="exercise">
+            <li>Our company sells <input type="text" style="width:90px;"> T-shirts in the summer.</li>
+            <li>The shop doesn't sell <input type="text" style="width:90px;"> winter jackets, only summer ones.</li>
+            <li>The factory makes <input type="text" style="width:90px;"> coffee. It's a big export for us.</li>
+            <li>We don't make <input type="text" style="width:90px;"> money doing this. We do it for free.</li>
+            <li>We don't eat <input type="text" style="width:90px;"> pasta. Only a small amount.</li>
+            <li>This shop doesn't sell <input type="text" style="width:90px;"> jumpers. Maybe one or two a week.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev1')">show answers ▾</button>
+          <div class="reveal-content" id="rev1">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>a lot of</strong></li><li><strong>many</strong></li><li><strong>a lot of</strong></li>
+              <li><strong>much</strong></li><li><strong>much</strong></li><li><strong>many</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 5 — Complete with a, an or some</span>
+          <span class="activity-src src-bp">BP p.19</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box neutral"><div class="word-box-label">choose from</div>
+            <span class="word-chip">a</span><span class="word-chip">an</span><span class="word-chip">some</span>
+          </div>
+          <ol class="exercise">
+            <li>This is <input type="text" style="width:60px;"> old warehouse but <input type="text" style="width:60px;"> people still work here.</li>
+            <li>He usually has <input type="text" style="width:60px;"> sandwich and <input type="text" style="width:60px;"> fruit for lunch.</li>
+            <li>The truck arrives in <input type="text" style="width:60px;"> hour to deliver to <input type="text" style="width:60px;"> UK cities.</li>
+            <li>I write <input type="text" style="width:60px;"> email to <input type="text" style="width:60px;"> customer in England every week.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev2')">show answers ▾</button>
+          <div class="reveal-content" id="rev2">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>an</strong> / <strong>some</strong></li>
+              <li><strong>a</strong> / <strong>some</strong></li>
+              <li><strong>an</strong> / <strong>some</strong></li>
+              <li><strong>an</strong> / <strong>a</strong></li>
+            </ol></div>
+          </div>
+          <div class="note-box" style="margin-top:10px;"><strong>an hour</strong> — "h" is silent → vowel sound /aʊ/. Same: <em>an honest person, an MBA.</em></div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🔢</div>
+          <span class="activity-title">Ex. 6 — how many or how much? Then match answers (a–f)</span>
+          <span class="activity-src src-bp">BP p.19</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box neutral"><div class="word-box-label">many or much?</div>
+            <span class="word-chip">many</span><span class="word-chip">much</span>
+          </div>
+          <ol class="exercise">
+            <li>How <input type="text" style="width:70px;"> people work in your company?</li>
+            <li>How <input type="text" style="width:70px;"> money do you spend on travel each week?</li>
+            <li>How <input type="text" style="width:70px;"> emails do you receive every day?</li>
+            <li>How <input type="text" style="width:70px;"> time do you have for lunch?</li>
+            <li>How <input type="text" style="width:70px;"> coffee do you drink every day?</li>
+            <li>How <input type="text" style="width:70px;"> hours do you work each week?</li>
+          </ol>
+          <div class="word-box" style="margin-top:8px;"><div class="word-box-label">match with</div>
+            <span class="word-chip">a. On some days none. When busy, a lot.</span>
+            <span class="word-chip">b. A lot. Train costs £50 a week!</span>
+            <span class="word-chip">c. Not many. About 20 in the office.</span>
+            <span class="word-chip">d. About 40 a week, Mon–Fri.</span>
+            <span class="word-chip">e. Not much. About 30 minutes.</span>
+            <span class="word-chip">f. A lot! It helps me concentrate.</span>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev3')">show answers ▾</button>
+          <div class="reveal-content" id="rev3">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>many</strong> → c</li><li><strong>much</strong> → b</li><li><strong>many</strong> → a</li>
+              <li><strong>much</strong> → e</li><li><strong>much</strong> → f</li><li><strong>many</strong> → d</li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">📐</div>
+          <span class="activity-title">Grammar — CAN / CAN'T for possibility</span>
+          <span class="activity-src src-bp">BP p.21</span>
+        </div>
+        <div class="activity-body">
+          <div class="grammar-box">
+            <div class="grammar-box-header"><span>CAN / CAN'T</span></div>
+            <div class="grammar-box-body">
+              <div class="grammar-row"><span class="grammar-plus">+</span><span>We <strong>can</strong> deliver the order on Monday. &nbsp;·&nbsp; I <strong>can</strong> call you back in 10 minutes.</span></div>
+              <div class="grammar-row"><span class="grammar-minus">−</span><span>They <strong>can't</strong> deliver today. &nbsp;·&nbsp; I'm sorry, we <strong>can't</strong> — we don't have any in stock.</span></div>
+              <div class="grammar-row"><span class="grammar-q">?</span><span><strong>Can</strong> you deliver by Monday? &nbsp;→&nbsp; Yes, we <strong>can</strong>. / Sorry, we <strong>can't</strong>.</span></div>
+            </div>
+          </div>
+          <div class="note-box" style="margin-top:10px;"><strong>Note:</strong> can/can't never changes — no -s for he/she. After can: verb with no -s and no <em>to</em>. <em>She <strong>can deliver</strong></em> (not "cans" / "can to deliver").</div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">🎭</div>
+          <span class="activity-title">Roleplay — Phone order</span>
+          <span class="activity-src src-you">ROLEPLAY</span>
+        </div>
+        <div class="activity-body">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;">
+                <div style="background:var(--paper-dark);padding:9px 14px;font-weight:600;font-size:13px;border-bottom:1px solid var(--border);">Round 1 — You are the CUSTOMER</div>
+                <div style="padding:14px;font-size:14px;color:var(--ink-soft);line-height:1.8;">
+                  <strong>Company:</strong> Mercedes-Benz R&D<br>
+                  <strong>Supplier:</strong> TechConnect GmbH<br>
+                  <strong>Product:</strong> Premium cable connectors, model PC-220<br>
+                  <strong>Quantity:</strong> 300 units<br>
+                  <strong>Delivery:</strong> by Wednesday 11th<br>
+                  <strong>Also ask:</strong> total cost
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;">
+                <div style="background:var(--paper-dark);padding:9px 14px;font-weight:600;font-size:13px;border-bottom:1px solid var(--border);">Round 2 — You are the SALESPERSON (Laura)</div>
+                <div style="padding:14px;font-size:14px;color:var(--ink-soft);line-height:1.8;">
+                  <strong>In stock:</strong> only 200 units<br>
+                  <strong>Can deliver:</strong> 200 by Wednesday, rest by Friday<br>
+                  <strong>Price:</strong> €0.85 per unit<br>
+                  <strong>Delivery:</strong> free of charge<br>
+                  <strong>Total (300 units):</strong> €255
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="phrase-box">
+            <div class="phrase-label">Key phrases</div>
+            <div class="phrase-row"><span class="phrase-en">[Company]. [Name] speaking.</span><span class="phrase-de">відповідь на дзвінок</span></div>
+            <div class="phrase-row"><span class="phrase-en">I'd like to order…</span><span class="phrase-de">Я хотіла б замовити…</span></div>
+            <div class="phrase-row"><span class="phrase-en">Can you deliver by [date]?</span><span class="phrase-de">Ви можете доставити до [дати]?</span></div>
+            <div class="phrase-row"><span class="phrase-en">I'm very sorry, we can't.</span><span class="phrase-de">На жаль, ми не можемо.</span></div>
+            <div class="phrase-row"><span class="phrase-en">We don't have any in stock.</span><span class="phrase-de">Цього немає на складі.</span></div>
+            <div class="phrase-row"><span class="phrase-en">How much is that in total?</span><span class="phrase-de">Скільки це загалом?</span></div>
+            <div class="phrase-row"><span class="phrase-en">I'll confirm your order on the system.</span><span class="phrase-de">Я підтверджу замовлення в системі.</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 2 ══ -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Email Enquiries — Reading + Vocabulary</div>
+        <div class="phase-sub">BP A2 p.22, ex. 1A + ex. 2</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🔤</div>
+          <span class="activity-title">Ex. 1A — Match words to definitions</span>
+          <span class="activity-src src-bp">BP p.22</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box"><div class="word-box-label">words</div>
+            <span class="word-chip">exchange</span><span class="word-chip">purchases</span>
+            <span class="word-chip">refund</span><span class="word-chip">return</span>
+          </div>
+          <ol class="exercise">
+            <li>things you buy → <input type="text" style="width:110px;"></li>
+            <li>take or send back something you buy in a shop or online → <input type="text" style="width:110px;"></li>
+            <li>get something different for something you buy and don't want → <input type="text" style="width:110px;"></li>
+            <li>get money back for something you buy but don't want → <input type="text" style="width:110px;"></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev4')">show answers ▾</button>
+          <div class="reveal-content" id="rev4">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>purchases</strong></li><li><strong>return</strong></li>
+              <li><strong>exchange</strong></li><li><strong>refund</strong></li>
+            </ol></div>
+          </div>
+          <div class="word-box"><div class="word-box-label">Answer the questions:</div>Do you sometimes return things you buy in shops online?<br> Do you prefer to exchange your purchases or get a refund?
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📋</div>
+          <span class="activity-title">Ex. 2 — Read the FAQs. Match questions (a–d) with sections (1–4)</span>
+          <span class="activity-src src-bp">BP p.22</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box"><div class="word-box-label">questions to match</div>
+            <span class="word-chip">a. Can I return my order?</span>
+            <span class="word-chip">b. Is there a delivery charge?</span>
+            <span class="word-chip">c. Can I exchange or cancel my order?</span>
+            <span class="word-chip">d. Are there any discounts for large orders?</span>
+          </div>
+
+          <div class="faq-block">
+            <div class="faq-header">Orders and returns FAQs</div>
+            <div class="faq-item">
+              <div class="faq-num">1 — <input type="text" style="width:200px;"></div>
+              <div class="faq-text">Delivery is free of charge in the EU for orders of €50 and over. <strong>There is a charge</strong> for orders under €50. Click here for delivery charges.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-num">2 — <input type="text" style="width:200px;"></div>
+              <div class="faq-text">Yes, <strong>there are some discounts</strong>. Please contact Customer Services for information.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-num">3 — <input type="text" style="width:200px;"></div>
+              <div class="faq-text">Yes, <strong>there is some time</strong> to change or cancel your order before delivery. Please contact Customer Services as soon as possible.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-num">4 — <input type="text" style="width:200px;"></div>
+              <div class="faq-text">Yes, you have thirty days to return your online purchases free of charge. <strong>There are two easy ways</strong> you can return your order. Click here for details.</div>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev5')">show answers ▾</button>
+          <div class="reveal-content" id="rev5">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li>1 → <strong>b</strong> — Is there a delivery charge?</li>
+              <li>2 → <strong>d</strong> — Are there any discounts for large orders?</li>
+              <li>3 → <strong>c</strong> — Can I exchange or cancel my order?</li>
+              <li>4 → <strong>a</strong> — Can I return my order?</li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📧</div>
+          <span class="activity-title">Ex. 3A — Read the replies. Which FAQ does each enquiry refer to?</span>
+          <span class="activity-src src-bp">BP p.22</span>
+        </div>
+        <div class="activity-body">
+      
+          <div class="word-box neutral">
+            <div class="word-box-label">phrases in the box</div>
+            <span class="word-chip">Please find attached</span>
+            <span class="word-chip">Please contact us</span>
+            <span class="word-chip">Thank you for your enquiry,</span>
+            <span class="word-chip">In response to your enquiry,</span>
+          </div>
+      
+          <div class="email-block" style="margin-top:14px;">
+            <div class="email-header">✉️ &nbsp;<span>Email A</span> &nbsp;— Dear Ms Mayer &nbsp;<span style="margin-left:auto;">FAQ section: <input type="text" style="width:30px;"></span></div>
+            <div class="email-body">
+              Dear Ms Mayer,<br><br>
+              <sup>1</sup><input type="text" style="width:200px;"> <strong>there are two ways</strong> you can return your order. You can go to one of our stores and they can exchange the goods or refund your money.<br>
+              <sup>2</sup><input type="text" style="width:200px;"> a list of our stores. We can also collect the goods from your home address free of charge. Please click on <u>this link</u> to complete the return form.<br>
+              <sup>3</sup><input type="text" style="width:200px;"> if you have any questions.<br><br>
+              Regards,
+            </div>
+          </div>
+      
+          <div class="email-block">
+            <div class="email-header">✉️ &nbsp;<span>Email B</span> &nbsp;— Dear Mr Weber &nbsp;<span style="margin-left:auto;">FAQ section: <input type="text" style="width:30px;"></span></div>
+            <div class="email-body">
+              Dear Mr Weber,<br><br>
+              <sup>4</sup><input type="text" style="width:200px;"> <strong>There aren't any delivery charges</strong> in the EU for orders over €50. <strong>There is a charge</strong> for orders €50 and under. Standard delivery costs €4.50 and express delivery costs €6.50.<br><br>
+              Please contact us if you have any questions.<br><br>
+              Regards,
+            </div>
+          </div>
+      
+          <button class="reveal-btn" onclick="toggleReveal('rev3a')">show answers ▾</button>
+          <div class="reveal-content" id="rev3a">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>Email A → FAQ section <strong>4</strong> (Can I return my order?)</li>
+                <li>Email B → FAQ section <strong>1</strong> (Is there a delivery charge?)</li>
+              </ol>
+              <p style="margin-top:8px;"><strong>Phrases:</strong></p>
+              <ol>
+                <li><strong>In response to your enquiry,</strong></li>
+                <li><strong>Please find attached</strong></li>
+                <li><strong>Please contact us</strong></li>
+                <li><strong>Thank you for your enquiry,</strong></li>
+              </ol>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Grammar: There is / There are</div>
+        <div class="phase-sub">BP A2 p.23 · ex. 4 + ex. 5A</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">📐</div>
+          <span class="activity-title">Grammar box — Saying something exists</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+            <div class="note-box" style="margin-top:12px;">
+                <strong>Коли використовуємо There is / There are?</strong><br><br>
+                Ми використовуємо <strong>there is / there are</strong> коли хочемо сказати що щось <em>існує</em> або <em>є в наявності</em> — тобто коли вперше згадуємо щось або говоримо про кількість.<br><br>
+                <strong>There is</strong> → одна річ (singular):<br>
+                <em>There is a problem with your order.</em> — Є проблема з вашим замовленням.<br>
+                <em>There's a kitchen on the first floor.</em> — На першому поверсі є кухня.<br><br>
+                <strong>There are</strong> → більше однієї (plural):<br>
+                <em>There are some discounts for large orders.</em> — Є знижки для великих замовлень.<br>
+                <em>There are two ways to return your order.</em> — Є два способи повернути замовлення.<br><br>
+                <strong>Порівняй з "it is":</strong><br>
+                <em>There is</em> — ми вперше говоримо про щось (воно існує)<br>
+                <em>It is</em> — ми вже знаємо про що мова, уточнюємо деталі<br>
+                <em>There's a charge for delivery. <strong>It's</strong> €4.50.</em> — Є плата за доставку. Вона становить €4.50.
+              </div>
+          <div class="grammar-box">
+            <div class="grammar-box-header"><span>THERE IS / THERE ARE</span></div>
+            <div class="grammar-box-body">
+              <div class="grammar-row"><span class="grammar-plus">+</span><span><strong>There is (There's)</strong> a delivery charge. &nbsp;·&nbsp; <strong>There are</strong> some discounts on large orders.</span></div>
+              <div class="grammar-row"><span class="grammar-minus">−</span><span><strong>There isn't</strong> a store near me. &nbsp;·&nbsp; <strong>There aren't any</strong> delivery charges in the EU.</span></div>
+              <div class="grammar-row"><span class="grammar-q">?</span><span><strong>Is there</strong> a discount? → Yes, there <strong>is</strong>. / No, there <strong>isn't</strong>.</span></div>
+              <div class="grammar-row"><span class="grammar-q">?</span><span><strong>Are there any</strong> deliveries at the weekend? → Yes, there <strong>are</strong>. / No, there <strong>aren't</strong>.</span></div>
+            </div>
+          </div>
+          <div class="note-box" style="margin-top:10px;">
+            <strong>There is</strong> + одна річ (singular) &nbsp;·&nbsp; <strong>There are</strong> + більше однієї (plural)<br>
+            <em>There is <strong>a</strong> problem.</em> &nbsp;·&nbsp; <em>There are <strong>some</strong> problems.</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 4 — Choose the correct option</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>There <em>is / are</em> some problems in the warehouse.</li>
+            <li>There <em>is / are</em> a problem with your order.</li>
+            <li>There <em>is / are</em> some products that you can't return.</li>
+            <li>There <em>is / are</em> some food in this order.</li>
+            <li>There isn't <em>any / some</em> information on the website.</li>
+            <li>There aren't <em>any / some</em> discounts on orders.</li>
+            <li>There <em>isn't / aren't</em> any white boxes in stock.</li>
+            <li>There <em>isn't / aren't</em> any space in the truck.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev6')">show answers ▾</button>
+          <div class="reveal-content" id="rev6">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>are</strong></li><li><strong>is</strong></li><li><strong>are</strong></li><li><strong>is</strong></li>
+              <li><strong>any</strong></li><li><strong>any</strong></li><li><strong>aren't</strong></li><li><strong>isn't</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 5A — Complete the dialogues with there is/isn't or there are/aren't</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--paper-dark);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);">Dialogue 1</div>
+            <div style="padding:14px;font-size:14px;color:var(--ink-soft);line-height:2.0;">
+              A: <sup>1</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;"> any photocopy paper in the office?<br>
+              B: Yes, <sup>2</sup><input type="text" style="width:80px;"> some pink A4 paper. Here you are.<br>
+              A: No, I need white paper. <sup>3</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;"> any white paper?<br>
+              B: Sorry! No, <sup>4</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;">. I'll order some now.
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--paper-dark);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);">Dialogue 2</div>
+            <div style="padding:14px;font-size:14px;color:var(--ink-soft);line-height:2.0;">
+              C: Three new employees start work today. <sup>5</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;"> any desks and computer chairs for them?<br>
+              D: Yes, <sup>6</sup><input type="text" style="width:80px;"> some new furniture in the warehouse.<br>
+              C: <sup>7</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;"> any office equipment for them?<br>
+              D: No, <sup>8</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;">. What exactly do they need?<br>
+              C: Three phones, three computers and a printer.
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev7')">show answers ▾</button>
+          <div class="reveal-content" id="rev7">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <p><strong>Dialogue 1:</strong></p>
+              <ol>
+                <li><strong>Is there</strong></li>
+                <li><strong>there is</strong></li>
+                <li><strong>Is there</strong></li>
+                <li><strong>there isn't</strong></li>
+              </ol>
+              <p style="margin-top:8px;"><strong>Dialogue 2:</strong></p>
+              <ol start="5">
+                <li><strong>Are there</strong></li>
+                <li><strong>there is</strong></li>
+                <li><strong>Is there</strong></li>
+                <li><strong>there isn't</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎧</div>
+          <span class="activity-title">Ex. 5B — Listen and check your answers</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+            <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004876&color=%23f2d5d6&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_2_03-5" title="BP_A2_CB_Tk_2_03" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_2_03</a></div>
+        </div>
+      </div>
+      
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">✍️</div>
+          <span class="activity-title">Ex. 6 — Writing: respond to a customer enquiry</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+          <p>Read the email from a customer. Write a response using phrases from Exercise 3A.</p>
+      
+          <div class="email-block">
+            <div class="email-header">
+              <div>
+                <div><strong>From:</strong> &nbsp;Liudvika Kuliešienė</div>
+                <div><strong>To:</strong> &nbsp;Customer Services</div>
+                <div><strong>Subject:</strong> &nbsp;Prices and discounts for large orders</div>
+              </div>
+            </div>
+            <div class="email-body">
+              I'd like to place a large order for photocopy paper. I can't find any prices on the website. Is there a discount for a large order? Are there any delivery charges?<br><br>
+              Regards,<br>
+              Liudvika Kuliešienė
+            </div>
+          </div>
+      
+          <p style="margin-top:14px;"><strong>Write your reply here:</strong></p>
+          <div class="email-block">
+            <div class="email-header">
+              <div>
+                <div><strong>From:</strong> &nbsp;Customer Services</div>
+                <div><strong>To:</strong> &nbsp;Liudvika Kuliešienė</div>
+                <div><strong>Subject:</strong> &nbsp;Re: Prices and discounts for large orders</div>
+              </div>
+            </div>
+            <div class="email-body">
+              <textarea style="width:100%; min-height:160px; border:none; background:transparent; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); resize:vertical; outline:none;" placeholder="Dear Ms Kuliešienė, ..."></textarea>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+function togglePhase(id){const el=document.getElementById(id);el.classList.toggle('collapsed');}
+function toggleReveal(id){const el=document.getElementById(id);el.classList.toggle('open');const btn=el.previousElementSibling;btn.textContent=el.classList.contains('open')?'hide answers ▴':'show answers ▾';}
+</script>
+</body>
+</html>

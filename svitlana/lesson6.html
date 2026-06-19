@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 5</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:          #33322b;
+      --ink-soft:     #504d35;
+      --paper:        #f9f7ee;
+      --paper-dark:   #eeead8;
+      --accent:       #cfbb23;
+      --accent-dark:  #a59837;
+      --accent-light: #fadd00;
+      --olive:        #7a733d;
+      --olive-dark:   #504d35;
+      --warm-grey:    #7a733d;
+      --border:       #ddd8b0;
+      --white:        #ffffff;
+      --phase-1:      #504d35;
+      --phase-2:      #7a733d;
+      --phase-3:      #a59837;
+      --phase-4:      #33322b;
+      --phase-5:      #cfbb23;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+
+    .header { background:var(--ink); color:var(--white); padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .header::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle,rgba(207,187,35,0.3) 0%,transparent 70%); }
+    .header::after  { content:''; position:absolute; bottom:-40px; left:20%; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(122,115,61,0.25) 0%,transparent 70%); }
+    .header-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,56px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .header h1 em { font-style:italic; color:var(--accent-light); }
+    .header-meta { display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+    .meta-chip .dot { width:6px; height:6px; border-radius:50%; background:var(--accent-light); flex-shrink:0; }
+    .meta-chip strong { color:var(--white); }
+
+    .objectives-wrap { max-width:1100px; margin:0 auto; padding:32px 40px; }
+    .objectives-box { background:var(--white); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:4px; padding:24px 28px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:700px){.objectives-box{grid-template-columns:1fr}.header,.objectives-wrap,.main{padding-left:20px;padding-right:20px}}
+    .obj-col h3 { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:10px; }
+    .obj-list { list-style:none; }
+    .obj-list li { font-size:14px; padding:5px 0 5px 18px; position:relative; color:var(--ink-soft); border-bottom:1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom:none; }
+    .obj-list li::before { content:'✓'; position:absolute; left:0; color:var(--accent-dark); font-size:12px; font-weight:600; }
+
+    .main { max-width:1100px; margin:0 auto; padding:0 40px 60px; }
+
+    .phase { margin-bottom:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .phase-header { padding:18px 24px; display:flex; align-items:center; gap:16px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:20px; font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase-num { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:4px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); line-height:1.2; }
+    .phase-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .phase-body { padding:0 24px 24px; }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-1 .phase-header{background:var(--phase-1)} .phase-2 .phase-header{background:var(--phase-2)}
+    .phase-3 .phase-header{background:var(--phase-3)} .phase-4 .phase-header{background:var(--phase-4)}
+    .phase-5 .phase-header{background:var(--phase-5); color:var(--ink);}
+    .phase-5 .phase-num { background:rgba(0,0,0,0.15); color:var(--ink); }
+    .phase-5 .phase-title { color:var(--ink); }
+    .phase-5 .phase-sub { color:rgba(0,0,0,0.55); }
+    .phase-5 .phase-header::after { color:rgba(0,0,0,0.4); }
+
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:16px; overflow:hidden; }
+    .activity-head { background:var(--paper); padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
+    .activity-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .activity-title { font-weight:600; font-size:14px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:var(--warm-grey); background:var(--paper-dark); padding:3px 8px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:16px; }
+
+    .note-box { background:#f5f2d8; border-left:3px solid var(--accent); border-radius:0 4px 4px 0; padding:12px 16px; margin:12px 0; font-size:14px; color:var(--ink-soft); line-height:1.6; }
+    .note-box em { font-style:italic; color:var(--ink); }
+
+    .vocab-table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
+    .vocab-table th { background:var(--ink); color:var(--white); padding:8px 12px; text-align:left; font-weight:500; font-size:12px; }
+    .vocab-table td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--paper); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+    .vocab-table .ans { color:var(--accent-dark); font-style:italic; font-size:13px; }
+
+    .phrase-box { background:var(--ink); color:var(--white); border-radius:4px; padding:16px 20px; margin:12px 0; }
+    .phrase-box .phrase-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent-light); margin-bottom:10px; }
+    .phrase-row { display:flex; align-items:baseline; gap:16px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .phrase-row:last-child { border-bottom:none; }
+    .phrase-en { font-size:15px; font-weight:500; flex:1; }
+    .phrase-de { font-size:13px; color:rgba(255,255,255,0.5); flex:1; }
+
+    .steps { list-style:none; margin:12px 0; }
+    .steps li { display:flex; gap:14px; padding:10px 0; border-bottom:1px dotted var(--border); font-size:14px; line-height:1.5; align-items:flex-start; }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--white); background:var(--accent-dark); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:12px 16px; margin:12px 0; font-size:13px; }
+    .answer-key .ak-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .answer-key ol { padding-left:20px; }
+    .answer-key ol li { padding:3px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--accent-dark); }
+
+    .word-box { background:var(--white); border:2px solid var(--accent); border-radius:6px; padding:12px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--accent-dark); width:100%; margin-bottom:4px; }
+    .word-chip { background:var(--accent-dark); color:var(--white); font-size:13px; font-weight:600; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .word-box.neutral { border-color:var(--border); }
+    .word-box.neutral .word-chip { background:var(--ink-soft); }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:11px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:5px 14px; border-radius:20px; cursor:pointer; margin-top:10px; transition:all 0.2s; }
+    .reveal-btn:hover { border-color:var(--accent-dark); color:var(--accent-dark); }
+    .reveal-content { display:none; margin-top:10px; }
+    .reveal-content.open { display:block; }
+
+    .grammar-box { border:2px solid var(--accent); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .grammar-box-header { background:var(--accent); padding:10px 16px; }
+    .grammar-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); font-weight:600; }
+    .grammar-box-body { background:var(--white); padding:16px; }
+    .grammar-row { display:flex; gap:12px; padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; align-items:baseline; }
+    .grammar-row:last-child { border-bottom:none; }
+    .grammar-plus  { color:#3a6e2a; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-minus { color:#b03020; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-q     { color:var(--accent-dark); font-weight:700; flex-shrink:0; width:16px; }
+
+    .phone-script { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .phone-header { background:var(--paper-dark); padding:8px 16px; font-family:'DM Mono',monospace; font-size:11px; color:var(--warm-grey); border-bottom:1px solid var(--border); }
+    .phone-line { display:flex; gap:12px; padding:9px 16px; border-bottom:1px solid var(--border); font-size:14px; }
+    .phone-line:last-child { border-bottom:none; }
+    .phone-line:nth-child(even) { background:var(--paper); }
+    .phone-speaker { font-family:'DM Mono',monospace; font-size:10px; color:var(--accent-dark); font-weight:600; white-space:nowrap; width:80px; flex-shrink:0; margin-top:1px; }
+    .phone-text { color:var(--ink-soft); line-height:1.5; }
+
+    /* speaking box */
+    .speaking-box { border:2px solid var(--accent-dark); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .speaking-box-header { background:var(--accent-dark); padding:10px 16px; }
+    .speaking-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--white); font-weight:600; }
+    .speaking-box-body { background:var(--white); padding:16px; }
+    .speaking-section { margin-bottom:14px; }
+    .speaking-section:last-child { margin-bottom:0; }
+    .speaking-section-title { font-size:12px; font-weight:700; color:var(--accent-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; font-family:'DM Mono',monospace; }
+    .speaking-row { display:flex; gap:12px; padding:5px 0; border-bottom:1px dotted var(--border); font-size:14px; }
+    .speaking-row:last-child { border-bottom:none; }
+    .speaking-q { flex:1; color:var(--ink); }
+    .speaking-a { flex:1; color:var(--ink-soft); font-style:italic; }
+
+    /* email block */
+    .email-block { border:1px solid var(--border); border-radius:4px; overflow:hidden; margin:12px 0; font-size:14px; }
+    .email-header { background:var(--paper-dark); padding:8px 14px; font-size:12px; color:var(--warm-grey); border-bottom:1px solid var(--border); display:flex; gap:8px; align-items:center; }
+    .email-header span { font-weight:600; color:var(--ink); }
+    .email-body { padding:14px; color:var(--ink-soft); line-height:1.7; }
+
+    /* faq block */
+    .faq-block { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .faq-header { background:var(--accent-dark); color:var(--white); padding:8px 14px; font-weight:600; font-size:13px; }
+    .faq-item { padding:12px 14px; border-bottom:1px solid var(--border); font-size:14px; }
+    .faq-item:last-child { border-bottom:none; }
+    .faq-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:600; color:var(--accent-dark); margin-bottom:4px; }
+    .faq-text { color:var(--ink-soft); line-height:1.6; }
+    .faq-text strong { color:var(--ink); }
+
+    input[type="text"] { border:none; border-bottom:1px solid var(--accent-dark); background:transparent; font-size:14px; color:var(--ink); padding:2px 4px; outline:none; }
+
+    .src-bp  { background:#504d35; color:white; }
+    .src-you { background:#7a733d; color:white; }
+    .icon-warmup  { background:#f5f2d8; }
+    .icon-vocab   { background:#f0edcc; }
+    .icon-grammar { background:#f5f2d8; }
+    .icon-speaking{ background:#edeab8; }
+    .icon-wrap    { background:#f0edcc; }
+
+    p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:14px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom:none; }
+  </style>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 6<br><em>Doing Business III</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 Unit 2.3 (finish) + 2.4 + extra grammar practice</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES -->
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Extra practice: articles (a/an) and countable/uncountable nouns</li>
+        <li>Finish There is/There are grammar + listening + writing</li>
+        <li>Work Skills: Making agreements (video + roleplay)</li>
+        <li>Make a simple business agreement</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>a/an before countable nouns — correcting common mistakes</li>
+        <li>Plural -s vs a/an with uncountable-looking nouns</li>
+        <li>There is/are · Is there/Are there — review</li>
+        <li>Agreement phrases: How about…? / Does the price include…?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Grammar Warm-up — Articles &amp; Countable Nouns</div>
+        <div class="phase-sub">Murphy's Grammar in Use, Units 69 &amp; 71 — extra practice</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">✏️</div>
+          <span class="activity-title">69.1 — Correct the sentences where necessary (a/an)</span>
+          <span class="activity-src src-bp">Murphy 69.1</span>
+        </div>
+        <div class="activity-body">
+          <p>Some sentences need <strong>a/an</strong> before a noun. Correct them where necessary. If the sentence is already correct, write <strong>OK</strong>.</p>
+          <ol class="exercise">
+            <li>Joe goes everywhere by bike. He doesn't have car. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>Helen was listening to music when I arrived. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>We went to very nice restaurant last weekend. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>I brush my teeth with toothpaste. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>I use toothbrush to brush my teeth. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>Can you tell me if there's bank near here? &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>My brother works for insurance company. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>I don't like violence. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>When we were in Rome, we stayed in big hotel. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>If you have problem, I'll try and help you. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>I like your suggestion. It's interesting idea. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>Can you smell paint? &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>I like volleyball. It's good game. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>Lisa doesn't usually wear jewellery. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>Jane was wearing beautiful necklace. &nbsp; → <input type="text" style="width:220px;"></li>
+            <li>Does this city have airport? &nbsp; → <input type="text" style="width:220px;"></li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev1')">show answers ▾</button>
+          <div class="reveal-content" id="rev1">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>He doesn't have a car.</strong></li>
+              <li><strong>OK</strong> (no change — music is uncountable)</li>
+              <li><strong>We went to a very nice restaurant.</strong></li>
+              <li><strong>OK</strong> (toothpaste is uncountable)</li>
+              <li><strong>I use a toothbrush.</strong></li>
+              <li><strong>...if there's a bank near here?</strong></li>
+              <li><strong>...for an insurance company.</strong></li>
+              <li><strong>OK</strong> (violence is uncountable)</li>
+              <li><strong>...we stayed in a big hotel.</strong></li>
+              <li><strong>If you have a problem...</strong></li>
+              <li><strong>It's an interesting idea.</strong></li>
+              <li><strong>OK</strong> (paint is uncountable here)</li>
+              <li><strong>It's a good game.</strong></li>
+              <li><strong>OK</strong> (jewellery is uncountable)</li>
+              <li><strong>Jane was wearing a beautiful necklace.</strong></li>
+              <li><strong>Does this city have an airport?</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">✏️</div>
+          <span class="activity-title">69.2 — Complete with a/an where necessary</span>
+          <span class="activity-src src-bp">Murphy 69.2</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box neutral"><div class="word-box-label">words in the box</div>
+            <span class="word-chip">biscuit</span><span class="word-chip">blood</span>
+            <span class="word-chip">coat</span><span class="word-chip">decision</span>
+            <span class="word-chip">electricity</span><span class="word-chip">ice</span>
+            <span class="word-chip">interview</span><span class="word-chip">key</span>
+            <span class="word-chip">moment</span><span class="word-chip">music</span>
+            <span class="word-chip">question</span>
+          </div>
+          <ol class="exercise">
+            <li>The road is closed. There's been <input type="text" style="width:140px;">.</li>
+            <li>Listen! Can you hear <input type="text" style="width:140px;">?</li>
+            <li>I couldn't get into the house. I didn't have <input type="text" style="width:140px;">.</li>
+            <li>It's very warm today. Why are you wearing <input type="text" style="width:140px;">?</li>
+            <li>Would you like <input type="text" style="width:140px;"> in your drink?</li>
+            <li>Are you hungry? Have <input type="text" style="width:140px;">!</li>
+            <li>Our lives would be very difficult without <input type="text" style="width:140px;">.</li>
+            <li>Excuse me, can I ask you <input type="text" style="width:140px;">?</li>
+            <li>I'm not ready yet. Can you wait <input type="text" style="width:140px;">, please?</li>
+            <li>The heart pumps <input type="text" style="width:140px;"> through the body.</li>
+            <li>We can't delay much longer. We have to make <input type="text" style="width:140px;"> soon.</li>
+            <li>I had <input type="text" style="width:140px;"> for a job yesterday. It went quite well.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev2')">show answers ▾</button>
+          <div class="reveal-content" id="rev2">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>an accident</strong></li>
+              <li><strong>music</strong></li>
+              <li><strong>a key</strong></li>
+              <li><strong>a coat</strong></li>
+              <li><strong>ice</strong></li>
+              <li><strong>a biscuit</strong></li>
+              <li><strong>electricity</strong></li>
+              <li><strong>a question</strong></li>
+              <li><strong>a moment</strong></li>
+              <li><strong>blood</strong></li>
+              <li><strong>a decision</strong></li>
+              <li><strong>an interview</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">✏️</div>
+          <span class="activity-title">69.3 — Complete with the word in singular, plural, or a/an</span>
+          <span class="activity-src src-bp">Murphy 69.3</span>
+        </div>
+        <div class="activity-body">
+          <p>Sometimes the word needs to be <strong>plural (-s)</strong>, and sometimes you need <strong>a/an</strong>.</p>
+          <div class="word-box neutral"><div class="word-box-label">words in the box</div>
+            <span class="word-chip">air</span><span class="word-chip">day</span>
+            <span class="word-chip">friend</span><span class="word-chip">joke</span>
+            <span class="word-chip">language</span><span class="word-chip">meat</span>
+            <span class="word-chip">patience</span><span class="word-chip">people</span>
+            <span class="word-chip">queue</span><span class="word-chip">space</span>
+            <span class="word-chip">umbrella</span>
+          </div>
+          <ol class="exercise">
+            <li>I had a camera with me, but I didn't take any <em>(pictures)</em>.</li>
+            <li>There are seven <input type="text" style="width:130px;"> in a week.</li>
+            <li>A vegetarian is a person who doesn't eat <input type="text" style="width:130px;">.</li>
+            <li>Outside the cinema there was <input type="text" style="width:130px;"> of people waiting to see the film.</li>
+            <li>I'm not good at telling <input type="text" style="width:130px;">.</li>
+            <li>Last night I went out with some <input type="text" style="width:130px;"> of mine.</li>
+            <li>There were very few <input type="text" style="width:130px;"> in town today. The streets were almost empty.</li>
+            <li>I'm going out for a walk. I need some fresh <input type="text" style="width:130px;">.</li>
+            <li>Paul always wants things quickly. He doesn't have much <input type="text" style="width:130px;">.</li>
+            <li>I think it's going to rain. Do you have <input type="text" style="width:130px;"> I could borrow?</li>
+            <li>How many <input type="text" style="width:130px;"> can you speak?</li>
+            <li>Our flat is very small. We don't have much <input type="text" style="width:130px;">.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev3')">show answers ▾</button>
+          <div class="reveal-content" id="rev3">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li>pictures <em>(given)</em></li>
+              <li><strong>days</strong></li>
+              <li><strong>meat</strong></li>
+              <li><strong>a queue</strong></li>
+              <li><strong>jokes</strong></li>
+              <li><strong>friends</strong></li>
+              <li><strong>people</strong></li>
+              <li><strong>air</strong></li>
+              <li><strong>patience</strong></li>
+              <li><strong>an umbrella</strong></li>
+              <li><strong>languages</strong></li>
+              <li><strong>space</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">✏️</div>
+          <span class="activity-title">71.3 — Which is right?</span>
+          <span class="activity-src src-bp">Murphy 71.3</span>
+        </div>
+        <div class="activity-body">
+          <p>Choose the correct option — with or without article/some.</p>
+          <ol class="exercise">
+            <li>Most of my friends are <em>students / some students</em>. <span style="color:var(--accent-dark);font-style:italic;">(students is correct — given example)</span></li>
+            <li>Are you <em>careful driver / a careful driver</em>?</li>
+            <li>I went to the library and borrowed <em>books / some books</em>.</li>
+            <li>Mark works in a bookshop. He sells <em>books / some books</em>.</li>
+            <li>I've been walking for hours. I've got <em>sore feet / some sore feet</em>.</li>
+            <li>I don't feel very well. I've got <em>sore throat / a sore throat</em>.</li>
+            <li>What <em>lovely present / a lovely present</em>! Thank you very much.</li>
+            <li>I met <em>students / some students</em> in a cafe yesterday. They were from China.</li>
+            <li>It might rain. Don't go out <em>without umbrella / without an umbrella</em>.</li>
+            <li><em>People / Some people</em> learn languages more easily than others.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev4')">show answers ▾</button>
+          <div class="reveal-content" id="rev4">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li>students <em>(given)</em></li>
+              <li><strong>a careful driver</strong></li>
+              <li><strong>some books</strong></li>
+              <li><strong>books</strong> (general — what he sells)</li>
+              <li><strong>sore feet</strong></li>
+              <li><strong>a sore throat</strong></li>
+              <li><strong>a lovely present</strong></li>
+              <li><strong>some students</strong></li>
+              <li><strong>without an umbrella</strong></li>
+              <li><strong>Some people</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box" style="margin-top:6px;">
+        <strong>Загальне правило:</strong> якщо іменник <strong>countable singular</strong> — завжди потрібен <strong>a/an</strong> (a car, an idea, a game). Якщо <strong>countable plural</strong> — можна без артикля (books, students) або з <strong>some</strong> коли йдеться про невизначену кількість (some books — конкретні кілька штук). Якщо <strong>uncountable</strong> (music, blood, patience) — ніколи не використовуємо a/an.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 2 ══ -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">There is / There are — Finishing from Lesson 5</div>
+        <div class="phase-sub">BP A2 p.23 · Grammar + Ex.4 + Ex.5A/5B + Ex.6 Writing</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">📐</div>
+          <span class="activity-title">Grammar box — Saying something exists</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="note-box" style="margin-top:0;">
+            <strong>Коли використовуємо There is / There are?</strong><br><br>
+            Ми використовуємо <strong>there is / there are</strong> коли хочемо сказати що щось <em>існує</em> або <em>є в наявності</em> — тобто коли вперше згадуємо щось або говоримо про кількість.<br><br>
+            <strong>There is</strong> → одна річ (singular):<br>
+            <em>There is a problem with your order.</em> — Є проблема з вашим замовленням.<br>
+            <em>There's a kitchen on the first floor.</em> — На першому поверсі є кухня.<br><br>
+            <strong>There are</strong> → більше однієї (plural):<br>
+            <em>There are some discounts for large orders.</em> — Є знижки для великих замовлень.<br>
+            <em>There are two ways to return your order.</em> — Є два способи повернути замовлення.<br><br>
+            <strong>Порівняй з "it is":</strong><br>
+            <em>There is</em> — ми вперше говоримо про щось (воно існує)<br>
+            <em>It is</em> — ми вже знаємо про що мова, уточнюємо деталі<br>
+            <em>There's a charge for delivery. <strong>It's</strong> €4.50.</em> — Є плата за доставку. Вона становить €4.50.
+          </div>
+
+          <div class="grammar-box">
+            <div class="grammar-box-header"><span>THERE IS / THERE ARE</span></div>
+            <div class="grammar-box-body">
+              <div class="grammar-row"><span class="grammar-plus">+</span><span><strong>There is (There's)</strong> a delivery charge. &nbsp;·&nbsp; <strong>There are</strong> some discounts on large orders.</span></div>
+              <div class="grammar-row"><span class="grammar-minus">−</span><span><strong>There isn't</strong> a store near me. &nbsp;·&nbsp; <strong>There aren't any</strong> delivery charges in the EU.</span></div>
+              <div class="grammar-row"><span class="grammar-q">?</span><span><strong>Is there</strong> a discount? → Yes, there <strong>is</strong>. / No, there <strong>isn't</strong>.</span></div>
+              <div class="grammar-row"><span class="grammar-q">?</span><span><strong>Are there any</strong> deliveries at the weekend? → Yes, there <strong>are</strong>. / No, there <strong>aren't</strong>.</span></div>
+            </div>
+          </div>
+          <div class="note-box" style="margin-top:10px;">
+            <strong>There is</strong> + одна річ (singular) &nbsp;·&nbsp; <strong>There are</strong> + більше однієї (plural)<br>
+            <em>There is <strong>a</strong> problem.</em> &nbsp;·&nbsp; <em>There are <strong>some</strong> problems.</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 4 — Choose the correct option</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>There <em>is / are</em> some problems in the warehouse.</li>
+            <li>There <em>is / are</em> a problem with your order.</li>
+            <li>There <em>is / are</em> some products that you can't return.</li>
+            <li>There <em>is / are</em> some food in this order.</li>
+            <li>There isn't <em>any / some</em> information on the website.</li>
+            <li>There aren't <em>any / some</em> discounts on orders.</li>
+            <li>There <em>isn't / aren't</em> any white boxes in stock.</li>
+            <li>There <em>isn't / aren't</em> any space in the truck.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev5')">show answers ▾</button>
+          <div class="reveal-content" id="rev5">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>are</strong></li><li><strong>is</strong></li><li><strong>are</strong></li><li><strong>is</strong></li>
+              <li><strong>any</strong></li><li><strong>any</strong></li><li><strong>aren't</strong></li><li><strong>isn't</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 5A — Complete the dialogues with there is/isn't or there are/aren't</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--paper-dark);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);">Dialogue 1</div>
+            <div style="padding:14px;font-size:14px;color:var(--ink-soft);line-height:2.0;">
+              A: <sup>1</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;"> any photocopy paper in the office?<br>
+              B: Yes, <sup>2</sup><input type="text" style="width:80px;"> some pink A4 paper. Here you are.<br>
+              A: No, I need white paper. <sup>3</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;"> any white paper?<br>
+              B: Sorry! No, <sup>4</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;">. I'll order some now.
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--paper-dark);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);">Dialogue 2</div>
+            <div style="padding:14px;font-size:14px;color:var(--ink-soft);line-height:2.0;">
+              C: Three new employees start work today. <sup>5</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;"> any desks and computer chairs for them?<br>
+              D: Yes, <sup>6</sup><input type="text" style="width:80px;"> some new furniture in the warehouse.<br>
+              C: <sup>7</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;"> any office equipment for them?<br>
+              D: No, <sup>8</sup><input type="text" style="width:80px;"> <input type="text" style="width:80px;">. What exactly do they need?<br>
+              C: Three phones, three computers and a printer.
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev6')">show answers ▾</button>
+          <div class="reveal-content" id="rev6">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <p><strong>Dialogue 1:</strong></p>
+              <ol>
+                <li><strong>Is there</strong></li>
+                <li><strong>there is</strong></li>
+                <li><strong>Is there</strong></li>
+                <li><strong>there isn't</strong></li>
+              </ol>
+              <p style="margin-top:8px;"><strong>Dialogue 2:</strong></p>
+              <ol start="5">
+                <li><strong>Are there</strong></li>
+                <li><strong>there is</strong></li>
+                <li><strong>Is there</strong></li>
+                <li><strong>there isn't</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎧</div>
+          <span class="activity-title">Ex. 5B — Listen and check your answers</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004876&color=%23a59837&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+          <div style="font-size: 10px; color: var(--warm-grey); line-break: anywhere; word-break: normal; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif; font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: var(--warm-grey); text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_2_03-5" title="BP_A2_CB_Tk_2_03" target="_blank" style="color: var(--warm-grey); text-decoration: none;">BP_A2_CB_Tk_2_03</a></div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">✍️</div>
+          <span class="activity-title">Ex. 6 — Writing: respond to a customer enquiry</span>
+          <span class="activity-src src-bp">BP p.23</span>
+        </div>
+        <div class="activity-body">
+          <p>Read the email from a customer. Write a response using phrases from Exercise 3A.</p>
+
+          <div class="email-block">
+            <div class="email-header">
+              <div>
+                <div><strong>From:</strong> &nbsp;Liudvika Kuliešienė</div>
+                <div><strong>To:</strong> &nbsp;Customer Services</div>
+                <div><strong>Subject:</strong> &nbsp;Prices and discounts for large orders</div>
+              </div>
+            </div>
+            <div class="email-body">
+              I'd like to place a large order for photocopy paper. I can't find any prices on the website. Is there a discount for a large order? Are there any delivery charges?<br><br>
+              Regards,<br>
+              Liudvika Kuliešienė
+            </div>
+          </div>
+
+          <p style="margin-top:14px;"><strong>Write your reply here:</strong></p>
+          <div class="email-block">
+            <div class="email-header">
+              <div>
+                <div><strong>From:</strong> &nbsp;Customer Services</div>
+                <div><strong>To:</strong> &nbsp;Liudvika Kuliešienė</div>
+                <div><strong>Subject:</strong> &nbsp;Re: Prices and discounts for large orders</div>
+              </div>
+            </div>
+            <div class="email-body">
+              <textarea style="width:100%; min-height:160px; border:none; background:transparent; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); resize:vertical; outline:none;" placeholder="Dear Ms Kuliešienė, ..."></textarea>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Extra Practice — There is/are in your real context</div>
+        <div class="phase-sub">Speaking practice using Mercedes-Benz context</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">💬</div>
+          <span class="activity-title">Speaking — Describe your workplace</span>
+        </div>
+        <div class="activity-body">
+          <p>Answer these questions about your real office at work using <strong>there is / there are / there isn't / there aren't / is there / are there</strong>.</p>
+          <ol class="exercise">
+            <li>Is there a canteen in your building?</li>
+            <li>How many meeting rooms are there on your floor?</li>
+            <li>Is there a kitchen area where you work?</li>
+            <li>Are there any quiet rooms for calls?</li>
+            <li>Is there a car park at your office?</li>
+            <li>How many people are there in your department?</li>
+            <li>Are there any international colleagues in your team?</li>
+            <li>Is there a gym or relaxation area in the building?</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">✏️</div>
+          <span class="activity-title">Practice — Complete with there is/are/isn't/aren't</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li><input type="text" style="width:90px;"> a discount if you order <strong>in bulk</strong>.</li>
+            <li><input type="text" style="width:90px;"> any units in stock right now — we need to wait until Friday.</li>
+            <li><input type="text" style="width:90px;"> two ways to contact our supplier: by phone or by email.</li>
+            <li><input type="text" style="width:90px;"> a charge for express delivery.</li>
+            <li><input type="text" style="width:90px;"> any problems with this order — everything is confirmed.</li>
+            <li><input type="text" style="width:90px;"> some delay because of the holidays.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev7')">show answers ▾</button>
+          <div class="reveal-content" id="rev7">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>There is</strong></li>
+              <li><strong>There aren't</strong></li>
+              <li><strong>There are</strong></li>
+              <li><strong>There is</strong></li>
+              <li><strong>There aren't</strong></li>
+              <li><strong>There is</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 4 ══ -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Work Skills: Making Agreements</div>
+        <div class="phase-sub">BP A2 p.24, Lead-in + ex. 2/3/4 (video)</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">🧹</div>
+          <span class="activity-title">Lead-in — Cleaning service vocabulary</span>
+          <span class="activity-src src-bp">BP p.24</span>
+        </div>
+        <div class="activity-body">
+          <p>Do you have a cleaning service where you work? What do cleaners do?</p>
+          <div class="word-box"><div class="word-box-label">cleaning tasks</div>
+            <span class="word-chip">clean the floor</span>
+            <span class="word-chip">empty the bins</span>
+            <span class="word-chip">clean the desks</span>
+            <span class="word-chip">vacuum the carpet</span>
+            <span class="word-chip">wash dishes/cups</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎬</div>
+          <span class="activity-title">Video — Izabela and Robert discuss a cleaning contract</span>
+          <span class="activity-src src-bp">BP p.24</span>
+        </div>
+        <div class="activity-body">
+          <p>Izabela, an office manager, has a meeting with Robert, a cleaning company owner. They discuss a cleaning contract.</p>
+
+          <!-- VIDEO PLACEHOLDER -->
+          <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:6px;margin:12px 0;background:var(--paper-dark);display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--warm-grey);">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/6eYOTtZS2Vw?si=T9DmVNbsx8RnNdoy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    
+            </div>
+          </div>
+
+          <p><strong>Ex. 2 — Watch the video. In what order do they talk about these things? Number 1–5.</strong></p>
+          <ol class="exercise">
+            <li>the cost of the service &nbsp;&nbsp; <input type="text" style="width:40px;"></li>
+            <li>the working days &nbsp;&nbsp; <input type="text" style="width:40px;"></li>
+            <li>the cleaning tasks &nbsp;&nbsp; <input type="text" style="width:40px;"></li>
+            <li>the description of the office &nbsp;&nbsp; <input type="text" style="width:40px;"></li>
+            <li>the working hours &nbsp;&nbsp; <input type="text" style="width:40px;"></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev8')">show answers ▾</button>
+          <div class="reveal-content" id="rev8">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li>the cost of the service → <strong>5</strong></li>
+              <li>the working days → <strong>3</strong></li>
+              <li>the cleaning tasks → <strong>2</strong></li>
+              <li>the description of the office → <strong>1</strong></li>
+              <li>the working hours → <strong>4</strong></li>
+            </ol></div>
+          </div>
+
+          <p style="margin-top:16px;"><strong>Ex. 3 — Watch again. Complete Robert's notes.</strong></p>
+          <div style="border:2px solid var(--accent);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--accent);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);">ROBERT'S CLEANING SERVICES — Notes</div>
+            <div style="padding:16px;font-size:14px;color:var(--ink-soft);line-height:2.2;">
+              Places to clean: reception area, one big office, two <sup>1</sup><input type="text" style="width:110px;">, a staff kitchen on the first floor; one big office, four individual <sup>2</sup><input type="text" style="width:110px;"> on the second floor; two staff toilets (one on each floor) and the stairs.<br>
+              Jobs to do: clean the desks; empty the bins and <sup>3</sup><input type="text" style="width:130px;">, clean the toilets, the kitchen area and wash the coffee cups.<br>
+              Days of work: <sup>4</sup><input type="text" style="width:130px;"><br>
+              Hours of work: Before <sup>5</sup><input type="text" style="width:80px;"> a.m.<br>
+              Total hours of contract: <sup>6</sup><input type="text" style="width:80px;"> (per day), <sup>7</sup><input type="text" style="width:80px;"> (per week).<br>
+              Agreed price: £<sup>8</sup><input type="text" style="width:80px;"> including charge for the cleaning products.<br>
+              Cleaning equipment in the cupboard in the <sup>9</sup><input type="text" style="width:110px;">.
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev9')">show answers ▾</button>
+          <div class="reveal-content" id="rev9">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>meeting rooms</strong></li>
+              <li><strong>offices</strong></li>
+              <li><strong>clean the floors</strong></li>
+              <li><strong>5 days mon-fri</strong></li>
+              <li><strong>8:30</strong></li>
+              <li><strong>5</strong></li>
+              <li><strong>15</strong></li>
+              <li><strong>310</strong></li>
+              <li><strong>kitchen</strong></li>
+            </ol></div>
+          </div>
+
+          <p style="margin-top:16px;"><strong>Ex. 4 — Match the questions (1–8) with the answers (a–h).</strong></p>
+          <div class="row g-2 mt-1">
+            <div class="col-md-6">
+              <table class="vocab-table">
+                <thead><tr><th>#</th><th>Question</th><th>Match</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>What do you want the cleaner to do, exactly?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>2</td><td>Can the cleaner wash the coffee cups?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>3</td><td>Do you want us to clean the windows?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>4</td><td>How many cleaners are there?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>5</td><td>How much time does the cleaner need?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>6</td><td>Does the price include cleaning products?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>7</td><td>How much is that?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>8</td><td>When can the cleaner start?</td><td><input type="text" style="width:30px;"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="vocab-table">
+                <thead><tr><th>Letter</th><th>Answer</th></tr></thead>
+                <tbody>
+                  <tr><td>a</td><td>It's usually one cleaner for an office this size.</td></tr>
+                  <tr><td>b</td><td>About three hours a day.</td></tr>
+                  <tr><td>c</td><td>How about next Monday?</td></tr>
+                  <tr><td>d</td><td>Yes, of course.</td></tr>
+                  <tr><td>e</td><td>No, we have a specialist company to clean the windows.</td></tr>
+                  <tr><td>f</td><td>Clean the desks, empty the bins and clean the floors.</td></tr>
+                  <tr><td>g</td><td>No, it doesn't. There's a small charge for those.</td></tr>
+                  <tr><td>h</td><td>It's ten pounds a week.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev10')">show answers ▾</button>
+          <div class="reveal-content" id="rev10">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li>1 → <strong>f</strong></li><li>2 → <strong>d</strong></li><li>3 → <strong>e</strong></li>
+              <li>4 → <strong>a</strong></li><li>5 → <strong>b</strong></li><li>6 → <strong>g</strong></li>
+              <li>7 → <strong>h</strong></li><li>8 → <strong>c</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 5 ══ -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Speaking Box + Roleplay — Making Agreements</div>
+        <div class="phase-sub">BP A2 p.25 · speaking box + ex. 6 adapted</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">💬</div>
+          <span class="activity-title">Speaking box — Making Agreements</span>
+          <span class="activity-src src-bp">BP p.25</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Making Agreements</span></div>
+            <div class="speaking-box-body">
+
+              <div class="speaking-section">
+                <div class="speaking-section-title">Asking about the company's service</div>
+                <div class="speaking-row"><span class="speaking-q">How many [workers / chefs] are there?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">How about [coming] [before / after] [8 o'clock / we start work]?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">Can [you / your team] do that?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">How much time do you need?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">Does the price include [materials / plates / cleaning products]?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">When can [you / your team] start?</span><span class="speaking-a"></span></div>
+              </div>
+
+              <div class="speaking-section">
+                <div class="speaking-section-title">Asking the client questions</div>
+                <div class="speaking-row"><span class="speaking-q">What do you want [the cleaner / us] to do exactly?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">How many [days / hours] do you need the service?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">What time do you want [the cleaner / chef] to come?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">Is there a place for the [cleaning products / materials]?</span><span class="speaking-a"></span></div>
+                <div class="speaking-row"><span class="speaking-q">How about [on Monday / on the 14th]?</span><span class="speaking-a"></span></div>
+              </div>
+
+              <div class="speaking-section">
+                <div class="speaking-section-title">Saying yes / no</div>
+                <div class="speaking-row">
+                  <span class="speaking-q"><strong>Yes:</strong> Yes, we can. · Yes, it does. · Yes, that's fine. · Yes, of course.</span>
+                  <span class="speaking-a"><strong>No:</strong> No, we can't. (I'm sorry). · No, it doesn't. (I'm sorry).</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">🎭</div>
+          <span class="activity-title">Roleplay — Catering service for office event</span>
+          <span class="activity-src src-you">ROLEPLAY</span>
+        </div>
+        <div class="activity-body">
+          <p>Some company is organising a team event for 20 people. You need to arrange catering.</p>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;">
+                <div style="background:var(--paper-dark);padding:9px 14px;font-weight:600;font-size:13px;border-bottom:1px solid var(--border);">Student A — the client</div>
+                <div style="padding:14px;font-size:14px;color:var(--ink-soft);line-height:1.8;">
+                  You need catering for a team event.<br>
+                  <strong>Details you know:</strong><br>
+                  · 20 people<br>
+                  · Friday 27th, 12:30–14:00<br>
+                  · Cold buffet preferred<br>
+                  · Small kitchen available<br>
+                  · Budget: around €400<br><br>
+                  <strong>Ask about:</strong> hot or cold buffet options · how many staff they provide · whether they provide plates/glasses · total cost
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;">
+                <div style="background:var(--paper-dark);padding:9px 14px;font-weight:600;font-size:13px;border-bottom:1px solid var(--border);">Student B — Catering company</div>
+                <div style="padding:14px;font-size:14px;color:var(--ink-soft);line-height:1.8;">
+                  You provide hot and cold buffets.<br>
+                  <strong>Your service:</strong><br>
+                  · 2 staff for cold buffet, 3 for hot<br>
+                  · Plates and glasses included<br>
+                  · Cold buffet: €18 per person<br>
+                  · Hot buffet: €25 per person<br>
+                  · Can clean up after: yes, small charge<br><br>
+                  <strong>Ask about:</strong> number of people · date and time · kitchen facilities · hot or cold preference
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phrase-box">
+            <div class="phrase-label">Use phrases from the speaking box</div>
+            <div class="phrase-row"><span class="phrase-en">How many people is the buffet for?</span><span class="phrase-de">На скільки людей?</span></div>
+            <div class="phrase-row"><span class="phrase-en">Does the price include plates and glasses?</span><span class="phrase-de">Ціна включає тарілки і стакани?</span></div>
+            <div class="phrase-row"><span class="phrase-en">Can your team clean up after the event?</span><span class="phrase-de">Ваша команда прибере після заходу?</span></div>
+            <div class="phrase-row"><span class="phrase-en">How about Friday the 27th at 12:30?</span><span class="phrase-de">Як щодо п'ятниці 27-го о 12:30?</span></div>
+            <div class="phrase-row"><span class="phrase-en">Yes, that's fine. / No, I'm sorry, we can't.</span><span class="phrase-de">Добре. / На жаль, ми не можемо.</span></div>
+            <div class="phrase-row"><span class="phrase-en">Is there a kitchen at your office?</span><span class="phrase-de">У вас є кухня в офісі?</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePhase(id){const el=document.getElementById(id);el.classList.toggle('collapsed');}
+function toggleReveal(id){const el=document.getElementById(id);el.classList.toggle('open');const btn=el.previousElementSibling;btn.textContent=el.classList.contains('open')?'hide answers ▴':'show answers ▾';}
+</script>
+</body>
+</html>

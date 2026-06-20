@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 4 — Innovative Organisations</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2240;
+      --ink-soft: #3a4a6a;
+      --paper: #f5f7fc;
+      --paper-dark: #e8edf8;
+      --gold: #c88a10;
+      --teal: #2a5298;
+      --teal-light: #4a7fc8;
+      --warm-grey: #6a7a9a;
+      --border: #d0d8ec;
+      --white: #ffffff;
+      --phase-1: #1e3a5f;
+      --phase-2: #2a4a7a;
+      --phase-3: #1a3a6e;
+      --phase-4: #1e3a5f;
+      --phase-5: #2a4a7a;
+      --phase-6: #1a3a6e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+
+    .header { background: #1a2e52; color: #fff; padding: 48px 40px 40px; position: relative; overflow: hidden; }
+    .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(90,143,232,0.3) 0%, transparent 70%); }
+    .header::after  { content: ''; position: absolute; bottom: -40px; left: 20%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(200,138,16,0.2) 0%, transparent 70%); }
+    .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px,5vw,58px); font-weight: 900; line-height: 1.05; margin-bottom: 16px; }
+    .header h1 em { font-style: italic; color: #f0c060; }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7); }
+    .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0c060; flex-shrink: 0; }
+    .meta-chip strong { color: #fff; }
+
+    .objectives-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .objectives-box { background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .obj-col h3 { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .obj-list { list-style: none; }
+    .obj-list li { font-size: 14px; padding: 5px 0 5px 18px; position: relative; color: var(--ink-soft); border-bottom: 1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom: none; }
+    .obj-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal-light); font-size: 12px; font-weight: 600; }
+
+    .main { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+
+    .phase { margin-bottom: 40px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; position: relative; }
+    .phase-header::after { content: '▾'; position: absolute; right: 20px; font-size: 18px; color: rgba(255,255,255,0.6); transition: transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform: rotate(-90deg); }
+    .phase-num { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 20px; color: rgba(255,255,255,0.9); white-space: nowrap; }
+    .phase-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
+    .phase-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .phase-time { margin-left: auto; margin-right: 32px; font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.8); white-space: nowrap; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; }
+    .phase-body { padding: 0 24px 24px; background: var(--paper); }
+    .phase.collapsed .phase-body { display: none; }
+    .phase-1 .phase-header { background: var(--phase-1); }
+    .phase-2 .phase-header { background: var(--phase-2); }
+    .phase-3 .phase-header { background: var(--phase-3); }
+    .phase-4 .phase-header { background: var(--phase-4); }
+    .phase-5 .phase-header { background: var(--phase-5); }
+    .phase-6 .phase-header { background: var(--phase-6); }
+
+    .activity { border: 1px solid var(--border); border-radius: 4px; margin-top: 16px; overflow: hidden; background: var(--white); }
+    .activity-head { background: var(--paper-dark); padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; background: #eef3fb; }
+    .activity-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+    .activity-src { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: #1e3a6e; background: #dce6f5; border: 1px solid #b0c8ec; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-time-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+    .activity-body { padding: 16px; }
+
+    .teacher-says { background: #e8eef8; border-left: 3px solid #2a5298; border-radius: 0 4px 4px 0; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+    .teacher-says .label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #2a5298; margin-bottom: 6px; }
+    .teacher-says p { color: var(--ink-soft); line-height: 1.6; }
+    .teacher-says em { font-style: italic; color: var(--ink); }
+
+    .tip-box { background: #eef3fb; border: 1px solid #b0c8ec; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; display: flex; gap: 10px; }
+    .tip-icon { font-size: 16px; flex-shrink: 0; }
+    .tip-text { color: #2a3a5a; line-height: 1.5; }
+    .tip-text strong { color: var(--ink); }
+
+    .warn-box { background: #fdf0e8; border: 1px solid #e8c080; border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 14px; color: #5a3000; display: flex; gap: 10px; }
+
+    .phrase-box { background: #1a2e52; border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+    .phrase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: #f0c060; margin-bottom: 10px; }
+    .phrase-row { display: flex; align-items: baseline; gap: 16px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .phrase-row:last-child { border-bottom: none; }
+    .phrase-en { font-size: 14px; font-weight: 500; flex: 1; color: #fff; }
+    .phrase-de { font-size: 13px; color: rgba(255,255,255,0.55); flex: 1; }
+
+    .word-box { background: var(--white); border: 2px solid var(--teal); border-radius: 6px; padding: 12px 16px; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .word-box-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); width: 100%; margin-bottom: 4px; }
+    .word-chip { background: #1e3a5f; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+
+    .answer-key { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+    .ak-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 8px; }
+    .answer-key ol { padding-left: 20px; }
+    .answer-key ol li { padding: 3px 0; color: var(--ink-soft); }
+    .answer-key ol li strong { color: var(--teal); }
+
+    .reveal-btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; background: none; border: 1px solid var(--border); color: var(--warm-grey); padding: 5px 14px; border-radius: 20px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+    .reveal-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .reveal-content { display: none; margin-top: 10px; }
+    .reveal-content.open { display: block; }
+
+    .vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+    .vocab-table th { background: var(--ink); color: #fff; padding: 8px 12px; text-align: left; font-weight: 500; font-size: 12px; }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--ink-soft); }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: var(--paper-dark); }
+    .vocab-table .eng { font-weight: 600; color: var(--ink); }
+
+    .steps { list-style: none; margin: 12px 0; }
+    .steps li { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px dotted var(--border); font-size: 14px; align-items: flex-start; color: var(--ink-soft); }
+    .steps li:last-child { border-bottom: none; }
+    .step-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: #fff; background: var(--ink); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    .speaking-box { border: 2px solid var(--teal); border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .speaking-box-header { background: #1e3a5f; padding: 10px 16px; }
+    .speaking-box-header span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 600; }
+    .speaking-box-body { background: var(--white); padding: 16px; }
+    .speaking-row { display: flex; gap: 12px; padding: 6px 0; border-bottom: 1px dotted var(--border); font-size: 14px; color: var(--ink); }
+    .speaking-row:last-child { border-bottom: none; }
+
+    p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+    p:first-child { margin-top: 0; }
+    strong { color: var(--ink); }
+    ol.exercise { padding-left: 20px; }
+    ol.exercise li { font-size: 14px; color: var(--ink-soft); padding: 6px 0; border-bottom: 1px dotted var(--border); line-height: 1.6; }
+    ol.exercise li:last-child { border-bottom: none; }
+    input[type="text"] { border: none; border-bottom: 1.5px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); padding: 2px 4px; outline: none; transition: border-color 0.2s; }
+    input[type="text"]:focus { border-bottom-color: var(--teal); }
+
+    .mood-img-wrap { background: var(--paper-dark); border: 2px dashed var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 180px; margin: 12px 0; color: var(--warm-grey); font-size: 13px; font-family: 'DM Mono', monospace; letter-spacing: 1px; text-align: center; padding: 16px; }
+
+    .audio-wrap { background: #0f1c33; border-radius: 6px; padding: 16px; margin: 12px 0; min-height: 80px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; }
+
+    .scenario-card { background: var(--paper-dark); border: 2px dashed var(--border); border-radius: 8px; padding: 20px; margin: 12px 0; }
+    .scenario-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-grey); margin-bottom: 10px; }
+    .scenario-text { font-size: 15px; color: var(--ink); line-height: 1.7; font-style: italic; }
+
+    .profile-card-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+    .company-profile { border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+    .company-profile-img { height: 130px; background: linear-gradient(135deg, #1e3a5f, #2a5298); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.85); font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; letter-spacing: 1px; }
+    .company-profile-body { background: var(--white); padding: 16px 18px; }
+    .company-profile-name { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .cp-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dotted var(--border); font-size: 13px; }
+    .cp-row:last-child { border-bottom: none; }
+    .cp-label { color: var(--warm-grey); font-weight: 500; }
+    .cp-value { color: var(--ink); font-weight: 600; text-align: right; }
+
+    .grammar-rule-block { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin: 16px 0; }
+    .grammar-rule-block h4 { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal); margin: 14px 0 8px; }
+    .grammar-rule-block h4:first-child { margin-top: 0; }
+    .grammar-rule-block p { font-size: 13.5px; color: var(--ink-soft); margin: 6px 0; }
+    .grammar-rule-block .ex { color: var(--teal); font-style: italic; display: block; margin: 4px 0 4px 14px; }
+    .grammar-rule-block .note { color: var(--warm-grey); font-size: 12.5px; font-style: italic; margin-top: 6px; }
+    .grammar-rule-block .strike { text-decoration: line-through; color: #b03030; }
+
+    @media (max-width: 700px) {
+      .objectives-box { grid-template-columns: 1fr; }
+      .header, .objectives-wrap, .main { padding-left: 20px; padding-right: 20px; }
+      .profile-card-wrap { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 4<br><em>Innovative Organisations</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;B1+</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP B1+ Unit 1.2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Duration:</strong>&nbsp;60 min</div>
+    </div>
+  </div>
+</div>
+
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Discuss tall vs flat organisational structures</li>
+        <li>Understand real company examples (W. L. Gore, Zappos)</li>
+        <li>Use future forms: Present Simple, Present Continuous, going to</li>
+        <li>Talk about plans, intentions, predictions and scheduled events</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>bureaucracy, centralised, decentralised, hierarchy, innovative, promotion</li>
+        <li>Future forms: will, going to, Present Continuous, Present Simple</li>
+        <li>Talking about probability and intentions</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══ PHASE 1 — LEAD-IN ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Lead-in — Tall vs Flat Organisations</div>
+        <div class="phase-sub">BP B1+ p.10 — Exercise 1</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🏛️</div>
+          <span class="activity-title">Exercise 1 — Compare structures</span>
+          <span class="activity-src">BP p.10</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at the tall and flat organisational structures. What do you think are some advantages and disadvantages of each?</p>
+
+          <div class="mood-img-wrap"><img src="tfo.png"></div>
+
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Think about</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">How does decision-making differ between the two?</div>
+              <div class="speaking-row">Which one would suit a large bank or financial company — and why?</div>
+              <div class="speaking-row">Which one would you personally prefer to work in?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 2 — VOCABULARY 2A/2B ══ -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Vocabulary — Organisational Structures</div>
+        <div class="phase-sub">BP B1+ p.10 — Exercises 2A, 2B</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔑</div>
+          <span class="activity-title">Exercise 2A — Match words with definitions</span>
+          <span class="activity-src">BP p.10</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Match the words and phrases in the box with the definitions below.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">Word bank</div>
+            <span class="word-chip">bureaucracy</span>
+            <span class="word-chip">centralised</span>
+            <span class="word-chip">decentralised</span>
+            <span class="word-chip">hierarchy</span>
+            <span class="word-chip">innovative</span>
+            <span class="word-chip">promotion</span>
+          </div>
+
+          <ol class="exercise">
+            <li>a move to a more important job in a company or organisation — <input type="text" size="18"></li>
+            <li>new, different and better than before — <input type="text" size="18"></li>
+            <li>a system of organisation in which people are divided into levels of importance — <input type="text" size="18"></li>
+            <li>a complicated official system that has a lot of rules and processes — <input type="text" size="18"></li>
+            <li>organised the control of an organisation so that everything is done or decided in one place — <input type="text" size="18"></li>
+            <li>moved parts of an organisation, etc. from a central place to several different smaller ones — <input type="text" size="18"></li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev2a')">show answers ▾</button>
+          <div class="reveal-content" id="rev2a">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>promotion</strong></li>
+                <li><strong>innovative</strong></li>
+                <li><strong>hierarchy</strong></li>
+                <li><strong>bureaucracy</strong></li>
+                <li><strong>centralised</strong></li>
+                <li><strong>decentralised</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Exercise 2B — Apply the vocabulary</span>
+          <span class="activity-src">BP p.10 & p.126</span>
+          <span class="activity-time-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Use the words from Exercise 2A to talk about the tall and flat structures from Exercise 1.</p>
+
+          <div class="grammar-rule-block">
+            <h4>Tall organisations</h4>
+            <p>Tall organisations have lots of management levels. There is generally more <strong>bureaucracy</strong> and decision-making is slow and <strong>centralised</strong> in the top levels of the <strong>hierarchy</strong> (top-down decision-making). A criticism of tall organisations is that they are slow to <strong>innovate</strong> and therefore are less competitive. However, there are also many opportunities for <strong>promotion</strong>. Large complex corporations with a lot of staff are typical examples of tall organisations.</p>
+
+            <h4>Flat organisations</h4>
+            <p>Flat organisations are less hierarchical. There are few levels of middle management. Decision-making is more <strong>decentralised</strong> and therefore quicker. The lines of communication between staff and senior managers are more direct and two-way (top-down as well as bottom-up). Flatter organisations are said to be more creative and <strong>innovative</strong>. However, with fewer management levels, there are fewer chances of <strong>promotion</strong>. Managers can have more responsibilities and stress. Start-ups with fewer staff are typical flat organisations.</p>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">Compare your ideas from Exercise 1 with the textbook explanation above. Were your guesses close?</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 3 — COMPANY PROFILES ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Company Profiles — W. L. Gore & Zappos</div>
+        <div class="phase-sub">BP B1+ p.10 — Exercise 3</div>
+      </div>
+      <span class="phase-time">6 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🏢</div>
+          <span class="activity-title">Exercise 3 — Predict the structure</span>
+          <span class="activity-src">BP p.10</span>
+          <span class="activity-time-badge">6 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at the two company profiles below. Do you think they are likely to have a flat or tall structure? Why?</p>
+
+          <div class="profile-card-wrap">
+            <div class="company-profile">
+              <div class="company-profile-img">W.L. GORE</div>
+              <div class="company-profile-body">
+                <div class="company-profile-name">Company Profile</div>
+                <div class="cp-row"><span class="cp-label">CEO</span><span class="cp-value">Terri Kelly</span></div>
+                <div class="cp-row"><span class="cp-label">Sector</span><span class="cp-value">Manufacturing</span></div>
+                <div class="cp-row"><span class="cp-label">Number of staff</span><span class="cp-value">Over 10,000</span></div>
+              </div>
+            </div>
+            <div class="company-profile">
+              <div class="company-profile-img">ZAPPOS</div>
+              <div class="company-profile-body">
+                <div class="company-profile-name">Company Profile</div>
+                <div class="cp-row"><span class="cp-label">CEO</span><span class="cp-value">Tony Hsieh</span></div>
+                <div class="cp-row"><span class="cp-label">Sector</span><span class="cp-value">Online shoe and clothing sales</span></div>
+                <div class="cp-row"><span class="cp-label">Number of staff</span><span class="cp-value">Over 1,500</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">🎯</span>
+            <div class="tip-text">Hint: think about company size, sector, and what you already know about each company's culture or reputation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 4 — LISTENING ══ -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Listening — Radio Discussion</div>
+        <div class="phase-sub">BP B1+ p.10 — Exercises 4, 5, 6</div>
+      </div>
+      <span class="phase-time">15 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎧</div>
+          <span class="activity-title">Exercise 4 — Listen and check</span>
+          <span class="activity-src">BP p.10 · audio 1.01</span>
+          <span class="activity-time-badge">3 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Listen to the radio discussion with Janet Wood, an organisation consultant. Check your answers from Exercise 3.</p>
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1119160222&color=%23f2d5d6&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/unienglish" title="Uni English Radio" target="_blank" style="color: #cccccc; text-decoration: none;">Uni English Radio</a> · <a href="https://soundcloud.com/unienglish/1-01-2" title="1.01" target="_blank" style="color: #cccccc; text-decoration: none;">1.01</a></div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✓</div>
+          <span class="activity-title">Exercise 5 — True or False</span>
+          <span class="activity-src">BP p.10</span>
+          <span class="activity-time-badge">6 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Listen again and decide if these sentences are true (T) or false (F). Correct the incorrect sentences.</p>
+
+          <ol class="exercise">
+            <li>Organisations with tall structures can change and innovate fast. <input type="text" size="6" placeholder="T/F"></li>
+            <li>Bob and Genevieve Gore started their company in the 1960s. <input type="text" size="6" placeholder="T/F"></li>
+            <li>Employees voted to decide who should be the CEO of Gore. <input type="text" size="6" placeholder="T/F"></li>
+            <li>'Holacracy®' is a system without traditional managers. <input type="text" size="6" placeholder="T/F"></li>
+            <li>All the functions at Zappos are now done by teams. <input type="text" size="6" placeholder="T/F"></li>
+            <li>The transition at Zappos will take a few months to complete. <input type="text" size="6" placeholder="T/F"></li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev5')">show answers ▾</button>
+          <div class="reveal-content" id="rev5">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>F</strong> — tall organisations are usually slow to change and innovate</li>
+                <li><strong>T</strong></li>
+                <li><strong>F</strong> — employees vote, but for things like leadership of projects, not the CEO</li>
+                <li><strong>T</strong></li>
+                <li><strong>T</strong></li>
+                <li><strong>F</strong> — the transition will take a few years, not a few months</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔘</div>
+          <span class="activity-title">Exercise 6 — Choose the correct option</span>
+          <span class="activity-src">BP p.10</span>
+          <span class="activity-time-badge">6 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Choose the correct option. Listen to the discussion again if necessary.</p>
+
+          <ol class="exercise">
+            <li>Janet Wood seems <input type="text" size="4">
+              <br><small>a) critical of hierarchies &nbsp; b) positive about hierarchies &nbsp; c) sceptical about flat structures</small>
+            </li>
+            <li>Which statement about W. L. Gore is true? <input type="text" size="4">
+              <br><small>a) Employees work in teams of 30 &nbsp; b) Staff are called associates &nbsp; c) Nobody has a job title</small>
+            </li>
+            <li>Which statement about Zappos is true? <input type="text" size="4">
+              <br><small>a) The company started two years ago &nbsp; b) Staff work in about 500 teams called circles &nbsp; c) The lead link of a circle decides what everyone does</small>
+            </li>
+            <li>What do W. L. Gore and Zappos have in common? <input type="text" size="4">
+              <br><small>a) Senior executives are elected by employees &nbsp; b) Any member of staff can start a new project team &nbsp; c) Staff decide their own roles in a team</small>
+            </li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev6')">show answers ▾</button>
+          <div class="reveal-content" id="rev6">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>b</strong> — positive about hierarchies (she sees pros and cons, but is generally positive about moving away from rigid hierarchy)</li>
+                <li><strong>b</strong> — Staff are called associates</li>
+                <li><strong>b</strong> — Staff work in about 500 teams called circles</li>
+                <li><strong>b</strong> — Any member of staff can start a new project team</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 5 — DISCUSSION ══ -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div>
+        <div class="phase-title">Discussion — Flat Organisations in Practice</div>
+        <div class="phase-sub">BP B1+ p.10 — Exercise 7 + extra</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Exercise 7 — Personal reaction</span>
+          <span class="activity-src">BP p.10 · adapted</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">How would you feel about working in a flatter organisation with few or no managers?</div>
+              <div class="speaking-row">Do you think a system like Holacracy® could work in a finance department, where regulation and accountability matter a lot? Why or why not?</div>
+              <div class="speaking-row">If your own company moved to a flatter structure tomorrow, what would change most for you personally — more freedom, more stress, both?</div>
+              <div class="speaking-row">Would you rather have a clear boss to report to, or more autonomy but more responsibility for decisions?</div>
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">There's no right answer here — push for real reasoning. If she agrees too quickly, ask <strong>"but what about the downside?"</strong></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 6 — GRAMMAR ══ -->
+  <div class="phase phase-6" id="ph6">
+    <div class="phase-header" onclick="togglePhase('ph6')">
+      <span class="phase-num">06</span>
+      <div>
+        <div class="phase-title">Grammar — Future Forms</div>
+        <div class="phase-sub">BP B1+ p.11 — Exercises 8A, 8B, 9, 10A, 10B</div>
+      </div>
+      <span class="phase-time">20 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔗</div>
+          <span class="activity-title">Exercise 8A — Match extracts with function</span>
+          <span class="activity-src">BP p.11</span>
+          <span class="activity-time-badge">6 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at these extracts from the discussion. Match each one with its function (a–d).</p>
+
+          <div class="word-box" style="border-color: var(--border);">
+            <div class="word-box-label" style="color: var(--warm-grey);">Functions</div>
+            <span class="word-chip" style="background: #2a4a7a;">a) a personal intention</span>
+            <span class="word-chip" style="background: #2a4a7a;">b) a plan/arrangement</span>
+            <span class="word-chip" style="background: #2a4a7a;">c) a prediction</span>
+            <span class="word-chip" style="background: #2a4a7a;">d) a scheduled event</span>
+          </div>
+
+          <ol class="exercise">
+            <li>You decide what you <strong>are going to contribute</strong> to the team. — <input type="text" size="4"></li>
+            <li>Zappos <strong>has</strong> a training session next week. — <input type="text" size="4"></li>
+            <li>I'm <strong>flying</strong> to Las Vegas tomorrow. — <input type="text" size="4"></li>
+            <li>I'm sure that's <strong>going to be</strong> a very interesting experience. — <input type="text" size="4"></li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev8a')">show answers ▾</button>
+          <div class="reveal-content" id="rev8a">
+            <div class="answer-key">
+              <div class="ak-label">Answer key — 8A</div>
+              <ol>
+                <li>1 → <strong>a</strong> — personal intention</li>
+                <li>2 → <strong>d</strong> — scheduled event</li>
+                <li>3 → <strong>b</strong> — plan/arrangement</li>
+                <li>4 → <strong>c</strong> — prediction</li>
+              </ol>
+              <div class="ak-label" style="margin-top:14px;">Answer key — 8B (verb form used)</div>
+              <ol>
+                <li>1 → <strong>be going to</strong> + infinitive (are going to contribute)</li>
+                <li>2 → <strong>Present Simple</strong> (has)</li>
+                <li>3 → <strong>Present Continuous</strong> (am flying)</li>
+                <li>4 → <strong>be going to</strong> + infinitive (going to be)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Grammar reference — Future Forms</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="grammar-rule-block">
+            <p>We can talk about the future using a variety of forms depending on the function:</p>
+
+            <h4>Present Simple — scheduled events</h4>
+            <p>We use the <strong>Present Simple</strong> for <strong>events scheduled to happen</strong> (something that is timetabled).</p>
+            <span class="ex">I <strong>have</strong> a job interview tomorrow.</span>
+            <span class="ex">Our train <strong>doesn't leave</strong> until 8.30 this evening.</span>
+            <span class="ex"><strong>Does</strong> the departmental meeting <strong>start</strong> at 9 o'clock on Monday as usual?</span>
+
+            <h4>Present Continuous — plans/arrangements</h4>
+            <p>We use the <strong>Present Continuous</strong> for <strong>plans/arrangements</strong> (something you have confirmed for the future). This often involves other people.</p>
+            <span class="ex">I'm <strong>visiting</strong> the suppliers tomorrow.</span>
+            <span class="ex">He's on holiday so he <strong>isn't coming</strong> to the meeting on Friday.</span>
+            <span class="ex"><strong>Are</strong> you <strong>having</strong> a leaving party next week?</span>
+
+            <h4>Be + going to + infinitive</h4>
+            <p>We can use <strong>be + going to + infinitive</strong> in two different ways:</p>
+
+            <p><strong>i. To talk about personal intentions</strong> (something you want to do).</p>
+            <span class="ex">I'm <strong>going to get</strong> to the office early tomorrow.</span>
+            <span class="ex">We <strong>aren't going to change</strong> the software.</span>
+            <span class="ex">Is she <strong>going to come</strong> to the meeting?</span>
+
+            <p class="note"><strong>Note:</strong> We use the Present Continuous more for plans/arrangements with other people and <em>be + going to + infinitive</em> for personal intentions. However, often we could use either form because many events can be seen as either plans/arrangements or intentions.</p>
+            <span class="ex">I'm <strong>visiting</strong> the suppliers tomorrow. (This is a plan/arrangement between the supplier and myself.)</span>
+            <span class="ex">I'm <strong>going to visit</strong> the suppliers tomorrow. (This is my intention.)</span>
+            <span class="ex">I'm <strong>going to get</strong> to the office early tomorrow. (This is my intention.)</span>
+            <span class="ex"><span class="strike">I'm getting to the office early tomorrow.</span> (This is <u>not</u> correct because it is not a plan/arrangement.)</span>
+
+            <p><strong>ii. To talk about predictions when something is probable</strong> (something you expect to happen).</p>
+            <span class="ex">He's very good. I think he's <strong>going to get</strong> promoted soon.</span>
+            <span class="ex">Look at this office! It's <strong>not going to be</strong> big enough for four people.</span>
+            <span class="ex">She does a great job. I'm sure they're <strong>going to make</strong> her Chief Executive.</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Exercise 9 — Choose the best option</span>
+          <span class="activity-src">BP p.11</span>
+          <span class="activity-time-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Decide which is the best option in each sentence and explain your choice. There may be more than one possible answer.</p>
+
+          <ol class="exercise">
+            <li>What time <input type="text" size="6"> the first flight <input type="text" size="6"> on Sundays?
+              <br><small>a) does … leave &nbsp; b) is … leaving &nbsp; c) is … going to leave</small>
+            </li>
+            <li>When I get more free time, I <input type="text" size="14"> a gym.
+              <br><small>a) join &nbsp; b) am joining &nbsp; c) am going to join</small>
+            </li>
+            <li>He can't remember what time he <input type="text" size="14"> the client tomorrow.
+              <br><small>a) visits &nbsp; b) is visiting &nbsp; c) is going to visit</small>
+            </li>
+            <li>I <input type="text" size="16"> to her email until later today.
+              <br><small>a) don't reply &nbsp; b) am not replying &nbsp; c) am not going to reply</small>
+            </li>
+            <li>We <input type="text" size="14"> some friends after work this evening.
+              <br><small>a) meet &nbsp; b) are meeting &nbsp; c) are going to meet</small>
+            </li>
+            <li>Susan hasn't studied all year. She <input type="text" size="14"> her final exams next week.
+              <br><small>a) fails &nbsp; b) is failing &nbsp; c) is going to fail</small>
+            </li>
+            <li>The conference <input type="text" size="14"> until 10 o'clock but let's get there early.
+              <br><small>a) doesn't start &nbsp; b) isn't starting &nbsp; c) isn't going to start</small>
+            </li>
+            <li><input type="text" size="6"> we <input type="text" size="6"> in time to catch the train? There's a lot of traffic.
+              <br><small>a) Do we arrive &nbsp; b) Are we arriving &nbsp; c) Are we going to arrive</small>
+            </li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev9')">show answers ▾</button>
+          <div class="reveal-content" id="rev9">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>a</strong> does…leave — scheduled timetable event</li>
+                <li><strong>c</strong> am going to join — personal intention, no confirmed arrangement yet</li>
+                <li><strong>b or c</strong> is visiting / is going to visit — both work; arrangement or intention</li>
+                <li><strong>b or c</strong> am not replying / am not going to reply — intention not to act</li>
+                <li><strong>b or c</strong> are meeting / are going to meet — confirmed plan or intention</li>
+                <li><strong>c</strong> is going to fail — prediction based on evidence (hasn't studied)</li>
+                <li><strong>a</strong> doesn't start — scheduled event (timetable)</li>
+                <li><strong>c</strong> Are we going to arrive — prediction given the traffic situation</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Exercise 10A — Complete the conversation</span>
+          <span class="activity-src">BP p.11</span>
+          <span class="activity-time-badge">6 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the conversation with appropriate future forms, using contractions where possible. There may be more than one possible answer.</p>
+
+          <ol class="exercise">
+            <li><strong>A:</strong> Hi, Juliana. What time <input type="text" size="22"> (the department meeting / start) tomorrow?</li>
+            <li><strong>B:</strong> At 10 o'clock as usual, but I think I <input type="text" size="18"> (be) about fifteen minutes late. I have a dentist's appointment.</li>
+            <li><strong>A:</strong> <input type="text" size="22"> (you/be) able to talk after your trip to the dentist's?</li>
+            <li><strong>B:</strong> Yes, it's just a check-up. In fact, I <input type="text" size="18"> (give) a presentation on the company restructuring.</li>
+            <li><strong>A:</strong> I'm sure that <input type="text" size="14"> (be) interesting. Is it true we <input type="text" size="14"> (move) to offices outside the city?</li>
+            <li><strong>B:</strong> I <input type="text" size="18"> (not tell) you anything before the meeting. You know that.</li>
+            <li><strong>A:</strong> Well, I <input type="text" size="14"> (sit) right at the front. I don't want to miss anything.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev10a')">show answers ▾</button>
+          <div class="reveal-content" id="rev10a">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>does the department meeting <strong>start</strong> — scheduled event</li>
+                <li>I'm <strong>going to be</strong> — prediction/intention about being late</li>
+                <li><strong>Are you going to be</strong> — asking about intention/possibility</li>
+                <li>I'm <strong>giving</strong> — confirmed arrangement</li>
+                <li>that's <strong>going to be</strong> / we'<strong>re moving</strong> — prediction / plan</li>
+                <li>I'm <strong>not going to tell</strong> — personal intention (refusal)</li>
+                <li>I'<strong>m going to sit</strong> — personal intention</li>
+              </ol>
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dotted var(--border);">
+            <div class="activity-head" style="margin: 0 -16px 12px; border-radius: 0;">
+              <div class="activity-icon">🎧</div>
+              <span class="activity-title">Exercise 10B — Listen and check</span>
+              <span class="activity-src">audio 1.02</span>
+            </div>
+            <p>Listen to the conversation. Which future forms do the speakers use in each case? Why do you think this is?</p>
+            <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1119160204&color=%23f2d5d6&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/unienglish" title="Uni English Radio" target="_blank" style="color: #cccccc; text-decoration: none;">Uni English Radio</a> · <a href="https://soundcloud.com/unienglish/1-02-2" title="1.02" target="_blank" style="color: #cccccc; text-decoration: none;">1.02</a></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WRITING TASK -->
+  <div style="background: #1a2e52; border-radius: 8px; padding: 24px 28px; margin-top: 8px;">
+    <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#f0c060; margin:0 0 12px">✍️ Writing task — homework</p>
+    <p style="color:rgba(255,255,255,0.85); font-size:14px; margin-bottom:14px;">Write an email to a friend or colleague about a real or imaginary trip you have planned for work or pleasure. Write 100–120 words.</p>
+    <ul class="steps">
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">1</span><span>Say when and where you are going and how you are travelling there.</span></li>
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">2</span><span>Say where you are staying.</span></li>
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">3</span><span>Mention your predictions for the weather.</span></li>
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">4</span><span>Talk about your intentions and arrangements for the visit.</span></li>
+    </ul>
+    <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.12)">
+      <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin:0 0 8px">Note for teacher</p>
+      <p style="color:rgba(255,255,255,0.7); font-size:13px; margin:0;">Consider spending 5 minutes at the start of next lesson reviewing the email together — check which future forms she used and why, then correct together rather than just marking it.</p>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Діагностичне заняття</title>
+<style>
+  :root{
+    --navy:#0e1a2b;
+    --navy-light:#152740;
+    --gold:#d4af6a;
+    --gold-soft:#e8cd96;
+    --ink:#e9eef5;
+    --ink-dim:#9fb0c6;
+    --line:#24395a;
+    --a1:#7fb87f;
+    --a2:#6fb3d6;
+    --b1:#d4af6a;
+    --b2:#d68a6f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Georgia','Times New Roman',serif;
+    background:var(--navy);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  header{
+    padding:28px 32px 20px;
+    border-bottom:1px solid var(--line);
+  }
+  header h1{
+    margin:0 0 6px;
+    font-size:1.6rem;
+    color:var(--gold-soft);
+    font-weight:600;
+    letter-spacing:.3px;
+  }
+  header p{
+    margin:0;
+    color:var(--ink-dim);
+    font-family:Arial,sans-serif;
+    font-size:.92rem;
+  }
+  .tabs{
+    display:flex;
+    gap:6px;
+    padding:18px 32px 0;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    font-family:Arial,sans-serif;
+    font-weight:700;
+    font-size:.95rem;
+    padding:10px 22px;
+    border-radius:8px 8px 0 0;
+    border:1px solid var(--line);
+    border-bottom:none;
+    background:var(--navy-light);
+    color:var(--ink-dim);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn:hover{color:var(--ink);}
+  .tab-btn.active{color:var(--navy);}
+  .tab-btn[data-level="a1"].active{background:var(--a1);}
+  .tab-btn[data-level="a2"].active{background:var(--a2);}
+  .tab-btn[data-level="b1"].active{background:var(--b1);}
+  .tab-btn[data-level="b2"].active{background:var(--b2);}
+
+  main{
+    padding:0 32px 50px;
+    max-width:880px;
+  }
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .level-banner{
+    border-radius:0 10px 10px 10px;
+    border:1px solid var(--line);
+    padding:16px 22px;
+    margin-bottom:24px;
+    background:var(--navy-light);
+  }
+  .level-banner h2{margin:0;font-size:1.25rem;}
+  .panel[data-level="a1"] .level-banner h2{color:var(--a1);}
+  .panel[data-level="a2"] .level-banner h2{color:var(--a2);}
+  .panel[data-level="b1"] .level-banner h2{color:var(--b1);}
+  .panel[data-level="b2"] .level-banner h2{color:var(--b2);}
+
+  .phase{
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .phase-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 20px;
+    background:var(--navy-light);
+    cursor:pointer;
+    font-family:Arial,sans-serif;
+  }
+  .phase-head .ph-title{font-weight:700;font-size:1rem;color:var(--gold-soft);}
+  .phase-head .ph-meta{font-size:.8rem;color:var(--ink-dim);}
+  .phase-body{
+    padding:18px 20px 22px;
+    border-top:1px solid var(--line);
+    display:none;
+  }
+  .phase.open .phase-body{display:block;}
+  .phase-head .chevron{transition:transform .2s ease;color:var(--ink-dim);}
+  .phase.open .chevron{transform:rotate(90deg);}
+
+  .qlist{margin:0;padding-left:0;list-style:none;}
+  .qlist li{margin-bottom:10px;padding-left:18px;position:relative;}
+  .qlist li::before{content:"—";position:absolute;left:0;color:var(--gold);}
+
+  .grammar-item{margin-bottom:14px;font-family:Arial,sans-serif;font-size:.95rem;}
+  .grammar-item input{
+    background:var(--navy);
+    border:1px solid var(--line);
+    color:var(--ink);
+    border-radius:5px;
+    padding:5px 8px;
+    font-family:Arial,sans-serif;
+    margin-left:6px;
+    min-width:140px;
+  }
+  .grammar-item input:focus{outline:1px solid var(--gold);}
+
+  .reading-text{
+    font-family:Arial,sans-serif;
+    font-size:.95rem;
+    background:var(--navy);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:14px 16px;
+    margin-bottom:14px;
+  }
+
+  .vocab-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px 18px;
+    font-family:Arial,sans-serif;
+    font-size:.92rem;
+    margin-bottom:10px;
+  }
+  .vocab-grid input{
+    background:var(--navy);
+    border:1px solid var(--line);
+    color:var(--ink);
+    border-radius:5px;
+    padding:4px 8px;
+    font-family:Arial,sans-serif;
+    width:70%;
+  }
+
+  .video-slot{
+    border:1px dashed var(--line);
+    border-radius:8px;
+    padding:14px 18px;
+    background:var(--navy);
+  }
+  .video-embed input{
+    width:100%;
+    background:var(--navy-light);
+    border:1px solid var(--line);
+    color:var(--ink);
+    border-radius:5px;
+    padding:8px 10px;
+    font-family:Arial,sans-serif;
+    font-size:.85rem;
+  }
+  .video-frame-wrap{margin-top:12px;}
+  iframe.yt{width:100%;aspect-ratio:16/9;border:none;border-radius:6px;display:none;}
+
+  .reveal-btn{
+    font-family:Arial,sans-serif;
+    font-size:.82rem;
+    font-weight:700;
+    color:var(--navy);
+    background:var(--gold);
+    border:none;
+    border-radius:6px;
+    padding:6px 14px;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  .answer-key{
+    display:none;
+    margin-top:10px;
+    padding:10px 14px;
+    background:var(--navy);
+    border-left:3px solid var(--gold);
+    border-radius:4px;
+    font-family:Arial,sans-serif;
+    font-size:.88rem;
+    color:var(--gold-soft);
+  }
+  .answer-key.show{display:block;}
+
+  @media(max-width:600px){
+    header,.tabs,main{padding-left:16px;padding-right:16px;}
+    .vocab-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Англійська — пробне заняття</h1>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-level="a1" onclick="showLevel('a1')">A1</button>
+  <button class="tab-btn" data-level="a2" onclick="showLevel('a2')">A2</button>
+  <button class="tab-btn" data-level="b1" onclick="showLevel('b1')">B1</button>
+  <button class="tab-btn" data-level="b2" onclick="showLevel('b2')">B2</button>
+</div>
+
+<main>
+
+  <!-- ================= A1 ================= -->
+  <div class="panel active" data-level="a1">
+    <div class="level-banner"><h2>A1</h2></div>
+
+    <div class="phase open">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Speaking · знайомство</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <ul class="qlist">
+          <li>What is your name? How old are you?</li>
+          <li>Where are you from? Where do you live?</li>
+          <li>What is your job? / Are you a student?</li>
+          <li>Do you have any children / pets?</li>
+          <li>What is your favourite colour / food?</li>
+          <li>Do you have brothers or sisters?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Граматика · to be / have / present simple</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="grammar-item">1. She ___ (to be) a teacher. <input type="text"></div>
+        <div class="grammar-item">2. I ___ (have) two brothers. <input type="text"></div>
+        <div class="grammar-item">3. They ___ (not / live) in Kyiv. <input type="text"></div>
+        <div class="grammar-item">4. ___ you like coffee? <input type="text"></div>
+        <div class="grammar-item">5. We ___ (be) from Ukraine. <input type="text"></div>
+        <div class="grammar-item">6. He ___ (work) in a bank. <input type="text"></div>
+        <div class="grammar-item">7. My sister ___ (not / have) a car. <input type="text"></div>
+        <div class="grammar-item">8. ___ (this / be) your bag?</div>
+        <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Показати відповіді</button>
+        <div class="answer-key">1. is &nbsp; 2. have &nbsp; 3. don't live &nbsp; 4. Do &nbsp; 5. are &nbsp; 6. works &nbsp; 7. doesn't have &nbsp; 8. Is this</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Лексика · базові слова</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <p style="font-family:Arial,sans-serif;font-size:.9rem;color:var(--ink-dim);margin-top:0;">Перекладіть слова:</p>
+        <div class="vocab-grid">
+          <div>1. будинок <input type="text"></div>
+          <div>2. родина <input type="text"></div>
+          <div>3. друг <input type="text"></div>
+          <div>4. робота <input type="text"></div>
+          <div>5. машина <input type="text"></div>
+          <div>6. книга <input type="text"></div>
+          <div>7. погода <input type="text"></div>
+          <div>8. місто <input type="text"></div>
+        </div>
+        <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Показати відповіді</button>
+        <div class="answer-key">1. house &nbsp;2. family &nbsp;3. friend &nbsp;4. job/work &nbsp;5. car &nbsp;6. book &nbsp;7. weather &nbsp;8. city</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Читання</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="reading-text">
+          My name is Anna. I am 28 years old. I live in Lviv with my husband and our daughter. I work in a small shop. In the morning, I drink coffee and go to work. In the evening, I cook dinner and watch TV.
+        </div>
+        <ul class="qlist">
+          <li>How old is Anna?</li>
+          <li>Where does she live?</li>
+          <li>What does she do in the morning?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Відео</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/nuXyJazvm4U?si=H-zTaxpDPZCx0gNC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= A2 ================= -->
+  <div class="panel" data-level="a2">
+    <div class="level-banner"><h2>A2</h2></div>
+
+    <div class="phase open">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Speaking · повсякденне життя</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <ul class="qlist">
+          <li>What did you do yesterday?</li>
+          <li>Tell me about your typical day.</li>
+          <li>What do you usually do on weekends?</li>
+          <li>What's your favourite food / film? Why?</li>
+          <li>What was the last trip you took?</li>
+          <li>What do you do to relax after work?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Граматика · Past Simple / Present Continuous</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="grammar-item">1. Yesterday I ___ (go) to the cinema. <input type="text"></div>
+        <div class="grammar-item">2. Look! It ___ (rain). <input type="text"></div>
+        <div class="grammar-item">3. There ___ (be) a lot of people at the party. <input type="text"></div>
+        <div class="grammar-item">4. She ___ (not / finish) her homework. <input type="text"></div>
+        <div class="grammar-item">5. We ___ (visit) my grandmother last weekend. <input type="text"></div>
+        <div class="grammar-item">6. He ___ (not / watch) TV now, he ___ (read) a book. <input type="text"></div>
+        <div class="grammar-item">7. Did you ___ (see) that film?</div>
+        <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Показати відповіді</button>
+        <div class="answer-key">1. went &nbsp;2. is raining &nbsp;3. were &nbsp;4. hasn't finished &nbsp;5. visited &nbsp;6. isn't watching / is reading &nbsp;7. see</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Лексика · фрази</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="vocab-grid">
+          <div>1. розклад <input type="text"></div>
+          <div>2. подорож <input type="text"></div>
+          <div>3. зустріч <input type="text"></div>
+          <div>4. покупки <input type="text"></div>
+          <div>5. знижка <input type="text"></div>
+          <div>6. вихідні <input type="text"></div>
+        </div>
+        <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Показати відповіді</button>
+        <div class="answer-key">1. schedule &nbsp;2. trip/journey &nbsp;3. meeting &nbsp;4. shopping &nbsp;5. discount &nbsp;6. weekend</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Читання</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="reading-text">
+          Last weekend, my friends and I went to the mountains. We left early in the morning and arrived at the hotel around noon. The weather was perfect, so we decided to go hiking. In the evening, we made a fire and talked for hours. It was one of the best weekends I've had this year.
+        </div>
+        <ul class="qlist">
+          <li>What did they do in the evening?</li>
+          <li>Why did they decide to go hiking?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Відео</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="video-slot">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/gOMypAhVaXE?si=0zulk96BltO4tRGX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= B1 ================= -->
+  <div class="panel" data-level="b1">
+    <div class="level-banner"><h2>B1</h2></div>
+
+    <div class="phase open">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Speaking · думки та досвід</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <ul class="qlist">
+          <li>What was the most interesting thing that happened to you recently?</li>
+          <li>If you could change one thing about your job, what would it be?</li>
+          <li>What's something you've always wanted to learn?</li>
+          <li>Describe a difficult decision you had to make.</li>
+          <li>What's a habit you'd like to change?</li>
+          <li>Tell me about a person who influenced you a lot.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Граматика · Present Perfect / умовні / зв'язки</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="grammar-item">1. I ___ (never / be) to Japan. <input type="text"></div>
+        <div class="grammar-item">2. If I ___ (have) more time, I would learn Spanish. <input type="text"></div>
+        <div class="grammar-item">3. ___ I finished work, I went straight home. <input type="text"></div>
+        <div class="grammar-item">4. This is the book ___ I told you about. <input type="text"></div>
+        <div class="grammar-item">5. By the time she arrived, we ___ (already / leave). <input type="text"></div>
+        <div class="grammar-item">6. He said he ___ (call) me back later. <input type="text"></div>
+        <div class="grammar-item">7. I'm used to ___ (work) late.</div>
+        <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Показати відповіді</button>
+        <div class="answer-key">1. have never been &nbsp;2. had &nbsp;3. As soon as / After &nbsp;4. that/which &nbsp;5. had already left &nbsp;6. would call &nbsp;7. working</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Лексика · колокації</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="vocab-grid">
+          <div>1. приймати рішення <input type="text"></div>
+          <div>2. досягти мети <input type="text"></div>
+          <div>3. справлятися зі стресом <input type="text"></div>
+          <div>4. встановити термін <input type="text"></div>
+          <div>5. брати на себе відповідальність <input type="text"></div>
+          <div>6. йти на компроміс <input type="text"></div>
+        </div>
+        <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Показати відповіді</button>
+        <div class="answer-key">1. make a decision &nbsp;2. achieve a goal &nbsp;3. cope with stress &nbsp;4. set a deadline &nbsp;5. take responsibility &nbsp;6. make a compromise</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Читання</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="reading-text">
+          Many people believe that working from home increases productivity, but the reality is more complicated. While some employees report fewer distractions and better focus, others struggle with isolation and find it harder to separate work from personal life. Companies are now experimenting with hybrid models, hoping to combine the benefits of both approaches.
+        </div>
+        <ul class="qlist">
+          <li>What is one disadvantage of working from home mentioned in the text?</li>
+          <li>What are companies trying to do now?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Відео</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="video-slot">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/7F1iJZr-p4E?si=Rf-OSLVavTAdCrvA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= B2 ================= -->
+  <div class="panel" data-level="b2">
+    <div class="level-banner"><h2>B2</h2></div>
+
+    <div class="phase open">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Speaking · аргументація</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <ul class="qlist">
+          <li>Do you think remote work is better than working in an office? Why?</li>
+          <li>What's a belief you've changed your mind about over the years?</li>
+          <li>How do you think your industry will change in the next 10 years?</li>
+          <li>Describe a situation where you had to persuade someone.</li>
+          <li>What's the biggest risk you've taken, professionally or personally?</li>
+          <li>Do you think social media has more positive or negative effects on society?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Граматика · інверсія, passive, складні зв'язки</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="grammar-item">1. Not only ___ he late, but he also forgot the documents. <input type="text"></div>
+        <div class="grammar-item">2. The report ___ (finish) by next Friday. <input type="text"></div>
+        <div class="grammar-item">3. ___ the weather, the event went ahead. <input type="text"></div>
+        <div class="grammar-item">4. I wish I ___ (know) about this earlier. <input type="text"></div>
+        <div class="grammar-item">5. Had I known, I ___ (act) differently. <input type="text"></div>
+        <div class="grammar-item">6. It's high time we ___ (make) a decision. <input type="text"></div>
+        <div class="grammar-item">7. She would rather you ___ (not / mention) it.</div>
+        <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Показати відповіді</button>
+        <div class="answer-key">1. was &nbsp;2. will have been finished/will be finished &nbsp;3. Despite/Regardless of &nbsp;4. had known &nbsp;5. would have acted &nbsp;6. made &nbsp;7. didn't mention</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Лексика · ідіоми та формальна мова</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="vocab-grid">
+          <div>1. зважити всі за і проти <input type="text"></div>
+          <div>2. бути на одній хвилі <input type="text"></div>
+          <div>3. дотримуватися термінів <input type="text"></div>
+          <div>4. суттєвий вплив <input type="text"></div>
+          <div>5. на перший погляд <input type="text"></div>
+          <div>6. зрештою <input type="text"></div>
+        </div>
+        <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Показати відповіді</button>
+        <div class="answer-key">1. weigh the pros and cons &nbsp;2. be on the same wavelength &nbsp;3. meet deadlines &nbsp;4. significant impact &nbsp;5. at first glance &nbsp;6. ultimately/in the end</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Читання</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="reading-text">
+          As artificial intelligence becomes more deeply embedded in everyday decision-making, questions about accountability are growing more urgent. Critics argue that organisations are quick to adopt automated systems but slow to establish clear lines of responsibility when those systems make mistakes. Proponents counter that the benefits, in efficiency and consistency, far outweigh the risks, provided proper oversight is in place.
+        </div>
+        <ul class="qlist">
+          <li>What concern do critics raise about automated systems?</li>
+          <li>What condition do proponents attach to their argument?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head" onclick="togglePhase(this)">
+        <span class="ph-title">Відео</span><span class="ph-meta"><span class="chevron">▶</span></span>
+      </div>
+      <div class="phase-body">
+        <div class="video-slot">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/2lxvNnGkdTo?si=AnI0EsOKyKtUUAvu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function showLevel(level){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.level===level));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.dataset.level===level));
+}
+function togglePhase(headEl){
+  headEl.parentElement.classList.toggle('open');
+}
+function getYouTubeId(url){
+  const m = url.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+['a1','a2','b1','b2'].forEach(lvl=>{
+  const input = document.getElementById('yt-'+lvl);
+  const frame = document.getElementById('yt-frame-'+lvl);
+  input.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){
+      const id = getYouTubeId(input.value.trim());
+      if(id){
+        frame.src = 'https://www.youtube.com/embed/'+id;
+        frame.style.display='block';
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>

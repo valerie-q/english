@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 6 — Sales Pitch & Startup Wisdom</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2240; --ink-soft: #3a4a6a; --paper: #f5f7fc; --paper-dark: #e8edf8;
+      --gold: #c88a10; --teal: #2a5fa8; --teal-light: #4a7fc8; --warm-grey: #6a7a9a;
+      --border: #d0d8ec; --white: #ffffff;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+
+    .header { background:#1a2e52; color:#fff; padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .header::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle, rgba(90,143,232,0.3) 0%, transparent 70%); }
+    .header::after { content:''; position:absolute; bottom:-40px; left:20%; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle, rgba(200,138,16,0.2) 0%, transparent 70%); }
+    .header-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,58px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .header h1 em { font-style:italic; color:#f0c060; }
+    .header-meta { display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+    .meta-chip .dot { width:6px; height:6px; border-radius:50%; background:#f0c060; flex-shrink:0; }
+    .meta-chip strong { color:#fff; }
+
+    .objectives-wrap { max-width:1100px; margin:0 auto; padding:32px 40px; }
+    .objectives-box { background:#fff; border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:4px; padding:24px 28px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .obj-col h3 { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:10px; }
+    .obj-list { list-style:none; }
+    .obj-list li { font-size:14px; padding:5px 0 5px 18px; position:relative; color:var(--ink-soft); border-bottom:1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom:none; }
+    .obj-list li::before { content:'✓'; position:absolute; left:0; color:var(--teal-light); font-size:12px; font-weight:600; }
+
+    .main { max-width:1100px; margin:0 auto; padding:0 40px 60px; }
+
+    .phase { margin-bottom:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding:18px 24px; display:flex; align-items:center; gap:16px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:20px; font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase-num { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:4px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:#fff; }
+    .phase-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .phase-body { padding:0 24px 24px; background:var(--paper); }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-1 .phase-header { background:#1e3a5f; }
+    .phase-2 .phase-header { background:#2a4a7a; }
+    .phase-3 .phase-header { background:#1a3a6e; }
+    .phase-4 .phase-header { background:#1e3a5f; }
+    .phase-5 .phase-header { background:#2a4a7a; }
+    .phase-6 .phase-header { background:#1a3a6e; }
+
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:16px; overflow:hidden; background:var(--white); box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+    .activity-head { background:var(--paper-dark); padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
+    .activity-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; background:#eef3fb; }
+    .activity-title { font-weight:600; font-size:14px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:#1e3a6e; background:#dce6f5; border:1px solid #b0c8ec; padding:3px 8px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:16px; background:var(--white); }
+
+    .speaking-box { border:2px solid var(--teal); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .speaking-box-header { background:#1e3a5f; padding:10px 16px; }
+    .speaking-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#fff; font-weight:600; }
+    .speaking-box-body { background:var(--white); padding:16px; }
+    .speaking-row { padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; color:var(--ink); }
+    .speaking-row:last-child { border-bottom:none; }
+
+    .phrase-box { background:#1a2e52; border-radius:4px; padding:16px 20px; margin:12px 0; }
+    .phrase-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:#f0c060; margin-bottom:10px; }
+    .phrase-row { display:flex; align-items:baseline; gap:16px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1); }
+    .phrase-row:last-child { border-bottom:none; }
+    .phrase-en { font-size:15px; font-weight:500; flex:1; color:#fff; }
+    .phrase-de { font-size:13px; color:rgba(255,255,255,0.55); flex:1; }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:5px 14px; border-radius:20px; cursor:pointer; margin-top:10px; transition:all 0.2s; }
+    .reveal-btn:hover { border-color:var(--teal); color:var(--teal); }
+    .reveal-content { display:none; margin-top:10px; }
+    .reveal-content.open { display:block; }
+
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:12px 16px; margin:12px 0; font-size:13px; }
+    .ak-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .answer-key ol { padding-left:20px; }
+    .answer-key li { padding:3px 0; color:var(--ink-soft); }
+    .answer-key li strong { color:var(--teal); }
+
+    .word-box { background:var(--white); border:2px solid var(--teal); border-radius:6px; padding:12px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--teal); width:100%; margin-bottom:4px; }
+    .word-chip { background:#1e3a5f; color:#fff; font-size:13px; font-weight:600; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+
+    .fill-text { background:var(--paper); border:1px solid var(--border); border-radius:6px; padding:16px 20px; font-size:14px; line-height:2.2; color:var(--ink); margin:12px 0; }
+    .fill-input { border:none; border-bottom:2px solid var(--teal-light); background:transparent; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; padding:0 4px; min-width:120px; }
+    .fill-input:focus { border-bottom-color:var(--gold); }
+
+    .pitch-step { border-radius:6px; overflow:hidden; margin:12px 0; border:1px solid var(--border); }
+    .pitch-step-header { display:flex; align-items:center; gap:12px; padding:12px 16px; background:#1e3a5f; }
+    .pitch-step-num { font-family:'DM Mono',monospace; font-size:13px; font-weight:600; color:#f0c060; min-width:20px; }
+    .pitch-step-title { font-size:15px; font-weight:600; color:#fff; }
+    .pitch-step-body { background:var(--white); padding:16px; }
+    .pitch-example { background:#f5f7fc; border-left:3px solid var(--teal-light); padding:12px 16px; margin:10px 0; font-size:14px; font-style:italic; color:var(--ink-soft); border-radius:0 4px 4px 0; }
+
+    .pitch-write-area { width:100%; min-height:90px; border:2px solid var(--border); border-radius:6px; padding:14px 16px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); background:var(--paper); resize:vertical; outline:none; line-height:1.7; }
+    .pitch-write-area:focus { border-color:var(--teal); }
+
+    .match-table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
+    .match-table th { background:var(--ink); color:#fff; padding:8px 12px; text-align:left; font-weight:500; font-size:12px; }
+    .match-table td { padding:8px 12px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--ink-soft); }
+    .match-table tr:last-child td { border-bottom:none; }
+    .match-table tr:nth-child(even) td { background:var(--paper-dark); }
+
+    .term-box { background: var(--white); border-left: 3px solid var(--gold); border-radius: 0 4px 4px 0; padding: 10px 14px; margin: 8px 0; font-size: 14px; }
+    .term-box strong { color: var(--teal); }
+
+    .tweet-card { border:1px solid #cfd9de; border-radius:12px; padding:16px 20px; max-width:560px; margin:14px 0; background:#fff; }
+    .tweet-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .tweet-avatar { width:40px; height:40px; border-radius:50%; background:var(--teal); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:18px; flex-shrink:0; }
+    .tweet-author { margin-left:10px; }
+    .tweet-author strong { display:block; font-size:14px; color:#0f1419; }
+    .tweet-author span { font-size:13px; color:#536471; }
+    .tweet-x { fill:#000; width:20px; height:20px; }
+    .tweet-body { font-size:15px; color:#0f1419; line-height:1.7; }
+    .tweet-body u { text-decoration-color:#f0c060; text-underline-offset:3px; }
+    .tweet-vocab { margin-top:12px; padding:10px 14px; border:1px solid #f0c060; border-radius:6px; }
+    .tweet-vocab p { font-size:13px; color:#536471; margin:0 0 4px; }
+    .tweet-vocab p:last-child { margin:0; }
+    .tweet-vocab strong { color:#0f1419; }
+
+    .glossary-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 24px; margin:12px 0; }
+    .glossary-item { font-size:13px; padding:8px 0; border-bottom:1px dotted var(--border); color:var(--ink-soft); }
+    .glossary-item strong { color:var(--teal); }
+
+    .quiz-question { border:1px solid var(--border); border-radius:6px; padding:16px; margin-top:14px; background:var(--white); }
+    .quiz-q-text { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:10px; }
+    .quiz-option { display:flex; align-items:center; gap:10px; padding:7px 10px; border-radius:4px; cursor:pointer; font-size:14px; color:var(--ink-soft); border:1px solid transparent; transition:all 0.15s; margin-bottom:4px; }
+    .quiz-option:hover { background:var(--paper-dark); border-color:var(--border); }
+    .quiz-option input[type="radio"] { accent-color:var(--teal); width:16px; height:16px; flex-shrink:0; }
+    .quiz-option.correct { background:#eaf5ea; border-color:#6abf6a; color:#1a4a1a; }
+    .quiz-option.wrong { background:#fdeaea; border-color:#e08080; color:#4a1a1a; }
+    .quiz-feedback { font-size:12px; margin-top:6px; font-family:'DM Mono',monospace; display:none; }
+    .quiz-feedback.show { display:block; }
+    .quiz-feedback.ok { color:#2a7a2a; }
+    .quiz-feedback.bad { color:#aa2222; }
+    .quiz-score-box { background:#1a2e52; border-radius:8px; padding:20px 24px; margin-top:20px; text-align:center; display:none; }
+    .quiz-score-box.show { display:block; }
+    .quiz-score-num { font-family:'Playfair Display',serif; font-size:48px; color:#f0c060; font-weight:900; }
+    .quiz-score-label { font-size:14px; color:rgba(255,255,255,0.7); margin-top:4px; }
+
+    .mood-img-wrap img { max-width:420px; width:100%; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.1); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:14px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom:none; }
+    p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0; }
+    p:first-child { margin-top:0; }
+    strong { color:var(--ink); }
+
+    @media (max-width:700px) {
+      .objectives-box, .glossary-grid { grid-template-columns:1fr; }
+      .header, .objectives-wrap, .main { padding-left:20px; padding-right:20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 6<br><em>Sales Pitch & Startup Wisdom</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;English for Tech · pp. 42–46</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;B1–B2</div>
+    </div>
+  </div>
+</div>
+
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Learn small talk phrases for the World Cup</li>
+        <li>Understand how to structure a sales pitch</li>
+        <li>Write and deliver a pitch for your own company/product</li>
+        <li>Discuss startup advice from Guy Kawasaki</li>
+        <li>Test vocabulary and grammar from Lesson 2</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>Sales pitch structure: who you are, what your company does, value proposition, call to action</li>
+        <li>Startup vocabulary: evangelist, bozo, naysayer, mantra, MVVVP</li>
+        <li>Key terms: shareholder, incubator, accelerator, pitch deck, MVP, bootstrap, scale up, middleman</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PHASE 1 — WARM-UP: FOOTBALL SMALL TALK -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Warm-up — Small Talk: World Cup</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🖼️</div>
+          <span class="activity-title">Who are you rooting for?</span>
+        </div>
+        <div class="activity-body">
+          <div class="mood-img-wrap">
+            <img src="ff.webp">
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">⚽</div>
+          <span class="activity-title">Football small talk — key phrases</span>
+        </div>
+        <div class="activity-body">
+          <p>The World Cup is here — your colleagues are talking about it on Slack, before meetings, during coffee breaks. You don't need to be a football expert to join in. Here are the phrases that will get you through.</p>
+
+          <div class="phrase-box">
+            <div class="phrase-label">Key phrases</div>
+            <div class="phrase-row">
+              <span class="phrase-en">Kickoff</span>
+              <span class="phrase-de">the start of the match — also used at work: "We're kicking off the project on Monday"</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Who are you rooting for?</span>
+              <span class="phrase-de">which team do you want to win (common in American English)</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">Underdog</span>
+              <span class="phrase-de">the team nobody expects to win — also used in business: "Our startup was the underdog"</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">What a goal! / What a finish!</span>
+              <span class="phrase-de">natural reaction to an amazing moment — more natural than "the goal was very good"</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">That was a bad call</span>
+              <span class="phrase-de">disagreeing with a referee's decision (a "call" = a decision)</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">A snoozefest</span>
+              <span class="phrase-de">something very boring — casual and slightly funny</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">A nail-biter</span>
+              <span class="phrase-de">a very tense match — also works outside football: "That product demo was a nail-biter"</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">What a comeback</span>
+              <span class="phrase-de">a team that was losing but came back to win — works for business too: "The company made a strong comeback"</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">They couldn't handle the pressure</span>
+              <span class="phrase-de">failed because of the pressure of the moment</span>
+            </div>
+            <div class="phrase-row">
+              <span class="phrase-en">I'm not really into football, but…</span>
+              <span class="phrase-de">a polite way to join the conversation without pretending to be an expert</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Fill in the gaps</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box">
+            <div class="word-box-label">phrase bank</div>
+            <span class="word-chip">kicking off</span>
+            <span class="word-chip">underdog</span>
+            <span class="word-chip">nail-biter</span>
+            <span class="word-chip">bad call</span>
+            <span class="word-chip">comeback</span>
+            <span class="word-chip">not really into football</span>
+          </div>
+          <div class="fill-text">
+            1. We're <input class="fill-input" size="14"> the new project on Monday.<br><br>
+            2. Our startup was the <input class="fill-input" size="12">, but we still won the contract.<br><br>
+            3. The last ten minutes of the match were a real <input class="fill-input" size="14">.<br><br>
+            4. I don't think that was a penalty — <input class="fill-input" size="12">.<br><br>
+            5. The product had a slow start, but it made a <input class="fill-input" size="14"> after the redesign.<br><br>
+            6. I'm <input class="fill-input" size="26">, but I like the atmosphere around the World Cup.
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev_fb')">show answers ▾</button>
+          <div class="reveal-content" id="rev_fb">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>kicking off</strong></li>
+                <li><strong>underdog</strong></li>
+                <li><strong>nail-biter</strong></li>
+                <li><strong>bad call</strong></li>
+                <li><strong>comeback</strong></li>
+                <li><strong>not really into football</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Speaking practice</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Answer naturally</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What's your prediction — who do you think will win?</div>
+              <div class="speaking-row">Did you watch any matches this week? Was it a nail-biter or a snoozefest?</div>
+              <div class="speaking-row">Is there a team you'd call this year's underdog?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 2 — SALES PITCH -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Writing & Soft Skills — Sales Pitch</div>
+        <div class="phase-sub">EfT pp. 42–43 · Presenting your company or product</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📖</div>
+          <span class="activity-title">Ex. 1A — What makes a good pitch</span>
+          <span class="activity-src">EfT p.42</span>
+        </div>
+        <div class="activity-body">
+          <p>"I have an idea I want to pitch." This is a sentence every English speaker says at least once in their career. Every time you have to introduce yourself, talk about what your company does, or suggest a new idea, you are delivering a sales pitch.</p>
+
+          <p style="margin-top:12px"><strong>Here's how you can go about it:</strong></p>
+          <ol class="exercise">
+            <li>Who are you?</li>
+            <li>What does your company do?</li>
+            <li>What's the value proposition?</li>
+            <li>Attention-grabbing call to action statement.</li>
+            <li>Read and edit the pitch.</li>
+          </ol>
+
+          <p style="margin-top:14px"><strong>Remember the 3 big Don'ts of a sales pitch:</strong></p>
+          <div class="term-box"><strong>Don't use jargon</strong> — use simple words that people from outside of your professional sphere can understand.</div>
+          <div class="term-box"><strong>Don't make the pitch too long</strong> — 1 minute is ideal. The end goal of a pitch is to earn you a second conversation, not to explain everything at once.</div>
+          <div class="term-box"><strong>Don't freestyle too much</strong> — make your pitch concise and to the point. Preparing your pitch helps you make a better impression than improvising it off the top of your head.</div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🏗️</div>
+          <span class="activity-title">How a pitch is structured</span>
+          <span class="activity-src">EfT p.43</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="pitch-step">
+            <div class="pitch-step-header">
+              <span class="pitch-step-num">1</span>
+              <span class="pitch-step-title">Who are you?</span>
+            </div>
+            <div class="pitch-step-body">
+              <p>Write a sentence about who you are and what your role is at the company.</p>
+              <div class="pitch-example">e.g., "I'm the CEO of Hiretool."</div>
+            </div>
+          </div>
+
+          <div class="pitch-step">
+            <div class="pitch-step-header">
+              <span class="pitch-step-num">2</span>
+              <span class="pitch-step-title">What does your company do?</span>
+            </div>
+            <div class="pitch-step-body">
+              <p>What's the company's mission and goals for its product or service?</p>
+              <div class="pitch-example">"I'm the CEO of Hiretool. We help tech companies that outsource their workforce across the globe test potential candidates' English and communication skills prior to inviting them to a job interview with a foreign customer."</div>
+            </div>
+          </div>
+
+          <div class="pitch-step">
+            <div class="pitch-step-header">
+              <span class="pitch-step-num">3</span>
+              <span class="pitch-step-title">What's the value proposition?</span>
+            </div>
+            <div class="pitch-step-body">
+              <p>What does your company do exceptionally well that sets its product or service apart from the rest? Write a brief, 1-2 sentence statement about the value the product or service provides to current customers.</p>
+              <div class="pitch-example">"...A recruiter or a manager can assign a test to a candidate in just 2 clicks. No middleman, no additional registration that would scare the candidate away. The tests are predesigned by our specialists based on a client's request and checked with the help of AI technology."</div>
+            </div>
+          </div>
+
+          <div class="pitch-step">
+            <div class="pitch-step-header">
+              <span class="pitch-step-num">4</span>
+              <span class="pitch-step-title">Grab their attention</span>
+            </div>
+            <div class="pitch-step-body">
+              <p>Pull in your audience with an exciting story about a customer or the company founders. Or offer up a fascinating fact or statistic about the product.</p>
+              <div class="pitch-example">"According to Statistics Brain, 43 percent of U.S. companies are outsourcing jobs from the IT industry. Which means a lot of non-native English speakers are recruited."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✍️</div>
+          <span class="activity-title">Ex. 1B — Write your own pitch</span>
+          <span class="activity-src">EfT p.43</span>
+        </div>
+        <div class="activity-body">
+          <p>Now, write your own pitch following the same 4 steps.</p>
+          <div style="margin:14px 0">
+            <p style="font-weight:600;font-size:13px;color:var(--teal);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase">1. Who are you?</p>
+            <textarea class="pitch-write-area" placeholder="I'm the..."></textarea>
+          </div>
+          <div style="margin:14px 0">
+            <p style="font-weight:600;font-size:13px;color:var(--teal);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase">2. What does your company do?</p>
+            <textarea class="pitch-write-area" placeholder="We help..."></textarea>
+          </div>
+          <div style="margin:14px 0">
+            <p style="font-weight:600;font-size:13px;color:var(--teal);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase">3. What's the value proposition?</p>
+            <textarea class="pitch-write-area" placeholder="What sets us apart is..."></textarea>
+          </div>
+          <div style="margin:14px 0">
+            <p style="font-weight:600;font-size:13px;color:var(--teal);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase">4. Grab their attention</p>
+            <textarea class="pitch-write-area" placeholder="According to..." style="min-height:70px"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎤</div>
+          <span class="activity-title">Speaking Ex. 1 — Deliver your pitch</span>
+          <span class="activity-src">EfT p.44</span>
+        </div>
+        <div class="activity-body">
+          <p>It's time to put all of your learnings from this lesson together! Look at the example of a pitch and complete it with your own information.</p>
+
+          <div class="pitch-example" style="margin-top:12px">
+            Hi! I'm here to tell you about our company and what we do.<br><br>
+            I founded / joined this company in … (2013) because I wanted to … (work on bigger and more exciting projects).<br><br>
+            We released … (over 7) … products which helped our customers… (communicate in English more effectively and feel at home in an English-speaking environment).<br><br>
+            During my time in this company I … (scaled our business, made new partnerships).<br><br>
+            Currently, we have (over 30) clients and are working on … (5) new projects.<br><br>
+            We are hoping to launch them… (next year).
+          </div>
+
+          <div style="background:var(--paper-dark);border-radius:6px;padding:14px 18px;margin-top:14px;font-size:13px;color:var(--ink-soft)">
+            <strong style="color:var(--ink)">TIP — to make speaking tasks extra effective:</strong>
+            <ul style="margin:8px 0 0 18px;padding:0">
+              <li>use new words you've learned from the lesson</li>
+              <li>recall the grammar rules you've learned (for example, Past Simple and Present Perfect)</li>
+              <li>use engaging intonation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 3 — GUY KAWASAKI -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Speaking & Soft Skills — Startup Wisdom</div>
+        <div class="phase-sub">EfT pp. 44–45 · Ex. 2A, 2B</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📖</div>
+          <span class="activity-title">Ex. 2A — Match headings to paragraphs</span>
+          <span class="activity-src">EfT p.44</span>
+        </div>
+        <div class="activity-body">
+          <p>Read Anna's recap of a speech by Guy Kawasaki and match the heading to the paragraphs (1–6).</p>
+
+          <div class="term-box"><strong>Evangelist</strong> (noun) — someone who often talks about how good they think something is, and tries to persuade you to have the same opinion.</div>
+
+          <p style="margin-top:12px">As a participant of GSV Ventures Bootcamp, I had the honor to attend an extremely motivational talk by Guy Kawasaki, Chief Evangelist of Canva.</p>
+          <p>Here are my takeaways from Guy Kawasaki's speech. I view them as a step-by-step guide on how to build your startup and ship your product right. Just follow the next steps:</p>
+
+          <div class="word-box">
+            <div class="word-box-label">heading bank</div>
+            <span class="word-chip">Get your product into people's hands</span>
+            <span class="word-chip">Hire passionate people</span>
+            <span class="word-chip">Prioritize</span>
+            <span class="word-chip">Think about your mission</span>
+            <span class="word-chip">Start small</span>
+            <span class="word-chip">Say no to naysayers</span>
+          </div>
+
+          <table class="match-table" style="margin-top:12px">
+            <thead><tr><th>#</th><th>Heading</th><th>Paragraph</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td><input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:170px"></td>
+                <td>Build an MVVVP where M = minimal, V = viable, V = valuable, V = validating, P = product.</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:170px"></td>
+                <td>Get your product out there! Ship it! As an entrepreneur your job is to DO IT.</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:170px"></td>
+                <td>Canva's mantra is "democratize design". Guy's is "empower people". What's your and your product's mantra?</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td><input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:170px"></td>
+                <td>Worry about big things. Designing business cards for your startup is a good idea but it shouldn't be your priority.</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td><input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:170px"></td>
+                <td>They may not have a perfect background but they need to love what you do. Hire them.</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td><input type="text" style="border:none;border-bottom:2px solid var(--teal-light);background:transparent;font-size:13px;outline:none;padding:0 4px;width:170px"></td>
+                <td>Don't let the bozos grind you down. Especially rich and powerful bozos who may not know better than you.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="term-box" style="margin-top:12px"><strong>Bozo</strong> (noun, mainly US slang) — a stupid person. <em>"Some bozo on a motorcycle almost ran me over."</em></div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_ex2a')">show answers ▾</button>
+          <div class="reveal-content" id="rev_ex2a">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>Start small</strong></li>
+                <li><strong>Get your product into people's hands</strong></li>
+                <li><strong>Think about your mission</strong></li>
+                <li><strong>Prioritize</strong></li>
+                <li><strong>Hire passionate people</strong></li>
+                <li><strong>Say no to naysayers</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Ex. 2B — Talk about your own startup</span>
+          <span class="activity-src">EfT p.45</span>
+        </div>
+        <div class="activity-body">
+          <p>Now, imagine you are building your own startup (if you're an entrepreneur already, you can rely on real-life experience).</p>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Talk about</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What your startup is called.</div>
+              <div class="speaking-row">What your mantra (mission) is.</div>
+              <div class="speaking-row">What your product can do for its users.</div>
+              <div class="speaking-row">What sort of culture you're trying to create at your company and what people you like to work with.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🐦</div>
+          <span class="activity-title">Ex. 3 — Paul Graham's tweet</span>
+          <span class="activity-src">EfT p.45</span>
+        </div>
+        <div class="activity-body">
+          <p>Paul Graham is a co-founder of Y Combinator, one of the most prestigious accelerators in the world. Read his tweet below and answer the question:</p>
+          <p style="font-weight:600;color:var(--ink);margin:10px 0">In your opinion, what are some of the things a beginner CEO needs to learn in order to build a successful startup?</p>
+
+          <div class="tweet-card">
+            <div class="tweet-header">
+              <div style="display:flex;align-items:center">
+                <div class="tweet-avatar">P</div>
+                <div class="tweet-author">
+                  <strong>Paul Graham</strong>
+                  <span>@paulg</span>
+                </div>
+              </div>
+              <svg class="tweet-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.849L1.254 2.25H8.08l4.259 5.636L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+              </svg>
+            </div>
+            <div class="tweet-body">
+              Starting a startup is going to force you to learn a lot of new things anyway, usually <u>under pretty harsh conditions</u>. And if you know you're going to have to learn a lot of new stuff anyway, why not start with the <u>stuff you know you're missing</u>?
+            </div>
+            <div class="tweet-vocab">
+              <p><strong>Under pretty harsh conditions</strong> — in a difficult environment.</p>
+              <p><strong>The stuff you're missing</strong> — the things you haven't learned yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 4 — GLOSSARY -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Glossary of Technical Terms</div>
+        <div class="phase-sub">EfT p.46</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📚</div>
+          <span class="activity-title">Key startup terms</span>
+        </div>
+        <div class="activity-body">
+          <div class="glossary-grid">
+            <div class="glossary-item"><strong>Startup</strong> — a newly established business. A software startup valued at more than a billion dollars is called a "unicorn", implying that such cases are extremely rare.</div>
+            <div class="glossary-item"><strong>Shareholder</strong> — an owner of shares in a company.</div>
+            <div class="glossary-item"><strong>Incubator</strong> — an organization engaged in fostering early-stage companies.</div>
+            <div class="glossary-item"><strong>Accelerator</strong> — an organization that offers support services and funding opportunities for startups.</div>
+            <div class="glossary-item"><strong>Pitch deck</strong> — a presentation deck used to pitch your idea or company to an audience, generally investors.</div>
+            <div class="glossary-item"><strong>API</strong> — a set of programming code that enables data transmission between one software product and another.</div>
+            <div class="glossary-item"><strong>CEO</strong> — the highest-ranking person in a company, ultimately responsible for managerial decisions.</div>
+            <div class="glossary-item"><strong>MVP</strong> — a version of a product with just enough features to be usable by early customers.</div>
+            <div class="glossary-item"><strong>VC (Venture Capital)</strong> — private equity financing that investors provide to startups and small businesses.</div>
+            <div class="glossary-item"><strong>Bootstrap</strong> — start up a business with minimal financial resources.</div>
+            <div class="glossary-item"><strong>Scale up</strong> — increase production or capacity.</div>
+            <div class="glossary-item"><strong>Middleman</strong> — a person who buys goods from producers and sells them to retailers or consumers, an intermediary.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Fill in the gaps — Glossary terms</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the sentences with the correct term from the glossary.</p>
+      
+          <div class="word-box">
+            <div class="word-box-label">term bank</div>
+            <span class="word-chip">shareholder</span>
+            <span class="word-chip">incubator</span>
+            <span class="word-chip">accelerator</span>
+            <span class="word-chip">pitch deck</span>
+            <span class="word-chip">MVP</span>
+            <span class="word-chip">VC funding</span>
+            <span class="word-chip">bootstrap</span>
+            <span class="word-chip">scale up</span>
+            <span class="word-chip">middleman</span>
+          </div>
+      
+          <div class="fill-text">
+            1. Before meeting investors, we spent two weeks perfecting our <input class="fill-input" size="14"> — every slide had to tell a clear story.<br><br>
+            2. We didn't have enough features for a full launch, so we released an <input class="fill-input" size="10"> to test demand first.<br><br>
+            3. As an early <input class="fill-input" size="14"> in the company, she still attends every board meeting.<br><br>
+            4. Instead of raising <input class="fill-input" size="14">, they decided to <input class="fill-input" size="14"> the business using their own savings.<br><br>
+            5. The platform connects buyers and sellers directly, cutting out the <input class="fill-input" size="14"> entirely.<br><br>
+            6. The <input class="fill-input" size="14"> helped us build our first business plan, while the <input class="fill-input" size="14"> later helped us grow much faster once we had real users.<br><br>
+            7. Once we proved the model worked in one city, it was time to <input class="fill-input" size="14"> and expand nationally.
+          </div>
+      
+          <button class="reveal-btn" onclick="toggleReveal('rev_glossary')">show answers ▾</button>
+          <div class="reveal-content" id="rev_glossary">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>pitch deck</strong></li>
+                <li><strong>MVP</strong></li>
+                <li><strong>shareholder</strong></li>
+                <li><strong>VC funding</strong> / <strong>bootstrap</strong></li>
+                <li><strong>middleman</strong></li>
+                <li><strong>incubator</strong> / <strong>accelerator</strong></li>
+                <li><strong>scale up</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔭</div>
+          <span class="activity-title">Extra practice — Startup profiles</span>
+          <span class="activity-src">EfT p.46</span>
+        </div>
+        <div class="activity-body">
+          <p>Below are 4 startup profiles, the kind you'd find on a platform like Wellfound (formerly AngelList Talent). Read through them and complete the tasks.</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0">
+
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)">
+              <div style="background:#1e3a5f;padding:12px 16px">
+                <div style="font-weight:700;color:#fff;font-size:15px">Lumio</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-top:2px">Seed stage · 8 employees · Remote-first</div>
+              </div>
+              <div style="padding:14px 16px;font-size:13px;color:var(--ink-soft)">
+                <p style="margin:0 0 8px">Lumio builds AI-powered lighting systems for smart offices that automatically adjust brightness and color temperature based on employee focus levels and time of day.</p>
+                <p style="margin:0 0 8px"><strong style="color:var(--ink)">Open role:</strong> Product Marketing Manager — own go-to-market strategy for our first enterprise launch.</p>
+                <p style="margin:0;font-style:italic;color:var(--warm-grey)">$90k–$120k + 0.1%–0.3% equity</p>
+              </div>
+            </div>
+
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)">
+              <div style="background:#2a4a7a;padding:12px 16px">
+                <div style="font-weight:700;color:#fff;font-size:15px">Fernway</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-top:2px">Series A · 35 employees · Hybrid (Berlin)</div>
+              </div>
+              <div style="padding:14px 16px;font-size:13px;color:var(--ink-soft)">
+                <p style="margin:0 0 8px">Fernway helps logistics companies cut fuel costs by predicting optimal delivery routes using real-time traffic and weather data.</p>
+                <p style="margin:0 0 8px"><strong style="color:var(--ink)">Open role:</strong> Senior Backend Engineer — scale our routing engine to handle 10x more requests.</p>
+                <p style="margin:0;font-style:italic;color:var(--warm-grey)">€75k–€95k + 0.05%–0.15% equity</p>
+              </div>
+            </div>
+
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)">
+              <div style="background:#1a3a6e;padding:12px 16px">
+                <div style="font-weight:700;color:#fff;font-size:15px">Pebblecare</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-top:2px">Pre-seed · 4 employees · Remote</div>
+              </div>
+              <div style="padding:14px 16px;font-size:13px;color:var(--ink-soft)">
+                <p style="margin:0 0 8px">Pebblecare is building a subscription box and app that helps elderly people manage medication schedules independently, with family members getting real-time updates.</p>
+                <p style="margin:0 0 8px"><strong style="color:var(--ink)">Open role:</strong> Founding Designer — define the entire product experience from scratch.</p>
+                <p style="margin:0;font-style:italic;color:var(--warm-grey)">$60k–$80k + 0.5%–1% equity</p>
+              </div>
+            </div>
+
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)">
+              <div style="background:#1e3a5f;padding:12px 16px">
+                <div style="font-weight:700;color:#fff;font-size:15px">Northstack</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-top:2px">Series B · 120 employees · In office (Austin)</div>
+              </div>
+              <div style="padding:14px 16px;font-size:13px;color:var(--ink-soft)">
+                <p style="margin:0 0 8px">Northstack provides a no-code platform for small businesses to build internal tools — think custom dashboards and workflows without hiring a developer.</p>
+                <p style="margin:0 0 8px"><strong style="color:var(--ink)">Open role:</strong> Head of Customer Success — build and lead a team of 6 CSMs.</p>
+                <p style="margin:0;font-style:italic;color:var(--warm-grey)">$130k–$160k + 0.02%–0.08% equity</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discuss the profiles</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which of these 4 startups sounds the most promising to you? Why?</div>
+              <div class="speaking-row">Which role would you personally be most interested in, and what would you ask in an interview?</div>
+              <div class="speaking-row">Based on Bill Gross's "timing" framework from the previous lesson — which of these ideas feels best timed right now?</div>
+              <div class="speaking-row">If you were an investor, which one would you fund first — and which would you pass on?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 5 — QUIZ -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div>
+        <div class="phase-title">Quiz — Lesson 2 review</div>
+        <div class="phase-sub">Vocabulary & Grammar · 16 questions</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🧠</div>
+          <span class="activity-title">Test your knowledge from Lesson 2</span>
+        </div>
+        <div class="activity-body">
+          <p>Choose the correct answer for each question. Your score will appear at the end.</p>
+          <div id="quiz-container">
+
+            <div class="quiz-question" data-correct="b">
+              <div class="quiz-q-text">1. After months of hard work, we have finally managed to get our product ________ the ground.</div>
+              <label class="quiz-option"><input type="radio" name="q1" value="a"> a) off</label>
+              <label class="quiz-option"><input type="radio" name="q1" value="b"> b) to</label>
+              <label class="quiz-option"><input type="radio" name="q1" value="c"> c) on</label>
+              <div class="quiz-feedback" id="fb1"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="a">
+              <div class="quiz-q-text">2. The opposite of "beneficial" is:</div>
+              <label class="quiz-option"><input type="radio" name="q2" value="a"> a) harmful</label>
+              <label class="quiz-option"><input type="radio" name="q2" value="b"> b) transparent</label>
+              <label class="quiz-option"><input type="radio" name="q2" value="c"> c) efficient</label>
+              <div class="quiz-feedback" id="fb2"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">3. You can't put the future of your company ________ stake.</div>
+              <label class="quiz-option"><input type="radio" name="q3" value="a"> a) on</label>
+              <label class="quiz-option"><input type="radio" name="q3" value="b"> b) to</label>
+              <label class="quiz-option"><input type="radio" name="q3" value="c"> c) at</label>
+              <div class="quiz-feedback" id="fb3"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">4. I have ________ this issue many times before.</div>
+              <label class="quiz-option"><input type="radio" name="q4" value="a"> a) met</label>
+              <label class="quiz-option"><input type="radio" name="q4" value="b"> b) faced with</label>
+              <label class="quiz-option"><input type="radio" name="q4" value="c"> c) come across</label>
+              <div class="quiz-feedback" id="fb4"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="b">
+              <div class="quiz-q-text">5. He went to a conference for business founders where he met many ________.</div>
+              <label class="quiz-option"><input type="radio" name="q5" value="a"> a) jack-of-all-trades</label>
+              <label class="quiz-option"><input type="radio" name="q5" value="b"> b) entrepreneurs</label>
+              <label class="quiz-option"><input type="radio" name="q5" value="c"> c) incubators</label>
+              <div class="quiz-feedback" id="fb5"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">6. You need to know what your customers' ________ are before you start developing your product.</div>
+              <label class="quiz-option"><input type="radio" name="q6" value="a"> a) issues</label>
+              <label class="quiz-option"><input type="radio" name="q6" value="b"> b) pivots</label>
+              <label class="quiz-option"><input type="radio" name="q6" value="c"> c) pain points</label>
+              <div class="quiz-feedback" id="fb6"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="b">
+              <div class="quiz-q-text">7. The synonym of "annual" is:</div>
+              <label class="quiz-option"><input type="radio" name="q7" value="a"> a) early</label>
+              <label class="quiz-option"><input type="radio" name="q7" value="b"> b) yearly</label>
+              <label class="quiz-option"><input type="radio" name="q7" value="c"> c) annoying</label>
+              <div class="quiz-feedback" id="fb7"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">8. We decided to ________ two new designers ________.</div>
+              <label class="quiz-option"><input type="radio" name="q8" value="a"> a) join; to our company</label>
+              <label class="quiz-option"><input type="radio" name="q8" value="b"> b) hire; on the team</label>
+              <label class="quiz-option"><input type="radio" name="q8" value="c"> c) bring; on board</label>
+              <div class="quiz-feedback" id="fb8"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">9. At the end of the sentence "When did this happen?", the intonation:</div>
+              <label class="quiz-option"><input type="radio" name="q9" value="a"> a) goes up</label>
+              <label class="quiz-option"><input type="radio" name="q9" value="b"> b) remains flat throughout the sentence</label>
+              <label class="quiz-option"><input type="radio" name="q9" value="c"> c) goes down</label>
+              <div class="quiz-feedback" id="fb9"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">10. I ________ to become an athlete when I was younger.</div>
+              <label class="quiz-option"><input type="radio" name="q10" value="a"> a) have wanted</label>
+              <label class="quiz-option"><input type="radio" name="q10" value="b"> b) want</label>
+              <label class="quiz-option"><input type="radio" name="q10" value="c"> c) wanted</label>
+              <div class="quiz-feedback" id="fb10"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">11. I ________ always ________ to go to Chile. Hopefully, I'll get a chance to do it one day.</div>
+              <label class="quiz-option"><input type="radio" name="q11" value="a"> a) --; wanted</label>
+              <label class="quiz-option"><input type="radio" name="q11" value="b"> b) am; wanting</label>
+              <label class="quiz-option"><input type="radio" name="q11" value="c"> c) have; wanted</label>
+              <div class="quiz-feedback" id="fb11"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="b">
+              <div class="quiz-q-text">12. I ________ this man for 10 years now.</div>
+              <label class="quiz-option"><input type="radio" name="q12" value="a"> a) knew</label>
+              <label class="quiz-option"><input type="radio" name="q12" value="b"> b) have known</label>
+              <label class="quiz-option"><input type="radio" name="q12" value="c"> c) know</label>
+              <div class="quiz-feedback" id="fb12"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="a">
+              <div class="quiz-q-text">13. Can you see that woman over there? She ________ here since 10am.</div>
+              <label class="quiz-option"><input type="radio" name="q13" value="a"> a) has been</label>
+              <label class="quiz-option"><input type="radio" name="q13" value="b"> b) have been</label>
+              <label class="quiz-option"><input type="radio" name="q13" value="c"> c) was</label>
+              <div class="quiz-feedback" id="fb13"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">14. We ________ two years building this project and we finally finished it.</div>
+              <label class="quiz-option"><input type="radio" name="q14" value="a"> a) have spent</label>
+              <label class="quiz-option"><input type="radio" name="q14" value="b"> b) spend</label>
+              <label class="quiz-option"><input type="radio" name="q14" value="c"> c) spent</label>
+              <div class="quiz-feedback" id="fb14"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+              <div class="quiz-q-text">15. — Look at the new VR helmet I bought! — Wow! How much ________?</div>
+              <label class="quiz-option"><input type="radio" name="q15" value="a"> a) has it costed you</label>
+              <label class="quiz-option"><input type="radio" name="q15" value="b"> b) does it cost you</label>
+              <label class="quiz-option"><input type="radio" name="q15" value="c"> c) did it cost you?</label>
+              <div class="quiz-feedback" id="fb15"></div>
+            </div>
+
+            <div class="quiz-question" data-correct="a">
+              <div class="quiz-q-text">16. 50 people ________ their jobs since this morning.</div>
+              <label class="quiz-option"><input type="radio" name="q16" value="a"> a) have quit</label>
+              <label class="quiz-option"><input type="radio" name="q16" value="b"> b) quit</label>
+              <label class="quiz-option"><input type="radio" name="q16" value="c"> c) are quitting</label>
+              <div class="quiz-feedback" id="fb16"></div>
+            </div>
+
+          </div>
+
+          <button onclick="submitQuiz()" style="margin-top:20px;background:#1a2e52;color:#fff;border:none;padding:10px 28px;border-radius:6px;font-family:'DM Mono',monospace;font-size:13px;cursor:pointer;letter-spacing:1px">
+            CHECK ANSWERS
+          </button>
+
+          <div class="quiz-score-box" id="score-box">
+            <div class="quiz-score-num" id="score-num">—</div>
+            <div class="quiz-score-label">out of 16 correct</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+function submitQuiz() {
+  const questions = document.querySelectorAll('.quiz-question');
+  let score = 0;
+  questions.forEach((q, i) => {
+    const correct = q.dataset.correct;
+    const selected = q.querySelector('input[type="radio"]:checked');
+    const fb = document.getElementById(`fb${i+1}`);
+    const options = q.querySelectorAll('.quiz-option');
+    options.forEach(opt => opt.classList.remove('correct', 'wrong'));
+    if (selected) {
+      options.forEach(opt => {
+        const val = opt.querySelector('input').value;
+        if (val === correct) opt.classList.add('correct');
+        else if (val === selected.value && selected.value !== correct) opt.classList.add('wrong');
+      });
+      if (selected.value === correct) {
+        score++;
+        fb.textContent = '✓ Correct';
+        fb.className = 'quiz-feedback show ok';
+      } else {
+        fb.textContent = `✗ The correct answer is (${correct})`;
+        fb.className = 'quiz-feedback show bad';
+      }
+    } else {
+      fb.textContent = '— Not answered';
+      fb.className = 'quiz-feedback show bad';
+    }
+  });
+  const scoreBox = document.getElementById('score-box');
+  document.getElementById('score-num').textContent = `${score} / 16`;
+  scoreBox.classList.add('show');
+  scoreBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+</body>
+</html>

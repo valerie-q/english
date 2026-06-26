@@ -1,1 +1,491 @@
-ssoso
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1A The Story of Me — Sofia</title>
+<style>
+  :root{
+    --navy:#16254a;
+    --navy-light:#1c2d4f;
+    --gold:#c08a2e;
+    --gold-soft:#9c6b1f;
+    --text:#1c1f26;
+    --muted:#5b6270;
+    --card:#ffffff;
+    --bg:#f7f5f0;
+    --border:#e3ddd0;
+    --correct:#2f8f5b;
+    --wrong:#c0473d;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin:0;
+    padding:0 0 60px;
+    line-height:1.55;
+  }
+  header{
+    background:linear-gradient(135deg, var(--navy), var(--navy-light));
+    padding:34px 20px 26px;
+    border-bottom:3px solid var(--gold);
+    text-align:center;
+  }
+  header h1{
+    color:var(--gold);
+    margin:0 0 6px;
+    font-size:1.8rem;
+    letter-spacing:0.5px;
+  }
+  header p{
+    color:#c7cee0;
+    margin:0;
+    font-size:0.95rem;
+  }
+  .wrap{
+    max-width:780px;
+    margin:0 auto;
+    padding:0 18px;
+  }
+  .phase{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-top:22px;
+    overflow:hidden;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .phase-head{
+    background:linear-gradient(135deg, var(--navy), var(--navy-light));
+    padding:14px 20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    user-select:none;
+  }
+  .phase-head h2{
+    margin:0;
+    font-size:1.08rem;
+    color:#ffffff;
+  }
+  .phase-head .tag{
+    font-size:0.72rem;
+    color:var(--navy);
+    background:var(--gold);
+    padding:3px 10px;
+    border-radius:20px;
+    font-weight:600;
+    white-space:nowrap;
+    margin-left:10px;
+  }
+  .arrow{
+    color:var(--gold);
+    font-size:1.1rem;
+    transition:transform 0.25s;
+    margin-left:8px;
+  }
+  .phase.collapsed .arrow{transform:rotate(-90deg);}
+  .phase-body{
+    padding:20px 22px 24px;
+  }
+  .phase.collapsed .phase-body{display:none;}
+  h3{color:var(--gold-soft); font-size:1rem; margin:18px 0 8px;}
+  p{margin:8px 0;}
+  .instr{color:var(--muted); font-style:italic; font-size:0.93rem;}
+  .box{
+    background:#fbf8f1;
+    border:1px solid var(--border);
+    border-left:3px solid var(--navy);
+    border-radius:8px;
+    padding:14px 16px;
+    margin:12px 0;
+  }
+  .wordbox{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:10px 0 14px;
+  }
+  .chip{
+    background:#fff8ea;
+    border:1px solid var(--gold);
+    color:var(--gold-soft);
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:0.88rem;
+    font-weight:600;
+  }
+  ol, ul{padding-left:22px;}
+  li{margin:7px 0;}
+  input.gap{
+    background:#fbf8f1;
+    border:none;
+    border-bottom:2px dotted var(--gold);
+    color:var(--text);
+    font-size:1rem;
+    width:140px;
+    padding:2px 4px;
+    font-family:inherit;
+  }
+  input.gap:focus{outline:none; border-bottom:2px solid var(--gold);}
+  .reveal-btn{
+    background:var(--navy);
+    border:1px solid var(--navy);
+    color:#ffffff;
+    padding:6px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.85rem;
+    margin:10px 0;
+  }
+  .reveal-btn:hover{background:var(--gold); border-color:var(--gold); color:var(--navy);}
+  .answer{
+    display:none;
+    background:#eef8f1;
+    border-left:3px solid var(--correct);
+    padding:10px 14px;
+    margin:8px 0;
+    border-radius:4px;
+    font-size:0.93rem;
+  }
+  .answer.show{display:block;}
+  .answer b{color:var(--correct);}
+  .media-slot{
+    border:2px dashed var(--border);
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+    color:var(--muted);
+    margin:12px 0;
+    font-size:0.88rem;
+    background:#fbf8f1;
+  }
+  .media-slot span{color:var(--gold-soft); font-weight:600;}
+  .error-pair{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:6px;
+    margin:10px 0;
+  }
+  .error-line{
+    background:#fbf8f1;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:10px 14px;
+    font-size:0.95rem;
+  }
+  .speak-q{
+    background:#f0f3f8;
+    border-left:3px solid var(--navy);
+    padding:10px 14px;
+    margin:10px 0;
+    border-radius:4px;
+  }
+  .grammar-note{
+    background:#fff8ea;
+    border:1px solid var(--gold);
+    border-radius:8px;
+    padding:14px 18px;
+    margin:14px 0;
+    font-size:0.95rem;
+  }
+  .grammar-note b{color:var(--gold-soft);}
+  table.timeline{width:100%; margin:10px 0; font-size:0.9rem;}
+  table.timeline td{padding:6px; text-align:center; color:var(--muted);}
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.8rem;
+    margin-top:40px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>1A · The Story of Me</h1>
+  <p>Narrative tenses · Describing possessions · Weak forms</p>
+</header>
+
+<div class="wrap">
+
+  <!-- PHASE 1 -->
+  <div class="phase">
+    <div class="phase-head" onclick="toggle(this)">
+      <h2>1. Warm-up — Speaking</h2>
+      <div style="display:flex; align-items:center;">
+        <span class="tag">free talk</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="speak-q">Think of <b>three objects</b> you own that mean something to you. For each one, be ready to answer:</div>
+      <ul>
+        <li>What is it?</li>
+        <li>Where / how did you get it?</li>
+        <li>Why is it special to you?</li>
+      </ul>
+      <p class="instr">Just talk for 2–3 minutes. We'll come back to this at the end of the lesson with the full "story of me" speaking task.</p>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase">
+    <div class="phase-head" onclick="toggle(this)">
+      <h2>2. Listening</h2>
+      <div style="display:flex; align-items:center;">
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <h3>Read the story and look at the pictures. Why might these objects be important to the speakers?</h3>
+      <div class="box">
+        <p><b>A Story of Me in Three Objects</b><br>The objects that we choose to have around us reflect our personalities in different ways. Our possessions contain our memories; they remind us of people and places in our lives. In this podcast we ask people to choose three objects from their life that they would never throw away, and tell us about them.</p>
+      </div>
+
+      <img scr="p1.png">
+
+      <audio controls style="width:100%; margin:12px 0;">
+        <source src="1_01.mp3" type="audio/mpeg">
+      </audio>
+
+      <h3>A. Listen and number the objects in the order you hear them</h3>
+      <div class="wordbox">
+        <span class="chip">coffee pot</span>
+        <span class="chip">leather jacket</span>
+        <span class="chip">lemon tree</span>
+        <span class="chip">silver rings</span>
+        <span class="chip">Spanish guitar</span>
+        <span class="chip">walking boots</span>
+      </div>
+      <p class="instr">(Marta's three objects, then Tim's three objects)</p>
+      <button class="reveal-btn" onclick="show(this)">Show order</button>
+      <div class="answer">
+        <b>Marta:</b> 1 silver rings → 2 leather jacket → 3 lemon tree<br>
+        <b>Tim:</b> 4 Spanish guitar → 5 walking boots → 6 coffee pot
+      </div>
+
+      <h3>B. Listen again. True or False?</h3>
+      <ol>
+        <li>Marta inherited a valuable ring from her mother.</li>
+        <li>Marta borrowed a jacket from a friend.</li>
+        <li>One of Marta's friends helped her dream to come true.</li>
+        <li>The owner of the guitar shop asked Tim if he was a professional.</li>
+        <li>Tim enjoys walking with friends.</li>
+        <li>Tim always made good coffee when he was at university.</li>
+      </ol>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        1 F (it's not worth a lot, not valuable) · 2 T · 3 T · 4 T · 5 T · 6 F (he made instant coffee without much care)
+      </div>
+
+      <h3>C. Discuss</h3>
+      <div class="speak-q">Do you have anything in common with either Marta or Tim? What?</div>
+      <div class="speak-q">"If you can't enjoy little things, then you will never be happy." What do you think this means? What are some "little things" that make you happy?</div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase">
+    <div class="phase-head" onclick="toggle(this)">
+      <h2>3. Vocabulary — Describing Possessions</h2>
+      <div style="display:flex; align-items:center;">
+        <span class="tag">vocab</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p>From Marta's story:</p>
+      <div class="box">
+        <p>"I've worn silver rings all my life. … This one <b>belonged to</b> my mother and I <b>inherited</b> it when she died. It's <b>not worth a lot</b>, but it's very <b>special</b> to me."</p>
+        <p>"I borrowed this <b>leather</b> jacket from a friend when I was studying at university … It's a <b>genuine</b> 1980s leather jacket … When I was wearing it, I always thought it looked really <b>cool</b>. It's a bit <b>damaged</b> now, but I still love it."</p>
+      </div>
+
+      <h3>Match the word to the definition</h3>
+      <ol>
+        <li>If something was owned by someone else, we can say it <input class="gap" placeholder="..."></li>
+        <li>If something is not valuable, it's <input class="gap" placeholder="..."></li>
+        <li>If it's made of animal skin, it's <input class="gap" placeholder="..."></li>
+        <li>If you received a possession after someone died, you <input class="gap" placeholder="..."> it.</li>
+        <li>If something is real, not a copy, it's <input class="gap" placeholder="..."></li>
+        <li>Something broken in some way is <input class="gap" placeholder="..."></li>
+        <li>If something has emotional importance, it's <input class="gap" placeholder="..."></li>
+        <li>If something looks good in a fashionable way, it's <input class="gap" placeholder="..."></li>
+      </ol>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        1 belonged to · 2 not worth a lot · 3 leather · 4 inherited · 5 genuine · 6 damaged · 7 special · 8 cool
+      </div>
+
+      <h3>Quick speaking</h3>
+      <div class="speak-q">Do you have any possessions which previously belonged to your parents, grandparents or friends? What are they?</div>
+      <div class="speak-q">Do you have a possession which is not worth a lot, but is special to you?</div>
+      <div class="speak-q">Do you own a lot of things made from the same material, e.g. silver, denim, leather?</div>
+
+
+      <h3> Match the type of material with the photos</h3>
+
+      <img src="p2.png">
+
+      <h3> Complete the sentences with the most suitable material</h3>
+<ol>
+  <li>I've just ordered a new <input class="gap" placeholder="..."> jacket online. It's a cool designer jacket at a really good price.</li>
+  <li>She creates beautiful statues using <input class="gap" placeholder="..."> imported from the mountains of Italy.</li>
+  <li>She inherited some jewellery, and one of the rings had a huge <input class="gap" placeholder="..."> in it. It's worth lots of money.</li>
+  <li>I love sleeping in clean, white <input class="gap" placeholder="..."> sheets.</li>
+  <li>He bought a set of <input class="gap" placeholder="..."> pans for his new kitchen.</li>
+  <li>The <input class="gap" placeholder="..."> is kept in the bank.</li>
+  <li>The shoes on a horse are made of <input class="gap" placeholder="...">.</li>
+  <li>The <input class="gap" placeholder="..."> of her car tyres left black marks on the road.</li>
+  <li>I dropped the <input class="gap" placeholder="..."> bottle on the floor and it smashed.</li>
+  <li>The house has beautiful floors made of <input class="gap" placeholder="..."> taken from the local forests.</li>
+  <li>She finished second and won a <input class="gap" placeholder="..."> medal.</li>
+  <li>I always recycle my <input class="gap" placeholder="..."> bottles.</li>
+</ol>
+    </div>
+  </div>
+
+  <!-- PHASE 4: GRAMMAR CORE -->
+  <div class="phase">
+    <div class="phase-head" onclick="toggle(this)">
+      <h2>4. Grammar — Narrative Tenses</h2>
+      <div style="display:flex; align-items:center;">
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="grammar-note">
+        <p>When we tell a story, we oft en use a variety of
+          tenses. These are called ‘narrative tenses’ and
+          they include the <b>past simple, the past continuous
+          and the past perfect</b>. It is important to use the
+          correct tense as this gives us information about the
+          sequence of events and the most important details
+          of the story.</p>
+        <p><b>Past simple</b> — the main events, in order: <i>Suddenly, he heard a crash. She woke up early and decided to go out.</i></p>
+        <p><b>Past continuous</b> — background, or a temporary/changing situation happening <i>at the time</i> of the main event: <i>The sun was shining. I was living in Brazil at the time.</i></p>
+        <p><b>Past perfect</b> — something that happened <i>before</i> the main story moment: <i>I bought it to replace one that I'd lost.</i></p>
+      </div>
+      <div class="grammar-note">It <b>was</b> a cold, wet day and the wind <b>was blowing</b>.
+        Josh <b>was walking</b> down the road when suddenly,
+        he <b>heard</b> a terrible crash. He <b>turned</b> around
+        and <b>saw</b> that a woman <b>had crashed</b> her moped.
+        Luckily, the woman <b>was fine</b>, but the moped <b>had
+        been</b> badly <b>damaged.</b></div>
+
+      <h3>A. Choose the correct tense</h3>
+      <ol>
+        <li>I <input class="gap"> (was jogging / jogged)along the beach when suddenly, I <input class="gap"> (realised / had realised) I didn't have my wedding ring. I <input class="gap"> (was dropping / had dropped) it on the beach somewhere.</li>
+        <li>I <input class="gap"> (was looking / looked)for my ring when an old lady <input class="gap"> (came / had come) up to me. She <input class="gap"> (was finding / had found) my ring on her morning walk.</li>
+        <li>My granddad <input class="gap"> (was fishing / fished) when he <input class="gap"> (was catching / caught) an old wallet with his fishing rod. He was amazed to see it was his own wallet, which he <input class="gap"> (was losing / had lost) in the same lake twenty years earlier!</li>
+        <li>I <input class="gap"> (was studying / had studied) at university in California when my sister suddenly <input class="gap">(decided / was deciding) to come and visit me. I was so surprised because she <input class="gap">(hadn't said / wasn't saying) anything about her plans.</li>
+      </ol>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        1 was jogging, realised, had dropped<br>
+        2 was looking, came, had found<br>
+        3 was fishing, caught, had lost<br>
+        4 was studying, decided, hadn't said
+      </div>
+
+      <h3>B. Complete the story — "This old leather suitcase..."</h3>
+      <div class="box">
+        <p>This old leather suitcase is very special to me. It belonged to my father and it's a bit damaged now. I remember when I was a child, my mother and I <input class="gap" placeholder="1"> at my grandmother's house. I <input class="gap" placeholder="2"> my father for a long time. When he <input class="gap" placeholder="3"> at the house, he <input class="gap" placeholder="4"> this old suitcase, and it had all these labels on it from around the world. He <input class="gap" placeholder="5"> from a trip across Asia. When he saw me, he sat down and <input class="gap" placeholder="6"> the suitcase. He pulled out a beautiful doll and <input class="gap" placeholder="7"> it to me. It's one of my earliest memories.</p>
+      </div>
+      <div class="wordbox">
+        <span class="chip">arrived</span><span class="chip">gave</span><span class="chip">had just returned</span>
+        <span class="chip">hadn't seen</span><span class="chip">opened</span><span class="chip">was carrying</span>
+        <span class="chip">were staying</span>
+      </div>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        1 were staying · 2 hadn't seen · 3 arrived · 4 was carrying · 5 had just returned · 6 opened · 7 gave
+      </div>
+
+      <h3>C. Complete the story — the red toy car</h3>
+      <div class="box">
+        <p>When I was six years old, my parents <input class="gap" placeholder="8"> me a large, red, toy car for my birthday. I <input class="gap" placeholder="9"> cars and I was so excited to try out my new present. We <input class="gap" placeholder="10"> at my grandparent's house for the summer holidays and I asked if I could try the car outside.</p>
+      </div>
+      <div class="wordbox">
+        <span class="chip">bought</span><span class="chip">crashed</span><span class="chip">drove</span><span class="chip">had always loved</span>
+        <span class="chip">had completely broken</span><span class="chip">realised</span><span class="chip">was going</span>
+        <span class="chip">was laughing</span><span class="chip">were staying</span>
+      </div>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        8 bought · 9 had always loved · 10 were staying<br>
+        <span class="instr">(continue: I drove / was going... down the hill when I realised the brakes had completely broken and I crashed... someone was laughing)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5: PRONUNCIATION -->
+  <div class="phase">
+    <div class="phase-head" onclick="toggle(this)">
+      <h2>5. Pronunciation — Weak Forms of Auxiliary Verbs</h2>
+      <div style="display:flex; align-items:center;">
+        <span class="tag">audio 1.02</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <audio controls style="width:100%; margin:12px 0;">
+        <source src="1_02.mp3" type="audio/mpeg">
+      </audio>
+      <ol>
+        <li>I <input class="gap" placeholder="..."> around Australia.</li>
+        <li>We <input class="gap" placeholder="..."> in China.</li>
+        <li>He <input class="gap" placeholder="..."> at university.</li>
+        <li>I bought a new leather jacket to replace the one I <input class="gap" placeholder="..."> .</li>
+        <li>My mother <input class="gap" placeholder="..."> the ring to me.</li>
+        <li>He <input class="gap" placeholder="..."> me making coffee.</li>
+      </ol>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        1 was travelling · 2 were living · 3 was studying · 4 had lost · 5 had given · 6 had seen<br>
+        <span class="instr">The auxiliary verbs are not stressed — they are weak forms.</span>
+      </div>
+      <p class="instr">Listen again and repeat after the speaker.</p>
+    </div>
+  </div>
+
+  <!-- PHASE 6: FREE SPEAKING -->
+  <div class="phase">
+    <div class="phase-head" onclick="toggle(this)">
+      <h2>6. Speaking — A Story of Me in Three Objects</h2>
+      <div style="display:flex; align-items:center;">
+        <span class="tag">speaking</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="speak-q">What are the objects? How would you describe them?</div>
+      <div class="speak-q">Tell a story about each of the objects. Where did you get them? Why are they important to you?</div>
+      <div class="box">
+        <p style="color:var(--gold-soft); font-weight:600; font-style:italic;">Example: "This old leather biker's jacket belonged to my dad. He wore it a lot when he was living and working in London. He'd finished university and was working as a motorcycle courier. It's a bit damaged now, but it's very special to me, even if I don't actually wear it much anymore."</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Speakout B1+ · Unit 1A · The Story of Me</footer>
+
+<script>
+function toggle(headEl){
+  const phase = headEl.parentElement;
+  phase.classList.toggle('collapsed');
+}
+function show(btn){
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent = ans.classList.contains('show') ? 'Hide answers' : btn.textContent.replace('Hide','Show');
+}
+</script>
+
+</body>
+</html>

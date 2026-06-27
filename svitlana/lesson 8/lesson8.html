@@ -1,1 +1,862 @@
-t
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 5</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:          #33322b;
+      --ink-soft:     #504d35;
+      --paper:        #f9f7ee;
+      --paper-dark:   #eeead8;
+      --accent:       #cfbb23;
+      --accent-dark:  #a59837;
+      --accent-light: #fadd00;
+      --olive:        #7a733d;
+      --olive-dark:   #504d35;
+      --warm-grey:    #7a733d;
+      --border:       #ddd8b0;
+      --white:        #ffffff;
+      --phase-1:      #504d35;
+      --phase-2:      #7a733d;
+      --phase-3:      #a59837;
+      --phase-4:      #33322b;
+      --phase-5:      #cfbb23;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+
+    .header { background:var(--ink); color:var(--white); padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .header::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle,rgba(207,187,35,0.3) 0%,transparent 70%); }
+    .header::after  { content:''; position:absolute; bottom:-40px; left:20%; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(122,115,61,0.25) 0%,transparent 70%); }
+    .header-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,56px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .header h1 em { font-style:italic; color:var(--accent-light); }
+    .header-meta { display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+    .meta-chip .dot { width:6px; height:6px; border-radius:50%; background:var(--accent-light); flex-shrink:0; }
+    .meta-chip strong { color:var(--white); }
+
+    .objectives-wrap { max-width:1100px; margin:0 auto; padding:32px 40px; }
+    .objectives-box { background:var(--white); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:4px; padding:24px 28px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:700px){.objectives-box{grid-template-columns:1fr}.header,.objectives-wrap,.main{padding-left:20px;padding-right:20px}}
+    .obj-col h3 { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:10px; }
+    .obj-list { list-style:none; }
+    .obj-list li { font-size:14px; padding:5px 0 5px 18px; position:relative; color:var(--ink-soft); border-bottom:1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom:none; }
+    .obj-list li::before { content:'✓'; position:absolute; left:0; color:var(--accent-dark); font-size:12px; font-weight:600; }
+
+    .main { max-width:1100px; margin:0 auto; padding:0 40px 60px; }
+
+    .phase { margin-bottom:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .phase-header { padding:18px 24px; display:flex; align-items:center; gap:16px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:20px; font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase-num { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:4px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); line-height:1.2; }
+    .phase-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .phase-body { padding:0 24px 24px; }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-1 .phase-header{background:var(--phase-1)} .phase-2 .phase-header{background:var(--phase-2)}
+    .phase-3 .phase-header{background:var(--phase-3)} .phase-4 .phase-header{background:var(--phase-4)}
+    .phase-5 .phase-header{background:var(--phase-5); color:var(--ink);}
+    .phase-5 .phase-num { background:rgba(0,0,0,0.15); color:var(--ink); }
+    .phase-5 .phase-title { color:var(--ink); }
+    .phase-5 .phase-sub { color:rgba(0,0,0,0.55); }
+    .phase-5 .phase-header::after { color:rgba(0,0,0,0.4); }
+
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:16px; overflow:hidden; }
+    .activity-head { background:var(--paper); padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
+    .activity-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .activity-title { font-weight:600; font-size:14px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:var(--warm-grey); background:var(--paper-dark); padding:3px 8px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:16px; }
+
+    .note-box { background:#f5f2d8; border-left:3px solid var(--accent); border-radius:0 4px 4px 0; padding:12px 16px; margin:12px 0; font-size:14px; color:var(--ink-soft); line-height:1.6; }
+    .note-box em { font-style:italic; color:var(--ink); }
+
+    .vocab-table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
+    .vocab-table th { background:var(--ink); color:var(--white); padding:8px 12px; text-align:left; font-weight:500; font-size:12px; }
+    .vocab-table td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--paper); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+    .vocab-table .ans { color:var(--accent-dark); font-style:italic; font-size:13px; }
+
+    .phrase-box { background:var(--ink); color:var(--white); border-radius:4px; padding:16px 20px; margin:12px 0; }
+    .phrase-box .phrase-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent-light); margin-bottom:10px; }
+    .phrase-row { display:flex; align-items:baseline; gap:16px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .phrase-row:last-child { border-bottom:none; }
+    .phrase-en { font-size:15px; font-weight:500; flex:1; }
+    .phrase-de { font-size:13px; color:rgba(255,255,255,0.5); flex:1; }
+
+    .steps { list-style:none; margin:12px 0; }
+    .steps li { display:flex; gap:14px; padding:10px 0; border-bottom:1px dotted var(--border); font-size:14px; line-height:1.5; align-items:flex-start; }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--white); background:var(--accent-dark); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:12px 16px; margin:12px 0; font-size:13px; }
+    .answer-key .ak-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .answer-key ol { padding-left:20px; }
+    .answer-key ol li { padding:3px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--accent-dark); }
+
+    .word-box { background:var(--white); border:2px solid var(--accent); border-radius:6px; padding:12px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--accent-dark); width:100%; margin-bottom:4px; }
+    .word-chip { background:var(--accent-dark); color:var(--white); font-size:13px; font-weight:600; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .word-box.neutral { border-color:var(--border); }
+    .word-box.neutral .word-chip { background:var(--ink-soft); }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:11px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:5px 14px; border-radius:20px; cursor:pointer; margin-top:10px; transition:all 0.2s; }
+    .reveal-btn:hover { border-color:var(--accent-dark); color:var(--accent-dark); }
+    .reveal-content { display:none; margin-top:10px; }
+    .reveal-content.open { display:block; }
+
+    .grammar-box { border:2px solid var(--accent); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .grammar-box-header { background:var(--accent); padding:10px 16px; }
+    .grammar-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); font-weight:600; }
+    .grammar-box-body { background:var(--white); padding:16px; }
+    .grammar-row { display:flex; gap:12px; padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; align-items:baseline; }
+    .grammar-row:last-child { border-bottom:none; }
+    .grammar-plus  { color:#3a6e2a; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-minus { color:#b03020; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-q     { color:var(--accent-dark); font-weight:700; flex-shrink:0; width:16px; }
+
+    .phone-script { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .phone-header { background:var(--paper-dark); padding:8px 16px; font-family:'DM Mono',monospace; font-size:11px; color:var(--warm-grey); border-bottom:1px solid var(--border); }
+    .phone-line { display:flex; gap:12px; padding:9px 16px; border-bottom:1px solid var(--border); font-size:14px; }
+    .phone-line:last-child { border-bottom:none; }
+    .phone-line:nth-child(even) { background:var(--paper); }
+    .phone-speaker { font-family:'DM Mono',monospace; font-size:10px; color:var(--accent-dark); font-weight:600; white-space:nowrap; width:80px; flex-shrink:0; margin-top:1px; }
+    .phone-text { color:var(--ink-soft); line-height:1.5; }
+
+    /* speaking box */
+    .speaking-box { border:2px solid var(--accent-dark); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .speaking-box-header { background:var(--accent-dark); padding:10px 16px; }
+    .speaking-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--white); font-weight:600; }
+    .speaking-box-body { background:var(--white); padding:16px; }
+    .speaking-section { margin-bottom:14px; }
+    .speaking-section:last-child { margin-bottom:0; }
+    .speaking-section-title { font-size:12px; font-weight:700; color:var(--accent-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; font-family:'DM Mono',monospace; }
+    .speaking-row { display:flex; gap:12px; padding:5px 0; border-bottom:1px dotted var(--border); font-size:14px; }
+    .speaking-row:last-child { border-bottom:none; }
+    .speaking-q { flex:1; color:var(--ink); }
+    .speaking-a { flex:1; color:var(--ink-soft); font-style:italic; }
+
+    /* email block */
+    .email-block { border:1px solid var(--border); border-radius:4px; overflow:hidden; margin:12px 0; font-size:14px; }
+    .email-header { background:var(--paper-dark); padding:8px 14px; font-size:12px; color:var(--warm-grey); border-bottom:1px solid var(--border); display:flex; gap:8px; align-items:center; }
+    .email-header span { font-weight:600; color:var(--ink); }
+    .email-body { padding:14px; color:var(--ink-soft); line-height:1.7; }
+
+    /* faq block */
+    .faq-block { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .faq-header { background:var(--accent-dark); color:var(--white); padding:8px 14px; font-weight:600; font-size:13px; }
+    .faq-item { padding:12px 14px; border-bottom:1px solid var(--border); font-size:14px; }
+    .faq-item:last-child { border-bottom:none; }
+    .faq-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:600; color:var(--accent-dark); margin-bottom:4px; }
+    .faq-text { color:var(--ink-soft); line-height:1.6; }
+    .faq-text strong { color:var(--ink); }
+
+    input[type="text"] { border:none; border-bottom:1px solid var(--accent-dark); background:transparent; font-size:14px; color:var(--ink); padding:2px 4px; outline:none; }
+
+    .src-bp  { background:#504d35; color:white; }
+    .src-you { background:#7a733d; color:white; }
+    .icon-warmup  { background:#f5f2d8; }
+    .icon-vocab   { background:#f0edcc; }
+    .icon-grammar { background:#f5f2d8; }
+    .icon-speaking{ background:#edeab8; }
+    .icon-wrap    { background:#f0edcc; }
+
+    p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:14px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom:none; }
+    /* student tabs */
+    .student-tabs { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .student-tab-buttons { display:flex; background:var(--paper-dark); border-bottom:1px solid var(--border); }
+    .tab-btn { flex:1; padding:12px; border:none; background:transparent; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:600; font-size:14px; color:var(--warm-grey); transition:all 0.2s; border-bottom:3px solid transparent; }
+    .tab-btn:hover { background:rgba(0,0,0,0.03); }
+    .tab-btn.active { color:var(--ink); background:var(--white); border-bottom-color:var(--accent); }
+    .tab-content { display:none; padding:16px; }
+    .tab-content.active { display:block; }
+
+  </style>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 8<br><em>Planning a Work Party (cont.) + Changes</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 Unit 2.5 (finish) + Unit 3.1 A company's story</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES -->
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Roleplay: arrange catering with Student A/B information</li>
+        <li>Finish Business Workshop reading and writing</li>
+        <li>Phone roleplay with image-based order forms</li>
+        <li>Describe changes at work using Past Simple</li>
+        <li>Read and complete a company timeline</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Language</h3>
+      <ul class="obj-list">
+        <li>How many staff…? / Do you supply…? / How much do you charge?</li>
+        <li>Hot/cold buffet, staff, plates and glasses, charge per person</li>
+        <li>Past Simple: regular and irregular verbs</li>
+        <li>Did you…? / When did…? / Who started…?</li>
+        <li>move, start, produce, create, expand, hire, launch</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Roleplay — Arranging Catering (Student A/B)</div>
+        <div class="phase-sub">BP A2 p.25, ex.6 · Click your role to see your information</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Ex.6 — You need a catering service for your office party</span>
+          <span class="activity-src src-bp">BP p.25</span>
+        </div>
+        <div class="activity-body">
+          <p>Work in pairs. Click your role below to see your information. Ask and answer questions to arrange the catering.</p>
+
+          <div class="student-tabs">
+            <div class="student-tab-buttons">
+              <button class="tab-btn active" onclick="switchTab(this, 'tabset1', 'A')">Student A</button>
+              <button class="tab-btn" onclick="switchTab(this, 'tabset1', 'B')">Student B</button>
+            </div>
+
+            <div class="tab-content active" id="tabset1-A">
+              <p><strong>You need a catering service for your office party.</strong> Use the table to ask and answer questions.</p>
+
+              <p style="margin-top:12px;"><strong>Questions for the catering company:</strong></p>
+              <ol class="exercise">
+                <li>How many catering staff / there?</li>
+                <li>/ they clean the office after the party?</li>
+                <li>/ you supply plates and glasses?</li>
+                <li>How / do you charge?</li>
+              </ol>
+
+              <p style="margin-top:12px;"><strong>Information to tell the company:</strong></p>
+              <ul style="font-size:14px;color:var(--ink-soft);line-height:1.8;padding-left:20px;">
+                <li>You want a cold buffet for twenty-five people.</li>
+                <li>The party is at 1 p.m. next Friday.</li>
+                <li>You have a kitchen where the catering staff can work.</li>
+                <li>You want the catering staff to clean the room after the party.</li>
+              </ul>
+            </div>
+
+            <div class="tab-content" id="tabset1-B">
+              <p><strong>You represent a catering service.</strong> A new client wants catering for an office party. Use the table to ask and answer questions.</p>
+
+              <p style="margin-top:12px;"><strong>Questions for the client:</strong></p>
+              <ol class="exercise">
+                <li>you want a hot or cold buffet?</li>
+                <li>How / people / there for the party?</li>
+                <li>What day / the party?</li>
+                <li>What time / the party?</li>
+                <li>/ there a kitchen at the client's office?</li>
+              </ol>
+
+              <p style="margin-top:12px;"><strong>Information to tell the client — Your company:</strong></p>
+              <ul style="font-size:14px;color:var(--ink-soft);line-height:1.8;padding-left:20px;">
+                <li>can provide hot and cold buffets.</li>
+                <li>provides two catering staff for cold buffets and three for hot buffets for groups of 20-30.</li>
+                <li>does not clean rooms after a party.</li>
+                <li>provides all plates and glasses.</li>
+                <li>charges €20 per person for cold buffets and €27 for hot buffets.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 2 ══ -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Business Workshop: Planning a Work Party</div>
+        <div class="phase-sub">BP A2 p.26 · Introduction + Reading</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📧</div>
+          <span class="activity-title">Introduction — Ex.1: Read the email. What do you need to do?</span>
+          <span class="activity-src src-bp">BP p.26</span>
+        </div>
+        <div class="activity-body">
+          <p>You work in the human resources department at Benham Engineering. You receive this email. What do you need to do?</p>
+
+          <div class="email-block">
+            <div class="email-header">✉️ &nbsp;<span>Subject: Emilia's 20th Anniversary Party</span></div>
+            <div class="email-body">
+              We'd like to celebrate Emilia's twenty years with Benham Engineering. Can you organise a party for everyone? Here are the details:<br><br>
+              Date: Wednesday 14 March<br>
+              Time: 12.00 to 14.00<br>
+              Place: Conference room<br>
+              Number of people: Sixty<br>
+              Catering: a light buffet lunch with sandwiches, canapés, fruit and desserts<br><br>
+              Please arrange for a catering company to do the food service. We can buy the drinks. Can you also arrange the extra cleaning service with the cleaners after the party?<br><br>
+              Best regards,
+            </div>
+          </div>
+
+          <p style="margin-top:12px;"><strong>What do you need to do?</strong></p>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📋</div>
+          <span class="activity-title">Reading — Ex.2: Look at the catering company information. Complete the questions in the email.</span>
+          <span class="activity-src src-bp">BP p.26</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at the information from Carter-Villiers Caterers below. Complete the questions in the email using and the correct word order.</p>
+
+          <div style="border:2px dashed var(--border);border-radius:6px;padding:40px 20px;text-align:center;margin:14px 0;color:var(--warm-grey);background:var(--paper-dark);">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;"><img src="ze.png" style="max-width:100%;"></div>
+          </div>
+
+          <div class="email-block">
+            <div class="email-header">
+              <div>
+                <div><strong>To:</strong> &nbsp;customerservice@carter-villiers</div>
+                <div><strong>From:</strong> &nbsp;Anita Patterson</div>
+                <div><strong>Subject:</strong> &nbsp;Enquiry about a catering order</div>
+              </div>
+            </div>
+            <div class="email-body">
+              Dear Sir/Madam,<br><br>
+              We would like to order food for lunch at Benham Engineering on Wednesday 14 March and I have some questions. Firstly, <sup>1</sup>a<input type="text" style="width:90px;"> t<input type="text" style="width:90px;"> any sandwiches for vegetarians? I couldn't find any on the website.<br><br>
+              The selection of canapés is very good. <sup>2</sup>H<input type="text" style="width:90px;"> m<input type="text" style="width:90px;"> canapés are there per person? We also want to order cake and cut fruit platters. <sup>3</sup>H<input type="text" style="width:90px;"> m<input type="text" style="width:90px;"> people does each platter serve? Finally, <sup>4</sup>h<input type="text" style="width:90px;"> m<input type="text" style="width:90px;"> does delivery cost and <sup>5</sup>i<input type="text" style="width:90px;"> t<input type="text" style="width:90px;"> a discount for large orders? We want to order food for sixty people.<br><br>
+              Regards,<br>
+              Anita Patterson<br>
+              <span style="font-size:12px;color:var(--warm-grey);">Human Resources Assistant<br>Benham Engineering</span>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('revD')">show answers ▾</button>
+          <div class="reveal-content" id="revD">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>are there</strong> — Are there any sandwiches for vegetarians?</li>
+              <li><strong>How many</strong> — How many canapés are there per person?</li>
+              <li><strong>How many</strong> — How many people does each platter serve?</li>
+              <li><strong>how much</strong> — How much does delivery cost?</li>
+              <li><strong>is there</strong> — Is there a discount for large orders?</li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Writing + Speaking — Ordering the Party Catering</div>
+        <div class="phase-sub">BP A2 p.26–27 · Ex.3 Writing + Ex.4A/4B + Ex.5</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">✍️</div>
+          <span class="activity-title">Ex. 3 — Write a reply to Anita's email</span>
+          <span class="activity-src src-bp">BP p.26</span>
+        </div>
+        <div class="activity-body">
+          <p>Write a reply to Anita's enquiry. Answer her five questions using the catering company information (prices, vegetarian options, delivery cost, discount policy).</p>
+
+          <div class="email-block">
+            <div class="email-header">
+              <div>
+                <div><strong>From:</strong> &nbsp;Carter-Villiers Caterers</div>
+                <div><strong>To:</strong> &nbsp;Anita Patterson</div>
+                <div><strong>Subject:</strong> &nbsp;Re: Enquiry about a catering order</div>
+              </div>
+            </div>
+            <div class="email-body">
+              <textarea style="width:100%; min-height:180px; border:none; background:transparent; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); resize:vertical; outline:none;" placeholder="Dear Ms Patterson, ..."></textarea>
+            </div>
+          </div>
+
+          <div class="phrase-box" style="margin-top:14px;">
+            <div class="phrase-label">Useful phrases for your reply</div>
+            <div class="phrase-row"><span class="phrase-en">Thank you for your enquiry.</span><span class="phrase-de">Дякуємо за запит.</span></div>
+            <div class="phrase-row"><span class="phrase-en">Yes, we offer a selection of vegetarian sandwiches.</span><span class="phrase-de">Так, ми пропонуємо вегетаріанські сендвічі.</span></div>
+            <div class="phrase-row"><span class="phrase-en">There are [number] canapés per person.</span><span class="phrase-de">Є [число] канапе на людину.</span></div>
+            <div class="phrase-row"><span class="phrase-en">Each platter serves six people.</span><span class="phrase-de">Кожна тарілка на шість осіб.</span></div>
+            <div class="phrase-row"><span class="phrase-en">Delivery costs…</span><span class="phrase-de">Доставка коштує…</span></div>
+            <div class="phrase-row"><span class="phrase-en">Yes, there is a discount of 5% for large orders.</span><span class="phrase-de">Так, є знижка 5% на великі замовлення.</span></div>
+            <div class="phrase-row"><span class="phrase-en">Please contact us if you have any questions.</span><span class="phrase-de">Звертайтесь якщо є питання.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">📞</div>
+          <span class="activity-title">Ex. 4A — Phone the caterers and order food for the party</span>
+          <span class="activity-src src-bp">BP p.26</span>
+        </div>
+        <div class="activity-body">
+          <p>You are Anita Patterson from Benham Engineering. Phone Carter-Villiers Caterers to order food for the party. Write the cost of the order in your notes.</p>
+
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--paper-dark);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);">BENHAM ENGINEERING — Lunch order for 14 March</div>
+            <div style="padding:16px;font-size:14px;color:var(--ink-soft);line-height:1.9;">
+              <strong>Order details:</strong><br>
+              · Selection of canapés for sixty people<br>
+              · Ten sandwich platters: five meat, three fish, two vegetarian<br>
+              · Ten cake platters<br>
+              · Eight cut fruit platters<br>
+              <strong>Delivery time:</strong> 11.30 a.m.<br>
+              <strong>Total cost with five percent discount?</strong> <input type="text" style="width:140px;">
+            </div>
+          </div>
+
+          <p style="margin-top:14px;"><strong>Ex. 4B — Compare your information with a partner. Click your role to see your order form.</strong></p>
+
+          <div class="student-tabs">
+            <div class="student-tab-buttons">
+              <button class="tab-btn active" onclick="switchTab(this, 'tabset2', 'A')">Student A</button>
+              <button class="tab-btn" onclick="switchTab(this, 'tabset2', 'B')">Student B</button>
+            </div>
+
+            <div class="tab-content active" id="tabset2-A">
+              <p style="margin-bottom:10px;"><strong>Student A — your order form:</strong></p>
+              <div style="border:2px dashed var(--border);border-radius:6px;padding:40px 20px;text-align:center;color:var(--warm-grey);background:var(--paper-dark);">
+                <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;"><img src="sta.png" style="max-width:100%;" alt="Student A order form"></div>
+              </div>
+            </div>
+
+            <div class="tab-content" id="tabset2-B">
+              <p style="margin-bottom:10px;"><strong>Student B — your order form:</strong></p>
+              <div style="border:2px dashed var(--border);border-radius:6px;padding:40px 20px;text-align:center;color:var(--warm-grey);background:var(--paper-dark);">
+                <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;"><img src="stb.png" style="max-width:100%;" alt="Student B order form"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 4 ══ -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">New Topic: Changes — A Company's Story</div>
+        <div class="phase-sub">BP A2 Unit 3.1, p.28 · Timeline + Past Simple</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-warmup">💬</div>
+          <span class="activity-title">Lead-in — Think of a businessperson</span>
+          <span class="activity-src src-bp">BP p.28</span>
+        </div>
+        <div class="activity-body">
+          <p>Work in pairs. Think of a businessperson and answer the questions.</p>
+          <ol class="exercise">
+            <li>What's his/her name?</li>
+            <li>What's the name of his/her company?</li>
+            <li>What does his/her company do, make or sell?</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📅</div>
+          <span class="activity-title">Ex. 2A — Read the timeline. In how many countries does Costa Coffee operate?</span>
+          <span class="activity-src src-bp">BP p.28</span>
+        </div>
+        <div class="activity-body">
+
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;">
+            <div style="background:var(--accent);padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink);">TIMELINE: COSTA COFFEE</div>
+            <div style="padding:18px;">
+
+              <div class="row g-2 mb-3">
+                <div class="col-md-3">
+                  <div style="background:var(--paper-dark);border-radius:6px;padding:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;height:100%;">
+                    <strong style="color:var(--accent-dark);">1960s</strong> The Costa family, with sons Sergio and Bruno, <sup>1 </sup><b>move</b> from Italy to London.
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div style="background:var(--paper-dark);border-radius:6px;padding:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;height:100%;">
+                    <strong style="color:var(--accent-dark);">1978</strong> The Costa brothers <sup>4 </sup><b>open</b> a coffee shop — Costa Coffee.
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div style="background:var(--paper-dark);border-radius:6px;padding:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;height:100%;">
+                    <strong style="color:var(--accent-dark);">1985–1995</strong> Costa opens more shops and <sup>6 </sup><b>hires</b> more employees. By 1995, there are forty-one shops in the UK.
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div style="background:var(--paper-dark);border-radius:6px;padding:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;height:100%;">
+                    <strong style="color:var(--accent-dark);">2006</strong> Costa <sup>8 </sup><b>launches</b> the Costa Book Awards, giving prizes to the best writers in England and Ireland.
+                  </div>
+                </div>
+              </div>
+
+              <div style="position:relative;height:30px;margin:10px 0;border-top:2px solid var(--accent-dark);">
+                <div style="display:flex;justify-content:space-between;margin-top:-9px;font-size:11px;color:var(--warm-grey);font-family:'DM Mono',monospace;">
+                  <span>1960</span><span>1970</span><span>1980</span><span>1990</span><span>2000</span><span>2010</span><span>2020</span>
+                </div>
+              </div>
+
+              <div class="row g-2 mt-3">
+                <div class="col-md-3">
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;height:100%;">
+                    <strong style="color:var(--accent-dark);">1971</strong> Brothers Bruno and Sergio Costa <sup>2 </sup><b>start</b> a coffee supply company in London. They <sup>3 </sup><b>produce</b> coffee for local food sellers.
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;height:100%;">
+                    <strong style="color:var(--accent-dark);">1985</strong> Bruno leaves the business and <sup>5 </sup><b>creates</b> a different company.
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;height:100%;">
+                    <strong style="color:var(--accent-dark);">1999</strong> Costa <sup>7 </sup><b>expands</b> its market — the company opens a shop in Dubai.
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;height:100%;">
+                    <strong style="color:var(--accent-dark);">2019</strong> Costa has more than 3,800 shops in thirty-one countries.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <p style="margin-top:8px;"><strong>In how many countries does Costa Coffee operate?</strong></p>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🔗</div>
+          <span class="activity-title">Ex. 2B — Match the verbs with their past form in the sentences</span>
+          <span class="activity-src src-bp">BP p.28</span>
+        </div>
+        <div class="activity-body">
+          <p>Match the verbs in bold (1–8 from the timeline) with their past form in sentences (a–h).</p>
+          <ol class="exercise">
+            <li>No, they didn't. In their first year, Costa Coffee <strong>produced</strong> coffee for local food sellers.</li>
+            <li>Yes, he did. In 1985, Bruno <strong>created</strong> a different company.</li>
+            <li>The Costa brothers <strong>moved</strong> from Italy in 1960.</li>
+            <li>In 1999, Costa <strong>expanded</strong> its market and opened a shop in Dubai.</li>
+            <li>In 1971, the Costa Brothers <strong>started</strong> a coffee supply company in London.</li>
+            <li>They <strong>opened</strong> a Costa Coffee shop in 1978.</li>
+            <li>Costa Coffee opened more shops in the UK and <strong>hired</strong> more employees from 1985 to 1995.</li>
+            <li>In 2006, they <strong>launched</strong> the Costa Book Awards.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">❓</div>
+          <span class="activity-title">Ex. 2C — Match the questions with the sentences</span>
+          <span class="activity-src src-bp">BP p.28</span>
+        </div>
+        <div class="activity-body">
+          <p>Match the questions (1–8) with the sentences (a–h) from Exercise 2B.</p>
+          <div class="row g-2 mt-1">
+            <div class="col-md-6">
+              <table class="vocab-table">
+                <thead><tr><th>#</th><th>Question</th><th>Match</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Where did the Costa family move from?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>2</td><td>Who started Costa Coffee?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>3</td><td>Did they open a coffee shop at the beginning?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>4</td><td>When did they open a Costa Coffee shop?</td><td><input type="text" style="width:30px;"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="vocab-table">
+                <thead><tr><th>#</th><th>Question</th><th>Match</th></tr></thead>
+                <tbody>
+                  <tr><td>5</td><td>Did Bruno start his own company in 1985?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>6</td><td>Did Costa open more shops in the UK?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>7</td><td>When did Costa expand its market to other countries?</td><td><input type="text" style="width:30px;"></td></tr>
+                  <tr><td>8</td><td>What did the company launch in 2006?</td><td><input type="text" style="width:30px;"></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('revM')">show answers ▾</button>
+          <div class="reveal-content" id="revM">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li>1 → <strong>c</strong></li><li>2 → <strong>e</strong></li><li>3 → <strong>a</strong></li><li>4 → <strong>f</strong></li>
+              <li>5 → <strong>b</strong></li><li>6 → <strong>g</strong></li><li>7 → <strong>d</strong></li><li>8 → <strong>h</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Grammar — Talking about the Past</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="note-box">
+            We use the <strong>Past Simple</strong> to talk about completed actions and events in the past. We often use specific time references (e.g. <em>in 2017, last year</em>) to say when the action happened.<br><br>
+            <em>I started the business <strong>in 2017</strong>.</em><br>
+            <em>We launched the new product <strong>last year</strong>.</em>
+          </div>
+
+          <div class="grammar-box">
+            <div class="grammar-box-header"><span>Past Simple positive</span></div>
+            <div class="grammar-box-body">
+              <div class="grammar-row"><span class="grammar-plus">+</span><span>I/You/We/They/He/She <strong>started</strong> the business in 2017.</span></div>
+              <div class="grammar-row"><span class="grammar-plus">+</span><span>I/You/We/They/He/She <strong>launched</strong> the new product last year.</span></div>
+              <div class="grammar-row"><span class="grammar-plus">+</span><span>I/You/We/They/He/She <strong>applied</strong> for the job last week.</span></div>
+            </div>
+          </div>
+
+          <p style="margin-top:14px;"><strong>Spelling of Past Simple regular verbs</strong> — add <strong>-ed</strong> to the end of the verb.</p>
+
+          <table class="vocab-table">
+            <thead><tr><th>consonant</th><th>-e</th><th>vowel + -y or -w</th><th>consonant + -y</th><th>vowel + consonant</th></tr></thead>
+            <tbody>
+              <tr><td>work → work<strong>ed</strong></td><td>produce → produce<strong>d</strong></td><td>stay → stay<strong>ed</strong></td><td>apply → appl<strong>ied</strong></td><td>stop → stop<strong>ped</strong></td></tr>
+              <tr><td>start → start<strong>ed</strong></td><td>hire → hire<strong>d</strong></td><td>show → show<strong>ed</strong></td><td>study → stud<strong>ied</strong></td><td>plan → plan<strong>ned</strong></td></tr>
+            </tbody>
+          </table>
+
+          <p style="margin-top:16px;"><strong>Past Simple Yes/No questions</strong></p>
+          <div class="note-box">
+            У Past Simple Yes/No questions ми використовуємо допоміжне дієслово <strong>did</strong>. Основне дієслово (наприклад <em>start, win</em>) не змінюється на Past Simple. Відповідаємо також з <strong>did/didn't</strong>.<br><br>
+            <em><strong>Did</strong> you <strong>start</strong> the business in 2017?</em> → Yes, I <strong>did</strong>.<br>
+            <em><strong>Did</strong> they <strong>hire</strong> a new Manager?</em> → No, they <strong>didn't</strong>.
+          </div>
+
+          <table class="vocab-table">
+            <thead><tr><th>Did</th><th>Subject</th><th>Verb</th><th>Yes/No</th><th>Subject</th><th>did/didn't</th></tr></thead>
+            <tbody>
+              <tr><td>Did</td><td>I/you/we/they/he/she</td><td>start the business in 2017?</td><td>Yes,</td><td>I/you/we/they/he/she</td><td><strong>did</strong>.</td></tr>
+              <tr><td></td><td></td><td></td><td>No,</td><td></td><td><strong>didn't</strong>.</td></tr>
+            </tbody>
+          </table>
+
+          <br><br>
+
+          <table class="vocab-table">
+            <thead><tr><th>Question word</th><th>did</th><th>Subject</th><th>Verb</th><th>Answer</th></tr></thead>
+            <tbody>
+              <tr><td>When</td><td>did</td><td>I/you/we/they/he/she</td><td>start?</td><td>I/You/We/They/He/She <strong>started</strong> in 2018.</td></tr>
+              <tr><td>How</td><td>did</td><td>they</td><td>expand their market?</td><td>They <strong>created</strong> products in different languages.</td></tr>
+              <tr><td>Where</td><td>did</td><td>he</td><td>work in 2010?</td><td>He <strong>worked</strong> at Microsoft.</td></tr>
+              <tr><td>Who</td><td>did</td><td>you</td><td>hire for the job?</td><td>I <strong>hired</strong> Clara Sanchez.</td></tr>
+              <tr><td>Why</td><td>did</td><td>they</td><td>move last year?</td><td>They <strong>moved</strong> because they needed more space.</td></tr>
+              <tr><td>What</td><td>did</td><td>she</td><td>study at university?</td><td>She <strong>studied</strong> business management.</td></tr>
+            </tbody>
+          </table>
+
+          <p style="margin-top:16px;"><strong>Subject questions</strong></p>
+          <div class="note-box">
+            У Past Simple subject questions головне дієслово (для regular і irregular verbs) стоїть у формі Past Simple. Ми <strong>не</strong> використовуємо <strong>did</strong>.<br><br>
+            <em>Who <strong>started</strong> the business?</em><br>
+            <em>Who <strong>won</strong> the contract?</em>
+          </div>
+
+          <table class="vocab-table">
+            <thead><tr><th>Subject question</th><th>Answer</th></tr></thead>
+            <tbody>
+              <tr><td>Who <strong>started</strong> the business?</td><td>Three friends.</td></tr>
+              <tr><td>Who <strong>designed</strong> the product?</td><td>Our Designer, David.</td></tr>
+              <tr><td>What <strong>happened</strong> at work yesterday?</td><td>We had a meeting about the new design.</td></tr>
+              <tr><td>Which company <strong>launched</strong> the iPhone?</td><td>Apple. Apple launched the iPhone.</td></tr>
+              <tr><td>Which employee <strong>started</strong> last week?</td><td>David Lansbury. David Lansbury started last week.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="note-box" style="margin-top:10px;">
+            <strong>Ключова різниця:</strong> в object/yes-no questions питальне слово замінює <em>об'єкт</em> → потрібен <strong>did</strong> + дієслово без -ed. В subject questions питальне слово замінює <em>підмет</em> → <strong>без did</strong>, дієслово одразу в Past Simple.
+          </div>
+
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 1 — Complete the sentences with the Past Simple positive form of the verbs</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>He <input type="text" style="width:130px;"> (start) his job two years ago.</li>
+            <li>They <input type="text" style="width:130px;"> (work) at TechHub last year.</li>
+            <li>You <input type="text" style="width:130px;"> (finish) high school in 2018.</li>
+            <li>We <input type="text" style="width:130px;"> (develop) new products at the factory.</li>
+            <li>She <input type="text" style="width:130px;"> (study) in London.</li>
+            <li>They <input type="text" style="width:130px;"> (show) us the new offices yesterday.</li>
+            <li>I <input type="text" style="width:130px;"> (plan) the schedule. It's ready.</li>
+            <li>The company <input type="text" style="width:130px;"> (hire) a new manager.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('revG1')">show answers ▾</button>
+          <div class="reveal-content" id="revG1">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>started</strong></li>
+              <li><strong>worked</strong></li>
+              <li><strong>finished</strong></li>
+              <li><strong>developed</strong></li>
+              <li><strong>studied</strong></li>
+              <li><strong>showed</strong></li>
+              <li><strong>planned</strong></li>
+              <li><strong>hired</strong></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 2 — Read the dialogues. Choose the correct option</span>
+        </div>
+        <div class="activity-body">
+          <div style="border:1px solid var(--border);border-radius:6px;padding:16px;background:var(--white);margin:12px 0;font-size:14px;color:var(--ink-soft);line-height:2.0;">
+            <strong>A:</strong> <sup>1</sup><em>Who signed / Did you sign</em> the contract?<br>
+            <strong>B:</strong> My manager.<br><br>
+            <strong>A:</strong> Where <sup>2</sup><em>stayed / did you stay</em> at the conference?<br>
+            <strong>B:</strong> We stayed at the Park Hall Hotel.<br><br>
+            <strong>A:</strong> <sup>3</sup><em>Who designed the car? / What did you design?</em><br>
+            <strong>B:</strong> Karl Shultz was the designer.<br><br>
+            <strong>A:</strong> <sup>4</sup><em>What designed John? / What did John design?</em><br>
+            <strong>B:</strong> John designed the tables and chairs.
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('revG2')">show answers ▾</button>
+          <div class="reveal-content" id="revG2">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>Who signed</strong> the contract? <em>(subject question — no did)</em></li>
+              <li>Where <strong>did you stay</strong> at the conference? <em>(object question — needs did)</em></li>
+              <li><strong>Who designed the car?</strong> <em>(matches the answer "Karl Shultz was the designer")</em></li>
+              <li><strong>What did John design?</strong> <em>(object question — John is the subject, "tables and chairs" is the object)</em></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✏️</div>
+          <span class="activity-title">Ex. 3 — Put the words in the correct order to make questions</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>company / did / expand / the / range / its / ? <br> <input type="text" style="width:350px;"></li>
+            
+            <li>2014 / did / in / start / university / you / ? <br> <input type="text" style="width:350px;"></li>
+            <li>jobs / change / did / in / she / 2019 / ? <br> <input type="text" style="width:350px;"></li>
+            <li>the company / who / started / ? <br> <input type="text" style="width:350px;"></li>
+            <li>how / they / workplace / improve / did / their / ? <br> <input type="text" style="width:350px;"></li>
+            <li>you / last year / work / where / did / ? <br> <input type="text" style="width:350px;"></li>
+            <li>launched / last year / the HJ laptop / which company / ? <br> <input type="text" style="width:350px;"></li>
+            <li>close / she / why / did / the shop / ? <br> <input type="text" style="width:350px;"></li>
+            <li>who / a new computer / ordered / ? <br> <input type="text" style="width:350px;"></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('revG3')">show answers ▾</button>
+          <div class="reveal-content" id="revG3">
+            <div class="answer-key"><div class="ak-label">Answer key</div><ol>
+              <li><strong>Did the company expand its range?</strong></li>
+              <li><strong>Did you start university in 2014?</strong></li>
+              <li><strong>Did she change jobs in 2019?</strong></li>
+              <li><strong>Who started the company?</strong> <em>(subject question — no did)</em></li>
+              <li><strong>How did they improve their workplace?</strong></li>
+              <li><strong>Where did you work last year?</strong></li>
+              <li><strong>Which company launched the HJ laptop last year?</strong> <em>(subject question — no did)</em></li>
+              <li><strong>Why did she close the shop?</strong></li>
+              <li><strong>Who ordered a new computer?</strong> <em>(subject question — no did)</em></li>
+            </ol></div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">💬</div>
+          <span class="activity-title">Speaking — Talk about changes at your company</span>
+        </div>
+        <div class="activity-body">
+          <p>Answer using Past Simple.</p>
+          <ol class="exercise">
+            <li>When did you join your company?</li>
+            <li>Did your department change in the last few years?</li>
+            <li>Did the company hire many new people recently?</li>
+            <li>When did your team start the current project?</li>
+            <li>Did your company launch any new products recently?</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePhase(id){const el=document.getElementById(id);el.classList.toggle('collapsed');}
+function toggleReveal(id){const el=document.getElementById(id);el.classList.toggle('open');const btn=el.previousElementSibling;btn.textContent=el.classList.contains('open')?'hide answers ▴':'show answers ▾';}
+function switchTab(btn, groupId, tab) {
+  const wrapper = btn.closest('.student-tabs');
+  wrapper.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  wrapper.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(groupId + '-' + tab).classList.add('active');
+}
+</script>
+</body>
+</html>

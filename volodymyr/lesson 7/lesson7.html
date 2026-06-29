@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 7 — Revision (Units 1–2)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a2240; --ink-soft: #3a4a6a; --paper: #f5f7fc; --paper-dark: #e8edf8;
+      --gold: #c88a10; --teal: #2a5fa8; --teal-light: #4a7fc8; --warm-grey: #6a7a9a;
+      --border: #d0d8ec; --white: #ffffff;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+
+    .header { background:#1a2e52; color:#fff; padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .header::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle, rgba(90,143,232,0.3) 0%, transparent 70%); }
+    .header::after { content:''; position:absolute; bottom:-40px; left:20%; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle, rgba(200,138,16,0.2) 0%, transparent 70%); }
+    .header-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,58px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .header h1 em { font-style:italic; color:#f0c060; }
+    .header-meta { display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+    .meta-chip .dot { width:6px; height:6px; border-radius:50%; background:#f0c060; flex-shrink:0; }
+    .meta-chip strong { color:#fff; }
+
+    .objectives-wrap { max-width:1100px; margin:0 auto; padding:32px 40px; }
+    .objectives-box { background:#fff; border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:4px; padding:24px 28px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .obj-col h3 { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:10px; }
+    .obj-list { list-style:none; }
+    .obj-list li { font-size:14px; padding:5px 0 5px 18px; position:relative; color:var(--ink-soft); border-bottom:1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom:none; }
+    .obj-list li::before { content:'✓'; position:absolute; left:0; color:var(--teal-light); font-size:12px; font-weight:600; }
+
+    .main { max-width:1100px; margin:0 auto; padding:0 40px 60px; }
+
+    .phase { margin-bottom:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+    .phase-header { padding:18px 24px; display:flex; align-items:center; gap:16px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:20px; font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase-num { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:4px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:#fff; }
+    .phase-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .phase-body { padding:0 24px 24px; background:var(--paper); }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-1 .phase-header { background:#1e3a5f; }
+    .phase-2 .phase-header { background:#2a4a7a; }
+    .phase-3 .phase-header { background:#1a3a6e; }
+    .phase-4 .phase-header { background:#1e3a5f; }
+
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:16px; overflow:hidden; background:var(--white); box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+    .activity-head { background:var(--paper-dark); padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
+    .activity-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; background:#eef3fb; }
+    .activity-title { font-weight:600; font-size:14px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:#1e3a6e; background:#dce6f5; border:1px solid #b0c8ec; padding:3px 8px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:16px; background:var(--white); }
+
+    .speaking-box { border:2px solid var(--teal); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .speaking-box-header { background:#1e3a5f; padding:10px 16px; }
+    .speaking-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#fff; font-weight:600; }
+    .speaking-box-body { background:var(--white); padding:16px; }
+    .speaking-row { padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; color:var(--ink); }
+    .speaking-row:last-child { border-bottom:none; }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:5px 14px; border-radius:20px; cursor:pointer; margin-top:10px; transition:all 0.2s; }
+    .reveal-btn:hover { border-color:var(--teal); color:var(--teal); }
+    .reveal-content { display:none; margin-top:10px; }
+    .reveal-content.open { display:block; }
+
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:12px 16px; margin:12px 0; font-size:13px; }
+    .ak-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .answer-key ol { padding-left:20px; }
+    .answer-key li { padding:3px 0; color:var(--ink-soft); }
+    .answer-key li strong { color:var(--teal); }
+
+    .word-box { background:var(--white); border:2px solid var(--teal); border-radius:6px; padding:12px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--teal); width:100%; margin-bottom:4px; }
+    .word-chip { background:#1e3a5f; color:#fff; font-size:13px; font-weight:600; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+
+    .fill-text { background:var(--paper); border:1px solid var(--border); border-radius:6px; padding:16px 20px; font-size:14px; line-height:2.2; color:var(--ink); margin:12px 0; }
+    .fill-input { border:none; border-bottom:2px solid var(--teal-light); background:transparent; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; padding:0 4px; min-width:120px; }
+    .fill-input:focus { border-bottom-color:var(--gold); }
+
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:14px; color:var(--ink-soft); padding:6px 0; border-bottom:1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom:none; }
+    p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0; }
+    p:first-child { margin-top:0; }
+    strong { color:var(--ink); }
+
+    /* Anagram cards */
+    .anagram-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0; }
+    .anagram-card { border:1px solid var(--border); border-radius:8px; padding:14px 16px; background:var(--white); }
+    .anagram-letters { font-family:'DM Mono',monospace; font-size:20px; font-weight:700; letter-spacing:4px; color:var(--teal); text-align:center; background:var(--paper-dark); border-radius:6px; padding:10px; margin-bottom:10px; }
+    .anagram-def { font-size:13px; color:var(--ink-soft); margin-bottom:8px; }
+    .anagram-input { width:100%; border:none; border-bottom:2px solid var(--teal-light); background:transparent; font-size:15px; outline:none; padding:4px; text-align:center; font-weight:600; color:var(--ink); }
+
+    /* Tricky words */
+    .tricky-row { display:flex; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px dotted var(--border); font-size:14px; }
+    .tricky-row:last-child { border-bottom:none; }
+    .tricky-ua { font-family:'DM Mono',monospace; font-size:12px; color:var(--gold); background:var(--paper-dark); padding:2px 8px; border-radius:4px; white-space:nowrap; }
+
+    /* Correct/incorrect sentences */
+    .cw-item { border:1px solid var(--border); border-radius:6px; padding:12px 16px; margin-bottom:10px; background:var(--white); display:flex; gap:14px; align-items:flex-start; }
+    .cw-num { font-family:'DM Mono',monospace; font-weight:700; color:var(--teal); flex-shrink:0; }
+    .cw-text { font-size:14px; color:var(--ink); flex:1; }
+    .cw-buttons { display:flex; gap:6px; flex-shrink:0; }
+    .cw-btn { font-family:'DM Mono',monospace; font-size:11px; border:1px solid var(--border); background:var(--white); padding:4px 10px; border-radius:14px; cursor:pointer; color:var(--warm-grey); }
+
+    .mood-img-wrap img { max-width:420px; width:100%; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.1); }
+
+    .empty-block { border:2px dashed var(--border); border-radius:8px; padding:32px; text-align:center; color:var(--warm-grey); font-family:'DM Mono',monospace; font-size:13px; background:var(--paper-dark); }
+
+    @media (max-width:700px) {
+      .objectives-box, .anagram-grid { grid-template-columns:1fr; }
+      .header, .objectives-wrap, .main { padding-left:20px; padding-right:20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Revision<br><em>Lessons 1–6</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Focus:</strong>&nbsp;Vocabulary, Grammar, Soft Skills</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Plus:</strong>&nbsp;Personal error review</div>
+    </div>
+  </div>
+</div>
+
+<div class="objectives-wrap">
+  <div class="objectives-box">
+    <div class="obj-col">
+      <h3>Goals</h3>
+      <ul class="obj-list">
+        <li>Review verb-preposition collocations</li>
+        <li>Review key startup vocabulary</li>
+        <li>Correct common grammar mistakes</li>
+        <li>Review Past Simple, Present Perfect, Present Continuous</li>
+        <li>Work through your own recurring mistakes</li>
+      </ul>
+    </div>
+    <div class="obj-col">
+      <h3>Focus areas</h3>
+      <ul class="obj-list">
+        <li>False friends — words that trick you because of direct translation</li>
+        <li>Collocations: do/make, solve/hit/reach</li>
+        <li>Articles, adverbs, subject-verb agreement</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PHASE 1 — WARM-UP -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div><div class="phase-title">Warm-up — Startup profiles</div></div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🖼️</div>
+          <span class="activity-title">How's your mood today?</span>
+        </div>
+        <div class="activity-body">
+          <div class="mood-img-wrap">
+            <img src="mood_dogs.jpg" alt="Mood check">
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔭</div>
+          <span class="activity-title">Startup profiles — discuss</span>
+        </div>
+        <div class="activity-body">
+          <p>Below are 4 startup profiles, the kind you'd find on a platform like Wellfound.</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0">
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)">
+              <div style="background:#1e3a5f;padding:12px 16px">
+                <div style="font-weight:700;color:#fff;font-size:15px">Lumio</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-top:2px">Seed stage · 8 employees · Remote-first</div>
+              </div>
+              <div style="padding:14px 16px;font-size:13px;color:var(--ink-soft)">
+                <p style="margin:0 0 8px">Lumio builds AI-powered lighting systems for smart offices that automatically adjust brightness and color temperature based on employee focus levels and time of day.</p>
+                <p style="margin:0 0 8px"><strong style="color:var(--ink)">Open role:</strong> Product Marketing Manager — own go-to-market strategy for our first enterprise launch.</p>
+                <p style="margin:0;font-style:italic;color:var(--warm-grey)">$90k–$120k + 0.1%–0.3% equity</p>
+              </div>
+            </div>
+
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)">
+              <div style="background:#2a4a7a;padding:12px 16px">
+                <div style="font-weight:700;color:#fff;font-size:15px">Fernway</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-top:2px">Series A · 35 employees · Hybrid (Berlin)</div>
+              </div>
+              <div style="padding:14px 16px;font-size:13px;color:var(--ink-soft)">
+                <p style="margin:0 0 8px">Fernway helps logistics companies cut fuel costs by predicting optimal delivery routes using real-time traffic and weather data.</p>
+                <p style="margin:0 0 8px"><strong style="color:var(--ink)">Open role:</strong> Senior Backend Engineer — scale our routing engine to handle 10x more requests.</p>
+                <p style="margin:0;font-style:italic;color:var(--warm-grey)">€75k–€95k + 0.05%–0.15% equity</p>
+              </div>
+            </div>
+
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)">
+              <div style="background:#1a3a6e;padding:12px 16px">
+                <div style="font-weight:700;color:#fff;font-size:15px">Pebblecare</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-top:2px">Pre-seed · 4 employees · Remote</div>
+              </div>
+              <div style="padding:14px 16px;font-size:13px;color:var(--ink-soft)">
+                <p style="margin:0 0 8px">Pebblecare is building a subscription box and app that helps elderly people manage medication schedules independently, with family members getting real-time updates.</p>
+                <p style="margin:0 0 8px"><strong style="color:var(--ink)">Open role:</strong> Founding Designer — define the entire product experience from scratch.</p>
+                <p style="margin:0;font-style:italic;color:var(--warm-grey)">$60k–$80k + 0.5%–1% equity</p>
+              </div>
+            </div>
+
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)">
+              <div style="background:#1e3a5f;padding:12px 16px">
+                <div style="font-weight:700;color:#fff;font-size:15px">Northstack</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-top:2px">Series B · 120 employees · In office (Austin)</div>
+              </div>
+              <div style="padding:14px 16px;font-size:13px;color:var(--ink-soft)">
+                <p style="margin:0 0 8px">Northstack provides a no-code platform for small businesses to build internal tools — think custom dashboards and workflows without hiring a developer.</p>
+                <p style="margin:0 0 8px"><strong style="color:var(--ink)">Open role:</strong> Head of Customer Success — build and lead a team of 6 CSMs.</p>
+                <p style="margin:0;font-style:italic;color:var(--warm-grey)">$130k–$160k + 0.02%–0.08% equity</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which of these 4 startups sounds the most promising to you? Why?</div>
+              <div class="speaking-row">Which role would you personally be most interested in, and what would you ask in an interview?</div>
+              <div class="speaking-row">Based on Bill Gross's "timing" framework — which of these ideas feels best timed right now?</div>
+              <div class="speaking-row">If you were an investor, which one would you fund first — and which would you pass on?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 2 — REVISION (textbook) -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Revision — Vocabulary & Grammar</div>
+        <div class="phase-sub">EfT pp. 50–52 · Units 1–2</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- VOCAB PART 1 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Vocabulary Part 1 — Verb-preposition pairings</span>
+          <span class="activity-src">EfT p.50</span>
+        </div>
+        <div class="activity-body">
+          <p>Create verb-preposition pairings to fill in the blanks.</p>
+          <div style="display:flex;gap:20px;margin:12px 0">
+            <div class="word-box" style="flex:1">
+              <div class="word-box-label">verbs</div>
+              <span class="word-chip">Specialize</span>
+              <span class="word-chip">Take</span>
+              <span class="word-chip">Keep</span>
+              <span class="word-chip">Come</span>
+              <span class="word-chip">Break</span>
+              <span class="word-chip">Get</span>
+            </div>
+            <div class="word-box" style="flex:1">
+              <div class="word-box-label">prepositions</div>
+              <span class="word-chip">Off</span>
+              <span class="word-chip">In</span>
+              <span class="word-chip">On</span>
+              <span class="word-chip">Into</span>
+              <span class="word-chip">Up</span>
+              <span class="word-chip">Across</span>
+            </div>
+          </div>
+          <ol class="exercise">
+            <li>I don't know how to deal with this issue because it's not something I've ever <input class="fill-input" size="10"> <input class="fill-input" size="10">.</li>
+            <li>The market is saturated with recent graduates trying to <input class="fill-input" size="10"> <input class="fill-input" size="10"> the industry.</li>
+            <li>I gladly <input class="fill-input" size="10"> <input class="fill-input" size="10"> that challenge because it was something I really wanted to do.</li>
+            <li>— What does Brian <input class="fill-input" size="10"> <input class="fill-input" size="10">? — He's a marketing expert.</li>
+            <li>She's finding it hard to <input class="fill-input" size="10"> <input class="fill-input" size="10"> with the demands of her job.</li>
+            <li>Unless you already have an audience, it is very hard to <input class="fill-input" size="10"> your podcast <input class="fill-input" size="10"> the ground.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv1')">show answers ▾</button>
+          <div class="reveal-content" id="rv1">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>come across</strong></li>
+                <li><strong>break into</strong></li>
+                <li><strong>took on</strong></li>
+                <li><strong>specialize in</strong></li>
+                <li><strong>keep up</strong></li>
+                <li><strong>get / off</strong> the ground</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOCAB PART 2 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Vocabulary Part 2 — Choose the best option</span>
+          <span class="activity-src">EfT p.51</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>The great thing about our company is that all communication is <strong>solid / transparent</strong>. We can speak openly with one another.</li>
+            <li>We have found a <strong>cost-efficient / shortened</strong> method of hiring people that allows us to minimize our expenses.</li>
+            <li>We need to take into <strong>account / bring</strong> on board a few key details before we start on this project.</li>
+            <li>He got tired of working for other people and became <strong>a jack-of-all-trades / an entrepreneur</strong>.</li>
+            <li>We have finally finished our <strong>VC / MVP</strong>. You can download it on our website.</li>
+            <li>How are you going to <strong>qualify / compete</strong> with these people? They're all top-level professionals.</li>
+            <li>We have a set of <strong>core / annual</strong> strategies that allow us to make quick decisions when we need to pivot.</li>
+            <li>Ryan's explanations are always so <strong>scalable / concise</strong>. He always manages to give you the full picture in just a few sentences.</li>
+            <li>He doesn't have the <strong>expertise / stakeholder</strong> to tackle this issue himself.</li>
+            <li>It's going to be hard to explain the results of the meeting <strong>in charge / in a nutshell</strong> but I'm going to try my best.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv2')">show answers ▾</button>
+          <div class="reveal-content" id="rv2">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>transparent</strong></li>
+                <li><strong>cost-efficient</strong></li>
+                <li><strong>account</strong></li>
+                <li><strong>an entrepreneur</strong></li>
+                <li><strong>MVP</strong></li>
+                <li><strong>compete</strong></li>
+                <li><strong>core</strong></li>
+                <li><strong>concise</strong></li>
+                <li><strong>expertise</strong></li>
+                <li><strong>in a nutshell</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAMMAR PART 1 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Grammar Part 1 — Correct or wrong?</span>
+          <span class="activity-src">EfT p.51</span>
+        </div>
+        <div class="activity-body">
+          <p>Are the sentences correct or wrong? Correct the ones that are wrong.</p>
+          <ol class="exercise">
+            <li>I learn DevOps now.</li>
+            <li>I really like my new job.</li>
+            <li>I have been to the USA twice in my life.</li>
+            <li>I have been very excited when I got my first job.</li>
+            <li>She trying to find a better-paid job.</li>
+            <li>We have successfully identified a major pain point for our customer.</li>
+            <li>I didn't see John ever since he stopped working here.</li>
+            <li>Did you noticed anything strange yesterday?</li>
+            <li>She doesn't seems to understand what the problem is.</li>
+            <li>Where does your brother work?</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv3')">show answers ▾</button>
+          <div class="reveal-content" id="rv3">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li>Wrong → <strong>I'm learning DevOps now.</strong></li>
+                <li><strong>Correct</strong></li>
+                <li><strong>Correct</strong></li>
+                <li>Wrong → <strong>I was very excited when I got my first job.</strong></li>
+                <li>Wrong → <strong>She is trying to find a better-paid job.</strong></li>
+                <li><strong>Correct</strong></li>
+                <li>Wrong → <strong>I haven't seen John since he stopped working here.</strong></li>
+                <li>Wrong → <strong>Did you notice anything strange yesterday?</strong></li>
+                <li>Wrong → <strong>She doesn't seem to understand what the problem is.</strong></li>
+                <li><strong>Correct</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAMMAR PART 2 -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Grammar Part 2 — Fill in the gaps</span>
+          <span class="activity-src">EfT p.52</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>Laura <input class="fill-input" size="14"> (need) help with her project. Can you help her?</li>
+            <li>I <input class="fill-input" size="14"> (not update) my OS in two months now.</li>
+            <li>She <input class="fill-input" size="14"> (not want) her boyfriend to know that she is going to quit her job.</li>
+            <li>The interview <input class="fill-input" size="14"> (go) really well. I think I <input class="fill-input" size="14"> (make) a good impression on them yesterday.</li>
+            <li>I <input class="fill-input" size="10"> never <input class="fill-input" size="14"> (interview) anyone. This is my first time.</li>
+            <li>He <input class="fill-input" size="14"> (be) very happy with his current job.</li>
+            <li>Despite her illness, she <input class="fill-input" size="14"> (keep) working on that project until its successful completion.</li>
+            <li>These days, you <input class="fill-input" size="14"> (not need) a degree to get a good job.</li>
+            <li>Lynn <input class="fill-input" size="14"> (debug) the website as we speak. So far, she has found one critical bug.</li>
+            <li>We <input class="fill-input" size="10"> currently <input class="fill-input" size="14"> (adapt) to recent changes.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv4')">show answers ▾</button>
+          <div class="reveal-content" id="rv4">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>needs</strong></li>
+                <li><strong>haven't updated</strong></li>
+                <li><strong>doesn't want</strong></li>
+                <li><strong>went</strong> / <strong>made</strong></li>
+                <li><strong>have</strong> / <strong>interviewed</strong></li>
+                <li><strong>is</strong></li>
+                <li><strong>kept</strong></li>
+                <li><strong>don't need</strong></li>
+                <li><strong>is debugging</strong></li>
+                <li><strong>are</strong> / <strong>adapting</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOFT SKILLS -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎤</div>
+          <span class="activity-title">Soft Skills — Choose the best option to complete the pitch</span>
+          <span class="activity-src">EfT p.52</span>
+        </div>
+        <div class="activity-body">
+          <p>My name is Lauren. I work <strong>like / as</strong> a business analyst <strong>at / on</strong> a big tech company. My company helps managers and business owners put together robust teams to build projects or take care <strong>for / of</strong> administrative tasks.</p>
+          <p>We use <strong>cutting-edge / cutting-end</strong> AI technology that allows us to match the right person to the right job. Personally, I am in charge <strong>of / to</strong> interviewing prospective team members <strong>to make sure / for making sure</strong> they are bringing the perfect combination of skills and personality characteristics to the team. You can think of me as a recruiter, a project manager and a customer service expert all in one bundle.</p>
+
+          <button class="reveal-btn" onclick="toggleReveal('rv5')">show answers ▾</button>
+          <div class="reveal-content" id="rv5">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>as</strong></li>
+                <li><strong>at</strong></li>
+                <li><strong>of</strong></li>
+                <li><strong>cutting-edge</strong></li>
+                <li><strong>of</strong></li>
+                <li><strong>to make sure</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 3 — PERSONAL ERROR REVIEW -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Your own mistakes — let's fix them</div>
+        <div class="phase-sub">Based on patterns from previous lessons</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- ANAGRAMS -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔤</div>
+          <span class="activity-title">Unscramble the words</span>
+        </div>
+        <div class="activity-body">
+          <p>These letters are scrambled. Use the definition to figure out the word, then unscramble the letters.</p>
+
+          <div class="anagram-grid">
+            <div class="anagram-card">
+              <div class="anagram-letters">N U C E L I F N</div>
+              <div class="anagram-def">the power to affect someone's thinking or behaviour</div>
+              <input class="anagram-input" type="text" placeholder="your answer">
+            </div>
+            <div class="anagram-card">
+              <div class="anagram-letters">T S O M L Y</div>
+              <div class="anagram-def">in most cases; for the largest part</div>
+              <input class="anagram-input" type="text" placeholder="your answer">
+            </div>
+            <div class="anagram-card">
+              <div class="anagram-letters">F O F E R</div>
+              <div class="anagram-def">to present something for someone to accept or consider</div>
+              <input class="anagram-input" type="text" placeholder="your answer">
+            </div>
+            <div class="anagram-card">
+              <div class="anagram-letters">P S C L A I E E L Y</div>
+              <div class="anagram-def">used to single out one thing as more important than others</div>
+              <input class="anagram-input" type="text" placeholder="your answer">
+            </div>
+            <div class="anagram-card">
+              <div class="anagram-letters">T R E O U</div>
+              <div class="anagram-def">the path or way taken to get from one place to another</div>
+              <input class="anagram-input" type="text" placeholder="your answer">
+            </div>
+            <div class="anagram-card">
+              <div class="anagram-letters">D K W A R W O</div>
+              <div class="anagram-def">causing embarrassment or discomfort; not smooth or graceful</div>
+              <input class="anagram-input" type="text" placeholder="your answer">
+            </div>
+            <div class="anagram-card">
+              <div class="anagram-letters">H I W P U</div>
+              <div class="anagram-def">(phrasal verb) to prepare or create something quickly</div>
+              <input class="anagram-input" type="text" placeholder="your answer">
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rv_ana')">show answers ▾</button>
+          <div class="reveal-content" id="rv_ana">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>influence</strong></li>
+                <li><strong>mostly</strong></li>
+                <li><strong>offer</strong></li>
+                <li><strong>especially</strong></li>
+                <li><strong>route</strong></li>
+                <li><strong>awkward</strong></li>
+                <li><strong>whip up</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FALSE FRIENDS -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">⚠️</div>
+          <span class="activity-title">False friends — don't translate directly</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the sentences. The word in brackets is the Ukrainian concept — but don't translate it word-for-word. Think of the natural English equivalent.</p>
+
+          <div class="fill-text">
+            1. I'm <input class="fill-input" size="14"> a detailed report from the design team by Friday. <span style="color:var(--warm-grey);font-size:12px">(чекаю від)</span><br><br>
+            2. The <input class="fill-input" size="14"> of this new feature is scheduled for next quarter, not the planning phase. <span style="color:var(--warm-grey);font-size:12px">(реалізація)</span><br><br>
+            3. We're likely to <input class="fill-input" size="14"> a few technical issues once we scale to more users. <span style="color:var(--warm-grey);font-size:12px">(зустріти)</span><br><br>
+            4. Based on the <input class="fill-input" size="14"> data we have right now, I'd say the campaign is performing well. <span style="color:var(--warm-grey);font-size:12px">(актуальні)</span><br><br>
+            5. Despite the tight deadline, the team managed to <input class="fill-input" size="14"> the client to extend it by a week. <span style="color:var(--warm-grey);font-size:12px">(переконати)</span><br><br>
+            6. Working in such a <input class="fill-input" size="14"> environment taught me how to stay calm under pressure. <span style="color:var(--warm-grey);font-size:12px">(жорсткому)</span><br><br>
+            7. The startup needs to <input class="fill-input" size="14"> before they can hire any new developers. <span style="color:var(--warm-grey);font-size:12px">(залучити кошти)</span>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rv_ff')">show answers ▾</button>
+          <div class="reveal-content" id="rv_ff">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>expecting</strong> — not "waiting from"</li>
+                <li><strong>execution / release</strong> — not "realization"</li>
+                <li><strong>come across</strong> — not "meet"</li>
+                <li><strong>relevant</strong> — not "actual"</li>
+                <li><strong>persuade</strong></li>
+                <li><strong>harsh</strong></li>
+                <li><strong>raise funds</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAMMAR: CORRECT/INCORRECT -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Spot the mistake</span>
+        </div>
+        <div class="activity-body">
+          <p>Some sentences below are correct, others have a mistake. Identify which ones are wrong and correct them.</p>
+
+          <div class="cw-item"><span class="cw-num">1</span><span class="cw-text">The team is currently focused on health and fitness products for the new market.</span></div>
+          <div class="cw-item"><span class="cw-num">2</span><span class="cw-text">She has a lot of experience in the process of developmebt new mobile applications.</span></div>
+          <div class="cw-item"><span class="cw-num">3</span><span class="cw-text">A successful product manager should have good communication skills.</span></div>
+          <div class="cw-item"><span class="cw-num">4</span><span class="cw-text">We want our new clients them feel confident about the partnership from day one.</span></div>
+          <div class="cw-item"><span class="cw-num">5</span><span class="cw-text">It's a high competitive market, so we need a clear differentiator.</span></div>
+          <div class="cw-item"><span class="cw-num">6</span><span class="cw-text">It's too early to go with the second option — we haven't tested it enough.</span></div>
+          <div class="cw-item"><span class="cw-num">7</span><span class="cw-text">The client dont see the value yet, so we need to explain it better.</span></div>
+          <div class="cw-item"><span class="cw-num">8</span><span class="cw-text">We're looking for two new persons to join the design team.</span></div>
+          <div class="cw-item"><span class="cw-num">9</span><span class="cw-text">As we discussed earlier, the timeline needs to move up by two weeks.</span></div>
+          <div class="cw-item"><span class="cw-num">10</span><span class="cw-text">This approach just not work for enterprise clients — we tried it twice.</span></div>
+          <div class="cw-item"><span class="cw-num">11</span><span class="cw-text">It's a small team, but everyone wears multiple hats.</span></div>
+          <div class="cw-item"><span class="cw-num">12</span><span class="cw-text">Despite of the budget cuts, the launch went ahead as planned.</span></div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rv_mist')">show answers ▾</button>
+          <div class="reveal-content" id="rv_mist">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>Correct</strong></li>
+                <li>Wrong → <strong>...the process of developing new mobile applications.</strong> (gerund, not noun "developmebt")</li>
+                <li><strong>Correct</strong></li>
+                <li>Wrong → <strong>We want our new clients to feel confident...</strong> (need "to feel", not "them feel")</li>
+                <li>Wrong → <strong>It's a highly competitive market...</strong> (adverb "highly", not adjective "high")</li>
+                <li><strong>Correct</strong></li>
+                <li>Wrong → <strong>The client doesn't see the value yet...</strong> (3rd person singular needs "doesn't")</li>
+                <li>Wrong → <strong>...two new people to join...</strong> ("people" is the plural of "person", not "persons" in this context)</li>
+                <li><strong>Correct</strong></li>
+                <li>Wrong → <strong>This approach just doesn't work for enterprise clients...</strong> (need auxiliary "doesn't")</li>
+                <li><strong>Correct</strong></li>
+                <li>Wrong → <strong>Despite the budget cuts...</strong> ("despite" never takes "of")</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLLOCATIONS -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔗</div>
+          <span class="activity-title">Collocations — do/make, solve/hit/reach</span>
+        </div>
+        <div class="activity-body">
+          <p>Choose the correct verb to complete each sentence.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">verb bank</div>
+            <span class="word-chip">do</span>
+            <span class="word-chip">make</span>
+            <span class="word-chip">solve</span>
+            <span class="word-chip">hit</span>
+            <span class="word-chip">reach</span>
+            <span class="word-chip">made (decision)</span>
+            <span class="word-chip">found (solution)</span>
+          </div>
+
+          <ol class="exercise">
+            <li>Can you <input class="fill-input" size="10"> this task by the end of the day? It's quite urgent.</li>
+            <li>We need to <input class="fill-input" size="10"> a decision about the pricing model before the next investor call.</li>
+            <li>Our support team works hard to <input class="fill-input" size="10"> customer problems as quickly as possible.</li>
+            <li>If we keep this pace, we should <input class="fill-input" size="10"> our quarterly target by next week.</li>
+            <li>It took the team three weeks to <input class="fill-input" size="10"> an agreement with the new vendor.</li>
+            <li>After a lot of debate, the leadership team finally <input class="fill-input" size="14"> on the new roadmap.</li>
+            <li>The engineers <input class="fill-input" size="14"> to the bug — it was a caching issue all along.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rv_coll')">show answers ▾</button>
+          <div class="reveal-content" id="rv_coll">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>do</strong> this task</li>
+                <li><strong>make</strong> a decision</li>
+                <li><strong>solve</strong> customer problems</li>
+                <li><strong>hit</strong> our quarterly target</li>
+                <li><strong>reach</strong> an agreement</li>
+                <li><strong>made a decision</strong></li>
+                <li><strong>found a solution</strong></li>
+              </ol>
+            </div>
+          </div>
+
+          <div style="background:var(--paper-dark);border-radius:6px;padding:12px 16px;margin-top:14px;font-size:13px;color:var(--ink-soft)">
+            <strong style="color:var(--ink)">Remember the difference:</strong><br>
+            <strong>decision</strong> — what you decide to do (a choice)<br>
+            <strong>solution</strong> — how you fix a problem (an answer to a problem)
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 4 — TALK/SAY/SPEAK/TELL -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Grammar — Say vs Tell vs Speak vs Talk</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- SAY -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">SAY</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>Meaning:</strong> to express a thought or words — what someone says, without focusing on who they say it to.</p>
+          <p><strong>Used:</strong></p>
+          <ul style="margin:8px 0 12px 20px;font-size:14px;color:var(--ink-soft)">
+            <li>when quoting direct speech</li>
+            <li>before a reported clause, when there's no indirect object (no "me", "him", "her" right after)</li>
+            <li>with a direct object but no indirect object</li>
+          </ul>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Examples</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">"Plato is my friend, but truth is a better friend," said Aristotle.</div>
+              <div class="speaking-row">He <strong>said</strong> he likes horror movies a lot.</div>
+              <div class="speaking-row">Who <strong>said</strong> that?</div>
+              <div class="speaking-row">Don't <strong>say</strong> a word. / She didn't <strong>say</strong> my name.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TELL -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📢</div>
+          <span class="activity-title">TELL</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>Meaning:</strong> to inform, instruct, or relate something to a specific person.</p>
+          <p><strong>Used:</strong></p>
+          <ul style="margin:8px 0 12px 20px;font-size:14px;color:var(--ink-soft)">
+            <li>with an indirect object — the person being told</li>
+            <li>when followed by an infinitive (tell + person + to + verb), it shifts toward meaning "order/instruct"</li>
+          </ul>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Examples</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Our teacher <strong>told</strong> us an interesting story.</div>
+              <div class="speaking-row"><strong>Tell</strong> me everything about yourself!</div>
+              <div class="speaking-row">My coach <strong>told</strong> me what to do to win the contest.</div>
+              <div class="speaking-row">My father <strong>told</strong> me to clean up the mess after the party.</div>
+            </div>
+          </div>
+          <div style="background:var(--paper-dark);border-radius:6px;padding:12px 16px;margin-top:12px;font-size:13px;color:var(--ink-soft)">
+            <strong style="color:var(--ink)">Fixed expressions with "tell":</strong> tell a lie · tell the truth · tell a story · tell fibs / tell tall tales
+          </div>
+        </div>
+      </div>
+
+      <!-- SPEAK -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎙️</div>
+          <span class="activity-title">SPEAK</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>Meaning:</strong> to talk, usually in a more formal register — emphasizes the act of speaking itself, the language used, or addressing a group.</p>
+          <p><strong>Used:</strong></p>
+          <ul style="margin:8px 0 12px 20px;font-size:14px;color:var(--ink-soft)">
+            <li>"speak to" (a person) / "speak about" (a topic)</li>
+            <li>to name which language someone uses</li>
+            <li>to describe giving a speech / addressing an audience</li>
+          </ul>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Examples</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">She <strong>speaks</strong> 4 languages.</div>
+              <div class="speaking-row">Today I have <strong>spoken</strong> to him about a party.</div>
+              <div class="speaking-row">What language is he <strong>speaking</strong>?</div>
+              <div class="speaking-row">Did Adam <strong>speak</strong> at the meeting this morning?</div>
+            </div>
+          </div>
+          <div style="background:var(--paper-dark);border-radius:6px;padding:12px 16px;margin-top:12px;font-size:13px;color:var(--ink-soft)">
+            <strong style="color:var(--ink)">Common collocations:</strong> speak fluently · speak quietly / softly · speak quickly / rapidly
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🗣️</div>
+          <span class="activity-title">TALK</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>Meaning:</strong> very close to "speak" but more casual/conversational. There are situations where "speak" simply wouldn't fit.</p>
+          <p><strong>Used:</strong> mostly in informal, everyday conversation — chatting, discussing, having a casual exchange.</p>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Examples</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Please stop <strong>talking</strong>! <em style="color:var(--warm-grey);font-size:12px">("speak" wouldn't work here)</em></div>
+              <div class="speaking-row">Did you <strong>talk</strong> to him yesterday?</div>
+              <div class="speaking-row">What are you <strong>talking</strong> about?</div>
+              <div class="speaking-row">Have you <strong>talked</strong> to her today? / My friend <strong>talks</strong> too much.</div>
+            </div>
+          </div>
+          <div style="background:var(--paper-dark);border-radius:6px;padding:12px 16px;margin-top:12px;font-size:13px;color:var(--ink-soft)">
+            <strong style="color:var(--ink)">Worth remembering:</strong> "stop talking" — never "stop speaking" in this everyday sense.
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARISON TABLE -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📊</div>
+          <span class="activity-title">Quick comparison</span>
+        </div>
+        <div class="activity-body">
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <thead>
+              <tr style="background:var(--ink)">
+                <th style="color:#fff;padding:8px 12px;text-align:left;width:12%">Verb</th>
+                <th style="color:#fff;padding:8px 12px;text-align:left;width:38%">Used when…</th>
+                <th style="color:#fff;padding:8px 12px;text-align:left">Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:var(--white)">
+                <td style="padding:9px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">say</td>
+                <td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">quoting direct speech, reported clauses without an indirect object</td>
+                <td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">He said he likes horror movies.</td>
+              </tr>
+              <tr style="background:var(--paper-dark)">
+                <td style="padding:9px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">tell</td>
+                <td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">informing a specific person; giving instructions</td>
+                <td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">My coach told me what to do.</td>
+              </tr>
+              <tr style="background:var(--white)">
+                <td style="padding:9px 12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--border)">speak</td>
+                <td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft)">formal register; naming a language; addressing a group</td>
+                <td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink-soft);font-style:italic">She speaks four languages.</td>
+              </tr>
+              <tr style="background:var(--paper-dark)">
+                <td style="padding:9px 12px;font-weight:700;color:var(--teal)">talk</td>
+                <td style="padding:9px 12px;color:var(--ink-soft)">informal, everyday conversation</td>
+                <td style="padding:9px 12px;color:var(--ink-soft);font-style:italic">What are you talking about?</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EXERCISE FROM TEXTBOOK -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Exercise — Complete the sentences</span>
+        </div>
+        <div class="activity-body">
+          <p>Use the correct form of <strong>say, speak, tell</strong> and <strong>talk</strong> to complete the sentences.</p>
+          <ol class="exercise">
+            <li>What did he <input class="fill-input" size="14"> to you? She <input class="fill-input" size="14"> nothing.</li>
+            <li>Can you <input class="fill-input" size="14"> me when the movie starts?</li>
+            <li>We <input class="fill-input" size="14"> on the phone for over an hour.</li>
+            <li>Could you <input class="fill-input" size="14"> louder?</li>
+            <li>Anne <input class="fill-input" size="14">, "I'm tired." So she <input class="fill-input" size="14"> she was tired.</li>
+            <li>Anne <input class="fill-input" size="14"> me she was tired.</li>
+            <li>Hello, could I <input class="fill-input" size="14"> to Mr Brown?</li>
+            <li>The doctor <input class="fill-input" size="14"> me to stay in bed.</li>
+            <li>Is he <input class="fill-input" size="14"> me the truth?</li>
+            <li>I like <input class="fill-input" size="14"> to her.</li>
+            <li>He was the only one to <input class="fill-input" size="14"> out against the decision.</li>
+            <li>She didn't <input class="fill-input" size="14"> what she intended to do.</li>
+            <li>Don't <input class="fill-input" size="14"> me what to do!</li>
+            <li>Please <input class="fill-input" size="14"> up! We can't hear you here at the back.</li>
+            <li>Paul <input class="fill-input" size="14"> them about his journey but nobody was listening to him.</li>
+            <li>He <input class="fill-input" size="14"> he had to delay the meeting until next week.</li>
+            <li>Ann and Joe aren't <input class="fill-input" size="14"> <input class="fill-input" size="10"> each other because they've argued.</li>
+            <li>The doctor <input class="fill-input" size="14"> me to lose weight.</li>
+            <li>"Stop talking!", the teacher <input class="fill-input" size="14"> angrily.</li>
+          </ol>
+
+          <button class="reveal-btn" onclick="toggleReveal('rv_stt')">show answers ▾</button>
+          <div class="reveal-content" id="rv_stt">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>say</strong> / <strong>said</strong></li>
+                <li><strong>tell</strong></li>
+                <li><strong>talked</strong></li>
+                <li><strong>speak</strong></li>
+                <li><strong>said</strong> / <strong>said</strong></li>
+                <li><strong>told</strong></li>
+                <li><strong>speak</strong> / <strong>talk</strong></li>
+                <li><strong>told</strong></li>
+                <li><strong>telling</strong></li>
+                <li><strong>talking</strong></li>
+                <li><strong>speak</strong></li>
+                <li><strong>say</strong></li>
+                <li><strong>tell</strong></li>
+                <li><strong>speak</strong></li>
+                <li><strong>was telling</strong></li>
+                <li><strong>said</strong></li>
+                <li><strong>talking to</strong></li>
+                <li><strong>told</strong></li>
+                <li><strong>said</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADDITIONAL PRACTICE -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎯</div>
+          <span class="activity-title">Extra practice — your own context</span>
+        </div>
+        <div class="activity-body">
+          <p>Now use these verbs to talk about your real work situations. Try to use each verb at least once.</p>
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Speaking prompts</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What's the last thing a colleague told you to do? Did you agree with it?</div>
+              <div class="speaking-row">Have you ever had to speak in front of a large group at work? How did it go?</div>
+              <div class="speaking-row">What do you and your team usually talk about during informal chats — not official meetings?</div>
+              <div class="speaking-row">Tell me about a time someone said something that completely changed your perspective on a project.</div>
+            </div>
+          </div>
+
+          <p style="margin-top:14px"><strong>Correct the verb:</strong> each sentence below uses the wrong verb. Fix it.</p>
+          <ol class="exercise">
+            <li>Can you say me where the meeting room is?</li>
+            <li>We need to tell about the budget before Friday.</li>
+            <li>She talks three languages fluently.</li>
+            <li>He said me he'd be late for the call.</li>
+            <li>I don't want to speak about this right now — it's too informal a topic for a quick chat.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv_extra')">show answers ▾</button>
+          <div class="reveal-content" id="rv_extra">
+            <div class="answer-key">
+              <div class="ak-label">Answer key</div>
+              <ol>
+                <li><strong>Can you tell me where the meeting room is?</strong> (indirect object "me" → tell)</li>
+                <li><strong>We need to talk about the budget before Friday.</strong> (talk about a topic, informally)</li>
+                <li><strong>She speaks three languages fluently.</strong> (naming languages → speak)</li>
+                <li><strong>He told me he'd be late for the call.</strong> (indirect object "me" → told)</li>
+                <li><strong>I don't want to talk about this right now...</strong> (casual chat → talk, not speak)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

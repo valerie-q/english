@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 5</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:          #33322b;
+      --ink-soft:     #504d35;
+      --paper:        #f9f7ee;
+      --paper-dark:   #eeead8;
+      --accent:       #cfbb23;
+      --accent-dark:  #a59837;
+      --accent-light: #fadd00;
+      --olive:        #7a733d;
+      --olive-dark:   #504d35;
+      --warm-grey:    #7a733d;
+      --border:       #ddd8b0;
+      --white:        #ffffff;
+      --phase-1:      #504d35;
+      --phase-2:      #7a733d;
+      --phase-3:      #a59837;
+      --phase-4:      #33322b;
+      --phase-5:      #cfbb23;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+
+    .header { background:var(--ink); color:var(--white); padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .header::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle,rgba(207,187,35,0.3) 0%,transparent 70%); }
+    .header::after  { content:''; position:absolute; bottom:-40px; left:20%; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(122,115,61,0.25) 0%,transparent 70%); }
+    .header-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,56px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .header h1 em { font-style:italic; color:var(--accent-light); }
+    .header-meta { display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+    .meta-chip .dot { width:6px; height:6px; border-radius:50%; background:var(--accent-light); flex-shrink:0; }
+    .meta-chip strong { color:var(--white); }
+
+    .objectives-wrap { max-width:1100px; margin:0 auto; padding:32px 40px; }
+    .objectives-box { background:var(--white); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:4px; padding:24px 28px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:700px){.objectives-box{grid-template-columns:1fr}.header,.objectives-wrap,.main{padding-left:20px;padding-right:20px}}
+    .obj-col h3 { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:10px; }
+    .obj-list { list-style:none; }
+    .obj-list li { font-size:14px; padding:5px 0 5px 18px; position:relative; color:var(--ink-soft); border-bottom:1px dotted var(--border); }
+    .obj-list li:last-child { border-bottom:none; }
+    .obj-list li::before { content:'✓'; position:absolute; left:0; color:var(--accent-dark); font-size:12px; font-weight:600; }
+
+    .main { max-width:1100px; margin:0 auto; padding:0 40px 60px; }
+
+    .phase { margin-bottom:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .phase-header { padding:18px 24px; display:flex; align-items:center; gap:16px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:20px; font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase-num { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:4px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); line-height:1.2; }
+    .phase-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .phase-body { padding:0 24px 24px; }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-1 .phase-header{background:var(--phase-1)} .phase-2 .phase-header{background:var(--phase-2)}
+    .phase-3 .phase-header{background:var(--phase-3)} .phase-4 .phase-header{background:var(--phase-4)}
+    .phase-5 .phase-header{background:var(--phase-5); color:var(--ink);}
+    .phase-5 .phase-num { background:rgba(0,0,0,0.15); color:var(--ink); }
+    .phase-5 .phase-title { color:var(--ink); }
+    .phase-5 .phase-sub { color:rgba(0,0,0,0.55); }
+    .phase-5 .phase-header::after { color:rgba(0,0,0,0.4); }
+
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:16px; overflow:hidden; }
+    .activity-head { background:var(--paper); padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
+    .activity-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .activity-title { font-weight:600; font-size:14px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:var(--warm-grey); background:var(--paper-dark); padding:3px 8px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:16px; }
+
+    .note-box { background:#f5f2d8; border-left:3px solid var(--accent); border-radius:0 4px 4px 0; padding:12px 16px; margin:12px 0; font-size:14px; color:var(--ink-soft); line-height:1.6; }
+    .note-box em { font-style:italic; color:var(--ink); }
+
+    .vocab-table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
+    .vocab-table th { background:var(--ink); color:var(--white); padding:8px 12px; text-align:left; font-weight:500; font-size:12px; }
+    .vocab-table td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--paper); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+    .vocab-table .ans { color:var(--accent-dark); font-style:italic; font-size:13px; }
+
+    .phrase-box { background:var(--ink); color:var(--white); border-radius:4px; padding:16px 20px; margin:12px 0; }
+    .phrase-box .phrase-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent-light); margin-bottom:10px; }
+    .phrase-row { display:flex; align-items:baseline; gap:16px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .phrase-row:last-child { border-bottom:none; }
+    .phrase-en { font-size:15px; font-weight:500; flex:1; }
+    .phrase-de { font-size:13px; color:rgba(255,255,255,0.5); flex:1; }
+
+    .steps { list-style:none; margin:12px 0; }
+    .steps li { display:flex; gap:14px; padding:10px 0; border-bottom:1px dotted var(--border); font-size:14px; line-height:1.5; align-items:flex-start; }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--white); background:var(--accent-dark); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:12px 16px; margin:12px 0; font-size:13px; }
+    .answer-key .ak-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .answer-key ol { padding-left:20px; }
+    .answer-key ol li { padding:3px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--accent-dark); }
+
+    .word-box { background:var(--white); border:2px solid var(--accent); border-radius:6px; padding:12px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--accent-dark); width:100%; margin-bottom:4px; }
+    .word-chip { background:var(--accent-dark); color:var(--white); font-size:13px; font-weight:600; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .word-box.neutral { border-color:var(--border); }
+    .word-box.neutral .word-chip { background:var(--ink-soft); }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:11px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:5px 14px; border-radius:20px; cursor:pointer; margin-top:10px; transition:all 0.2s; }
+    .reveal-btn:hover { border-color:var(--accent-dark); color:var(--accent-dark); }
+    .reveal-content { display:none; margin-top:10px; }
+    .reveal-content.open { display:block; }
+
+    .grammar-box { border:2px solid var(--accent); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .grammar-box-header { background:var(--accent); padding:10px 16px; }
+    .grammar-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); font-weight:600; }
+    .grammar-box-body { background:var(--white); padding:16px; }
+    .grammar-row { display:flex; gap:12px; padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; align-items:baseline; }
+    .grammar-row:last-child { border-bottom:none; }
+    .grammar-plus  { color:#3a6e2a; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-minus { color:#b03020; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-q     { color:var(--accent-dark); font-weight:700; flex-shrink:0; width:16px; }
+
+    .phone-script { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .phone-header { background:var(--paper-dark); padding:8px 16px; font-family:'DM Mono',monospace; font-size:11px; color:var(--warm-grey); border-bottom:1px solid var(--border); }
+    .phone-line { display:flex; gap:12px; padding:9px 16px; border-bottom:1px solid var(--border); font-size:14px; }
+    .phone-line:last-child { border-bottom:none; }
+    .phone-line:nth-child(even) { background:var(--paper); }
+    .phone-speaker { font-family:'DM Mono',monospace; font-size:10px; color:var(--accent-dark); font-weight:600; white-space:nowrap; width:80px; flex-shrink:0; margin-top:1px; }
+    .phone-text { color:var(--ink-soft); line-height:1.5; }
+
+    /* speaking box */
+    .speaking-box { border:2px solid var(--accent-dark); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .speaking-box-header { background:var(--accent-dark); padding:10px 16px; }
+    .speaking-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--white); font-weight:600; }
+    .speaking-box-body { background:var(--white); padding:16px; }
+    .speaking-section { margin-bottom:14px; }
+    .speaking-section:last-child { margin-bottom:0; }
+    .speaking-section-title { font-size:12px; font-weight:700; color:var(--accent-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; font-family:'DM Mono',monospace; }
+    .speaking-row { display:flex; gap:12px; padding:5px 0; border-bottom:1px dotted var(--border); font-size:14px; }
+    .speaking-row:last-child { border-bottom:none; }
+    .speaking-q { flex:1; color:var(--ink); }
+    .speaking-a { flex:1; color:var(--ink-soft); font-style:italic; }
+
+    /* email block */
+    .email-block { border:1px solid var(--border); border-radius:4px; overflow:hidden; margin:12px 0; font-size:14px; }
+    .email-header { background:var(--paper-dark); padding:8px 14px; font-size:12px; color:var(--warm-grey); border-bottom:1px solid var(--border); display:flex; gap:8px; align-items:center; }
+    .email-header span { font-weight:600; color:var(--ink); }
+    .email-body { padding:14px; color:var(--ink-soft); line-height:1.7; }
+
+    /* faq block */
+    .faq-block { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .faq-header { background:var(--accent-dark); color:var(--white); padding:8px 14px; font-weight:600; font-size:13px; }
+    .faq-item { padding:12px 14px; border-bottom:1px solid var(--border); font-size:14px; }
+    .faq-item:last-child { border-bottom:none; }
+    .faq-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:600; color:var(--accent-dark); margin-bottom:4px; }
+    .faq-text { color:var(--ink-soft); line-height:1.6; }
+    .faq-text strong { color:var(--ink); }
+
+    input[type="text"] { border:none; border-bottom:1px solid var(--accent-dark); background:transparent; font-size:14px; color:var(--ink); padding:2px 4px; outline:none; }
+
+    .src-bp  { background:#504d35; color:white; }
+    .src-you { background:#7a733d; color:white; }
+    .icon-warmup  { background:#f5f2d8; }
+    .icon-vocab   { background:#f0edcc; }
+    .icon-grammar { background:#f5f2d8; }
+    .icon-speaking{ background:#edeab8; }
+    .icon-wrap    { background:#f0edcc; }
+
+    p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:14px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom:none; }
+    /* student tabs */
+    .student-tabs { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .student-tab-buttons { display:flex; background:var(--paper-dark); border-bottom:1px solid var(--border); }
+    .tab-btn { flex:1; padding:12px; border:none; background:transparent; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:600; font-size:14px; color:var(--warm-grey); transition:all 0.2s; border-bottom:3px solid transparent; }
+    .tab-btn:hover { background:rgba(0,0,0,0.03); }
+    .tab-btn.active { color:var(--ink); background:var(--white); border-bottom-color:var(--accent); }
+    .tab-content { display:none; padding:16px; }
+    .tab-content.active { display:block; }
+
+  </style>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 9<br><em>Changes — A Company's Story</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 Unit 3.1 · Costa Coffee + Bill Gates timelines, Past Simple</div>
+    </div>
+  </div>
+</div>
+<br>
+<div class="main">
+
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Warm up questions</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">💬</div>
+          <span class="activity-title">Answer the questions</span>
+          <span class="activity-src src-bp">BP p.29</span>
+        </div>
+        <div class="activity-body">
+          <p>Answer about yourself using Past Simple.</p>
+          <ol class="exercise">
+            <li>When did you start school?</li>
+            <li>What was your first job?</li>
+            <li>Who was your first boss?</li>
+            <li>When did you last change job or move city?</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+ <!-- ══ PHASE 2 ══ -->
+ <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Timeline</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Look at the picture and complete the tasks</span>
+          
+        </div>
+        <div class="activity-body">
+          <img src="pp1.png">
+
+          <p><strong>Complete with a correct verb</strong></p>
+          <ol class="exercise">
+            <li>He <input type="text" style="width:100px;"> shcool in 1973.</li>
+            <li>He <input type="text" style="width:100px;"> at Harward for about two years.</li>
+            <li>He <input type="text" style="width:100px;"> Microsoft in 1975.</li>
+            <li>He <input type="text" style="width:100px;"> Windows in 1985.</li>
+            <li>His job <input type="text" style="width:100px;"> at Microaoft in 2000.</li>
+            <li>He <input type="text" style="width:100px;"> tennis with Roger Federer in 2017.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <span class="activity-title">Put the words in the correct order to make questions</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>1973 / did / what / Fill Gates / in / do ? <br> <input type="text" style="width:350px;"></li>
+            
+            <li>he / finish / university/ did / ? <br> <input type="text" style="width:350px;"></li>
+            <li>did/ when / he / Microsoft / start/ ? <br> <input type="text" style="width:350px;"></li>
+            <li>1985 / did / what / in / launch / he/ ? <br> <input type="text" style="width:350px;"></li>
+            <li>his job / at Microsoft / did / change / in 2000/ ? <br> <input type="text" style="width:350px;"></li>
+            <li>who / he / did / tennis / with / play / in 2017? <br> <input type="text" style="width:350px;"></li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Video — Two Company Stories</div>
+        <div class="phase-sub">BP A2 p.29, ex.5A/5B/5C · Postmark &amp; The Cambridge Satchel Company</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎬</div>
+          <span class="activity-title">Ex. 5A — Watch the video introduction</span>
+          <span class="activity-src src-bp">BP p.29</span>
+        </div>
+        <div class="activity-body">
+          <p>Watch the video introduction. What do Postmark and The Cambridge Satchel Company sell?</p>
+
+          <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:6px;margin:12px 0;background:var(--paper-dark);display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--warm-grey);">
+
+              <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;"><iframe width="560" height="315" src="https://www.youtube.com/embed/i3hg0nqNdbA?si=jQfoWYMiOs4qReoM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+            </div>
+          </div>
+
+          <div class="interview-space" style="min-height:40px;">Your answer:</div>
+
+          <div class="note-box" style="margin-top:12px;">
+            <strong>annual turnover</strong> = the total sales of a business in one year
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">❓</div>
+          <span class="activity-title">Ex. 5B — Watch Part 1 of the video. Answer the questions</span>
+          <span class="activity-src src-bp">BP p.29</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>Part 1 — Postmark</strong></p>
+          <ol class="exercise">
+            <li>Who started Postmark?</li>
+            <li>When did Postmark start?</li>
+            <li>What was the annual turnover in a) 2006? b) last year?</li>
+            <li>How many stores and employees does Postmark have?</li>
+            <li>When did Morgan arrive in the UK and what did she do?</li>
+            <li>When did Morgan join Postmark?</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✓</div>
+          <span class="activity-title">Ex. 5C — Watch Part 2 of the video. True or False?</span>
+          <span class="activity-src src-bp">BP p.29</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>Part 2 — The Cambridge Satchel Company.</strong> Are the sentences true (T) or false (F)? Correct the false sentences.</p>
+          <ol class="exercise">
+            <li>At the beginning, The Cambridge Satchel Company only had three colours of bags. &nbsp; [ T / F ]</li>
+            <li>The company opened a factory in 2012. &nbsp; [ T / F ]</li>
+            <li>The company now has 150 employees. &nbsp; [ T / F ]</li>
+            <li>The company has two shops — one in Cambridge and one in London. &nbsp; [ T / F ]</li>
+            <li>Max is the manager of The Cambridge Satchel Company shop in London. &nbsp; [ T / F ]</li>
+            <li>Max designed the first shop for Cambridge Satchel Company. &nbsp; [ T / F ]</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">📞</div>
+          <span class="activity-title">Ex. 4A — Phone the caterers and order food for the party</span>
+          <span class="activity-src src-bp">BP p.26</span>
+        </div>
+        <div class="activity-body">
+        
+          <p style="margin-top:14px;"><strong>Ex. 4B — Compare your information with a partner. Click your role to see your order form.</strong></p>
+
+          <div class="student-tabs">
+            <div class="student-tab-buttons">
+              <button class="tab-btn active" onclick="switchTab(this, 'tabset2', 'A')">Student A</button>
+              <button class="tab-btn" onclick="switchTab(this, 'tabset2', 'B')">Student B</button>
+            </div>
+
+            <div class="tab-content active" id="tabset2-A">
+              <p style="margin-bottom:10px;"><strong>Student A:</strong></p>
+              <div style="border:2px dashed var(--border);border-radius:6px;padding:40px 20px;text-align:center;color:var(--warm-grey);background:var(--paper-dark);">
+                <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;"><img src="sta.png" style="max-width:100%;" alt="Student A order form"></div>
+              </div>
+            </div>
+
+            <div class="tab-content" id="tabset2-B">
+              <p style="margin-bottom:10px;"><strong>Student B:</strong></p>
+              <div style="border:2px dashed var(--border);border-radius:6px;padding:40px 20px;text-align:center;color:var(--warm-grey);background:var(--paper-dark);">
+                <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;"><img src="stb.png" style="max-width:100%;" alt="Student B order form"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- ══ PHASE 4 ══ -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Task — Complete the Timeline (Student A/B)</div>
+        <div class="phase-sub">BP A2 p.29, ex.6 · Adapted for Mercedes-Benz context</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">🎭</div>
+          <span class="activity-title">Ex. 6 — Ask and answer questions to complete the timeline</span>
+          <span class="activity-src src-bp">BP p.29</span>
+        </div>
+        <div class="activity-body">
+          <p>Work in pairs. Click your role to see your timeline — some years are missing information. Ask your partner Past Simple questions to complete it.</p>
+
+          <div class="student-tabs">
+            <div class="student-tab-buttons">
+              <button class="tab-btn active" onclick="switchTab(this, 'tabset3', 'A')">Student A</button>
+              <button class="tab-btn" onclick="switchTab(this, 'tabset3', 'B')">Student B</button>
+            </div>
+
+            <div class="tab-content active" id="tabset3-A">
+              <p><strong>Your timeline — AutoFlex Components</strong></p>
+              <table class="vocab-table">
+                <thead><tr><th>Year</th><th>Event</th></tr></thead>
+                <tbody>
+                  <tr><td>1998</td><td>Founded by two engineers in Stuttgart.</td></tr>
+                  <tr><td>2003</td><td><input type="text" style="width:280px;"></td></tr>
+                  <tr><td>2009</td><td>Hired 50 new employees and expanded the factory.</td></tr>
+                  <tr><td>2014</td><td><input type="text" style="width:280px;"></td></tr>
+                  <tr><td>2018</td><td>Started supplying wiring components to Mercedes-Benz.</td></tr>
+                  <tr><td>2022</td><td><input type="text" style="width:280px;"></td></tr>
+                </tbody>
+              </table>
+              <div class="note-box" style="margin-top:10px;">
+                Ask Student B questions like: <em>"What happened in 2003?" / "Did they launch a new product in 2014?"</em> to fill in the missing years.
+              </div>
+            </div>
+
+            <div class="tab-content" id="tabset3-B">
+              <p><strong>Your timeline — AutoFlex Components</strong></p>
+              <table class="vocab-table">
+                <thead><tr><th>Year</th><th>Event</th></tr></thead>
+                <tbody>
+                  <tr><td>1998</td><td><input type="text" style="width:280px;"></td></tr>
+                  <tr><td>2003</td><td>Opened a second factory in Poland.</td></tr>
+                  <tr><td>2009</td><td><input type="text" style="width:280px;"></td></tr>
+                  <tr><td>2014</td><td>Launched a new range of eco-friendly cable connectors.</td></tr>
+                  <tr><td>2018</td><td><input type="text" style="width:280px;"></td></tr>
+                  <tr><td>2022</td><td>Opened an R&D office in Pune, India.</td></tr>
+                </tbody>
+              </table>
+              <div class="note-box" style="margin-top:10px;">
+                Ask Student A questions like: <em>"Who founded the company?" / "When did they hire new employees?"</em> to fill in the missing years.
+              </div>
+            </div>
+          </div>
+
+          <div class="phrase-box" style="margin-top:14px;">
+            <div class="phrase-label">Question starters to use</div>
+            <div class="phrase-row"><span class="phrase-en">What happened in [year]?</span><span class="phrase-de">Що сталося в [рік]?</span></div>
+            <div class="phrase-row"><span class="phrase-en">Did they [verb] in [year]?</span><span class="phrase-de">Вони зробили [дія] в [рік]?</span></div>
+            <div class="phrase-row"><span class="phrase-en">When did the company [verb]?</span><span class="phrase-de">Коли компанія зробила [дія]?</span></div>
+            <div class="phrase-row"><span class="phrase-en">Who founded / started / launched…?</span><span class="phrase-de">Хто заснував / запустив…? <em>(subject question — no did)</em></span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePhase(id){const el=document.getElementById(id);el.classList.toggle('collapsed');}
+function toggleReveal(id){const el=document.getElementById(id);el.classList.toggle('open');const btn=el.previousElementSibling;btn.textContent=el.classList.contains('open')?'hide answers ▴':'show answers ▾';}
+function switchTab(btn, groupId, tab) {
+  const wrapper = btn.closest('.student-tabs');
+  wrapper.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  wrapper.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(groupId + '-' + tab).classList.add('active');
+}
+</script>
+</body>
+</html>

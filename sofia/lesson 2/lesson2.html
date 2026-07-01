@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1A Writing · 1B Less is More? — Sofia</title>
+<style>
+    .market-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+:root{
+  --navy:#16254a;
+  --navy-light:#1c2d4f;
+  --gold:#c08a2e;
+  --gold-soft:#9c6b1f;
+  --text:#1c1f26;
+  --muted:#5b6270;
+  --card:#ffffff;
+  --bg:#f7f5f0;
+  --border:#e3ddd0;
+  --correct:#2f8f5b;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  margin:0;
+  padding:0 0 60px;
+  line-height:1.55;
+}
+header{
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  padding:34px 20px 26px;
+  border-bottom:3px solid var(--gold);
+  text-align:center;
+}
+header h1{color:var(--gold);margin:0 0 6px;font-size:1.8rem;letter-spacing:0.5px;}
+header p{color:#c7cee0;margin:0;font-size:0.95rem;}
+.wrap{max-width:780px;margin:0 auto;padding:0 18px;}
+.phase{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-top:22px;
+  overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+.phase-head{
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  padding:14px 20px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  user-select:none;
+}
+.phase-head h2{margin:0;font-size:1.08rem;color:#ffffff;}
+.phase-head .tag{
+  font-size:0.72rem;color:var(--navy);background:var(--gold);
+  padding:3px 10px;border-radius:20px;font-weight:600;white-space:nowrap;margin-left:10px;
+}
+.arrow{color:var(--gold);font-size:1.1rem;transition:transform 0.25s;margin-left:8px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:20px 22px 24px;}
+.phase.collapsed .phase-body{display:none;}
+h3{color:var(--gold-soft);font-size:1rem;margin:18px 0 8px;}
+h4{color:var(--navy);font-size:0.95rem;margin:16px 0 6px;font-weight:700;}
+p{margin:8px 0;}
+.instr{color:var(--muted);font-style:italic;font-size:0.93rem;}
+.box{
+  background:#fbf8f1;border:1px solid var(--border);
+  border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:12px 0;
+}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px;}
+.chip{
+  background:#fff8ea;border:1px solid var(--gold);color:var(--gold-soft);
+  padding:5px 12px;border-radius:20px;font-size:0.88rem;font-weight:600;
+}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+input.gap{
+  background:#fbf8f1;border:none;border-bottom:2px dotted var(--gold);
+  color:var(--text);font-size:1rem;width:130px;padding:2px 4px;font-family:inherit;
+}
+input.gap:focus{outline:none;border-bottom:2px solid var(--gold);}
+.reveal-btn{
+  background:var(--navy);border:1px solid var(--navy);color:#ffffff;
+  padding:6px 16px;border-radius:6px;cursor:pointer;font-size:0.85rem;margin:10px 0;
+}
+.reveal-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+.answer{
+  display:none;background:#eef8f1;border-left:3px solid var(--correct);
+  padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.93rem;
+}
+.answer.show{display:block;}
+.answer b{color:var(--correct);}
+.speak-q{
+  background:#f0f3f8;border-left:3px solid var(--navy);
+  padding:10px 14px;margin:10px 0;border-radius:4px;
+}
+.grammar-note{
+  background:#fff8ea;border:1px solid var(--gold);border-radius:8px;
+  padding:14px 18px;margin:14px 0;font-size:0.95rem;
+}
+.grammar-note b{color:var(--gold-soft);}
+
+/* Marketplace cards */
+.market-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:14px;
+  margin:16px 0;
+}
+.market-card{
+  background:#ffffff;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:0.88rem;
+}
+.market-img{
+  background:#e8e4dc;height:130px;display:flex;align-items:center;
+  justify-content:center;color:var(--muted);font-size:0.8rem;text-align:center;
+}
+.market-body{padding:10px 12px 12px;}
+.market-title{font-weight:700;font-size:0.95rem;color:var(--navy);margin-bottom:6px;}
+.market-price{font-weight:700;font-size:1rem;color:var(--correct);margin:6px 0;}
+.market-meta{color:var(--muted);font-size:0.8rem;margin-top:4px;}
+.market-divider{border:none;border-top:1px solid var(--border);margin:8px 0;}
+.market-actions{color:var(--muted);font-size:0.82rem;margin-top:6px;display:flex;gap:12px;}
+
+/* Article */
+.article-intro{
+  background:#f0f3f8;border-radius:10px;padding:20px 22px;margin:14px 0;
+  font-size:0.95rem;line-height:1.7;
+}
+.article-intro h2{color:var(--navy);margin:0 0 14px;font-size:1.5rem;line-height:1.2;}
+.article-intro h2 strong{display:block;font-size:1.85rem;}
+.highlight-fact{color:#1a6070;font-weight:600;}
+
+/* Student A/B modals */
+.modal-overlay{
+  display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(22,37,74,0.72);z-index:1000;justify-content:center;
+  align-items:flex-start;padding:30px 16px 40px;overflow-y:auto;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--card);border-radius:12px;max-width:560px;width:100%;
+  padding:26px 28px;position:relative;margin:auto;
+}
+.modal-close{
+  position:absolute;top:12px;right:16px;background:none;border:none;
+  font-size:1.4rem;cursor:pointer;color:var(--muted);line-height:1;
+}
+.modal-close:hover{color:var(--text);}
+.modal-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:0.5px;margin-bottom:4px;}
+.modal-box h3{color:var(--navy);margin:0 0 2px;font-size:1.15rem;}
+.modal-box h4{color:var(--gold-soft);margin:2px 0 14px;font-weight:700;}
+.modal-box p{margin:10px 0;font-size:0.95rem;line-height:1.65;}
+.modal-a{border-top:4px solid #5b9bd5;}
+.modal-b{border-top:4px solid #70b87e;}
+.modal-btn{
+  background:var(--navy);color:white;border:none;padding:8px 18px;
+  border-radius:8px;cursor:pointer;font-size:0.9rem;margin:4px 6px 4px 0;
+}
+.modal-btn:hover{background:var(--gold);color:var(--navy);}
+
+/* Future Skills */
+.future-skills{
+  background:#e6f4f4;border:2px solid #5ba8a8;border-radius:10px;
+  padding:16px 18px;margin:14px 0;
+}
+.fs-label{color:#2a7070;font-weight:700;font-size:0.75rem;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:2px;}
+.future-skills h4{color:#1a5050;margin:2px 0 10px;font-size:1rem;}
+
+/* Media slot */
+.media-slot{
+  border:2px dashed var(--border);border-radius:8px;padding:24px;
+  text-align:center;color:var(--muted);margin:12px 0;font-size:0.88rem;background:#fbf8f1;
+}
+.media-slot span{color:var(--gold-soft);font-weight:600;}
+
+/* Hint */
+.hint-btn{
+  background:#fff8ea;border:1px solid var(--gold);color:var(--gold-soft);
+  padding:6px 14px;border-radius:6px;cursor:pointer;font-size:0.85rem;margin:8px 0;
+  display:inline-block;
+}
+.hint-btn:hover{background:var(--gold);color:white;}
+.hint-box{
+  display:none;background:#fff8ea;border:1px solid var(--gold);
+  border-radius:8px;padding:14px 16px;margin:8px 0;font-size:0.9rem;
+}
+.hint-box.show{display:block;}
+.hint-ua{
+  color:var(--muted);font-style:italic;margin-bottom:10px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);font-size:0.88rem;
+}
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;margin-top:40px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>1A Writing · 1B Less is More?</h1>
+  <p>Narrative tenses review · Verb patterns · Personal preferences</p>
+</header>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 1: WARM-UP -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>1. Warm-up — Grammar Review</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">narrative tenses</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <p>Complete the stories with the correct form of the verbs in brackets.</p>
+
+    <div class="box">
+      <p>One morning I <input class="gap" placeholder="1 (look)"> for my car keys and I couldn't find them anywhere. Eventually, I <input class="gap" placeholder="2 (find)"> them in my son's bedroom. He <input class="gap" placeholder="3 (hide)"> them because he didn't want me to go to work.</p>
+    </div>
+
+    <div class="box">
+      <p>When I <input class="gap" placeholder="4 (study)"> at high school, my friends <input class="gap" placeholder="5 (spend)"> a lot of their time skateboarding. I <input class="gap" placeholder="6 (not try)"> it before and I <input class="gap" placeholder="7 (think)"> it looked fun. I <input class="gap" placeholder="8 (buy)"> myself a really cool skateboard and I was so excited to use it. Unfortunately, the first time I went out, I <input class="gap" placeholder="9 (fall)"> and broke my arm. I <input class="gap" placeholder="10 (not realise)"> how difficult it was! My skateboard stayed in my room after that.</p>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 was looking &nbsp;·&nbsp; 2 found &nbsp;·&nbsp; 3 had hidden<br>
+      4 was studying &nbsp;·&nbsp; 5 spent &nbsp;·&nbsp; 6 hadn't tried &nbsp;·&nbsp; 7 thought &nbsp;·&nbsp; 8 bought &nbsp;·&nbsp; 9 fell &nbsp;·&nbsp; 10 hadn't realised
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 2: WRITING -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>2. Writing — An Advert to Sell an Item Online</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">writing</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>8A</h3>
+    <div class="speak-q">Do you ever buy or sell items online? What kinds of thing? Which platform do you use?</div>
+
+    <h3>8B. Complete the descriptions of items for sale in the photos with the words in the box.</h3>
+    <div class="wordbox">
+      <span class="chip">condition</span><span class="chip">good</span><span class="chip">includes</span>
+      <span class="chip">Italian</span><span class="chip">leather</span><span class="chip">new</span><span class="chip">used</span>
+    </div>
+
+    <div class="market-grid">
+
+        <div class="market-card">
+            <img src="https://www.everlane.com/cdn/shop/files/a825ef47_60c9.jpg?v=1750093598" alt="men's jacket">
+            <div class="market-body">
+              <div class="market-title">men's jacket – medium</div>
+              <p>1980s vintage denim jacket. In perfect <input class="gap" style="width:90px;" placeholder="1">.</p>
+              <div class="market-price">£75</div>
+              <div class="market-meta">Size: Medium</div>
+              <hr class="market-divider">
+              <div class="market-actions">♡ 12 &nbsp; 🔖 &nbsp; ↗</div>
+            </div>
+          </div>
+
+      <div class="market-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Left_side_of_Flying_Pigeon.jpg"> 
+        <div class="market-body">
+          <div class="market-title">bicycle</div>
+          <p>Brand new men's bike. Bought earlier this year but never <input class="gap" style="width:55px;" placeholder="2">. <input class="gap" style="width:75px;" placeholder="3"> front and back lights, bike lock and keys.</p>
+          <div class="market-price">£350</div>
+          <div class="market-meta">Location: Manchester, UK</div>
+          <div class="market-meta">Condition: As <input class="gap" style="width:45px;" placeholder="4">.</div>
+          <hr class="market-divider">
+          <div class="market-actions">♡ 8 &nbsp; 🔖 &nbsp; ↗</div>
+        </div>
+      </div>
+
+      <div class="market-card">
+        <img src="https://mywirsh.com/cdn/shop/articles/Moka_Pot_MasteryHow_to_Avoid_Burnt_Coffee_and_Achieve_Espresso-Like_Crema_at_Home_b49cf4de-81e0-4701-9c7b-60cd39071a12.jpg?v=1780367538">
+        <div class="market-body">
+          <div class="market-title">moka coffee pot</div>
+          <p>Cool <input class="gap" style="width:65px;" placeholder="5"> moka coffee pot. Serves 4.</p>
+          <p style="color:var(--muted);font-size:0.8rem;">#espresso #coffee</p>
+          <div class="market-price">£18</div>
+          <hr class="market-divider">
+          <div class="market-actions">♡ 3 &nbsp; 🔖 &nbsp; ↗</div>
+        </div>
+      </div>
+
+      <div class="market-card">
+        <img src="https://blog.guitarfromspain.com/wp-content/uploads/2020/10/guitarkeenan01.jpg">
+        <div class="market-body">
+          <div class="market-title">Spanish guitar</div>
+          <p>Spanish classical guitar. In <input class="gap" style="width:55px;" placeholder="6"> condition, back slightly damaged. Comes complete with spare set of strings.</p>
+          <div class="market-price">£120</div>
+          <hr class="market-divider">
+          <div class="market-actions">♡ 10 &nbsp; 🔖 &nbsp; ↗</div>
+        </div>
+      </div>
+
+      <div class="market-card">
+        <img src="https://www.keenfootwear.co.uk/cdn/shop/files/keen-womens-targhee-iv-waterproof-hiking-boot-brown-1030689-cutout-02.jpg?v=1738774060&width=533">
+        <div class="market-body">
+          <div class="market-title">for sale</div>
+          <p>Ladies' walking boots, size 40. <input class="gap" style="width:70px;" placeholder="7"> boots. New and in perfect condition. In original box.</p>
+          <div class="market-price">£40</div>
+          <hr class="market-divider">
+          <div class="market-actions">♡ 5 &nbsp; 🔖 &nbsp; ↗</div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 condition &nbsp;·&nbsp; 2 used &nbsp;·&nbsp; 3 Includes &nbsp;·&nbsp; 4 new &nbsp;·&nbsp; 5 Italian &nbsp;·&nbsp; 6 good &nbsp;·&nbsp; 7 Leather
+    </div>
+
+    <h3>9A. Look at the sentences from the adverts. Which types of word are missing: nouns, articles, pronouns or other grammatical words?</h3>
+    <ol>
+      <li>The price of the bike includes front and back lights, a bike lock and keys. → <em>Price includes front and back lights, bike lock and keys.</em></li>
+      <li>They are new and they are in perfect condition. → <em>New and in perfect condition.</em></li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">Nouns, articles, pronouns and verbs.</div>
+
+    <h3>9B. How are the sentences (1–5) reduced in the adverts?</h3>
+    <ol>
+      <li>This bike was bought earlier this year but it was never used.</li>
+      <li>It is in the same condition as it was when it was new.</li>
+      <li>The coffee pot serves four people.</li>
+      <li>The back of the guitar is slightly damaged.</li>
+      <li>They come in the original box.</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 Bought earlier this year but never used.<br>
+      2 As new.<br>
+      3 Serves 4.<br>
+      4 Back slightly damaged.<br>
+      5 In original box.
+    </div>
+
+    <h3>9C. Reduce the sentences (1–4) to note form.</h3>
+    <ol>
+      <li>It has been slightly damaged.</li>
+      <li>The price includes a spare set of strings.</li>
+      <li>This has never been used.</li>
+      <li>It is in very good condition.</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 Slightly damaged.<br>
+      2 Price includes spare (set of) strings.<br>
+      3 As new.<br>
+      4 In very good condition.
+    </div>
+
+    <h3>9D.</h3>
+    <div class="speak-q">Choose three possessions that you could sell on a trading website or app. Write short descriptions of the different items for sale, with prices, using note form.</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 3: READING -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>3. Reading — Minimalism vs. Maximalism</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">reading</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>1A. Look at the photo and discuss the questions.</h3>
+    <img src="p11.png" width="700">
+    <div class="speak-q">1 What kind of person do you think lives in a place like this? Why?</div>
+    <div class="speak-q">2 What would/wouldn't you like about living in this place? Why?</div>
+
+    <h3>1B. Read the introduction to a magazine article about maximalism and minimalism. Are you surprised by any of the facts in the first paragraph? Why/Why not?</h3>
+
+    <div class="article-intro">
+      <h2>Minimalism vs.<br><strong>Maximalism</strong></h2>
+      <p>According to the <em>Los Angeles Times</em>, the average American home contains 300,000 items. It's a crazy number, even if it includes everything from pencils to beds. A British newspaper, <em>The Daily Telegraph</em>, reported that the average British 10-year-old owns 238 toys but plays with only twelve daily. <em>The Story of Stuff</em>, a documentary, tells us we consume double the number of things that we did half a century ago and there are more phones in the world than people.</p>
+      <p>All of this might explain why minimalism – the idea of living more simply – has become a trend. Minimalism began as an artistic movement in the 1950s. Artists like Donald Judd and Agnes Martin produced paintings and sculptures reduced to bare, pure lines. Now it's not art but the environmental impact of our lifestyles that has seen minimalism return.</p>
+      <p>Maximalism also has its roots in the art world, especially the French Rococo style of the eighteenth century and a 1920s movement called Art Deco. It involves bright colours and interesting patterns like zebra stripes and leaf prints. Fans of maximalism say it's not only for eighteenth century French kings, but for anyone who enjoys having lots of beautiful objects in the house.</p>
+      <p>So, space and simplicity or colour and craziness? Here, two designers share their views on the issue: minimalism or maximalism.</p>
+    </div>
+
+    <h3>1C. Student A: Read what Zuleya says about minimalism. Student B: Read what Richard says about maximalism. Tell each other an interesting fact from your part of the article.</h3>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;">
+      <button class="modal-btn" onclick="openModal('modalA')">📖 Student A — Zuleya Samova</button>
+      <button class="modal-btn" onclick="openModal('modalB')">📖 Student B — Richard Mbuya</button>
+    </div>
+
+    <p>1D. Read the rest of the article. Who do you think makes the stronger argument: Zuleya or Richard?</p>
+
+    <h3>2A. Can you remember what the full-length article says about these things? Check your answers.</h3>
+    <ol>
+      <li>a crazy number</li>
+      <li>twelve toys</li>
+      <li>the world's number of phones</li>
+      <li>a simpler world</li>
+      <li>who Joshua Fields Millburn and Ryan Nicodemus are</li>
+      <li>appreciating the things that really matter</li>
+      <li>objects that give visitors pleasure</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 The average American home contains 300,000 items.<br>
+      2 The average British 10-year-old owns 238 toys but plays with only twelve daily.<br>
+      3 There are more phones in the world than people.<br>
+      4 Zuleya believes a simpler world is a better world.<br>
+      5 The presenters of the Netflix series <em>The Minimalists: Less is Now</em>.<br>
+      6 Zuleya's argument: minimalism frees you to appreciate the things that matter — people and relationships.<br>
+      7 Richard's house is filled with treasures that give him and his visitors pleasure.
+    </div>
+
+    <h3>2B. Are the ideas in Ex 2A facts or opinions? Think about where the information comes from. Read the examples to help you.</h3>
+    <div class="box" style="border-left-color:#2a7070;">
+      <p><span class="highlight-fact">1</span> The idea that it's 'crazy' is the writer's opinion, not a fact. There is no source except the writer's thoughts.</p>
+      <p><span class="highlight-fact">2</span> The number twelve is from research quoted in the newspaper <em>The Daily Telegraph</em>. It is a fact, not an opinion.</p>
+    </div>
+
+    <h3>2C.</h3>
+    <div class="speak-q">Which opinions in the article do you agree with?</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 4: GRAMMAR -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>4. Grammar — Verb Patterns</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">grammar</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. Choose the correct words to complete the sentences.</h3>
+    <ol>
+      <li>Minimalism refers to <strong>design / designing</strong> things in a simple, elegant way.</li>
+      <li>They succeeded in <strong>persuade / persuading</strong> people to stop collecting useless stuff.</li>
+      <li>It turned out to <strong>be / being</strong> the most important trip of my life.</li>
+      <li>I went on to <strong>become / becoming</strong> a designer.</li>
+      <li>I believe in <strong>create / creating</strong> joyful designs.</li>
+      <li>I look forward to <strong>visit / visiting</strong> more street markets.</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 designing &nbsp;·&nbsp; 2 persuading &nbsp;·&nbsp; 3 to be &nbsp;·&nbsp; 4 to become &nbsp;·&nbsp; 5 creating &nbsp;·&nbsp; 6 visiting</div>
+
+    <p>3B. Check your answers in the article.</p>
+
+    <h3>3C. Look again at the sentences in Ex 3A and answer the questions.</h3>
+    <ol>
+      <li>What usually follows verb + preposition: the <em>-ing</em> form or the infinitive?</li>
+      <li>Which two sentences in Ex 3A do <strong>not</strong> follow this pattern?</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 The <em>-ing</em> form usually follows verb + preposition.<br>
+      2 Sentences 3 and 4 (<em>turned out to be</em>, <em>went on to become</em>) use <em>to</em> + infinitive, not <em>-ing</em>.
+    </div>
+
+    <h3>4A. Match the words in bold in sentences 1–2 with the definitions a–b.</h3>
+    <div class="box">
+      <p><strong>1</strong> They persuaded people to <strong>stop collecting</strong> useless stuff.</p>
+      <p><strong>2</strong> If we <strong>stop to think</strong> about what's really important …</p>
+      <p><strong>a</strong> <em>Stop</em> + <em>to</em> infinitive means pause an action so that you can do a different action.</p>
+      <p><strong>b</strong> <em>Stop</em> + <em>-ing</em> means change a habit.</p>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 → b &nbsp;·&nbsp; 2 → a</div>
+
+    <!-- GRAMMAR BANK -->
+    <h3 style="margin-top:28px;">Grammar Bank 1B — Verb Patterns</h3>
+
+    <div class="grammar-note">
+      <p>Sometimes we put two verbs together.</p>
+      <p>They <b>hope to learn</b> Spanish. &nbsp;|&nbsp; I <b>like playing</b> ball games.</p>
+      <p>When the first verb takes a preposition (except <em>to</em>), the second verb is usually in the <em>-ing</em> form.</p>
+      <p>You should <b>think about doing</b> that course. &nbsp;|&nbsp; I finally <b>succeeded in finding</b> a job. &nbsp;|&nbsp; We <b>believe in telling</b> the truth. &nbsp;|&nbsp; You should <b>concentrate on passing</b> your exams.</p> 
+      <p>I <b>dream about playing</b> for that team. &nbsp;|&nbsp; She <b>apologised for getting</b> angry. &nbsp;|&nbsp; He <b>struggles with working</b> at night. &nbsp;|&nbsp; I <b>care about saving</b> the environment.</p><br>
+      <p>When a phrasal verb is followed by a verb, the second is usually in the <em>-ing</em> form.</p>
+      <p>We <b>carried on driving</b> for another hour. &nbsp;|&nbsp; I <b>look forward to reading</b> your new book! &nbsp;|&nbsp; She <b>gave up studying</b> at night. &nbsp;|&nbsp; We <b>put off making</b> that decision.</p><br>
+      <p>Some phrasal verbs can be followed by an infinitive or an <em>-ing</em> form, but with a change in meaning.</p>
+      <p>She <b>went on dancing</b> even after her accident. &nbsp;<em>(go on + -ing = 'continue')</em><br>
+      She <b>went on to be</b> a great dancer. &nbsp;<em>(go on + infinitive = 'end up')</em></p>
+      <p>He <b>grew up watching</b> his father play football. &nbsp;<em>(grow up + -ing = 'do something while changing from child to adult')</em><br>
+      He <b>grew up to be</b> a great footballer. &nbsp;<em>(grow up + infinitive = 'describes what a person becomes as an adult')</em></p><br>
+      <p>Some verbs (without prepositions) can be followed by a <em>to</em> infinitive or an <em>-ing</em> form, but with a change in meaning.</p>
+      <p>I <b>stopped to talk</b> to Felipe. &nbsp;<em>(stop + to infinitive = 'paused an action to do a different action')</em><br>
+      I <b>stopped listening</b> to rock music years ago. &nbsp;<em>(stop + -ing = 'change a habit or finish a repeated/extended action')</em></p>
+      <p>I must <b>remember to set</b> the alarm. &nbsp;<em>(remember + to infinitive = 'you have a responsibility which you must not forget')</em><br>
+      I <b>remember playing</b> with those toys when I was five or six. &nbsp;<em>(remember + -ing = 'you have a memory of something that happened in the past')</em></p>
+    </div>
+
+    <h4>Practice 1. Complete the sentences with the correct form of the verb in brackets.</h4>
+    <ol>
+      <li>She's never cared about <input class="gap" placeholder="(have)"> lots of possessions.</li>
+      <li>After university, Ahmed went on <input class="gap" placeholder="(become)"> a TV presenter.</li>
+      <li>I gave up <input class="gap" placeholder="(collect)"> treasure years ago.</li>
+      <li>That house we rented turned out <input class="gap" placeholder="(be)"> ideal for my family.</li>
+      <li>Yoko apologised for <input class="gap" placeholder="(arrive)"> late.</li>
+      <li>I'm looking forward to <input class="gap" placeholder="(start)"> my dream job.</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 having &nbsp;·&nbsp; 2 to become &nbsp;·&nbsp; 3 collecting &nbsp;·&nbsp; 4 to be &nbsp;·&nbsp; 5 arriving &nbsp;·&nbsp; 6 starting</div>
+
+    <h4>Practice 2. Match each pair of sentence beginnings with the endings (a–b).</h4>
+    <div class="box">
+      <p><strong>1</strong> Kim went on to play<br>
+      <strong>2</strong> Kim went on playing<br>
+      <strong>a</strong> his guitar even after a string broke.<br>
+      <strong>b</strong> the guitar at several famous venues in London and Paris.</p>
+      <br>
+      <p><strong>3</strong> Pete remembers calling<br>
+      <strong>4</strong> Pete remembers to call<br>
+      <strong>a</strong> his grandmother every day to check she's OK.<br>
+      <strong>b</strong> me, but he's forgotten what we talked about.</p>
+      <br>
+      <p><strong>5</strong> She stopped drinking<br>
+      <strong>6</strong> She stopped to drink<br>
+      <strong>a</strong> soda because it's unhealthy.<br>
+      <strong>b</strong> water halfway through the run.</p>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1–b &nbsp;·&nbsp; 2–a &nbsp;·&nbsp; 3–b &nbsp;·&nbsp; 4–a &nbsp;·&nbsp; 5–a &nbsp;·&nbsp; 6–b</div>
+
+    <h4>Practice 3. Choose the correct options (A–C) to complete the text.</h4>
+    <div class="box">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">Three signs you have too much stuff</p>
+
+      <p><strong>1 &nbsp;You buy things not realising you already have them</strong></p>
+      <p><strong>Problem:</strong> You'd always dreamed about <sup>1</sup><input class="gap" style="width:85px;" placeholder="A / B / C"> that book or dress or vase. You order it online, open the package and realise you already own it.</p>
+      <p><strong>Solution:</strong> Stop <sup>2</sup><input class="gap" style="width:85px;" placeholder="A / B / C"> attention to advertisements and new trends. Concentrate on <sup>3</sup><input class="gap" style="width:85px;" placeholder="A / B / C"> the things you already have.</p>
+
+      <p style="margin-top:14px;"><strong>2 &nbsp;There's nowhere to sit down or eat</strong></p>
+      <p><strong>Problem:</strong> You have chairs, a table and a sofa, but they are full of stuff. 'I can't carry on <sup>4</sup><input class="gap" style="width:85px;" placeholder="A / B / C"> like this,' you say. But you do.</p>
+      <p><strong>Solution:</strong> Before you go to bed, remember <sup>5</sup><input class="gap" style="width:85px;" placeholder="A / B / C"> everything in its place, so every surface has some space on it.</p>
+
+      <p style="margin-top:14px;"><strong>3 &nbsp;You can never find what you're looking for</strong></p>
+      <p><strong>Problem:</strong> This happens with clothes. You have piles of them, but can't find what you want. Eventually you give up <sup>6</sup><input class="gap" style="width:85px;" placeholder="A / B / C"> and just buy something new.</p>
+      <p><strong>Solution:</strong> Go through your clothes. Throw away anything you haven't worn for over 18 months. It might turn out <sup>7</sup><input class="gap" style="width:85px;" placeholder="A / B / C"> the most important thing you do in the house.</p>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:0.87rem;color:var(--muted);">
+        <strong style="color:var(--text);">Options:</strong><br>
+        1 &nbsp;A owning &nbsp;&nbsp; B own &nbsp;&nbsp; C to own<br>
+        2 &nbsp;A paying &nbsp;&nbsp; B to pay &nbsp;&nbsp; C pay<br>
+        3 &nbsp;A to appreciate &nbsp;&nbsp; B appreciate &nbsp;&nbsp; C appreciating<br>
+        4 &nbsp;A live &nbsp;&nbsp; B living &nbsp;&nbsp; C to live<br>
+        5 &nbsp;A to put &nbsp;&nbsp; B put &nbsp;&nbsp; C putting<br>
+        6 &nbsp;A to look &nbsp;&nbsp; B looking &nbsp;&nbsp; C look<br>
+        7 &nbsp;A being &nbsp;&nbsp; B be &nbsp;&nbsp; C to be
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 C &nbsp;·&nbsp; 2 B &nbsp;·&nbsp; 3 B &nbsp;·&nbsp; 4 B &nbsp;·&nbsp; 5 A &nbsp;·&nbsp; 6 A &nbsp;·&nbsp; 7 C</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 5: VOCABULARY -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>5. Vocabulary — Personal Preferences</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">vocabulary</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>5A. Look at the words in bold in the two sections of the article about Minimalism vs. Maximalism. Answer the questions.</h3>
+    <ol>
+      <li>Which two adjectives mean 'perfect for me'?</li>
+      <li>Which two phrases mean 'I don't like …'?</li>
+      <li>Which phrase means 'don't need'?</li>
+      <li>Which word means 'enjoy or be thankful for something'?</li>
+      <li>Which phrase means 'make someone happy'?</li>
+      <li>Which word means 'the kind of things you like'?</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 ideal, dream<br>
+      2 I'm not a big fan of &nbsp;·&nbsp; It's not for me<br>
+      3 do without<br>
+      4 appreciate<br>
+      5 give pleasure<br>
+      6 tastes
+    </div>
+
+    <h3>5B. Choose the correct words to complete the summaries.</h3>
+    <div class="box">
+      <p>Zuleya says that, for creative people, the homes she designs are <sup>1</sup><strong>pleasure / ideal</strong>. She thinks minimalism allows us to <sup>2</sup><strong>stand / appreciate</strong> the important things in life. She believes we can <sup>3</sup><strong>do without / give pleasure</strong> so many things.</p>
+      <p style="margin-top:12px;">Richard is doing his <sup>4</sup><strong>dream / first</strong> job. Minimalism isn't <sup>5</sup><strong>for him / the taste</strong> because he <sup>6</sup><strong>dreams of / is not a big fan of</strong> blank, empty spaces. He says his objects give <sup>7</sup><strong>taste / pleasure</strong> to his visitors. He also says people have different <sup>8</sup><strong>hopes / tastes</strong> and you can live a simple life and still enjoy colours and patterns in your home.</p>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 ideal &nbsp;·&nbsp; 2 appreciate &nbsp;·&nbsp; 3 do without &nbsp;·&nbsp; 4 dream &nbsp;·&nbsp; 5 for him &nbsp;·&nbsp; 6 is not a big fan of &nbsp;·&nbsp; 7 pleasure &nbsp;·&nbsp; 8 tastes
+    </div>
+
+    <h3>5C. Complete the sentences with your own ideas.</h3>
+    <div class="speak-q">1 One sound or smell that gives me pleasure is …</div>
+    <div class="speak-q">2 My dream job would be … , and the ideal place for it would be …</div>
+    <div class="speak-q">3 I have very different tastes from … . For example, …</div>
+    <div class="speak-q">4 I always appreciate … . In fact, I can't do without …</div>
+    <div class="speak-q">5 … isn't for me because I'm not a big fan of …</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 6: SPEAKING -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>6. Speaking</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">speaking</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>7A. Read the questionnaire and think about your answers. What explanations and examples can you think of?</h3>
+    <img src="q.png" width="700">
+
+    <h3>7B.</h3>
+    <div class="future-skills">
+      <div class="fs-label">Future Skills</div>
+      <h4>Communication</h4>
+      <p>To show a strong attitude towards a topic, we often use emphatic language, e.g. 'I definitely …', 'I definitely don't …'. Can you think of any other emphatic phrases?</p>
+      <p>Before you do the activity in Ex 7C, look at the questions and think about which emphatic phrases you can use in your answers to show your attitude.</p>
+    </div>
+
+    <button class="hint-btn" onclick="toggleHint(this)">💡 Emphatic phrases — hint</button>
+    <div class="hint-box">
+      <div class="hint-ua">Emphatic phrases — це фрази, які підсилюють твоє ставлення до теми. Замість простого "I like it" кажемо "I absolutely love it" або "I'm a huge fan of it" — це робить мову живішою і природнішою.</div>
+      <p><strong>Strong positive:</strong></p>
+      <ul>
+        <li>I definitely … / I definitely do …</li>
+        <li>I absolutely love …</li>
+        <li>I'm a huge fan of …</li>
+        <li>I'm really into …</li>
+        <li>I really appreciate …</li>
+        <li>… is ideal for me / … is my dream …</li>
+      </ul>
+      <p><strong>Strong negative:</strong></p>
+      <ul>
+        <li>I definitely don't … / I definitely wouldn't …</li>
+        <li>I'm not a big fan of …</li>
+        <li>… is not for me at all</li>
+        <li>I can't stand …</li>
+        <li>I really don't see the point of …</li>
+        <li>I could easily do without …</li>
+      </ul>
+    </div>
+
+    <h3>7C. Ask and answer the questions in the questionnaire. Give examples and use emphatic language.</h3>
+
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<!-- MODAL STUDENT A -->
+<div class="modal-overlay" id="modalA">
+  <div class="modal-box modal-a">
+    <button class="modal-close" onclick="closeModal('modalA')">✕</button>
+    <p class="modal-label">1B · Ex 1C · Student A</p>
+    <h3>Minimalism vs. Maximalism</h3>
+    <h4>Zuleya Samova: 'Less is More'</h4>
+    <p>In my work, minimalism refers to designing things in a simple, elegant way. We've seen this trend growing: smartphones and televisions are flat, simple and easy to use. We design homes with clean lines and blank walls, <strong>ideal</strong> spaces for people living thoughtful, creative lives. For minimalists like me, the saying is a way of life: 'Less is more'. It means a simpler world is a better world.</p>
+    <p>Many people learn about minimalism through the movement made famous by the lifestyle writer Marie Kondo and the Netflix series <em>The Minimalists: Less is Now</em>. I think Kondo and the presenters of that Netflix series, Joshua Fields Millburn and Ryan Nicodemus, succeeded in persuading people to stop collecting useless stuff and to throw away the possessions they can <strong>do without</strong>.</p>
+    <p>One of the main arguments for using less stuff is that it's better for the environment, but it's not only that; it's a way to free yourself so you can <strong>appreciate</strong> the things that matter. If we stop to think about what's really important, we realise that it's people and relationships, not stuff.</p>
+  </div>
+</div>
+
+<!-- MODAL STUDENT B -->
+<div class="modal-overlay" id="modalB">
+  <div class="modal-box modal-b">
+    <button class="modal-close" onclick="closeModal('modalB')">✕</button>
+    <p class="modal-label">1B · Ex 1C · Student B</p>
+    <h3>Minimalism vs. Maximalism</h3>
+    <h4>Richard Mbuya: 'Fill the World with Colour and Light'</h4>
+    <p>My love of maximalism came from a journey I took. When I first travelled abroad, to Mozambique, I was a nervous twenty-year-old. It turned out to be the most important trip of my life. There, I discovered patterns and materials I'd never seen before. I went on to become a designer and I've spent the last twenty years mixing shapes and fabrics from different cultures – my <strong>dream</strong> job.</p>
+    <p>Maximalism isn't about luxury. It's about joy. My house is filled with treasures, things I love: stones I found in the Alps, shells from a beach in Indonesia, a 1960s typewriter, my children's paintings. They are beautiful to look at and touch. They <strong>give pleasure</strong> to me and my visitors and, for me, they bring back memories. I think you can live a simple life and still enjoy amazing colours and patterns. Or you might live a complicated life but have no furniture. We all have different <strong>tastes</strong>.</p>
+    <p>Personally, <strong>I'm not a big fan of</strong> minimalism and I wouldn't want to live in a minimalist house without my treasures around me. <strong>It's not for me</strong>. It would be like living in a hospital! My home reflects my work. I believe in creating joyful, bright, colourful designs and I look forward to visiting more street markets and finding objects to inspire my work.</p>
+  </div>
+</div>
+
+<footer>Speakout B1+ · 1A Writing · 1B Less is More?</footer>
+
+<script>
+function toggle(headEl){
+  headEl.parentElement.classList.toggle('collapsed');
+}
+function show(btn){
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent = ans.classList.contains('show') ? 'Hide answers' : btn.textContent.replace('Hide','Show');
+}
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow='';
+}
+function toggleHint(btn){
+  const box=btn.nextElementSibling;
+  box.classList.toggle('show');
+  btn.textContent=box.classList.contains('show') ? '💡 Emphatic phrases — hide' : '💡 Emphatic phrases — hint';
+}
+document.querySelectorAll('.modal-overlay').forEach(el=>{
+  el.addEventListener('click',function(e){
+    if(e.target===this) closeModal(this.id);
+  });
+});
+</script>
+</body>
+</html>

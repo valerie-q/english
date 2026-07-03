@@ -1,1 +1,781 @@
-hh
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1C Don't Forget to… — Sofia</title>
+<style>
+:root{
+  --navy:#16254a;
+  --navy-light:#1c2d4f;
+  --gold:#c08a2e;
+  --gold-soft:#9c6b1f;
+  --text:#1c1f26;
+  --muted:#5b6270;
+  --card:#ffffff;
+  --bg:#f7f5f0;
+  --border:#e3ddd0;
+  --correct:#2f8f5b;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  margin:0;
+  padding:0 0 60px;
+  line-height:1.55;
+}
+header{
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  padding:34px 20px 26px;
+  border-bottom:3px solid var(--gold);
+  text-align:center;
+}
+header h1{color:var(--gold);margin:0 0 6px;font-size:1.8rem;letter-spacing:0.5px;}
+header p{color:#c7cee0;margin:0;font-size:0.95rem;}
+.wrap{max-width:780px;margin:0 auto;padding:0 18px;}
+.phase{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;margin-top:22px;overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+.phase-head{
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  padding:14px 20px;cursor:pointer;display:flex;
+  align-items:center;justify-content:space-between;user-select:none;
+}
+.phase-head h2{margin:0;font-size:1.08rem;color:#ffffff;}
+.phase-head .tag{
+  font-size:0.72rem;color:var(--navy);background:var(--gold);
+  padding:3px 10px;border-radius:20px;font-weight:600;white-space:nowrap;margin-left:10px;
+}
+.arrow{color:var(--gold);font-size:1.1rem;transition:transform 0.25s;margin-left:8px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:20px 22px 24px;}
+.phase.collapsed .phase-body{display:none;}
+h3{color:var(--gold-soft);font-size:1rem;margin:18px 0 8px;}
+h4{color:var(--navy);font-size:0.95rem;margin:16px 0 6px;font-weight:700;}
+p{margin:8px 0;}
+.box{
+  background:#fbf8f1;border:1px solid var(--border);
+  border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:12px 0;
+}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px;}
+.chip{
+  background:#fff8ea;border:1px solid var(--gold);color:var(--gold-soft);
+  padding:5px 12px;border-radius:20px;font-size:0.88rem;font-weight:600;
+}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+input.gap{
+  background:#fbf8f1;border:none;border-bottom:2px dotted var(--gold);
+  color:var(--text);font-size:1rem;width:130px;padding:2px 4px;font-family:inherit;
+}
+input.gap:focus{outline:none;border-bottom:2px solid var(--gold);}
+.reveal-btn{
+  background:var(--navy);border:1px solid var(--navy);color:#ffffff;
+  padding:6px 16px;border-radius:6px;cursor:pointer;font-size:0.85rem;margin:10px 0;
+}
+.reveal-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+.answer{
+  display:none;background:#eef8f1;border-left:3px solid var(--correct);
+  padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.93rem;
+}
+.answer.show{display:block;}
+.answer b{color:var(--correct);}
+.speak-q{
+  background:#f0f3f8;border-left:3px solid var(--navy);
+  padding:10px 14px;margin:10px 0;border-radius:4px;
+}
+.grammar-note{
+  background:#fff8ea;border:1px solid var(--gold);border-radius:8px;
+  padding:14px 18px;margin:14px 0;font-size:0.95rem;
+}
+.grammar-note b{color:var(--gold-soft);}
+
+/* To-do lists */
+.todo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:14px 0;}
+.todo-card{
+  background:#f7f5f0;border:1px solid var(--border);border-radius:8px;overflow:hidden;
+}
+.todo-card-head{
+  background:var(--navy);color:#fff;font-weight:700;font-size:0.85rem;
+  padding:7px 12px;letter-spacing:0.3px;
+}
+.todo-card ul{margin:8px 0;padding:8px 12px 10px 26px;}
+.todo-card li{margin:5px 0;font-size:0.9rem;}
+
+/* Matching table */
+.match-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:0.92rem;}
+.match-table td{padding:7px 10px;border:1px solid var(--border);vertical-align:top;}
+.match-table td:first-child{font-weight:700;color:var(--navy);width:28px;text-align:center;}
+.match-table .answers-col{color:var(--muted);font-size:0.85rem;}
+
+/* Audio placeholder */
+.media-slot{
+  border:2px dashed var(--border);border-radius:8px;padding:14px;
+  text-align:center;color:var(--muted);margin:12px 0;font-size:0.88rem;background:#fbf8f1;
+}
+.media-slot span{color:var(--gold-soft);font-weight:600;}
+
+/* Phone messages */
+.phone-section{
+  background:#fbf8f1;border-radius:8px;padding:12px 16px;margin:10px 0;
+  border-left:3px solid var(--muted);
+}
+.phone-section h4{
+  color:var(--muted);font-size:0.72rem;text-transform:uppercase;
+  letter-spacing:0.5px;margin:0 0 8px;font-weight:700;
+}
+
+/* Grammar ref boxes */
+.ref-block{
+  background:#fff8ea;border:1px solid var(--gold);border-radius:8px;
+  padding:12px 16px;margin:10px 0;font-size:0.93rem;
+}
+.ref-block h4{color:var(--gold-soft);margin:0 0 8px;}
+.ref-block .example{color:var(--navy);font-weight:600;}
+.ref-block .note{color:var(--muted);font-style:italic;font-size:0.88rem;margin-top:6px;}
+.ref-label{
+  background:var(--navy);color:#fff;font-size:0.72rem;font-weight:700;
+  letter-spacing:0.4px;padding:3px 10px;border-radius:4px;display:inline-block;margin-bottom:8px;
+}
+
+/* Future Skills */
+.future-skills{
+  background:#e6f4f4;border:2px solid #5ba8a8;border-radius:10px;
+  padding:16px 18px;margin:14px 0;
+}
+.fs-label{color:#2a7070;font-weight:700;font-size:0.75rem;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:2px;}
+.future-skills h4{color:#1a5050;margin:2px 0 10px;font-size:1rem;}
+
+/* Mediation skills */
+.mediation-box{
+  background:#eef2fb;border:2px solid #5b7bbf;border-radius:10px;
+  padding:16px 18px;margin:14px 0;
+}
+.med-label{color:#2a4080;font-weight:700;font-size:0.75rem;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:2px;}
+.mediation-box h4{color:#1a2f60;margin:2px 0 10px;font-size:1rem;}
+.mediation-box .bank-link{
+  display:inline-block;background:var(--navy);color:#fff;
+  font-size:0.82rem;font-weight:700;padding:5px 14px;border-radius:5px;margin-top:8px;
+  text-decoration:none;
+}
+
+/* Dialogue example */
+.dialogue{
+  background:#f0f3f8;border-radius:8px;padding:14px 16px;margin:12px 0;font-size:0.93rem;
+}
+.dialogue p{margin:5px 0;}
+.dialogue .spk-b{color:#2a6070;font-weight:600;}
+.dialogue .spk-a{color:var(--navy);font-weight:600;}
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;margin-top:40px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>1C · Don't Forget to …</h1>
+  <p>Phrasal verbs: housework · How to leave phone messages · Speaking</p>
+</header>
+
+<div class="wrap">
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 1: VOCABULARY -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+    <div class="phase-head" onclick="toggle(this)">
+      <h2>1. Vocabulary — Personal Preferences</h2>
+      <div style="display:flex;align-items:center;">
+        <span class="tag">vocabulary</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+    <div class="phase-body">
+  
+      <h3>5A. Look at the words in bold in the two sections of the article about Minimalism vs. Maximalism. Answer the questions.</h3>
+      <ol>
+        <li>Which two adjectives mean 'perfect for me'?</li>
+        <li>Which two phrases mean 'I don't like …'?</li>
+        <li>Which phrase means 'don't need'?</li>
+        <li>Which word means 'enjoy or be thankful for something'?</li>
+        <li>Which phrase means 'make someone happy'?</li>
+        <li>Which word means 'the kind of things you like'?</li>
+      </ol>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        1 ideal, dream<br>
+        2 I'm not a big fan of &nbsp;·&nbsp; It's not for me<br>
+        3 do without<br>
+        4 appreciate<br>
+        5 give pleasure<br>
+        6 tastes
+      </div>
+  
+      <h3>5B. Choose the correct words to complete the summaries.</h3>
+      <div class="box">
+        <p>Zuleya says that, for creative people, the homes she designs are <sup>1</sup><strong>pleasure / ideal</strong>. She thinks minimalism allows us to <sup>2</sup><strong>stand / appreciate</strong> the important things in life. She believes we can <sup>3</sup><strong>do without / give pleasure</strong> so many things.</p>
+        <p style="margin-top:12px;">Richard is doing his <sup>4</sup><strong>dream / first</strong> job. Minimalism isn't <sup>5</sup><strong>for him / the taste</strong> because he <sup>6</sup><strong>dreams of / is not a big fan of</strong> blank, empty spaces. He says his objects give <sup>7</sup><strong>taste / pleasure</strong> to his visitors. He also says people have different <sup>8</sup><strong>hopes / tastes</strong> and you can live a simple life and still enjoy colours and patterns in your home.</p>
+      </div>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        1 ideal &nbsp;·&nbsp; 2 appreciate &nbsp;·&nbsp; 3 do without &nbsp;·&nbsp; 4 dream &nbsp;·&nbsp; 5 for him &nbsp;·&nbsp; 6 is not a big fan of &nbsp;·&nbsp; 7 pleasure &nbsp;·&nbsp; 8 tastes
+      </div>
+  
+      <h3>5C. Complete the sentences with your own ideas.</h3>
+      <div class="speak-q">1 One sound or smell that gives me pleasure is …</div>
+      <div class="speak-q">2 My dream job would be … , and the ideal place for it would be …</div>
+      <div class="speak-q">3 I have very different tastes from … . For example, …</div>
+      <div class="speak-q">4 I always appreciate … . In fact, I can't do without …</div>
+      <div class="speak-q">5 … isn't for me because I'm not a big fan of …</div>
+  
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PHASE 2: SPEAKING -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="phase">
+    <div class="phase-head" onclick="toggle(this)">
+      <h2>2. Speaking</h2>
+      <div style="display:flex;align-items:center;">
+        <span class="tag">speaking</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+    <div class="phase-body">
+  
+      <h3>7A. Read the questionnaire and think about your answers. What explanations and examples can you think of?</h3>
+      <img src="q.png" width="700">
+  
+      <h3>7B.</h3>
+      <div class="future-skills">
+        <div class="fs-label">Future Skills</div>
+        <h4>Communication</h4>
+        <p>To show a strong attitude towards a topic, we often use emphatic language, e.g. 'I definitely …', 'I definitely don't …'. Can you think of any other emphatic phrases?</p>
+        <p>Before you do the activity in Ex 7C, look at the questions and think about which emphatic phrases you can use in your answers to show your attitude.</p>
+      </div>
+  
+      <button class="hint-btn" onclick="toggleHint(this)">💡 Emphatic phrases — hint</button>
+      <div class="hint-box">
+        <div class="hint-ua">Emphatic phrases — це фрази, які підсилюють твоє ставлення до теми. Замість простого "I like it" кажемо "I absolutely love it" або "I'm a huge fan of it" — це робить мову живішою і природнішою.</div>
+        <p><strong>Strong positive:</strong></p>
+        <ul>
+          <li>I definitely … / I definitely do …</li>
+          <li>I absolutely love …</li>
+          <li>I'm a huge fan of …</li>
+          <li>I'm really into …</li>
+          <li>I really appreciate …</li>
+          <li>… is ideal for me / … is my dream …</li>
+        </ul>
+        <p><strong>Strong negative:</strong></p>
+        <ul>
+          <li>I definitely don't … / I definitely wouldn't …</li>
+          <li>I'm not a big fan of …</li>
+          <li>… is not for me at all</li>
+          <li>I can't stand …</li>
+          <li>I really don't see the point of …</li>
+          <li>I could easily do without …</li>
+        </ul>
+      </div>
+  
+      <h3>7C. Ask and answer the questions in the questionnaire. Give examples and use emphatic language.</h3>
+  
+    </div>
+  </div>
+  
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 3: VOCABULARY -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>3. Vocabulary — Phrasal Verbs: Housework</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">vocabulary</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>1A. Name as many household tasks as you can.</h3>
+    <div class="box">washing the dishes …</div>
+
+    <h3>1B. Answer the questions.</h3>
+    <div class="speak-q">1 Which of the tasks in Ex 1A do you do?</div>
+    <div class="speak-q">2 Which do you dislike the most?</div>
+    <div class="speak-q">3 Are there any that you like?</div>
+
+    <h3>2A. Match the 'to do' lists (1–3) with the situations (a–c).</h3>
+    <p><strong>a</strong> someone moving house &nbsp;&nbsp; <strong>b</strong> someone organising a party &nbsp;&nbsp; <strong>c</strong> someone going away for the winter</p>
+
+    <div class="todo-grid">
+      <div class="todo-card">
+        <div class="todo-card-head">List 1</div>
+        <ul>
+          <li>throw out food from the fridge</li>
+          <li>take out the rubbish</li>
+          <li>pack suitcases</li>
+          <li>set house alarm</li>
+        </ul>
+      </div>
+      <div class="todo-card">
+        <div class="todo-card-head">List 2</div>
+        <ul>
+          <li>pick up cake from bakery</li>
+          <li>tidy up living room</li>
+          <li>buy snack food</li>
+          <li>clean bathrooms</li>
+          <li>hang up clothes lying around in bedroom</li>
+          <li>turn up heating</li>
+        </ul>
+      </div>
+      <div class="todo-card">
+        <div class="todo-card-head">List 3</div>
+        <ul>
+          <li>finish packing boxes</li>
+          <li>phone new owners – go over instructions for alarm system</li>
+          <li>sweep floor</li>
+          <li>complete 'new address' form for post office</li>
+          <li>lock up the house</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 → c (going away for the winter) &nbsp;·&nbsp; 2 → b (organising a party) &nbsp;·&nbsp; 3 → a (moving house)</div>
+
+    <h3>2B. Look at the lists in Ex 2A and find phrasal verbs to match with meanings (1–8).</h3>
+    <ol>
+      <li>put something outside</li>
+      <li>increase</li>
+      <li>something you do with doors and windows to stop people getting in</li>
+      <li>put something in the rubbish because you don't want it</li>
+      <li>get/buy something (can be collecting something you arranged to buy earlier)</li>
+      <li>put things on a hook or other object</li>
+      <li>explain instructions to make sure someone understands</li>
+      <li>make somewhere neater by putting things in the right place</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 take out &nbsp;·&nbsp; 2 turn up &nbsp;·&nbsp; 3 lock up &nbsp;·&nbsp; 4 throw out<br>
+      5 pick up &nbsp;·&nbsp; 6 hang up &nbsp;·&nbsp; 7 go over &nbsp;·&nbsp; 8 tidy up
+    </div>
+
+    <h3>2C. Match the questions (1–8) with the answers (a–h).</h3>
+    <p>What do you do when:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin:10px 0;">
+      <div>
+        <ol>
+          <li>your clothes are lying all over the floor?</li>
+          <li>you're going home and you remember you need to buy milk?</li>
+          <li>your desk papers, books and cups are all over the room?</li>
+          <li>you need to explain complicated instructions to your flatmate?</li>
+          <li>food goes bad?</li>
+          <li>the temperature changes and the heating is too low?</li>
+          <li>you're leaving the house to go on holiday?</li>
+          <li>the bin is full of rubbish?</li>
+        </ol>
+      </div>
+      <div style="padding-left:16px;padding-top:8px;">
+        <p><strong>a</strong> lock it up</p>
+        <p><strong>b</strong> throw it out</p>
+        <p><strong>c</strong> tidy it up</p>
+        <p><strong>d</strong> hang them up</p>
+        <p><strong>e</strong> pick some up</p>
+        <p><strong>f</strong> go over them</p>
+        <p><strong>g</strong> take it out</p>
+        <p><strong>h</strong> turn it up</p>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1–d &nbsp;·&nbsp; 2–e &nbsp;·&nbsp; 3–c &nbsp;·&nbsp; 4–f &nbsp;·&nbsp; 5–b &nbsp;·&nbsp; 6–h &nbsp;·&nbsp; 7–a &nbsp;·&nbsp; 8–g</div>
+
+    <h3>Close the lesson. Test your knowledge.</h3>
+    <div class="dialogue">
+      <p><span class="spk-b">B:</span> What do you do when your clothes are lying all over the floor?</p>
+      <p><span class="spk-a">A:</span> Hang them up.</p>
+      <p><span class="spk-b">B:</span> Correct!</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 4: HOW TO... + GRAMMAR BANK -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>4. How to … Leave Phone Messages</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">functional language</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. Discuss the questions.</h3>
+    <div class="speak-q">1 Do you ever have to leave or listen to phone messages in English?</div>
+    <div class="speak-q">2 Do you find this difficult? Why/Why not?</div>
+
+    <h3>3B. Listen to the phone messages. Number the items in the box in the order you hear them.</h3>
+    <audio controls style="width:100%; margin:8px 0;">
+        <source src="1_04.mp3" type="audio/mpeg">
+      </audio>
+    <div class="wordbox">
+      <span class="chip">alarm system</span><span class="chip">broken pipe</span><span class="chip">folder</span>
+      <span class="chip">garage door</span><span class="chip">leather jacket</span><span class="chip">pizzas</span><span class="chip">plants</span>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 leather jacket &nbsp;·&nbsp; 2 garage door &nbsp;·&nbsp; 3 alarm system &nbsp;·&nbsp; 4 folder<br>
+      5 pizzas &nbsp;·&nbsp; 6 broken pipe &nbsp;·&nbsp; 7 plants
+    </div>
+
+    <h3>3C. Complete the phrases (1–10) with the words in the box.</h3>
+    <div class="wordbox">
+      <span class="chip">back</span><span class="chip">call</span><span class="chip">calling</span>
+      <span class="chip">find</span><span class="chip">here</span><span class="chip">message</span>
+      <span class="chip">number</span><span class="chip">reached</span><span class="chip">This</span><span class="chip">You'll</span>
+    </div>
+
+    <div class="phone-section">
+      <h4>Things you'll hear on a recorded message</h4>
+      <p>1 &nbsp;You've <input class="gap" placeholder="..."> Café Roma.</p>
+      <p>2 &nbsp;Please leave a message and we'll get <input class="gap" placeholder="..."> to you.</p>
+      <p>3 &nbsp;Thank you for <input class="gap" placeholder="..."> Smiths and Co. Our office hours are 8 a.m. to 6 p.m.</p>
+      <p>4 &nbsp;I can't take your call right now, but if you leave a <input class="gap" placeholder="..."> with your name and number, I'll get back to you as soon as I can.</p>
+    </div>
+
+    <div class="phone-section">
+      <h4>Starting a message</h4>
+      <p>5 &nbsp;<input class="gap" placeholder="..."> is Marcelo Fagundes calling about …</p>
+      <p>6 &nbsp;It's Patricia <input class="gap" placeholder="..."> …</p>
+    </div>
+
+    <div class="phone-section">
+      <h4>Giving detailed information</h4>
+      <p>7 &nbsp;<input class="gap" placeholder="..."> need to unlock the …</p>
+      <p>8 &nbsp;You'll <input class="gap" placeholder="..."> it on the table next to the …</p>
+    </div>
+
+    <div class="phone-section">
+      <h4>Asking for further phone actions</h4>
+      <p>9 &nbsp;Can you <input class="gap" placeholder="..."> me back?</p>
+      <p>10 &nbsp;You can reach me on this <input class="gap" placeholder="...">.</p>
+    </div>
+
+    <h3>3D. Listen and check.</h3>
+    <audio controls style="width:100%; margin:8px 0;">
+        <source src="1_05.mp3" type="audio/mpeg">
+      </audio>
+
+    <h3>4A. Complete the requests with the words and phrases in the box.</h3>
+    <div class="wordbox">
+      <span class="chip">could you please</span><span class="chip">do you think</span>
+      <span class="chip">I wonder if you</span><span class="chip">wonder</span><span class="chip">Would</span>
+    </div>
+    <ol>
+      <li><input class="gap" placeholder="..."> you explain the alarm system to her?</li>
+      <li><input class="gap" placeholder="..."> could bring my folder to the meeting?</li>
+      <li><input class="gap" placeholder="..."> let me know that you've got this message?</li>
+      <li><input class="gap" placeholder="..."> you'll be able to pick up some pizzas on the way home?</li>
+      <li>I <input class="gap" placeholder="..."> if you'd mind watering the plants for me.</li>
+    </ol>
+
+    <h3>4B. Listen and check.</h3>
+    <audio controls style="width:100%; margin:8px 0;">
+        <source src="1_06.mp3" type="audio/mpeg">
+      </audio>
+    <button class="reveal-btn" onclick="show(this)">Show answers (4A + 4B)</button>
+    <div class="answer">
+      1 Would &nbsp;·&nbsp; 2 I wonder if you &nbsp;·&nbsp; 3 Could you please &nbsp;·&nbsp; 4 Do you think &nbsp;·&nbsp; 5 wonder
+    </div>
+
+    <h3>4C. Are the polite requests in Ex 4A direct or indirect requests? How do you know?</h3>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">
+      1 direct &nbsp;·&nbsp; 2 indirect &nbsp;·&nbsp; 3 direct &nbsp;·&nbsp; 4 indirect &nbsp;·&nbsp; 5 indirect<br>
+      With indirect requests, the word order is the same as for affirmative statements.
+    </div>
+
+    <!-- GRAMMAR BANK -->
+    <h3 style="margin-top:28px;">Grammar Bank 1C — How to … Leave Phone Messages</h3>
+
+    <div class="grammar-note">
+      <div class="ref-label">Direct requests</div>
+      <p>We can make a direct request by using <b>Can you/Could you … ?</b> or <b>Will you/Would you … , please?</b></p>
+      <p class="example"><b>Can/Could you</b> call me back?<br>
+      <b>Will/Would you</b> (look for it/pick some up), <b>please?</b></p>
+    </div>
+
+    <div class="grammar-note">
+      <div class="ref-label">Indirect requests</div>
+      <p>We can soften a request to make it sound less direct by using phrases like:</p>
+      <p><b>Do you think you could/you'll be able to … ?</b><br>
+      <b>I wonder if you could/would …</b><br>
+      <b>I wonder if you'd mind …</b> + <em>-ing</em></p>
+      <p class="example"><b>Do you think you could</b> have a look at it for me?<br>
+      <b>I wonder if you'd</b> help me set the alarm.<br>
+      <b>I wonder if you'd mind</b> helping me lock up.</p>
+      <p class="note">Notice: with indirect requests, the word order is the same as for affirmative statements.<br>
+      Do you think you could &nbsp;NOT &nbsp;<s>Do you think could you</s></p>
+    </div>
+
+    <div class="grammar-note">
+      <div class="ref-label">Leaving a phone message</div>
+      <p>We use particular phrases when speaking on the phone or leaving a phone message.</p>
+      <p class="example">It's Max speaking. / It's Max here. / This is Max speaking/calling about … &nbsp;NOT &nbsp;<s>I'm Max.</s></p>
+
+      <div style="background:var(--navy);color:#fff;border-radius:6px;padding:8px 12px;margin:10px 0;font-size:0.88rem;font-weight:600;">things you'll hear on a recorded message</div>
+      <p><b>You've reached</b> (Riccardo's) mobile.<br>
+      <b>Please leave a message</b> and <b>we'll get back to you</b>.<br>
+      <b>Thank you for calling</b> (Dr Singh's office). <b>Our (office) hours are</b> (8 a.m. to 6 p.m.).<br>
+      <b>I can't take your call right now, but if you leave a message with your name and number, I'll get back to you as soon as I can.</b></p>
+
+      <div style="background:var(--navy);color:#fff;border-radius:6px;padding:8px 12px;margin:10px 0;font-size:0.88rem;font-weight:600;">starting a message</div>
+      <p><b>It's</b> (John) <b>here.</b><br>
+      <b>This is</b> (Marcelo Fagundes). <b>I'm calling about …</b><br>
+      <b>I'm calling to</b> (ask for/request) …<br>
+      <b>I was ringing to</b> (see if/find out if) …</p>
+
+      <div style="background:var(--navy);color:#fff;border-radius:6px;padding:8px 12px;margin:10px 0;font-size:0.88rem;font-weight:600;">making a polite request</div>
+      <p><b>Can you/Could you</b> (call me back/check) … ?<br>
+      <b>Will you/Would you</b> (look for it/explain …), please?<br>
+      <b>Do you think you could</b> (have a look at it for me)?<br>
+      <b>I wonder if you would mind</b> (having a look/helping me) … ?</p>
+
+      <div style="background:var(--navy);color:#fff;border-radius:6px;padding:8px 12px;margin:10px 0;font-size:0.88rem;font-weight:600;">giving detailed information</div>
+      <p><b>You'll need to</b> (open the … /speak to …).<br>
+      <b>It's the (one) that's</b> (sitting on the desk).<br>
+      <b>You'll find it</b> (on the table next to the …).<br>
+      <b>The event starts at … ,</b> (so you have to be there at …).</p>
+
+      <div style="background:var(--navy);color:#fff;border-radius:6px;padding:8px 12px;margin:10px 0;font-size:0.88rem;font-weight:600;">asking for further phone actions</div>
+      <p><b>Can you call me back?</b><br>
+      <b>You can reach me on</b> (this number/0775867435).</p>
+    </div>
+
+    <h4>Practice 1. Match 1–6 with a–f to make phone messages.</h4>
+    <div class="box">
+      <p><strong>1</strong> Hi you've reached Miguel's number. I can't take your call right now, but</p>
+      <p><strong>2</strong> Thank you for calling ElectroStars Ltd. Our hours</p>
+      <p><strong>3</strong> Hi, it's Ivan here.</p>
+      <p><strong>4</strong> Hi, this is Pete Sciberras. I'm calling about</p>
+      <p><strong>5</strong> Can you call</p>
+      <p><strong>6</strong> You can</p>
+      <br>
+      <p><strong>a</strong> me back on this number?</p>
+      <p><strong>b</strong> I'm calling about tomorrow night.</p>
+      <p><strong>c</strong> are 9 a.m. to 5 p.m. Monday to Friday.</p>
+      <p><strong>d</strong> reach me on 0886537564. Thanks.</p>
+      <p><strong>e</strong> please leave a message and I'll get back to you.</p>
+      <p><strong>f</strong> my appointment on Monday.</p>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1–e &nbsp;·&nbsp; 2–c &nbsp;·&nbsp; 3–b &nbsp;·&nbsp; 4–f &nbsp;·&nbsp; 5–a &nbsp;·&nbsp; 6–d</div>
+
+    <h4>Practice 2. Choose the correct words to complete the requests.</h4>
+    <ol>
+      <li>Hi Sara. Could you please <strong>arrange / arranging</strong> for the plumber to come and fix the kitchen sink?</li>
+      <li><strong>Would you / You would</strong> be able to help me tidy up the sitting room?</li>
+      <li>Do you think <strong>could you / you could</strong> be here by 7?</li>
+      <li>I wonder if you would be able to <strong>look / looking</strong> after Sammy for me?</li>
+      <li><strong>Would / Could</strong> we try to finish the meeting on time?</li>
+      <li>I wonder if you would mind <strong>go / going</strong> to the shop to pick up some sandwiches.</li>
+      <li><strong>Will you / Do you think you will</strong> please hang up your clothes before you leave?</li>
+      <li>I wonder if you would mind <strong>to stay / staying</strong> behind to help me clear up afterwards?</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 arrange &nbsp;·&nbsp; 2 Would you &nbsp;·&nbsp; 3 you could &nbsp;·&nbsp; 4 look &nbsp;·&nbsp; 5 Could &nbsp;·&nbsp; 6 going &nbsp;·&nbsp; 7 Will you &nbsp;·&nbsp; 8 staying</div>
+
+    <h4>Practice 3. Complete the phone messages with the words in the boxes.</h4>
+    <div class="box">
+      <div class="wordbox" style="margin-bottom:14px;">
+        <span class="chip">can</span><span class="chip">here</span><span class="chip">message</span>
+        <span class="chip">reached</span><span class="chip">think</span><span class="chip">this</span><span class="chip">to</span>
+      </div>
+      <p><strong>A:</strong> Hello. You have <sup>1</sup><input class="gap" style="width:85px;" placeholder="..."> Denbells Alarm Systems. Please leave a <sup>2</sup><input class="gap" style="width:80px;" placeholder="...">.</p>
+      <p style="margin-top:10px;"><strong>B:</strong> Hello, <sup>3</sup><input class="gap" style="width:60px;" placeholder="..."> is Monika Ingham <sup>4</sup><input class="gap" style="width:60px;" placeholder="...">. I'm calling <sup>5</sup><input class="gap" style="width:40px;" placeholder="..."> ask for your help. My alarm system is faulty and the alarm keeps going off. Do you <sup>6</sup><input class="gap" style="width:60px;" placeholder="..."> you could send somebody round to look at it for me? <sup>7</sup><input class="gap" style="width:50px;" placeholder="..."> you call me back on 03544 82212? Thanks.</p>
+    </div>
+
+    <div class="box">
+      <div class="wordbox" style="margin-bottom:14px;">
+        <span class="chip">could</span><span class="chip">get</span><span class="chip">it's</span>
+        <span class="chip">ringing</span><span class="chip">take</span><span class="chip">wonder</span><span class="chip">you'll</span>
+      </div>
+      <p><strong>A:</strong> Hi this is Sally. I'm sorry I can't <sup>8</sup><input class="gap" style="width:60px;" placeholder="..."> your call right now, but please leave a message and I'll <sup>9</sup><input class="gap" style="width:45px;" placeholder="..."> back to you as soon as I can.</p>
+      <p style="margin-top:10px;"><strong>B:</strong> Hi Sally, <sup>10</sup><input class="gap" style="width:50px;" placeholder="..."> Gabriel here. I was <sup>11</sup><input class="gap" style="width:70px;" placeholder="..."> to see if you could do me a favour. I left my bicycle downstairs and I think I forgot to lock it. I <sup>12</sup><input class="gap" style="width:70px;" placeholder="..."> if you could go and check it for me? <sup>13</sup><input class="gap" style="width:55px;" placeholder="..."> find the lock in the kitchen, near the door. <sup>14</sup><input class="gap" style="width:60px;" placeholder="..."> you let me know when you get this message?</p>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 reached &nbsp;·&nbsp; 2 message &nbsp;·&nbsp; 3 this &nbsp;·&nbsp; 4 here &nbsp;·&nbsp; 5 to &nbsp;·&nbsp; 6 think &nbsp;·&nbsp; 7 Can<br>
+      8 take &nbsp;·&nbsp; 9 get &nbsp;·&nbsp; 10 it's &nbsp;·&nbsp; 11 ringing &nbsp;·&nbsp; 12 wonder &nbsp;·&nbsp; 13 You'll &nbsp;·&nbsp; 14 Could
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PHASE 5: SPEAKING -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-head" onclick="toggle(this)">
+    <h2>5. Speaking</h2>
+    <div style="display:flex;align-items:center;">
+      <span class="tag">speaking</span>
+      <span class="arrow">▼</span>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>6A. You are going to practise leaving some phone messages. Read the Future Skills box and plan your messages for the situations in Ex 6B.</h3>
+
+    <div class="future-skills">
+      <div class="fs-label">Future Skills</div>
+      <h4>Communication</h4>
+      <p>Before leaving a phone message in English, it helps to plan and write down the main points. Think about how to:</p>
+      <ul>
+        <li>start the message,</li>
+        <li>say why you're calling,</li>
+        <li>explain details clearly (if necessary),</li>
+        <li>end the message.</li>
+      </ul>
+    </div>
+
+    <h3>6B. Go to page 141.</h3>
+
+    <div class="dialogue">
+      <p><span class="spk-b">B:</span> You've reached [name]. Please leave a message.</p>
+      <p><span class="spk-a">A:</span> …</p>
+    </div>
+
+    <div class="mediation-box">
+        <div class="med-label">Mediation Bank · page 145</div>
+        <h4>1C We're really busy right now</h4>
+        <p style="font-size:0.88rem;color:#2a4080;"><strong>SPEAKING OUTPUT</strong> | a work-based discussion &nbsp;·&nbsp; <strong>GOAL</strong> | agree on the best way to fix a work problem &nbsp;·&nbsp; <strong>MEDIATION SKILL</strong> | inviting contributions</p>
+      </div>
+  
+      <h3>Warm-up</h3>
+      <p><strong>1. Discuss the questions.</strong></p>
+      <div class="speak-q">1 How do you prefer to contact companies: by phone or by the chat service on their website?</div>
+      <div class="speak-q">2 When you call a company, what kind of automated messages do you often hear while you're waiting to talk to someone?</div>
+      <div class="speak-q">3 Is there anything you don't like about the experience of contacting customer service on the phone?</div>
+      <div class="box" style="color:#2a6070;font-style:italic;">I don't like the music. It's really annoying.</div>
+  
+      <h3>Prepare</h3>
+      <p><strong>2. Read the Scenario and listen to the messages. Why does Janel want to talk about the automated message system?</strong></p>
+      <audio controls style="width:100%; margin:8px 0;">
+        <source src="MB1_01.mp3" type="audio/mpeg">
+      </audio>
+      <div class="box">
+        <p style="font-weight:700;font-size:1rem;margin-bottom:10px;">SCENARIO</p>
+        <p style="color:var(--muted);font-size:0.88rem;">Janel sends you this message:</p>
+        <div style="background:#edf2fb;border-radius:6px;padding:14px 16px;margin:10px 0;font-size:0.93rem;">
+          <p>Hi everyone.</p>
+          <p>I looked at our feedback yesterday and everybody hates our automated messages on the customer service system! It has a rating of two stars out of five and people say it's really unfriendly and annoying. Can you listen to it and have a look at the script (see below) and think about how we can change it? Then we can talk about it in next week's meeting.</p>
+          <p>Thanks!<br>Janel</p>
+        </div>
+        <div style="background:#f5f5f5;border-radius:6px;padding:14px 16px;margin:10px 0;font-size:0.93rem;border-left:3px solid var(--muted);">
+          <p style="font-weight:700;">Automated message</p>
+          <p>You've got through to Well Gym. Press 1 to book a personal trainer. Press 2 to book the pool. Press 3 to speak to someone.</p>
+          <p><em>[If no one is free to help the customer when they choose an option:]</em><br>
+          We're really busy right now. Continue to wait or maybe call back later. While you're waiting, why don't you leave us a five-star review online?</p>
+          <p><em>[Music plays: heavy rock]</em><br>
+          <em>[Repeat message every 15 seconds.]</em></p>
+        </div>
+      </div>
+      <button class="reveal-btn" onclick="show(this)">Show answer</button>
+      <div class="answer">Because the customer feedback is very negative — the automated message system has a rating of two stars out of five and people say it's unfriendly and annoying.</div>
+  
+      <h3>3A. Listen to three people discussing the messages. What problems do they discuss?</h3>
+      <audio controls style="width:100%; margin:8px 0;">
+        <source src="MB1_02.mp3" type="audio/mpeg">
+      </audio>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0;">
+        <div class="box" style="margin:0;">• the person's voice</div>
+        <div class="box" style="margin:0;">• too many options</div>
+        <div class="box" style="margin:0;">• the music</div>
+        <div class="box" style="margin:0;">• the content of the messages</div>
+      </div>
+  
+      <h3>3B. Listen again. Which things (1–4) does Janel do to help her colleagues give their opinions?</h3>
+      <audio controls style="width:100%; margin:8px 0;">
+      </audio>
+      <ol>
+        <li>say how the conversation will be organised</li>
+        <li>ask people's opinions</li>
+        <li>say something funny to help everyone relax</li>
+        <li>ask people to say something about other people's opinions</li>
+      </ol>
+  
+      <p><strong>4. Read the Mediation Skill box. Which phrases did Janel use? Listen again and check.</strong></p>
+      <audio controls style="width:100%; margin:8px 0;">
+        <source src="audio/MB1.02.mp3" type="audio/mpeg">
+      </audio>
+      <div style="background:#f0eafa;border:2px solid #7b5ea7;border-radius:10px;padding:18px 20px;margin:14px 0;">
+        <p style="color:#5a3a8a;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Mediation Skill</p>
+        <p style="color:#3a2060;font-weight:700;font-size:1.05rem;margin:0 0 12px;">inviting contributions</p>
+        <p>When you are trying to solve a problem in a group, it is good to organise the conversation so that everyone has a chance to share their ideas. Here are a few ways you can do this.</p>
+        <p style="margin-top:12px;"><strong>Say how the conversation will be organised</strong><br>
+        <span style="color:#5a3a8a;font-weight:600;">Can we share one idea each about</span> how we can change this?<br>
+        <span style="color:#5a3a8a;font-weight:600;">Let's talk about</span> the music first, <span style="color:#5a3a8a;font-weight:600;">then we can talk about</span> the messages.</p>
+        <p style="margin-top:10px;"><strong>Ask the whole group</strong><br>
+        <span style="color:#5a3a8a;font-weight:600;">OK, what does everyone think?</span><br>
+        <span style="color:#5a3a8a;font-weight:600;">How do we feel about these ideas?</span></p>
+        <p style="margin-top:10px;"><strong>Ask individuals</strong><br>
+        Lesley, <span style="color:#5a3a8a;font-weight:600;">what are your thoughts on</span> it?<br>
+        Rich, <span style="color:#5a3a8a;font-weight:600;">how do you feel about</span> Lesley's idea?</p>
+        <p style="margin-top:10px;"><strong>Ask people to build on other people's opinions</strong><br>
+        Rich hates the music – <span style="color:#5a3a8a;font-weight:600;">what are your thoughts on it</span>, Lesley?<br>
+        I think the guy's voice is a bit boring. <span style="color:#5a3a8a;font-weight:600;">What does everyone else think?</span></p>
+      </div>
+  
+      <h3>5. Complete the conversation with sentences from the Mediation Skill box.</h3>
+      <div class="box">
+        <p><strong>Janel:</strong> So, we've got two possible plans to fix the problem. <sup>1</sup><input class="gap" style="width:220px;" placeholder="..."> ?</p>
+        <p style="margin-top:8px;"><strong>Lesley:</strong> I think plan A is better, it's cheaper and easier to do.</p>
+        <p style="margin-top:8px;"><strong>Janel:</strong> <sup>2</sup><input class="gap" style="width:260px;" placeholder="..."> .</p>
+        <p style="margin-top:8px;"><strong>Rich:</strong> I think Lesley's right, it is easier.</p>
+        <p style="margin-top:8px;"><strong>Janel:</strong> OK, so Les and Rich think plan A is better. <sup>3</sup><input class="gap" style="width:220px;" placeholder="..."> ? Tom? Chris?</p>
+      </div>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        1 Can we share one idea each about (which plan is better / how we can fix it)<br>
+        2 How do we feel about these ideas? / OK, what does everyone think?<br>
+        3 What are your thoughts on it / How do you feel about that
+      </div>
+  
+      <h3>6. Look at the Scenario again. Make some notes about how you can make the message more friendly and less annoying.</h3>
+      <div class="speak-q">Think about: the tone, the content, the music, the wait time, the options.</div>
+  
+      <h3 style="background:var(--navy);color:#fff;padding:8px 14px;border-radius:6px;display:inline-block;margin-top:16px;">Mediate</h3>
+      <p style="margin-top:10px;"><strong>7. Discuss the issue from the Scenario and decide how you will improve the system.</strong></p>
+      <div class="speak-q">Use the phrases from the Mediation Skill box to organise the conversation and invite contributions from everyone.</div>
+
+    
+
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 1C · Don't Forget to …</footer>
+
+<script>
+function toggle(headEl){
+  headEl.parentElement.classList.toggle('collapsed');
+}
+function show(btn){
+  const ans=btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent=ans.classList.contains('show') ? 'Hide answers' : btn.textContent.replace('Hide','Show');
+}
+</script>
+</body>
+</html>

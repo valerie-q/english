@@ -1,1 +1,741 @@
-jj
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 10</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:          #33322b;
+      --ink-soft:     #504d35;
+      --paper:        #f9f7ee;
+      --paper-dark:   #eeead8;
+      --accent:       #cfbb23;
+      --accent-dark:  #a59837;
+      --accent-light: #fadd00;
+      --olive:        #7a733d;
+      --olive-dark:   #504d35;
+      --warm-grey:    #7a733d;
+      --border:       #ddd8b0;
+      --white:        #ffffff;
+      --phase-1:      #504d35;
+      --phase-2:      #7a733d;
+      --phase-3:      #a59837;
+      --phase-4:      #33322b;
+      --phase-5:      #cfbb23;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+
+    .header { background:var(--ink); color:var(--white); padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .header::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle,rgba(207,187,35,0.3) 0%,transparent 70%); }
+    .header::after  { content:''; position:absolute; bottom:-40px; left:20%; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(122,115,61,0.25) 0%,transparent 70%); }
+    .header-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,56px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .header h1 em { font-style:italic; color:var(--accent-light); }
+    .header-meta { display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); }
+    .meta-chip { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+    .meta-chip .dot { width:6px; height:6px; border-radius:50%; background:var(--accent-light); flex-shrink:0; }
+    .meta-chip strong { color:var(--white); }
+
+    .main { max-width:1100px; margin:0 auto; padding:0 40px 60px; }
+
+    .phase { margin-bottom:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .phase-header { padding:18px 24px; display:flex; align-items:center; gap:16px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:20px; font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase-num { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:4px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); line-height:1.2; }
+    .phase-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .phase-body { padding:0 24px 24px; }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-1 .phase-header{background:var(--phase-1)} .phase-2 .phase-header{background:var(--phase-2)}
+    .phase-3 .phase-header{background:var(--phase-3)} .phase-4 .phase-header{background:var(--phase-4)}
+    .phase-5 .phase-header{background:var(--phase-5); color:var(--ink);}
+    .phase-5 .phase-num { background:rgba(0,0,0,0.15); color:var(--ink); }
+    .phase-5 .phase-title { color:var(--ink); }
+    .phase-5 .phase-sub { color:rgba(0,0,0,0.55); }
+    .phase-5 .phase-header::after { color:rgba(0,0,0,0.4); }
+
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:16px; overflow:hidden; }
+    .activity-head { background:var(--paper); padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
+    .activity-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .activity-title { font-weight:600; font-size:14px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:var(--warm-grey); background:var(--paper-dark); padding:3px 8px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:16px; }
+
+    .note-box { background:#f5f2d8; border-left:3px solid var(--accent); border-radius:0 4px 4px 0; padding:12px 16px; margin:12px 0; font-size:14px; color:var(--ink-soft); line-height:1.6; }
+    .note-box em { font-style:italic; color:var(--ink); }
+
+    .vocab-table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
+    .vocab-table th { background:var(--ink); color:var(--white); padding:8px 12px; text-align:left; font-weight:500; font-size:12px; }
+    .vocab-table td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--paper); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+    .vocab-table .ans { color:var(--accent-dark); font-style:italic; font-size:13px; }
+
+    .phrase-box { background:var(--ink); color:var(--white); border-radius:4px; padding:16px 20px; margin:12px 0; }
+    .phrase-box .phrase-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent-light); margin-bottom:10px; }
+    .phrase-row { display:flex; align-items:baseline; gap:16px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .phrase-row:last-child { border-bottom:none; }
+    .phrase-en { font-size:15px; font-weight:500; flex:1; }
+    .phrase-de { font-size:13px; color:rgba(255,255,255,0.5); flex:1; }
+
+    .steps { list-style:none; margin:12px 0; }
+    .steps li { display:flex; gap:14px; padding:10px 0; border-bottom:1px dotted var(--border); font-size:14px; line-height:1.5; align-items:flex-start; }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--white); background:var(--accent-dark); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:12px 16px; margin:12px 0; font-size:13px; }
+    .answer-key .ak-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .answer-key ol { padding-left:20px; }
+    .answer-key ol li { padding:3px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--accent-dark); }
+
+    .word-box { background:var(--white); border:2px solid var(--accent); border-radius:6px; padding:12px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--accent-dark); width:100%; margin-bottom:4px; }
+    .word-chip { background:var(--accent-dark); color:var(--white); font-size:13px; font-weight:600; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .word-box.neutral { border-color:var(--border); }
+    .word-box.neutral .word-chip { background:var(--ink-soft); }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:11px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:5px 14px; border-radius:20px; cursor:pointer; margin-top:10px; transition:all 0.2s; }
+    .reveal-btn:hover { border-color:var(--accent-dark); color:var(--accent-dark); }
+    .reveal-content { display:none; margin-top:10px; }
+    .reveal-content.open { display:block; }
+
+    .grammar-box { border:2px solid var(--accent); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .grammar-box-header { background:var(--accent); padding:10px 16px; display:flex; align-items:center; justify-content:space-between; }
+    .grammar-box-header span { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); font-weight:600; }
+    .grammar-box-header .gram-ref { font-size:10px; opacity:0.65; font-weight:400; letter-spacing:1px; }
+    .grammar-box-body { background:var(--white); padding:16px; }
+    .grammar-row { display:flex; gap:12px; padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; align-items:baseline; }
+    .grammar-row:last-child { border-bottom:none; }
+    .grammar-plus  { color:#3a6e2a; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-minus { color:#b03020; font-weight:700; flex-shrink:0; width:16px; }
+    .grammar-q     { color:var(--accent-dark); font-weight:700; flex-shrink:0; width:16px; }
+
+    .email-block { border:1px solid var(--border); border-radius:4px; overflow:hidden; margin:12px 0; font-size:14px; }
+    .email-header { background:var(--paper-dark); padding:8px 14px; font-size:12px; color:var(--warm-grey); border-bottom:1px solid var(--border); display:flex; gap:8px; align-items:center; }
+    .email-header span { font-weight:600; color:var(--ink); }
+    .email-body { padding:14px; color:var(--ink-soft); line-height:1.8; }
+    .email-body p { margin-bottom:8px; }
+    .email-body p:last-child { margin-bottom:0; }
+    .email-body ul { margin:6px 0 8px 18px; }
+    .email-body ul li { padding:2px 0; }
+
+    .notes-block { background:#f5f2d8; border:2px solid var(--accent); border-radius:6px; padding:20px 24px; margin:12px 0; font-size:14px; }
+    .notes-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent-dark); margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+    .notes-section-title { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--olive-dark); font-weight:600; margin:12px 0 6px; }
+    .notes-block ul { list-style:disc; padding-left:20px; }
+    .notes-block ul li { padding:4px 0; line-height:2; }
+
+    input[type="text"] { border:none; border-bottom:1px solid var(--accent-dark); background:transparent; font-size:14px; color:var(--ink); padding:2px 4px; outline:none; font-family:'DM Sans',sans-serif; }
+
+    .src-bp  { background:#504d35; color:white; }
+    .src-you { background:#7a733d; color:white; }
+    .icon-warmup  { background:#f5f2d8; }
+    .icon-vocab   { background:#f0edcc; }
+    .icon-grammar { background:#f5f2d8; }
+    .icon-speaking{ background:#edeab8; }
+    .icon-wrap    { background:#f0edcc; }
+
+    p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:14px; color:var(--ink-soft); padding:6px 0; border-bottom:1px dotted var(--border); }
+    ol.exercise li:last-child { border-bottom:none; }
+
+    .student-tabs { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .student-tab-buttons { display:flex; background:var(--paper-dark); border-bottom:1px solid var(--border); }
+    .tab-btn { flex:1; padding:12px; border:none; background:transparent; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:600; font-size:14px; color:var(--warm-grey); transition:all 0.2s; border-bottom:3px solid transparent; }
+    .tab-btn:hover { background:rgba(0,0,0,0.03); }
+    .tab-btn.active { color:var(--ink); background:var(--white); border-bottom-color:var(--accent); }
+    .tab-content { display:none; padding:16px; }
+    .tab-content.active { display:block; }
+
+    .gram-two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    @media(max-width:640px){ .gram-two-col{grid-template-columns:1fr} .main{padding-left:16px;padding-right:16px} .header{padding-left:20px;padding-right:20px} }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>Lesson 10<br><em>New Office</em></h1>
+    <div class="header-meta">
+      <div class="meta-chip"><span class="dot"></span><strong>Level:</strong>&nbsp;A2</div>
+      <div class="meta-chip"><span class="dot"></span><strong>Textbook:</strong>&nbsp;BP A2 Unit 3.1 (video) + Unit 3.2 · Email phrases, Giving Instructions</div>
+    </div>
+  </div>
+</div>
+<br>
+
+<div class="main">
+
+  <!-- ══ PHASE 1 · VIDEO (carried over from Lesson 9) ══ -->
+  <div class="phase phase-1" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Video — Two Company Stories</div>
+        <div class="phase-sub">BP A2 p.29, ex.5A / 5B / 5C · Postmark &amp; The Cambridge Satchel Company</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- 5A -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎬</div>
+          <span class="activity-title">Ex. 5A — Watch the video introduction</span>
+          <span class="activity-src src-bp">BP p.29</span>
+        </div>
+        <div class="activity-body">
+          <p>Watch the video introduction. What do Postmark and The Cambridge Satchel Company sell?</p>
+          <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:6px;margin:12px 0;background:var(--paper-dark);display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--warm-grey);">
+              <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;"><iframe width="560" height="315" src="https://www.youtube.com/embed/i3hg0nqNdbA?si=jQfoWYMiOs4qReoM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+            </div>
+          </div>
+          <p>Your answer: <input type="text" style="width:320px;"></p>
+          <div class="note-box" style="margin-top:12px;">
+            <strong>annual turnover</strong> = the total sales of a business in one year
+          </div>
+        </div>
+      </div>
+
+      <!-- 5B -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">❓</div>
+          <span class="activity-title">Ex. 5B — Watch Part 1 of the video. Answer the questions.</span>
+          <span class="activity-src src-bp">BP p.29</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>Part 1 — Postmark</strong></p>
+          <ol class="exercise">
+            <li>Who started Postmark?</li>
+            <li>When did Postmark start?</li>
+            <li>What was the annual turnover in a) 2006? &nbsp; b) last year?</li>
+            <li>How many stores and employees does Postmark have?</li>
+            <li>When did Morgan arrive in the UK and what did she do?</li>
+            <li>When did Morgan join Postmark?</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 5C -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">✓</div>
+          <span class="activity-title">Ex. 5C — Watch Part 2 of the video. True or False?</span>
+          <span class="activity-src src-bp">BP p.29</span>
+        </div>
+        <div class="activity-body">
+          <p><strong>Part 2 — The Cambridge Satchel Company.</strong> Are the sentences true (T) or false (F)? Correct the false sentences.</p>
+          <ol class="exercise">
+            <li>At the beginning, The Cambridge Satchel Company only had three colours of bags. &nbsp; [ T / F ]</li>
+            <li>The company opened a factory in 2012. &nbsp; [ T / F ]</li>
+            <li>The company now has 150 employees. &nbsp; [ T / F ]</li>
+            <li>The company has two shops — one in Cambridge and one in London. &nbsp; [ T / F ]</li>
+            <li>Max is the manager of The Cambridge Satchel Company shop in London. &nbsp; [ T / F ]</li>
+            <li>Max designed the first shop for Cambridge Satchel Company. &nbsp; [ T / F ]</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /phase-1 -->
+
+
+  <!-- ══ PHASE 2 · LEAD-IN ══ -->
+  <div class="phase phase-2" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Lead-in — New Office</div>
+        <div class="phase-sub">BP A2 p.30, ex.1</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-speaking">💬</div>
+          <span class="activity-title">Ex. 1 — Answer the questions.</span>
+          <span class="activity-src src-bp">BP p.30</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>Do you work / study in the same place every day? Where?</li>
+            <li>How often do you have to change your work / study location?</li>
+            <li>Do you prefer to stay in one location, or do you like change?</li>
+          </ol>
+          <div class="note-box" style="margin-top:10px;">
+            <em>I prefer to have the same desk every day because …</em>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /phase-2 -->
+
+
+  <!-- ══ PHASE 3 · VOCABULARY — EMAIL PHRASES + GRAMMAR ══ -->
+  <div class="phase phase-3" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Vocabulary — Email Phrases &amp; Giving Instructions</div>
+        <div class="phase-sub">BP A2 p.30, ex.2A / 2B / 3 + Grammar reference p.106</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- ── Ex. 2A ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📧</div>
+          <span class="activity-title">Ex. 2A — Read the email. Answer the questions.</span>
+          <span class="activity-src src-bp">BP p.30</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise" style="margin-bottom:14px;">
+            <li>Who wrote the email?</li>
+            <li>What do employees need to do?</li>
+          </ol>
+
+          <div class="email-block">
+            <div class="email-header">
+              <span>Subject:</span>&nbsp;New workspaces
+              <span style="margin-left:auto;font-weight:400;font-size:18px;color:var(--border);">✉</span>
+            </div>
+            <div class="email-body">
+              <p><sup>1</sup><em>To all staff,</em></p>
+              <p>This week, the new Hong Kong project started and we are now in new teams. Next week, there are new arrangements for all teams, and new workspaces for everyone. In preparation for this on Friday, <sup>2</sup><em>please do the following:</em></p>
+              <ul>
+                <li>remove everything from your desk.</li>
+                <li>put all of your things in a box.</li>
+                <li>write your name on the box.</li>
+                <li>please don't move the box. That job is for the warehouse workers.</li>
+                <li>look at the plan attached and find your new workspace.</li>
+              </ul>
+              <p><sup>3</sup><em>Thank you for your help.</em> Have a great weekend!</p>
+              <p><sup>4</sup><em>Best wishes,</em><br>Beth Lowry<br>Office Manager</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Ex. 2B ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🔗</div>
+          <span class="activity-title">Ex. 2B — Match the phrases (a–d) with the phrases (1–4) in the email.</span>
+          <span class="activity-src src-bp">BP p.30</span>
+        </div>
+        <div class="activity-body">
+          <p>The phrases marked <sup>1</sup>–<sup>4</sup> in the email above have more formal or informal equivalents below. Write the correct number next to each phrase.</p>
+
+          <table class="vocab-table" style="max-width:500px;margin-top:12px;">
+            <thead><tr><th>Phrase</th><th style="width:80px;text-align:center;">Number (1–4)</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">a.&nbsp; Regards,</td><td style="text-align:center;"><input type="text" style="width:50px;text-align:center;"></td></tr>
+              <tr><td class="eng">b.&nbsp; Dear employees,</td><td style="text-align:center;"><input type="text" style="width:50px;text-align:center;"></td></tr>
+              <tr><td class="eng">c.&nbsp; We appreciate your cooperation.</td><td style="text-align:center;"><input type="text" style="width:50px;text-align:center;"></td></tr>
+              <tr><td class="eng">d.&nbsp; Please follow these instructions.</td><td style="text-align:center;"><input type="text" style="width:50px;text-align:center;"></td></tr>
+            </tbody>
+          </table>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev2b')">show answers ▾</button>
+          <div class="reveal-content" id="rev2b">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li>a → <strong>4</strong> &nbsp;(Best wishes)</li>
+                <li>b → <strong>1</strong> &nbsp;(To all staff)</li>
+                <li>c → <strong>3</strong> &nbsp;(Thank you for your help)</li>
+                <li>d → <strong>2</strong> &nbsp;(please do the following)</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- ── GRAMMAR BOX FROM LESSON (coursebook p.30) ── -->
+          <div class="grammar-box" style="margin-top:20px;">
+            <div class="grammar-box-header">
+              <span>Giving Instructions</span>
+              <span class="gram-ref">→ Grammar reference p.106</span>
+            </div>
+            <div class="grammar-box-body">
+              <div class="gram-two-col">
+                <div>
+                  <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#3a6e2a;font-weight:700;margin-bottom:8px;">What to do</p>
+                  <div class="grammar-row"><span class="grammar-plus">+</span><span><strong>Remove</strong> everything from your desk.</span></div>
+                  <div class="grammar-row"><span class="grammar-plus">+</span><span><strong>Put</strong> all your things in a box.</span></div>
+                  <div class="grammar-row"><span class="grammar-plus">+</span><span>Please <strong>use</strong> two boxes.</span></div>
+                </div>
+                <div>
+                  <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#b03020;font-weight:700;margin-bottom:8px;">What <em>not</em> to do</p>
+                  <div class="grammar-row"><span class="grammar-minus">−</span><span><strong>Don't put</strong> all your things in one box.</span></div>
+                  <div class="grammar-row"><span class="grammar-minus">−</span><span>Please <strong>don't move</strong> the box.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /2B activity -->
+
+      <!-- ── GRAMMAR REFERENCE p.106 ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">📐</div>
+          <span class="activity-title">Grammar Reference — Giving Instructions (Imperative)</span>
+          <span class="activity-src src-bp">BP p.106</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="grammar-box">
+            <div class="grammar-box-header">
+              <span>3.2 — Giving Instructions</span>
+            </div>
+            <div class="grammar-box-body">
+
+              <p style="margin-bottom:10px;">We use the <strong>imperative</strong> to give instructions or orders to one person or a group of people.</p>
+              <div class="note-box" style="font-style:italic;margin-bottom:10px;">
+                <strong>Turn</strong> on your computer, then <strong>enter</strong> the password.<br>
+                <strong>Go</strong> to reception and <strong>complete</strong> a form.
+              </div>
+              <p style="margin-bottom:6px;">We can add <em>please</em> to be more polite:</p>
+              <div class="note-box" style="font-style:italic;margin-bottom:16px;">
+                Please <strong>leave</strong> by 6.00 p.m. &nbsp;&nbsp;&nbsp; Please <strong>don't move</strong> the boxes.
+              </div>
+
+              <div class="gram-two-col">
+                <!-- Positive -->
+                <div>
+                  <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#3a6e2a;font-weight:700;margin-bottom:8px;">Positive</p>
+                  <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px;">Use the <strong>infinitive</strong> verb form (e.g. <em>remove</em>, not <em>removes</em>). Do <strong>not</strong> use subject pronouns (e.g. <em>you</em>, <em>they</em>).</p>
+                  <div class="grammar-row">
+                    <span class="grammar-plus">+</span>
+                    <span style="font-style:italic;color:#3a6e2a;"><strong>Come</strong> to the office. &nbsp;<span style="text-decoration:line-through;color:var(--warm-grey);">You come to the office.</span></span>
+                  </div>
+                  <div class="grammar-row"><span class="grammar-plus">+</span><span style="font-style:italic;color:#3a6e2a;"><strong>Remove</strong> everything from your desk.</span></div>
+                  <div class="grammar-row"><span class="grammar-plus">+</span><span style="font-style:italic;color:#3a6e2a;"><strong>Come</strong> to the office at 10 o'clock, please.</span></div>
+                  <div class="grammar-row"><span class="grammar-plus">+</span><span style="font-style:italic;color:#3a6e2a;">Please <strong>leave</strong> by 6 o'clock.</span></div>
+                </div>
+                <!-- Negative -->
+                <div>
+                  <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#b03020;font-weight:700;margin-bottom:8px;">Negative</p>
+                  <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px;">Use <strong>don't</strong> (not <em>doesn't</em>) for singular or plural.</p>
+                  <div class="grammar-row">
+                    <span class="grammar-minus">−</span>
+                    <span style="font-style:italic;color:#b03020;"><strong>Don't use</strong> this desk. &nbsp;<span style="text-decoration:line-through;color:var(--warm-grey);">Doesn't use this desk.</span></span>
+                  </div>
+                  <div class="grammar-row"><span class="grammar-minus">−</span><span style="font-style:italic;color:#b03020;"><strong>Don't change</strong> desks.</span></div>
+                  <div class="grammar-row"><span class="grammar-minus">−</span><span style="font-style:italic;color:#b03020;"><strong>Don't use</strong> this desk, please.</span></div>
+                  <div class="grammar-row"><span class="grammar-minus">−</span><span style="font-style:italic;color:#b03020;">Please <strong>don't move</strong> these boxes.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ex.1 from p.106 -->
+          <p style="margin-top:18px;"><strong>Ex. 1 — Correct the mistakes in the sentences.</strong></p>
+          <ol class="exercise" style="margin-top:8px;">
+            <li>Please to help me.<br><input type="text" style="width:360px;margin-top:5px;"></li>
+            <li>Comes in and sits down, please.<br><input type="text" style="width:360px;margin-top:5px;"></li>
+            <li>Don't using your mobile phone here, please.<br><input type="text" style="width:360px;margin-top:5px;"></li>
+            <li>You are choose a new chair.<br><input type="text" style="width:360px;margin-top:5px;"></li>
+            <li>Doesn't take photos here, please.<br><input type="text" style="width:360px;margin-top:5px;"></li>
+            <li>Writes your name on your desk.<br><input type="text" style="width:360px;margin-top:5px;"></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev-p106')">show answers ▾</button>
+          <div class="reveal-content" id="rev-p106">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li><strong>Please help me.</strong></li>
+                <li><strong>Come in and sit down, please.</strong></li>
+                <li><strong>Don't use your mobile phone here, please.</strong></li>
+                <li><strong>Choose a new chair.</strong></li>
+                <li><strong>Don't take photos here, please.</strong></li>
+                <li><strong>Write your name on your desk.</strong></li>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /grammar reference activity -->
+
+      <!-- ── Ex. 3 ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🔗</div>
+          <span class="activity-title">Ex. 3 — Match the sentence halves.</span>
+          <span class="activity-src src-bp">BP p.30</span>
+        </div>
+        <div class="activity-body">
+          <div style="display:flex;gap:40px;flex-wrap:wrap;margin-bottom:12px;">
+            <ol class="exercise" style="flex:1;min-width:200px;">
+              <li>Please arrive</li>
+              <li>Don't be</li>
+              <li>Find</li>
+              <li>Don't change</li>
+              <li>Put</li>
+              <li>Please join</li>
+            </ol>
+            <ul style="list-style:lower-alpha;padding-left:22px;flex:1;min-width:220px;">
+              <li style="font-size:14px;color:var(--ink-soft);padding:6px 0;border-bottom:1px dotted var(--border);">your things on your new desk.</li>
+              <li style="font-size:14px;color:var(--ink-soft);padding:6px 0;border-bottom:1px dotted var(--border);">at the new office at 8.00 a.m. on Monday morning.</li>
+              <li style="font-size:14px;color:var(--ink-soft);padding:6px 0;border-bottom:1px dotted var(--border);">your new workspace on the office plan.</li>
+              <li style="font-size:14px;color:var(--ink-soft);padding:6px 0;border-bottom:1px dotted var(--border);">the lunch party at 12.30 p.m.</li>
+              <li style="font-size:14px;color:var(--ink-soft);padding:6px 0;border-bottom:1px dotted var(--border);">desks with other employees, please.</li>
+              <li style="font-size:14px;color:var(--ink-soft);padding:6px 0;">late.</li>
+            </ul>
+          </div>
+          <p style="margin-top:6px;">Answers: &nbsp;
+            1&nbsp;<input type="text" style="width:36px;text-align:center;">
+            2&nbsp;<input type="text" style="width:36px;text-align:center;">
+            3&nbsp;<input type="text" style="width:36px;text-align:center;">
+            4&nbsp;<input type="text" style="width:36px;text-align:center;">
+            5&nbsp;<input type="text" style="width:36px;text-align:center;">
+            6&nbsp;<input type="text" style="width:36px;text-align:center;">
+          </p>
+          <button class="reveal-btn" onclick="toggleReveal('rev3')">show answers ▾</button>
+          <div class="reveal-content" id="rev3">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li>1 → <strong>b</strong> &nbsp; Please arrive <em>at the new office at 8.00 a.m. on Monday morning.</em></li>
+                <li>2 → <strong>f</strong> &nbsp; Don't be <em>late.</em></li>
+                <li>3 → <strong>c</strong> &nbsp; Find <em>your new workspace on the office plan.</em></li>
+                <li>4 → <strong>e</strong> &nbsp; Don't change <em>desks with other employees, please.</em></li>
+                <li>5 → <strong>a</strong> &nbsp; Put <em>your things on your new desk.</em></li>
+                <li>6 → <strong>d</strong> &nbsp; Please join <em>the lunch party at 12.30 p.m.</em></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div><!-- /ex.3 activity -->
+
+    </div>
+  </div><!-- /phase-3 -->
+
+
+  <!-- ══ PHASE 4 · READING &amp; LISTENING ══ -->
+  <div class="phase phase-4" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Reading &amp; Listening — Meeting Room Rules / Office Move</div>
+        <div class="phase-sub">BP A2 p.31, ex.4 / 5A / 5B</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- ── Ex. 4 ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📧</div>
+          <span class="activity-title">Ex. 4 — Complete the instructions with the correct words / phrases from the box.</span>
+          <span class="activity-src src-bp">BP p.31</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box">
+            <div class="word-box-label">Words &amp; phrases</div>
+            <span class="word-chip">dear all</span>
+            <span class="word-chip">don't have</span>
+            <span class="word-chip">don't use</span>
+            <span class="word-chip">for your cooperation</span>
+            <span class="word-chip">go</span>
+            <span class="word-chip">make</span>
+            <span class="word-chip">regards</span>
+            <span class="word-chip">talk</span>
+          </div>
+
+          <div class="email-block" style="margin-top:12px;">
+            <div class="email-header">
+              <span>Subject:</span>&nbsp;Meeting room rules
+              <span style="margin-left:auto;font-weight:400;font-size:18px;color:var(--border);">✉</span>
+            </div>
+            <div class="email-body" style="line-height:2.2;">
+              <p><sup>1</sup><input type="text" style="width:110px;">,</p>
+              <p>We love the new offices, but we had some problems last week with meeting rooms. Please <sup>2</sup><input type="text" style="width:110px;"> a meeting room without a reservation. When you need a room, please <sup>3</sup><input type="text" style="width:70px;"> to Agnes and <sup>4</sup><input type="text" style="width:70px;"> a reservation. Please <sup>5</sup><input type="text" style="width:100px;"> lunch in meeting rooms. <sup>6</sup><input type="text" style="width:50px;"> to the company canteen for food.</p>
+              <p>Thank you <sup>7</sup><input type="text" style="width:180px;">.</p>
+              <p><sup>8</sup><input type="text" style="width:90px;">,<br>
+              Denise Woo<br>
+              Admin Assistant</p>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev4')">show answers ▾</button>
+          <div class="reveal-content" id="rev4">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li><strong>Dear all</strong></li>
+                <li><strong>don't have</strong></li>
+                <li><strong>talk</strong></li>
+                <li><strong>make</strong></li>
+                <li><strong>don't use</strong></li>
+                <li><strong>Go</strong></li>
+                <li><strong>for your cooperation</strong></li>
+                <li><strong>Regards</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div><!-- /ex.4 -->
+
+      <!-- ── Ex. 5A ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">🎧</div>
+          <span class="activity-title">Ex. 5A — Listen to the conversation and answer the questions.</span>
+          <span class="activity-src src-bp">BP p.31 · 3.01</span>
+        </div>
+        <div class="activity-body">
+
+            <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004891&color=%23f2d5d6&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_3_01-6" title="BP_A2_CB_Tk_3_01" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_3_01</a></div>
+
+          <ol class="exercise">
+            <li>Why does the company need to move?</li>
+            <li>What event is on Friday evening?</li>
+          </ol>
+        </div>
+      </div><!-- /ex.5A -->
+
+      <!-- ── Ex. 5B ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-vocab">📝</div>
+          <span class="activity-title">Ex. 5B — Listen again. Complete the notes.</span>
+          <span class="activity-src src-bp">BP p.31 · 3.01</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="notes-block">
+            <div class="notes-label">Notes</div>
+            <p style="margin-bottom:14px;line-height:2.2;">
+              Company hired <input type="text" style="width:60px;"> new employees last month, need to move to <input type="text" style="width:130px;">, <input type="text" style="width:110px;"> offices.
+            </p>
+
+            <div class="notes-section-title">Thursday:</div>
+            <ul>
+              <li>Everyone in the office: <input type="text" style="width:80px;"> a.m.</li>
+              <li>Desk items in boxes. Boxes stay in <input type="text" style="width:130px;">.</li>
+              <li>No staff in office after <input type="text" style="width:90px;">.</li>
+            </ul>
+
+            <div class="notes-section-title" style="margin-top:14px;">Friday:</div>
+            <ul>
+              <li>Morning — no work. Arrival time — <input type="text" style="width:110px;">.</li>
+              <li>Employees find desks — don't <input type="text" style="width:110px;"> desks!</li>
+              <li>Items on new desks.</li>
+              <li><input type="text" style="width:130px;"> — party for new office.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div><!-- /ex.5B -->
+
+    </div>
+  </div><!-- /phase-4 -->
+
+
+  <!-- ══ PHASE 5 · WRITING ══ -->
+  <div class="phase phase-5" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Writing — Instructions for the Office Move</div>
+        <div class="phase-sub">BP A2 p.31, ex.6A / 6B</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <!-- ── Ex. 6A ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-grammar">✍️</div>
+          <span class="activity-title">Ex. 6A — Write instructions about the notes in Ex. 5A. Use the words and phrases in the box.</span>
+          <span class="activity-src src-bp">BP p.31</span>
+        </div>
+        <div class="activity-body">
+          <div class="word-box">
+            <div class="word-box-label">Words to use</div>
+            <span class="word-chip">arrive</span>
+            <span class="word-chip">find (×2)</span>
+            <span class="word-chip">join</span>
+            <span class="word-chip">not change</span>
+            <span class="word-chip">not come</span>
+            <span class="word-chip">not stay</span>
+            <span class="word-chip">put</span>
+          </div>
+          <ol class="exercise" style="margin-top:12px;">
+            <li>Thursday: Please <input type="text" style="width:160px;"> at the office by 9.00 a.m.</li>
+            <li><input type="text" style="width:60px;"> all desk items in boxes.</li>
+            <li>Thursday: <input type="text" style="width:180px;"> in the office after 12.30 p.m.</li>
+            <li><input type="text" style="width:180px;"> to work on Friday morning.</li>
+            <li><input type="text" style="width:100px;"> your new desk and please <input type="text" style="width:130px;"> it!</li>
+            <li>You can <input type="text" style="width:110px;"> your office items on your new desk.</li>
+            <li>Please <input type="text" style="width:70px;"> us for a celebration at 6.00 p.m.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev6a')">show answers ▾</button>
+          <div class="reveal-content" id="rev6a">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li>Thursday: Please <strong>arrive</strong> at the office by 9.00 a.m.</li>
+                <li><strong>Put</strong> all desk items in boxes.</li>
+                <li>Thursday: <strong>Don't stay</strong> in the office after 12.30 p.m.</li>
+                <li><strong>Don't come</strong> to work on Friday morning.</li>
+                <li><strong>Find</strong> your new desk and please <strong>don't change</strong> it!</li>
+                <li>You can <strong>find</strong> your office items on your new desk.</li>
+                <li>Please <strong>join</strong> us for a celebration at 6.00 p.m.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div><!-- /ex.6A -->
+
+      <!-- ── Ex. 6B ── -->
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon icon-wrap">📨</div>
+          <span class="activity-title">Ex. 6B — Write an email giving instructions for the office move in Exercise 5B.</span>
+          <span class="activity-src src-bp">BP p.31</span>
+        </div>
+        <div class="activity-body">
+          <p>Use your notes from Exercise 5B. Write an email to all staff about the move. Use email phrases from Exercise 2B and imperative instructions.</p>
+
+          <div class="email-block" style="margin-top:14px;">
+            <div class="email-header">
+              <span>Subject:</span>&nbsp;<input type="text" style="width:260px;border:none;background:transparent;font-size:12px;color:var(--ink);" placeholder="type subject line here">
+              <span style="margin-left:auto;font-weight:400;font-size:18px;color:var(--border);">✉</span>
+            </div>
+            <div class="email-body" style="padding:0;">
+              <textarea style="width:100%;min-height:240px;border:none;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:transparent;resize:vertical;outline:none;line-height:1.9;display:block;" placeholder="Dear all,&#10;&#10;...&#10;&#10;Best wishes,&#10;[Your name]"></textarea>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /ex.6B -->
+
+    </div>
+  </div><!-- /phase-5 -->
+
+</div><!-- /main -->
+
+<script>
+function togglePhase(id){const el=document.getElementById(id);el.classList.toggle('collapsed');}
+function toggleReveal(id){const el=document.getElementById(id);el.classList.toggle('open');const btn=el.previousElementSibling;btn.textContent=el.classList.contains('open')?'hide answers ▴':'show answers ▾';}
+function switchTab(btn,groupId,tab){const wrapper=btn.closest('.student-tabs');wrapper.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));wrapper.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));btn.classList.add('active');document.getElementById(groupId+'-'+tab).classList.add('active');}
+</script>
+</body>
+</html>

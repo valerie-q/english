@@ -1,1 +1,838 @@
-jj
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1C — Grammar & Speaking — Sofia</title>
+<style>
+:root{
+  --navy:#1d2d50;
+  --navy-light:#2a3d6a;
+  --teal:#0097b3;
+  --teal-dark:#006f85;
+  --teal-light:#e0f5f8;
+  --teal-border:#80d0e0;
+  --amber:#c8700a;
+  --amber-light:#fef3e8;
+  --green:#2a8a5c;
+  --green-light:#e8f5ee;
+  --green-border:#80c8a0;
+  --text:#1a1f2e;
+  --muted:#5a6070;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --border:#d8dde8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+
+/* ── HEADER ─────────────────────────────────────── */
+header{background:var(--navy);border-bottom:4px solid var(--teal);}
+.header-inner{
+  max-width:1280px;margin:0 auto;padding:26px 40px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;gap:20px;
+}
+.header-unit{
+  background:var(--teal);color:white;font-weight:800;
+  font-size:2rem;padding:10px 20px;border-radius:6px;line-height:1;
+}
+.header-text h1{color:#fff;font-size:1.7rem;font-weight:700;margin-bottom:6px;}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.htag-g{background:rgba(0,151,179,0.25);color:#00c0df;border:1px solid rgba(0,151,179,0.4);}
+.htag-v{background:rgba(200,112,10,0.2);color:#f08030;border:1px solid rgba(200,112,10,0.3);}
+.htag-s{background:rgba(42,138,92,0.2);color:#3aaa70;border:1px solid rgba(42,138,92,0.3);}
+.header-badge{
+  text-align:right;color:#90a8c8;font-size:0.8rem;line-height:1.5;
+}
+
+/* ── WRAP ────────────────────────────────────────── */
+.wrap{max-width:1280px;margin:0 auto;padding:28px 40px;}
+
+/* ── PHASE SHELL ─────────────────────────────────── */
+.phase{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;margin-top:22px;overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.07);
+}
+.phase-head{
+  cursor:pointer;display:flex;align-items:stretch;user-select:none;
+}
+.phase-accent{
+  width:6px;flex-shrink:0;
+}
+.phase-num{
+  background:var(--navy);color:white;font-weight:800;
+  font-size:1rem;padding:14px 18px;
+  display:flex;align-items:center;justify-content:center;
+  min-width:52px;
+}
+.phase-title-row{
+  flex:1;padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.phase-title-row h2{font-size:1rem;font-weight:700;color:var(--navy);margin:0;}
+.badge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;}
+.badge-r{background:var(--amber-light);color:var(--amber);}
+.badge-g{background:var(--teal-light);color:var(--teal-dark);}
+.badge-s{background:var(--green-light);color:var(--green);}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:28px 32px 32px;}
+.phase.collapsed .phase-body{display:none;}
+
+.rev .phase-accent{background:var(--amber);}
+.rev .phase-num{background:var(--amber);}
+.gram .phase-accent{background:var(--teal);}
+.gram .phase-num{background:var(--teal-dark);}
+.spk .phase-accent{background:var(--green);}
+.spk .phase-num{background:var(--green);}
+
+/* ── SECTION LABELS ──────────────────────────────── */
+.sec-label{
+  display:inline-block;background:var(--navy);color:white;
+  font-size:0.68rem;font-weight:700;
+  padding:4px 12px;border-radius:4px;
+  text-transform:uppercase;letter-spacing:0.5px;
+  margin:20px 0 10px;
+}
+.sec-label.teal{background:var(--teal-dark);}
+.sec-label.green{background:var(--green);}
+
+/* ── WORDBOX ─────────────────────────────────────── */
+.wordbox{
+  display:flex;flex-wrap:wrap;gap:8px;
+  padding:14px 16px;
+  background:var(--teal-light);border:1px solid var(--teal-border);
+  border-radius:8px;margin:12px 0;
+}
+.chip{
+  background:white;border:1px solid var(--teal);
+  color:var(--teal-dark);padding:4px 12px;
+  border-radius:20px;font-size:0.87rem;font-weight:600;
+}
+
+/* ── BASIC ELEMENTS ──────────────────────────────── */
+.box{
+  background:#f8f9fc;border:1px solid var(--border);
+  border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;
+}
+input.gap{
+  background:#eef6f8;border:none;
+  border-bottom:2px dotted var(--teal);
+  color:var(--text);font-size:1rem;
+  width:120px;padding:2px 4px;font-family:inherit;
+}
+input.gap:focus{outline:none;border-bottom:2px solid var(--teal);}
+.reveal-btn{
+  background:var(--teal);border:none;color:#fff;
+  padding:7px 20px;border-radius:6px;cursor:pointer;
+  font-size:0.85rem;font-weight:600;margin:12px 0;
+}
+.reveal-btn:hover{background:var(--teal-dark);}
+.answer{
+  display:none;background:var(--green-light);
+  border-left:3px solid var(--green);
+  padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;
+}
+.answer.show{display:block;}
+.speak-q{
+  background:var(--green-light);border-left:3px solid var(--green);
+  padding:10px 14px;margin:8px 0;border-radius:4px;
+}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+audio{width:100%;margin:8px 0;border-radius:6px;}
+
+/* ── PHONE SECTION LABELS ────────────────────────── */
+.ph-label{
+  background:var(--navy);color:white;
+  font-size:0.68rem;font-weight:700;
+  padding:4px 12px;border-radius:4px;
+  display:block;margin:14px 0 6px;
+  text-transform:uppercase;letter-spacing:0.4px;
+  width:fit-content;
+}
+
+/* ═══════════════════════════════════════════════════
+   REVISION LAYOUT
+   ─ wordbox strip (full)
+   ─ left exercises | right exercises
+   ─ answer strip (full)
+   ═══════════════════════════════════════════════════ */
+.rev-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto auto;
+  gap:16px 24px;
+  grid-template-areas:
+    "words  words"
+    "left   right"
+    "btn    ans";
+  margin-top:14px;
+}
+.rev-words{grid-area:words;}
+.rev-left{grid-area:left;}
+.rev-right{grid-area:right;}
+.rev-btn{grid-area:btn;align-self:start;}
+.rev-ans{grid-area:ans;}
+
+/* ═══════════════════════════════════════════════════
+   GRAMMAR REFERENCE LAYOUT
+   ─ direct (narrow) | phone phrases (wide, tall)
+   ─ indirect (narrow, continues below)
+   ═══════════════════════════════════════════════════ */
+.gram-ref-grid{
+  display:grid;
+  grid-template-columns:5fr 7fr;
+  grid-template-rows:auto auto;
+  gap:16px;
+  grid-template-areas:
+    "direct   phone"
+    "indirect phone";
+  margin:14px 0 20px;
+}
+.gram-direct{grid-area:direct;}
+.gram-indirect{grid-area:indirect;}
+.gram-phone{grid-area:phone;}
+
+.ref-card{
+  background:var(--teal-light);border:1px solid var(--teal-border);
+  border-radius:10px;padding:16px 18px;font-size:0.93rem;height:100%;
+}
+.ref-card h4{
+  color:var(--teal-dark);font-size:0.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.5px;margin:0 0 10px;
+}
+.ex-phrase{color:var(--teal-dark);font-weight:600;}
+.note-small{color:var(--muted);font-style:italic;font-size:0.87rem;margin-top:8px;}
+.ref-card-big{
+  background:var(--navy);color:#c8ddf5;
+  border-radius:10px;padding:20px 22px;font-size:0.9rem;
+  line-height:1.65;height:100%;
+}
+.ref-card-big strong{color:#ffffff;}
+.ref-card-big .ph-sub{
+  background:var(--teal);color:white;
+  font-size:0.65rem;font-weight:700;padding:3px 10px;
+  border-radius:3px;display:inline-block;
+  margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.4px;
+}
+
+/* ═══════════════════════════════════════════════════
+   PRACTICE 1 — match layout
+   two equal boxes side by side
+   ═══════════════════════════════════════════════════ */
+.p1-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0;}
+
+/* ═══════════════════════════════════════════════════
+   PRACTICE 2 — two column list
+   ═══════════════════════════════════════════════════ */
+.p2-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:10px 0;}
+
+/* ═══════════════════════════════════════════════════
+   PRACTICE 3 — dialogue layout
+   word strip + two dialogue boxes
+   ═══════════════════════════════════════════════════ */
+.p3-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:16px;
+  grid-template-areas:
+    "w1 w2"
+    "d1 d2";
+  margin:10px 0;
+}
+.p3-w1{grid-area:w1;}
+.p3-w2{grid-area:w2;}
+.p3-d1{grid-area:d1;}
+.p3-d2{grid-area:d2;}
+.dial-box{
+  background:#f8f9fc;border:1px solid var(--border);
+  border-radius:8px;padding:14px 16px;font-size:0.93rem;
+}
+.dial-box p{margin:8px 0;}
+.spk-a{color:var(--navy);font-weight:700;}
+.spk-b{color:var(--teal-dark);font-weight:700;}
+
+/* ═══════════════════════════════════════════════════
+   SPEAKING LAYOUT
+   ─ [img small] [instruction text]
+   ─ [future skills box — wide]
+   ─ three vm-cards in row
+   ─ dialogue full
+   ═══════════════════════════════════════════════════ */
+.spk-intro{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:20px;align-items:start;
+  margin-bottom:20px;
+}
+.spk-img{
+  background:#e8ecf4;border:2px dashed var(--border);
+  border-radius:8px;height:160px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:0.82rem;text-align:center;
+}
+.spk-main{
+  display:grid;
+  grid-template-columns:2fr 3fr;
+  gap:20px;align-items:start;
+  margin:16px 0;
+}
+.future-skills{
+  background:#e6f4f4;border:2px solid #5ba8a8;
+  border-radius:10px;padding:16px 18px;
+}
+.fs-label{color:#2a7070;font-weight:700;font-size:0.72rem;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:2px;}
+.future-skills h4{color:#1a5050;margin:2px 0 10px;font-size:1rem;font-weight:700;}
+.spk-note{
+  background:var(--green-light);border:1px solid var(--green-border);
+  border-radius:10px;padding:16px 18px;
+}
+.spk-note p{font-size:0.93rem;}
+
+.vm-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0;}
+.vm-card{
+  background:#f8f9fc;border:1px solid var(--border);
+  border-radius:8px;padding:16px;font-size:0.93rem;
+  border-top:3px solid var(--teal);
+}
+.vm-num{
+  background:var(--teal);color:white;font-weight:800;
+  width:24px;height:24px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:0.78rem;margin-right:6px;vertical-align:middle;
+}
+.vm-details{color:var(--muted);font-size:0.86rem;margin-top:8px;}
+
+.dial-full{
+  background:#f8f9fc;border:1px solid var(--border);
+  border-radius:8px;padding:14px 18px;margin-top:16px;
+  font-size:0.95rem;
+}
+.dial-full p{margin:6px 0;}
+
+/* responsive */
+@media(max-width:900px){
+  .gram-ref-grid,.p1-grid,.p2-grid,.p3-grid,
+  .spk-intro,.spk-main,.vm-grid,.rev-grid{
+    grid-template-columns:1fr;
+    grid-template-areas:none;
+  }
+  .gram-phone,.rev-words,.rev-btn,.rev-ans{grid-area:auto;}
+  .wrap,.header-inner{padding:16px 18px;}
+}
+
+footer{
+  text-align:center;color:var(--muted);font-size:0.8rem;
+  padding:20px 40px;border-top:1px solid var(--border);
+  max-width:1280px;margin:40px auto 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="header-unit">1C</div>
+    <div class="header-text">
+      <h1>Don't Forget to …</h1>
+      <div class="header-tags">
+        <span class="htag htag-v">Revision: phrasal verbs</span>
+        <span class="htag htag-g">Grammar: phone messages</span>
+        <span class="htag htag-s">Speaking: voicemail</span>
+      </div>
+    </div>
+    <div class="header-badge">Speakout B1+<br>Unit 1C</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+    <div style="background:#fff8ea;border:1px solid var(--amber-border);border-radius:10px;padding:20px 24px;margin-bottom:20px;">
+        <p style="font-weight:700;color:var(--amber);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Warm-up — Tell the story</p>
+        <p style="margin-bottom:16px;">Look at each set of emojis and make up a short story. Use past tenses.</p>
+      
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+      
+          <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <div style="font-size:1.8rem;letter-spacing:6px;margin-bottom:10px;">🚗 🌧️ 📞 🏥 😅</div>
+            <textarea style="width:100%;height:80px;border:1px solid var(--border);border-radius:6px;padding:8px;font-family:inherit;font-size:0.88rem;resize:none;background:#f8f9fc;" placeholder="What happened?"></textarea>
+          </div>
+      
+          <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <div style="font-size:1.8rem;letter-spacing:6px;margin-bottom:10px;">✈️ 🧳 ❌ 😱 🛏️</div>
+            <textarea style="width:100%;height:80px;border:1px solid var(--border);border-radius:6px;padding:8px;font-family:inherit;font-size:0.88rem;resize:none;background:#f8f9fc;" placeholder="What happened?"></textarea>
+          </div>
+      
+          <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <div style="font-size:1.8rem;letter-spacing:6px;margin-bottom:10px;">🎂 🕯️ 🔥 💧 😂</div>
+            <textarea style="width:100%;height:80px;border:1px solid var(--border);border-radius:6px;padding:8px;font-family:inherit;font-size:0.88rem;resize:none;background:#f8f9fc;" placeholder="What happened?"></textarea>
+          </div>
+      
+        </div>
+      </div>
+<!-- ════════════════════════════════════════════════════════
+     REVISION
+     ════════════════════════════════════════════════════════ -->
+<div class="phase rev">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-accent"></div>
+    <div class="phase-num">R</div>
+    <div class="phase-title-row">
+      <h2>Revision — Phrasal Verbs: Housework</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-r">warm-up</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <p>Complete the sentences with the correct form of a phrasal verb from the box.</p>
+
+    <div class="rev-grid">
+      <div class="rev-words">
+        <div class="wordbox">
+          <span class="chip">hang up</span><span class="chip">tidy up</span><span class="chip">pick up</span>
+          <span class="chip">lock up</span><span class="chip">throw out</span><span class="chip">go over</span>
+          <span class="chip">take out</span><span class="chip">turn up</span>
+        </div>
+      </div>
+      <div class="rev-left">
+        <ol>
+          <li>Before we start, can we <input class="gap" placeholder="..."> the main points so everyone is clear?</li>
+          <li>That milk's been in the fridge for two weeks — you should <input class="gap" placeholder="..."> it.</li>
+          <li>I'm stuck at work. Could you <input class="gap" placeholder="..."> the kids from school today?</li>
+          <li>The music is too quiet in here. Can you <input class="gap" placeholder="..."> it?</li>
+        </ol>
+      </div>
+      <div class="rev-right">
+        <ol start="5">
+          <li>Your room is a mess. Please <input class="gap" placeholder="..."> it before your friends arrive.</li>
+          <li>Don't forget to <input class="gap" placeholder="..."> the house when you leave.</li>
+          <li>All your clothes are on the floor again! Can you <input class="gap" placeholder="..."> them please?</li>
+          <li>The bin is full. Who's going to <input class="gap" placeholder="..."> the rubbish?</li>
+        </ol>
+      </div>
+      <div class="rev-btn">
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 go over &nbsp;·&nbsp; 2 throw out &nbsp;·&nbsp; 3 pick up &nbsp;·&nbsp; 4 turn up<br>
+          5 tidy up &nbsp;·&nbsp; 6 lock up &nbsp;·&nbsp; 7 hang up &nbsp;·&nbsp; 8 take out
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     GRAMMAR BANK
+     ════════════════════════════════════════════════════════ -->
+<div class="phase gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-accent"></div>
+    <div class="phase-num">1</div>
+    <div class="phase-title-row">
+      <h2>Grammar Bank 1C — How to … Leave Phone Messages</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-g">grammar</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <!-- REFERENCE ─────────────────────────────────────── -->
+    <div class="gram-ref-grid">
+
+      <div class="gram-direct">
+        <div class="ref-card">
+          <h4>Direct requests</h4>
+          <p>We can make a direct request by using <strong>Can you/Could you … ?</strong> or <strong>Will you/Would you … , please?</strong></p>
+          <p class="ex-phrase" style="margin-top:10px;">Can/Could you call me back?<br>
+          Will/Would you (look for it/pick some up), please?</p>
+        </div>
+      </div>
+
+      <div class="gram-indirect">
+        <div class="ref-card">
+          <h4>Indirect requests</h4>
+          <p>We can soften a request by using phrases like:</p>
+          <p style="margin-top:8px;"><strong>Do you think you could/you'll be able to … ?</strong><br>
+          <strong>I wonder if you could/would …</strong><br>
+          <strong>I wonder if you'd mind …</strong> + <em>-ing</em></p>
+          <p class="ex-phrase" style="margin-top:10px;">Do you think you could have a look at it for me?<br>
+          I wonder if you'd help me set the alarm.<br>
+          I wonder if you'd mind helping me lock up.</p>
+          <p class="note-small">Word order stays the same as affirmative statements.<br>
+          Do you think you could — NOT <s>Do you think could you</s></p>
+        </div>
+      </div>
+
+      <div class="gram-phone">
+        <div class="ref-card-big">
+          <p style="font-weight:600;color:#ffffff;font-size:0.88rem;margin-bottom:4px;">Leaving a phone message</p>
+          <p style="color:#90b8d8;font-size:0.87rem;margin-bottom:12px;"><strong style="color:white;">It's Max speaking.</strong> / <strong style="color:white;">It's Max here.</strong> / <strong style="color:white;">This is Max speaking/calling about …</strong> &nbsp; NOT <s style="color:#607090;">I'm Max.</s></p>
+
+          <span class="ph-sub">Recorded message</span>
+          <p><strong>You've reached</strong> (Riccardo's) mobile.<br>
+          <strong>Please leave a message</strong> and <strong>we'll get back to you</strong>.<br>
+          <strong>Thank you for calling</strong> (Dr Singh's office). <strong>Our hours are</strong> (8 a.m. to 6 p.m.).<br>
+          <strong>I can't take your call right now, but if you leave a message with your name and number, I'll get back to you as soon as I can.</strong></p>
+
+          <span class="ph-sub">Starting a message</span>
+          <p><strong>It's</strong> (John) <strong>here.</strong><br>
+          <strong>This is</strong> (Marcelo). <strong>I'm calling about …</strong><br>
+          <strong>I'm calling to</strong> (ask for/request) …<br>
+          <strong>I was ringing to</strong> (see if/find out if) …</p>
+
+          <span class="ph-sub">Making a polite request</span>
+          <p><strong>Can you/Could you</strong> (call me back/check) … ?<br>
+          <strong>Will you/Would you</strong> (look for it/explain …), please?<br>
+          <strong>Do you think you could</strong> (have a look at it for me)?<br>
+          <strong>I wonder if you would mind</strong> (having a look/helping me) … ?</p>
+
+          <span class="ph-sub">Giving detailed information</span>
+          <p><strong>You'll need to</strong> (open the … /speak to …).<br>
+          <strong>It's the one that's</strong> (sitting on the desk).<br>
+          <strong>You'll find it</strong> (on the table next to the …).</p>
+
+          <span class="ph-sub">Asking for further actions</span>
+          <p><strong>Can you call me back?</strong><br>
+          <strong>You can reach me on</strong> (this number/0775867435).</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PRACTICE 1 ─────────────────────────────────────── -->
+    <span class="sec-label teal">Practice 1 — Match 1–6 with a–f</span>
+    <div class="p1-grid">
+      <div class="box">
+        <p><strong>1</strong> Hi you've reached Miguel's number. I can't take your call right now, but</p>
+        <p><strong>2</strong> Thank you for calling ElectroStars Ltd. Our hours</p>
+        <p><strong>3</strong> Hi, it's Ivan here.</p>
+        <p><strong>4</strong> Hi, this is Pete Sciberras. I'm calling about</p>
+        <p><strong>5</strong> Can you call</p>
+        <p><strong>6</strong> You can</p>
+      </div>
+      <div class="box">
+        <p><strong>a</strong> me back on this number?</p>
+        <p><strong>b</strong> I'm calling about tomorrow night.</p>
+        <p><strong>c</strong> are 9 a.m. to 5 p.m. Monday to Friday.</p>
+        <p><strong>d</strong> reach me on 0886537564. Thanks.</p>
+        <p><strong>e</strong> please leave a message and I'll get back to you.</p>
+        <p><strong>f</strong> my appointment on Monday.</p>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1–e &nbsp;·&nbsp; 2–c &nbsp;·&nbsp; 3–b &nbsp;·&nbsp; 4–f &nbsp;·&nbsp; 5–a &nbsp;·&nbsp; 6–d</div>
+
+    <!-- PRACTICE 2 ─────────────────────────────────────── -->
+    <span class="sec-label teal" style="margin-top:24px;">Practice 2 — Choose the correct words</span>
+    <div class="p2-grid">
+      <ol>
+        <li>Hi Sara. Could you please <strong>arrange / arranging</strong> for the plumber to come and fix the kitchen sink?</li>
+        <li><strong>Would you / You would</strong> be able to help me tidy up the sitting room?</li>
+        <li>Do you think <strong>could you / you could</strong> be here by 7?</li>
+        <li>I wonder if you would be able to <strong>look / looking</strong> after Sammy for me?</li>
+      </ol>
+      <ol start="5">
+        <li><strong>Would / Could</strong> we try to finish the meeting on time?</li>
+        <li>I wonder if you would mind <strong>go / going</strong> to the shop to pick up some sandwiches.</li>
+        <li><strong>Will you / Do you think you will</strong> please hang up your clothes before you leave?</li>
+        <li>I wonder if you would mind <strong>to stay / staying</strong> behind to help me clear up afterwards?</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 arrange &nbsp;·&nbsp; 2 Would you &nbsp;·&nbsp; 3 you could &nbsp;·&nbsp; 4 look &nbsp;·&nbsp; 5 Could &nbsp;·&nbsp; 6 going &nbsp;·&nbsp; 7 Will you &nbsp;·&nbsp; 8 staying</div>
+
+    <!-- PRACTICE 3 ─────────────────────────────────────── -->
+    <span class="sec-label teal" style="margin-top:24px;">Practice 3 — Complete the phone messages</span>
+    <div class="p3-grid">
+      <div class="p3-w1">
+        <div class="wordbox">
+          <span class="chip">can</span><span class="chip">here</span><span class="chip">message</span>
+          <span class="chip">reached</span><span class="chip">think</span><span class="chip">this</span><span class="chip">to</span>
+        </div>
+      </div>
+      <div class="p3-w2">
+        <div class="wordbox">
+          <span class="chip">could</span><span class="chip">get</span><span class="chip">it's</span>
+          <span class="chip">ringing</span><span class="chip">take</span><span class="chip">wonder</span><span class="chip">you'll</span>
+        </div>
+      </div>
+      <div class="p3-d1">
+        <div class="dial-box">
+          <p><strong>A:</strong> Hello. You have <sup>1</sup><input class="gap" style="width:76px;" placeholder="..."> Denbells Alarm Systems. Please leave a <sup>2</sup><input class="gap" style="width:76px;" placeholder="...">.</p>
+          <p style="margin-top:10px;"><strong>B:</strong> Hello, <sup>3</sup><input class="gap" style="width:48px;" placeholder="..."> is Monika Ingham <sup>4</sup><input class="gap" style="width:48px;" placeholder="...">. I'm calling <sup>5</sup><input class="gap" style="width:32px;" placeholder="..."> ask for your help. My alarm system is faulty and the alarm keeps going off. Do you <sup>6</sup><input class="gap" style="width:48px;" placeholder="..."> you could send somebody round? <sup>7</sup><input class="gap" style="width:42px;" placeholder="..."> you call me back on 03544 82212? Thanks.</p>
+        </div>
+      </div>
+      <div class="p3-d2">
+        <div class="dial-box">
+          <p><strong>A:</strong> Hi this is Sally. I'm sorry I can't <sup>8</sup><input class="gap" style="width:52px;" placeholder="..."> your call right now, but please leave a message and I'll <sup>9</sup><input class="gap" style="width:38px;" placeholder="..."> back to you as soon as I can.</p>
+          <p style="margin-top:10px;"><strong>B:</strong> Hi Sally, <sup>10</sup><input class="gap" style="width:42px;" placeholder="..."> Gabriel here. I was <sup>11</sup><input class="gap" style="width:62px;" placeholder="..."> to see if you could do me a favour. I left my bicycle downstairs and I think I forgot to lock it. I <sup>12</sup><input class="gap" style="width:62px;" placeholder="..."> if you could go and check it for me? <sup>13</sup><input class="gap" style="width:48px;" placeholder="..."> find the lock in the kitchen, near the door. <sup>14</sup><input class="gap" style="width:52px;" placeholder="..."> you let me know when you get this message?</p>
+        </div>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 reached &nbsp;·&nbsp; 2 message &nbsp;·&nbsp; 3 this &nbsp;·&nbsp; 4 here &nbsp;·&nbsp; 5 to &nbsp;·&nbsp; 6 think &nbsp;·&nbsp; 7 Can<br>
+      8 take &nbsp;·&nbsp; 9 get &nbsp;·&nbsp; 10 it's &nbsp;·&nbsp; 11 ringing &nbsp;·&nbsp; 12 wonder &nbsp;·&nbsp; 13 You'll &nbsp;·&nbsp; 14 Could
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SPEAKING
+     ════════════════════════════════════════════════════════ -->
+<div class="phase spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-accent"></div>
+    <div class="phase-num">2</div>
+    <div class="phase-title-row">
+      <h2>Speaking — Leaving Phone Messages</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-s">speaking</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <!-- intro row: image + 6A text + Future Skills -->
+    <div class="spk-intro">
+      <div class="spk-img">📷 image placeholder</div>
+      <div>
+        <p><strong>6A.</strong> You are going to practise leaving some phone messages. Read the Future Skills box and plan your messages for the situations in Ex 6B.</p>
+      </div>
+    </div>
+
+    <div class="spk-main">
+      <div class="spk-note">
+        <p><strong>Think about:</strong></p>
+        <ul style="margin-top:8px;">
+          <li>Who are you calling?</li>
+          <li>What do you need them to do?</li>
+          <li>What specific details do they need to know?</li>
+          <li>How will you end the message?</li>
+        </ul>
+        <p style="margin-top:12px;color:var(--muted);font-size:0.88rem;">Use phrases from the Grammar Bank: <em>I wonder if you could … / You'll need to … / You'll find it … / Can you call me back?</em></p>
+      </div>
+      <div class="future-skills">
+        <div class="fs-label">Future Skills</div>
+        <h4>Communication</h4>
+        <p>Before leaving a phone message in English, it helps to plan and write down the main points. Think about how to:</p>
+        <ul style="margin-top:8px;">
+          <li>start the message,</li>
+          <li>say why you're calling,</li>
+          <li>explain details clearly (if necessary),</li>
+          <li>end the message.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="margin-top:4px;"><strong>6B.</strong> Read the notes and prepare to leave detailed messages on voicemail.</p>
+    <div class="vm-grid">
+      <div class="vm-card">
+        <p style="font-weight:700;"><span class="vm-num">1</span> In class</p>
+        <p style="margin-top:8px;">Forgot to take food out of freezer.</p>
+        <p class="vm-details">Ask: go home, take food out<br><em>Give details: which food, how much, where to leave it</em></p>
+      </div>
+      <div class="vm-card">
+        <p style="font-weight:700;"><span class="vm-num">2</span> Walking home</p>
+        <p style="margin-top:8px;">Weather turned cold. Left heating on too low.</p>
+        <p class="vm-details">Ask new flatmate: change temperature setting<br><em>Give details: where, how, what temperature</em></p>
+      </div>
+      <div class="vm-card">
+        <p style="font-weight:700;"><span class="vm-num">3</span> Working late</p>
+        <p style="margin-top:8px;">Can't leave on time.</p>
+        <p class="vm-details">Ask: pick up children<br><em>Give details: time, location</em></p>
+      </div>
+    </div>
+
+    <p><strong>6C.</strong> Take turns to leave your messages. Student B: Start with a recorded message.</p>
+    <div class="dial-full">
+      <p><span class="spk-b">B:</span> You've reached [name]. Please leave a message.</p>
+      <p><span class="spk-a">A:</span> …</p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     MEDIATION BANK
+     ════════════════════════════════════════════════════════ -->
+<div class="phase" style="--accent:#7b5ea7;">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-accent" style="background:#7b5ea7;"></div>
+    <div class="phase-num" style="background:#5a3a8a;">MB</div>
+    <div class="phase-title-row">
+      <h2>Mediation Bank — We're really busy right now</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge" style="background:#f0eafa;color:#5a3a8a;">mediation</span>
+        <span class="arrow">▼</span>
+      </div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div style="background:#f0eafa;border:2px solid #b090d8;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:0.88rem;color:#3a2060;">
+      <strong>SPEAKING OUTPUT</strong> | a work-based discussion &nbsp;·&nbsp;
+      <strong>GOAL</strong> | agree on the best way to fix a work problem &nbsp;·&nbsp;
+      <strong>MEDIATION SKILL</strong> | inviting contributions
+    </div>
+
+    <!-- WARM-UP -->
+    <span class="sec-label" style="background:#5a3a8a;">Warm-up</span>
+    <p><strong>1. Discuss the questions.</strong></p>
+    <div class="spk-main" style="margin-top:12px;">
+      <div>
+        <div class="speak-q">1 How do you prefer to contact companies: by phone or by the chat service on their website?</div>
+        <div class="speak-q">2 When you call a company, what kind of automated messages do you often hear while you're waiting to talk to someone?</div>
+        <div class="speak-q">3 Is there anything you don't like about the experience of contacting customer service on the phone?</div>
+        <div class="box" style="border-left-color:#7b5ea7;background:#f0eafa;margin-top:10px;font-style:italic;color:#3a2060;">I don't like the music. It's really annoying.</div>
+      </div>
+    </div>
+
+    <!-- PREPARE -->
+    <span class="sec-label" style="background:#5a3a8a;margin-top:24px;">Prepare</span>
+    <p><strong>2. Read the Scenario and listen to the messages. Why does Janel want to talk about the automated message system?</strong></p>
+    <audio controls style="width:100%;margin:8px 0;border-radius:6px;">
+      <source src="MB1_01.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="p1-grid" style="margin:12px 0;">
+      <div style="background:#edf2fb;border-radius:10px;padding:18px 20px;font-size:0.93rem;">
+        <p style="font-weight:700;margin-bottom:10px;">SCENARIO</p>
+        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:8px;">Janel sends you this message:</p>
+        <p>Hi everyone.</p>
+        <p>I looked at our feedback yesterday and everybody hates our automated messages on the customer service system! It has a rating of two stars out of five and people say it's really unfriendly and annoying. Can you listen to it and have a look at the script (see below) and think about how we can change it? Then we can talk about it in next week's meeting.</p>
+        <p>Thanks!<br>Janel</p>
+      </div>
+      <div style="background:#f5f5f5;border-radius:10px;padding:18px 20px;font-size:0.93rem;border-left:4px solid #b090d8;">
+        <p style="font-weight:700;margin-bottom:10px;">Automated message</p>
+        <p>You've got through to Well Gym. Press 1 to book a personal trainer. Press 2 to book the pool. Press 3 to speak to someone.</p>
+        <p style="margin-top:10px;"><em>[If no one is free to help the customer when they choose an option:]</em><br>
+        We're really busy right now. Continue to wait or maybe call back later. While you're waiting, why don't you leave us a five-star review online?</p>
+        <p><em>[Music plays: heavy rock]</em><br>
+        <em>[Repeat message every 15 seconds.]</em></p>
+      </div>
+    </div>
+    <button class="reveal-btn" style="background:#5a3a8a;" onmouseover="this.style.background='#3a2060'" onmouseout="this.style.background='#5a3a8a'" onclick="show(this)">Show answer</button>
+    <div class="answer">Because the customer feedback is very negative — the system has a rating of two stars and people say it's unfriendly and annoying.</div>
+
+    <!-- 3A -->
+    <p style="margin-top:20px;"><strong>3A. Listen to three people discussing the messages. What problems do they discuss?</strong></p>
+    <audio controls style="width:100%;margin:8px 0;border-radius:6px;">
+      <source src="MB1_02.mp3" type="audio/mpeg">
+    </audio>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;">
+      <div class="box" style="margin:0;">• the person's voice</div>
+      <div class="box" style="margin:0;">• too many options</div>
+      <div class="box" style="margin:0;">• the music</div>
+      <div class="box" style="margin:0;">• the content of the messages</div>
+    </div>
+
+    <!-- 3B -->
+    <p style="margin-top:16px;"><strong>3B. Listen again. Which things (1–4) does Janel do to help her colleagues give their opinions?</strong></p>
+    <audio controls style="width:100%;margin:8px 0;border-radius:6px;">
+      <source src="MB1_02.mp3" type="audio/mpeg">
+    </audio>
+    <ol>
+      <li>say how the conversation will be organised</li>
+      <li>ask people's opinions</li>
+      <li>say something funny to help everyone relax</li>
+      <li>ask people to say something about other people's opinions</li>
+    </ol>
+
+    <!-- MEDIATION SKILL BOX -->
+    <p style="margin-top:20px;"><strong>4. Read the Mediation Skill box. Which phrases did Janel use? Listen again and check.</strong></p>
+    <audio controls style="width:100%;margin:8px 0;border-radius:6px;">
+      <source src="MB1_02.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="spk-main" style="margin-top:12px;align-items:start;">
+      <div style="background:#f0eafa;border:2px solid #7b5ea7;border-radius:10px;padding:18px 20px;">
+        <p style="color:#5a3a8a;font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Mediation Skill</p>
+        <p style="color:#3a2060;font-weight:700;font-size:1.05rem;margin-bottom:12px;">inviting contributions</p>
+        <p>When you are trying to solve a problem in a group, it is good to organise the conversation so that everyone has a chance to share their ideas.</p>
+
+        <p style="margin-top:12px;font-weight:700;">Say how the conversation will be organised</p>
+        <p><span style="color:#5a3a8a;font-weight:600;">Can we share one idea each about</span> how we can change this?<br>
+        <span style="color:#5a3a8a;font-weight:600;">Let's talk about</span> the music first, <span style="color:#5a3a8a;font-weight:600;">then we can talk about</span> the messages.</p>
+
+        <p style="margin-top:10px;font-weight:700;">Ask the whole group</p>
+        <p><span style="color:#5a3a8a;font-weight:600;">OK, what does everyone think?</span><br>
+        <span style="color:#5a3a8a;font-weight:600;">How do we feel about these ideas?</span></p>
+
+        <p style="margin-top:10px;font-weight:700;">Ask individuals</p>
+        <p>Lesley, <span style="color:#5a3a8a;font-weight:600;">what are your thoughts on</span> it?<br>
+        Rich, <span style="color:#5a3a8a;font-weight:600;">how do you feel about</span> Lesley's idea?</p>
+
+        <p style="margin-top:10px;font-weight:700;">Ask people to build on other people's opinions</p>
+        <p>Rich hates the music – <span style="color:#5a3a8a;font-weight:600;">what are your thoughts on it</span>, Lesley?<br>
+        I think the guy's voice is a bit boring. <span style="color:#5a3a8a;font-weight:600;">What does everyone else think?</span></p>
+      </div>
+
+      <!-- Exercise 5 -->
+      <div>
+        <p><strong>5. Complete the conversation with sentences from the Mediation Skill box.</strong></p>
+        <div class="dial-box" style="margin-top:10px;">
+          <p><span class="spk-b">Janel:</span> So, we've got two possible plans to fix the problem. <sup>1</sup><input class="gap" style="width:200px;" placeholder="..."> ?</p>
+          <p style="margin-top:8px;"><span class="spk-a">Lesley:</span> I think plan A is better, it's cheaper and easier to do.</p>
+          <p style="margin-top:8px;"><span class="spk-b">Janel:</span> <sup>2</sup><input class="gap" style="width:230px;" placeholder="..."> .</p>
+          <p style="margin-top:8px;"><span class="spk-a">Rich:</span> I think Lesley's right, it is easier.</p>
+          <p style="margin-top:8px;"><span class="spk-b">Janel:</span> OK, so Les and Rich think plan A is better. <sup>3</sup><input class="gap" style="width:200px;" placeholder="..."> ? Tom? Chris?</p>
+        </div>
+        <button class="reveal-btn" style="background:#5a3a8a;" onmouseover="this.style.background='#3a2060'" onmouseout="this.style.background='#5a3a8a'" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 Can we share one idea each about (which plan is better)<br>
+          2 How do we feel about these ideas? / OK, what does everyone think?<br>
+          3 What are your thoughts on it / How do you feel about that
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 + 7 -->
+    <p style="margin-top:20px;"><strong>6. Look at the Scenario again. Make some notes about how you can make the message more friendly and less annoying.</strong></p>
+    <div class="speak-q">Think about: the tone, the content, the music, the wait time, the options.</div>
+
+    <div style="background:#5a3a8a;color:white;border-radius:6px;padding:8px 16px;display:inline-block;font-weight:700;font-size:0.9rem;margin:20px 0 10px;">Mediate</div>
+    <p><strong>7. Discuss the issue from the Scenario and decide how you will improve the system.</strong></p>
+    <div class="speak-q">Use the phrases from the Mediation Skill box to organise the conversation and invite contributions from everyone.</div>
+
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 1C · Don't Forget to …</footer>
+
+<script>
+function toggle(headEl){
+  headEl.parentElement.classList.toggle('collapsed');
+}
+function show(btn){
+  const ans=btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent=ans.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
+}
+</script>
+</body>
+</html>

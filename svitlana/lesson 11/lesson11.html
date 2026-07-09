@@ -1,1 +1,959 @@
-jj
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 11</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red:      #c8362d;
+      --red-dk:   #9e2820;
+      --red-lt:   #fdf1f0;
+      --dark:     #2e2e2e;
+      --mid:      #5f5f5f;
+      --grey:     #f5f5f3;
+      --border:   #dedede;
+      --white:    #ffffff;
+      --green:    #2a6e1a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--dark);line-height:1.6;}
+
+    /* ─── HEADER ─── */
+    .hdr{background:var(--dark);color:#fff;padding:52px 48px 44px;position:relative;overflow:hidden;}
+    .hdr::before{content:'11';position:absolute;right:40px;top:50%;transform:translateY(-50%);
+      font-family:'Playfair Display',serif;font-size:240px;font-weight:900;
+      color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;}
+    .hdr-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--red);margin-bottom:10px;}
+    .hdr-title{font-family:'Playfair Display',serif;font-size:clamp(34px,5vw,60px);font-weight:900;line-height:1.05;margin-bottom:4px;}
+    .hdr-sub{font-size:15px;color:rgba(255,255,255,0.45);margin-top:6px;}
+    .hdr-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:28px;padding-top:24px;
+      border-top:1px solid rgba(255,255,255,0.1);}
+    .hdr-chip{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);}
+    .hdr-chip strong{color:#fff;}
+
+    /* ─── MAIN ─── */
+    .wrap{max-width:940px;margin:0 auto;padding:0 44px 80px;}
+
+    /* ─── EDITORIAL SECTION ─── */
+    .ed{border-top:2.5px solid var(--red);margin-top:44px;margin-bottom:4px;}
+    .ed-hdr{display:flex;align-items:center;gap:18px;padding:14px 0 0;cursor:pointer;user-select:none;position:relative;}
+    .ed-tag{background:var(--dark);color:#fff;font-family:'DM Mono',monospace;font-size:9px;
+      letter-spacing:2.5px;text-transform:uppercase;padding:7px 14px;white-space:nowrap;flex-shrink:0;}
+    .ed-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;flex:1;}
+    .ed-toggle{color:var(--mid);font-size:16px;margin-left:8px;transition:transform .3s;}
+    .ed.closed .ed-toggle{transform:rotate(-90deg);}
+    .ed-body{padding:22px 0 8px;}
+    .ed.closed .ed-body{display:none;}
+
+    /* ─── EXERCISE BLOCK ─── */
+    .ex{margin-bottom:26px;}
+    .ex-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+    .ex-num{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:10px;
+      font-weight:700;width:22px;height:22px;border-radius:50%;display:inline-flex;
+      align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-ltr{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--red);
+      flex-shrink:0;width:18px;}
+    .ex-instr{font-size:14px;font-weight:500;color:var(--dark);}
+    .ex-src{font-family:'DM Mono',monospace;font-size:9px;color:var(--mid);background:var(--grey);
+      padding:3px 9px;border-radius:2px;white-space:nowrap;margin-left:auto;}
+
+    /* ─── NUMBERED LIST ─── */
+    ol.nl{list-style:none;padding:0;margin:8px 0;counter-reset:c;}
+    ol.nl li{display:flex;align-items:baseline;gap:10px;padding:8px 0;
+      border-bottom:1px solid var(--border);font-size:14px;color:var(--mid);counter-increment:c;}
+    ol.nl li::before{content:counter(c);font-family:'DM Mono',monospace;font-size:10px;
+      color:var(--red);font-weight:700;flex-shrink:0;width:18px;}
+    ol.nl li:last-child{border-bottom:none;}
+
+    /* ─── INPUT ─── */
+    input[type=text]{border:none;border-bottom:1.5px solid var(--border);background:transparent;
+      font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);padding:2px 5px;outline:none;
+      transition:border-color .2s;}
+    input[type=text]:focus{border-bottom-color:var(--red);}
+
+    /* ─── WORD BOX ─── */
+    .wbox{border:1.5px solid var(--border);border-radius:3px;padding:10px 14px;margin:10px 0;
+      display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--grey);}
+    .wbox-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--mid);width:100%;margin-bottom:4px;}
+    .chip{background:var(--dark);color:#fff;font-size:12px;font-weight:500;padding:4px 11px;
+      border-radius:2px;white-space:nowrap;}
+
+    /* ─── REVEAL ─── */
+    .rev-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+      background:none;border:1px solid var(--border);color:var(--mid);padding:5px 14px;
+      border-radius:2px;cursor:pointer;margin-top:10px;transition:all .2s;}
+    .rev-btn:hover{border-color:var(--red);color:var(--red);}
+    .rev-body{display:none;margin-top:10px;}
+    .rev-body.open{display:block;}
+    .ans-box{background:var(--grey);border-left:3px solid var(--red);padding:12px 16px;font-size:13px;}
+    .ans-box .ak{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--mid);margin-bottom:8px;}
+    .ans-box ol{padding-left:18px;}
+    .ans-box li{padding:3px 0;color:var(--mid);}
+    .ans-box li strong{color:var(--red-dk);}
+
+    /* ─── GRAMMAR BOX ─── */
+    .g-box{border:1px solid var(--border);border-top:2px solid var(--red);
+      border-radius:0 0 3px 3px;overflow:hidden;margin:14px 0;}
+    .g-head{background:var(--dark);color:#fff;padding:9px 16px;display:flex;
+      align-items:center;justify-content:space-between;}
+    .g-head span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;
+      text-transform:uppercase;font-weight:600;}
+    .g-head .g-ref{font-size:9px;opacity:.5;font-weight:400;}
+    .g-body{background:#fff;padding:16px;}
+    .g-2col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:4px;}
+    .g-col-ttl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;
+      text-transform:uppercase;font-weight:700;margin-bottom:8px;}
+    .g-col-ttl.pos{color:var(--green);}
+    .g-col-ttl.neg{color:var(--red-dk);}
+    .g-ex{font-style:italic;margin:4px 0;font-size:14px;}
+    .g-ex.pos{color:var(--green);}
+    .g-ex.neg{color:var(--red-dk);}
+    .g-ex .x{text-decoration:line-through;color:var(--mid);}
+    .g-note{font-size:13px;color:var(--mid);line-height:1.65;margin:8px 0;}
+
+    /* ─── EMAIL BLOCK ─── */
+    .email{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin:12px 0;font-size:14px;}
+    .email-meta{background:var(--grey);padding:10px 16px;border-bottom:1px solid var(--border);
+      font-size:12px;display:grid;grid-template-columns:70px 1fr;gap:3px 12px;}
+    .email-meta .lbl{font-weight:700;color:var(--dark);}
+    .email-meta .val{color:var(--mid);}
+    .email-meta .subj{font-weight:700;color:var(--dark);}
+    .email-body{padding:16px;color:var(--mid);line-height:1.85;}
+    .email-body p{margin-bottom:10px;}
+    .email-body p:last-child{margin-bottom:0;}
+    .vb{font-weight:700;color:var(--dark);}
+
+    /* ─── NOTE BOX ─── */
+    .note{background:var(--grey);border-left:3px solid var(--border);
+      padding:10px 14px;font-size:13px;color:var(--mid);margin:10px 0;line-height:1.6;}
+    .note.red{border-left-color:var(--red);}
+
+    /* ─── STUDENT TABS ─── */
+    .tabs{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin:14px 0;}
+    .tab-bar{display:flex;background:var(--grey);border-bottom:1px solid var(--border);}
+    .t-btn{flex:1;padding:12px;border:none;background:transparent;cursor:pointer;
+      font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--mid);
+      border-bottom:2.5px solid transparent;transition:all .2s;}
+    .t-btn:hover{background:rgba(0,0,0,0.03);}
+    .t-btn.on{color:var(--dark);background:#fff;border-bottom-color:var(--red);}
+    .t-body{display:none;padding:20px;}
+    .t-body.on{display:block;}
+
+    /* ─── IMG PLACEHOLDER ─── */
+    .img-ph{border:2px dashed var(--border);border-radius:3px;padding:36px 20px;
+      text-align:center;color:var(--mid);background:var(--grey);margin:10px 0;}
+    .img-ph span{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;
+      text-transform:uppercase;display:block;margin-top:6px;}
+
+    /* ─── EMOJI CARDS ─── */
+    .emoji-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:14px 0;}
+    .emoji-card{border:1px solid var(--border);border-radius:3px;padding:20px 14px;text-align:center;}
+    .emoji-card .ecard-n{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;
+      text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+    .emoji-card .emj{font-size:26px;letter-spacing:6px;display:block;margin-bottom:12px;}
+    .emoji-card textarea{width:100%;min-height:72px;border:1px solid var(--border);border-radius:2px;
+      font-family:'DM Sans',sans-serif;font-size:13px;padding:8px;resize:vertical;
+      color:var(--dark);background:#fff;outline:none;}
+    .emoji-card textarea:focus{border-color:var(--red);}
+
+    /* ─── CATEGORY TABLE (Revision A) ─── */
+    .cat-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0;}
+    .cat-tbl th{background:var(--dark);color:#fff;padding:8px 14px;text-align:left;
+      font-size:11px;font-weight:600;}
+    .cat-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--mid);}
+    .cat-tbl td:last-child{width:100px;text-align:center;}
+    .cat-tbl tr:last-child td{border-bottom:none;}
+    .cat-tbl tr:hover td{background:var(--grey);}
+
+    /* ─── YES/NO TABLE ─── */
+    .yn-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0;}
+    .yn-tbl th{background:var(--dark);color:#fff;padding:9px 14px;text-align:left;}
+    .yn-tbl th.cn{text-align:center;width:64px;}
+    .yn-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--mid);}
+    .yn-tbl td.cn{text-align:center;}
+    .yn-tbl tr:last-child td{border-bottom:none;}
+    .yn-tbl tr:hover td{background:var(--grey);}
+    .yn-box{width:20px;height:20px;border:1.5px solid var(--border);border-radius:2px;
+      display:inline-block;vertical-align:middle;}
+
+    /* ─── READING GRID ─── */
+    .rd-grid{display:grid;grid-template-columns:260px 1fr;gap:24px;margin:14px 0;}
+
+    /* ─── WRITING GRID ─── */
+    .wr-grid{display:grid;grid-template-columns:240px 1fr;gap:24px;margin:14px 0;}
+
+    /* ─── VERBS TABLE ─── */
+    .vb-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);
+      border-radius:3px;overflow:hidden;margin:12px 0;}
+    .vb-pair{padding:8px 14px;border-bottom:1px solid var(--border);
+      border-right:1px solid var(--border);display:flex;gap:8px;font-size:14px;}
+    .vb-pair:nth-child(2n){border-right:none;}
+    .vb-pair:last-child,.vb-pair:nth-last-child(2){border-bottom:none;}
+    .vb-base{color:var(--mid);}
+    .vb-sep{color:var(--border);}
+    .vb-past{font-weight:700;color:var(--red-dk);}
+
+    /* ─── IRREGULAR VERBS LINK BUTTON ─── */
+    .irr-link{display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;
+      text-decoration:none;padding:10px 20px;border-radius:2px;font-size:13px;font-weight:600;
+      margin:14px 0;transition:background .2s;}
+    .irr-link:hover{background:var(--red-dk);color:#fff;}
+
+    /* ─── NEGATIVE PS TABLE ─── */
+    .neg-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0;}
+    .neg-tbl th{background:var(--grey);padding:7px 12px;border:1px solid var(--border);
+      font-weight:600;text-align:left;font-size:12px;}
+    .neg-tbl td{padding:7px 12px;border:1px solid var(--border);color:var(--mid);font-style:italic;}
+    .neg-tbl td strong{color:var(--red-dk);font-style:normal;}
+
+    /* ─── PERFORMANCE NOTES ─── */
+    .perf{border:1px solid var(--border);border-top:2px solid var(--red);
+      border-radius:0 0 3px 3px;overflow:hidden;margin:14px 0;}
+    .perf-grid{display:grid;grid-template-columns:1fr 1fr;}
+    .perf-cell{padding:14px 16px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+    .perf-cell:nth-child(2n){border-right:none;}
+    .perf-cell:nth-last-child(-n+2){border-bottom:none;}
+    .p-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      font-weight:700;margin-bottom:6px;}
+    .p-lbl.s{color:var(--green);}
+    .p-lbl.c{color:var(--red-dk);}
+    .p-lbl.r{color:#1a5c8a;}
+    .p-lbl.a{color:var(--dark);}
+    .p-txt{font-size:13px;color:var(--mid);line-height:1.65;font-style:italic;}
+
+    /* ─── HW BLOCK ─── */
+    .hw-block{background:var(--grey);border:1px solid var(--border);border-top:2px solid var(--dark);
+      border-radius:0 0 3px 3px;padding:20px;margin:8px 0;}
+    .hw-ttl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;
+      text-transform:uppercase;color:var(--dark);font-weight:700;margin-bottom:14px;}
+
+    /* ─── CHECKBOX ITEM ─── */
+    .cbx-row{display:flex;flex-wrap:wrap;gap:12px 32px;margin:12px 0;}
+    .cbx-item{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--mid);cursor:pointer;}
+    .cbx-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--red);}
+
+    /* ─── TEXTAREA ─── */
+    textarea.warea{width:100%;min-height:220px;border:1.5px solid var(--border);border-radius:3px;
+      padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);
+      background:#fff;resize:vertical;outline:none;line-height:1.85;}
+    textarea.warea:focus{border-color:var(--red);}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:700px){
+      .wrap{padding:0 16px 60px;}
+      .hdr{padding:32px 20px;}
+      .hdr::before{display:none;}
+      .g-2col,.rd-grid,.wr-grid,.emoji-row,.perf-grid,.vb-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<div class="hdr">
+  <div class="hdr-eye">Unit 3 &nbsp;·&nbsp; Changes</div>
+  <div class="hdr-title">Lesson 11<br><em style="font-style:italic;color:rgba(255,255,255,0.7);">Company Performance</em></div>
+  <div class="hdr-sub">Business Partner A2 · Unit 3.3</div>
+  <div class="hdr-meta">
+    <div class="hdr-chip"><strong>Level:</strong>&nbsp; A2</div>
+    <div class="hdr-chip"><strong>Focus:</strong>&nbsp; Past Simple irregular verbs · Talking about performance · Writing a company email</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1 · REVISION
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-rev">
+    <div class="ed-hdr" onclick="toggle('s-rev')">
+      <div class="ed-tag">Revision</div>
+      <div class="ed-title">Email Phrases &amp; Giving Instructions — Unit 3.2</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- Rev A -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Write the correct category next to each phrase: <strong>O</strong> = Opening &nbsp;·&nbsp; <strong>I</strong> = Giving instructions &nbsp;·&nbsp; <strong>T</strong> = Thanking &nbsp;·&nbsp; <strong>C</strong> = Closing</span>
+        </div>
+        <table class="cat-tbl">
+          <thead><tr><th>#</th><th>Phrase</th><th>Category (O / I / T / C)</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Dear all,</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+            <tr><td>2</td><td>Regards,</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+            <tr><td>3</td><td>To all staff,</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+            <tr><td>4</td><td>Please follow these instructions.</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+            <tr><td>5</td><td>Best wishes,</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+            <tr><td>6</td><td>We appreciate your cooperation.</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+            <tr><td>7</td><td>Dear employees,</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+            <tr><td>8</td><td>Thank you for your help.</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+            <tr><td>9</td><td>Please do the following.</td><td><input type="text" style="width:60px;text-align:center;"></td></tr>
+          </tbody>
+        </table>
+        <button class="rev-btn" onclick="reveal('rev-a')">show answers ▾</button>
+        <div class="rev-body" id="rev-a">
+          <div class="ans-box">
+            <div class="ak">Answers</div>
+            <ol>
+              <li>Dear all → <strong>O</strong></li>
+              <li>Regards → <strong>C</strong></li>
+              <li>To all staff → <strong>O</strong></li>
+              <li>Please follow these instructions → <strong>I</strong></li>
+              <li>Best wishes → <strong>C</strong></li>
+              <li>We appreciate your cooperation → <strong>T</strong></li>
+              <li>Dear employees → <strong>O</strong></li>
+              <li>Thank you for your help → <strong>T</strong></li>
+              <li>Please do the following → <strong>I</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rev B -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Write a polite instruction for each situation. Use the imperative (+ <em>please</em> where helpful).</span>
+        </div>
+        <ol class="nl">
+          <li>Tell staff not to eat lunch at their desks.<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+          <li>Ask everyone to write their name on the sign-in sheet.<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+          <li>Tell colleagues not to use their phones in meetings.<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+          <li>Tell staff to go to the canteen for hot drinks.<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+          <li>Ask employees to book a meeting room before they use it.<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+          <li>Tell staff not to print more than ten pages a day.<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rev-b')">show suggested answers ▾</button>
+        <div class="rev-body" id="rev-b">
+          <div class="ans-box">
+            <div class="ak">Suggested answers</div>
+            <ol>
+              <li><strong>Please don't eat lunch at your desk.</strong></li>
+              <li><strong>Please write your name on the sign-in sheet.</strong></li>
+              <li><strong>Don't use your phone in meetings, please.</strong></li>
+              <li><strong>Please go to the canteen for hot drinks.</strong></li>
+              <li><strong>Please book a meeting room before you use it.</strong></li>
+              <li><strong>Don't print more than ten pages a day.</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /Revision -->
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2 · WARM-UP
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-warm">
+    <div class="ed-hdr" onclick="toggle('s-warm')">
+      <div class="ed-tag">Warm-up</div>
+      <div class="ed-title">Emoji Stories — Practice Past Simple</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Look at each set of 5 emojis. Create a short story in the <strong>Past Simple</strong>. Use as many verbs as you can.</p>
+      <div class="emoji-row">
+        <div class="emoji-card">
+          <div class="ecard-n">Story 1</div>
+          <span class="emj">👩‍💼 ☕ 🏪 📈 🌍</span>
+          <textarea placeholder="She started a small coffee shop…"></textarea>
+        </div>
+        <div class="emoji-card">
+          <div class="ecard-n">Story 2</div>
+          <span class="emj">📋 📦 🚛 🏢 🎊</span>
+          <textarea placeholder="They planned the office move…"></textarea>
+        </div>
+        <div class="emoji-card">
+          <div class="ecard-n">Story 3</div>
+          <span class="emj">🎯 ❌ 🤔 💡 🏆</span>
+          <textarea placeholder="The team set a big target…"></textarea>
+        </div>
+      </div>
+    </div>
+  </div><!-- /Warm-up -->
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3 · SPEAKING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-sp">
+    <div class="ed-hdr" onclick="toggle('s-sp')">
+      <div class="ed-tag">Speaking</div>
+      <div class="ed-title">Information Gap Activity</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Click your role to see your card.</p>
+      <div class="tabs">
+        <div class="tab-bar">
+          <button class="t-btn on" onclick="tab(this,'sp','A')">Student A</button>
+          <button class="t-btn" onclick="tab(this,'sp','B')">Student B</button>
+        </div>
+        <div class="t-body on" id="sp-A">
+          <!-- Valerie: insert src for Student A image -->
+          <img src="staa.png" alt="Student A card" style="max-width:100%;border-radius:3px;display:block;">
+        </div>
+        <div class="t-body" id="sp-B">
+          <!-- Valerie: insert src for Student B image -->
+          <img src="stbb.png" alt="Student B card" style="max-width:100%;border-radius:3px;display:block;">
+        </div>
+      </div>
+    </div>
+  </div><!-- /Speaking -->
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 4 · HOMEWORK CHECK
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-hw">
+    <div class="ed-hdr" onclick="toggle('s-hw')">
+      <div class="ed-tag">Homework</div>
+      <div class="ed-title">Checking — Ex. 6A &amp; 6B (Unit 3.2)</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <div class="hw-block">
+        <div class="hw-ttl">📌 Homework check — Unit 3.2, p.31</div>
+
+        <p style="font-size:13px;font-weight:600;color:var(--dark);margin-bottom:10px;">Ex. 6A — Answers</p>
+        <ol class="nl" style="margin-bottom:20px;">
+          <li>Thursday: Please <strong style="color:var(--red-dk);">arrive</strong> at the office by 9.00 a.m.</li>
+          <li><strong style="color:var(--red-dk);">Put</strong> all desk items in boxes.</li>
+          <li>Thursday: <strong style="color:var(--red-dk);">Don't stay</strong> in the office after 12.30 p.m.</li>
+          <li><strong style="color:var(--red-dk);">Don't come</strong> to work on Friday morning.</li>
+          <li><strong style="color:var(--red-dk);">Find</strong> your new desk and please <strong style="color:var(--red-dk);">don't change</strong> it!</li>
+          <li>You can <strong style="color:var(--red-dk);">find</strong> your office items on your new desk.</li>
+          <li>Please <strong style="color:var(--red-dk);">join</strong> us for a celebration at 6.00 p.m.</li>
+        </ol>
+
+    </div>
+    </div>
+  </div><!-- /Homework -->
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 5 · LEAD-IN  3.3
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-li">
+    <div class="ed-hdr" onclick="toggle('s-li')">
+      <div class="ed-tag">Lead-in</div>
+      <div class="ed-title">Company Performance &nbsp;<span style="font-size:14px;font-family:'DM Mono',monospace;font-weight:400;color:var(--mid);">3.3</span></div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">How do you receive communication from your place of work?</span>
+          <span class="ex-src">BP p.32</span>
+        </div>
+        <div class="cbx-row">
+          <label class="cbx-item"><input type="checkbox"> blog post</label>
+          <label class="cbx-item"><input type="checkbox"> website</label>
+          <label class="cbx-item"><input type="checkbox"> newsletter</label>
+          <label class="cbx-item"><input type="checkbox"> emails</label>
+          <label class="cbx-item"><input type="checkbox"> intranet</label>
+          <label class="cbx-item"><input type="checkbox"> other: <input type="text" style="width:100px;margin-left:4px;"></label>
+        </div>
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">How often do you receive this type of communication? What is it usually about?</span>
+        </div>
+        <div style="margin-top:6px;"><input type="text" style="width:100%;max-width:560px;"></div>
+      </div>
+
+    </div>
+  </div><!-- /Lead-in -->
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 6 · READING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-rd">
+    <div class="ed-hdr" onclick="toggle('s-rd')">
+      <div class="ed-tag">Reading</div>
+      <div class="ed-title">Past Successes and Challenges — KwikBike</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- 2A instruction -->
+      <div class="ex-head" style="margin-bottom:10px;">
+        <span class="ex-num">2</span>
+        <span class="ex-ltr">A</span>
+        <span class="ex-instr">Read the email about KwikBike. Did they succeed? Tick (✓) <em>Yes</em> or <em>No</em> for points 1–6.</span>
+        <span class="ex-src">BP p.32</span>
+      </div>
+
+      <!-- Side-by-side: bicycle image + Yes/No table -->
+      <div class="rd-grid">
+        <!-- left: bicycle photo -->
+        <div>
+          <img src="https://dobradija.com/storage/temp/public/117/a9b/c9d/%20розовая%20физическая%20выносливость__2000.jpg" alt="KwikBike — cyclists photo" style="width:100%;border-radius:3px;display:block;">
+          <!-- Valerie: insert src for bicycle photo -->
+        </div>
+        <!-- right: Yes/No table -->
+        <div>
+          <table class="yn-tbl">
+            <thead>
+              <tr>
+                <th style="width:32px;">#</th>
+                <th>Target</th>
+                <th class="cn">Yes</th>
+                <th class="cn">No</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Hit the target number of new shops</td><td class="cn"><span class="yn-box"></span></td><td class="cn"><span class="yn-box"></span></td></tr>
+              <tr><td>2</td><td>Get to know corporate customers very well</td><td class="cn"><span class="yn-box"></span></td><td class="cn"><span class="yn-box"></span></td></tr>
+              <tr><td>3</td><td>Advertise to win more customers</td><td class="cn"><span class="yn-box"></span></td><td class="cn"><span class="yn-box"></span></td></tr>
+              <tr><td>4</td><td>Win customers in the Overton area</td><td class="cn"><span class="yn-box"></span></td><td class="cn"><span class="yn-box"></span></td></tr>
+              <tr><td>5</td><td>Create a booking system</td><td class="cn"><span class="yn-box"></span></td><td class="cn"><span class="yn-box"></span></td></tr>
+              <tr><td>6</td><td>Make booking fast</td><td class="cn"><span class="yn-box"></span></td><td class="cn"><span class="yn-box"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="email">
+        <div class="email-meta">
+          <span class="lbl">To:</span><span class="val">all staff</span>
+          <span class="lbl">From:</span><span class="val">simon.owen@kwikbike</span>
+          <span class="lbl">Subject:</span><span class="subj">Another great year for KwikBike – Thank you</span>
+          <span class="lbl">Date:</span><span class="val">Monday 22 December</span>
+        </div>
+        <div class="email-body">
+          <p>Dear Team,</p>
+          <p>First, a big thank you for all your hard work in the last year. We <strong class="vb">made</strong> good progress at KwikBike. We <strong class="vb">grew</strong> our retail business from ten stores to twelve and we <strong class="vb">built</strong> strong relationships with important corporate customers. Unfortunately, we <strong class="vb">didn't hit</strong> our target of fourteen stores, so we need to investigate new areas for business.</p>
+          <p>We also <strong class="vb">went</strong> to bike events, <strong class="vb">bought</strong> advertising there and offered discounts, and this <strong class="vb">won</strong> new business, especially in the Northside area. However, we <strong class="vb">didn't win</strong> any new business in the Overton area so we want to make progress there next year. We also <strong class="vb">spent</strong> $10,000 on our online booking system. Our sales started to increase, but some customers <strong class="vb">had</strong> problems with it. We need to improve this system as soon as possible so we don't lose sales.</p>
+          <p>Overall, it <strong class="vb">was</strong> a great year. Well done everyone! I look forward to next year.</p>
+          <p>Best regards,<br>Simon Owen</p>
+        </div>
+      </div>
+
+      <button class="rev-btn" onclick="reveal('rev-2a')">show answers — Ex. 2A ▾</button>
+      <div class="rev-body" id="rev-2a">
+        <div class="ans-box">
+          <div class="ak">Answers</div>
+          <ol>
+            <li><strong>No</strong> (target = 14 stores; got 12)</li>
+            <li><strong>Yes</strong> (built strong relationships with important corporate customers)</li>
+            <li><strong>Yes</strong> (went to bike events, bought advertising, offered discounts)</li>
+            <li><strong>No</strong> (didn't win any new business in the Overton area)</li>
+            <li><strong>Yes</strong> (spent $10,000 on online booking system)</li>
+            <li><strong>No</strong> (customers had problems with it)</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 2B -->
+      <div class="ex" style="margin-top:20px;">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Match the verbs in <strong>bold</strong> in the email with their present form. Write the past form.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px 16px;font-size:14px;color:var(--mid);margin:10px 0;">
+          <div>a.&nbsp; hit &ndash; <em>hit</em> &nbsp;<span style="color:var(--border);">(given)</span></div>
+          <div>b.&nbsp; make &ndash; <input type="text" style="width:80px;"></div>
+          <div>c.&nbsp; win &ndash; <input type="text" style="width:80px;"></div>
+          <div>d.&nbsp; have &ndash; <input type="text" style="width:80px;"></div>
+          <div>e.&nbsp; build &ndash; <input type="text" style="width:80px;"></div>
+          <div>f.&nbsp; grow &ndash; <input type="text" style="width:80px;"></div>
+          <div>g.&nbsp; buy &ndash; <input type="text" style="width:80px;"></div>
+          <div>h.&nbsp; spend &ndash; <input type="text" style="width:80px;"></div>
+          <div>i.&nbsp; be &ndash; <input type="text" style="width:80px;"></div>
+          <div>j.&nbsp; go &ndash; <input type="text" style="width:80px;"></div>
+          <div>k.&nbsp; don't hit &ndash; <input type="text" style="width:100px;"></div>
+          <div>l.&nbsp; don't win &ndash; <input type="text" style="width:100px;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rev-2b')">show answers ▾</button>
+        <div class="rev-body" id="rev-2b">
+          <div class="ans-box">
+            <div class="ak">Answers</div>
+            <p style="color:var(--mid);font-size:13px;">b. <strong>made</strong> &nbsp;·&nbsp; c. <strong>won</strong> &nbsp;·&nbsp; d. <strong>had</strong> &nbsp;·&nbsp; e. <strong>built</strong> &nbsp;·&nbsp; f. <strong>grew</strong> &nbsp;·&nbsp; g. <strong>bought</strong> &nbsp;·&nbsp; h. <strong>spent</strong> &nbsp;·&nbsp; i. <strong>was</strong> &nbsp;·&nbsp; j. <strong>went</strong> &nbsp;·&nbsp; k. <strong>didn't hit</strong> &nbsp;·&nbsp; l. <strong>didn't win</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2C -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Answer the questions.</span>
+        </div>
+        <ol class="nl">
+          <li>How many shops did KwikBike have at the beginning of last year?<br><input type="text" style="width:280px;margin-top:5px;"></li>
+          <li>How many shops do they have now?<br><input type="text" style="width:280px;margin-top:5px;"></li>
+          <li>Where did they advertise?<br><input type="text" style="width:280px;margin-top:5px;"></li>
+          <li>Where did the advertising win new business?<br><input type="text" style="width:280px;margin-top:5px;"></li>
+          <li>How much did they spend on their online booking system?<br><input type="text" style="width:280px;margin-top:5px;"></li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rev-2c')">show answers ▾</button>
+        <div class="rev-body" id="rev-2c">
+          <div class="ans-box">
+            <div class="ak">Answers</div>
+            <ol>
+              <li><strong>Ten stores</strong></li>
+              <li><strong>Twelve stores</strong></li>
+              <li><strong>At bike events</strong></li>
+              <li><strong>In the Northside area</strong></li>
+              <li><strong>$10,000</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /Reading -->
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 7 · COMMUNICATIVE GRAMMAR + REFERENCE
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-gr">
+    <div class="ed-hdr" onclick="toggle('s-gr')">
+      <div class="ed-tag">Grammar</div>
+      <div class="ed-title">Talking about the Past (2) — Irregular Verbs</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- Grammar box from lesson p.33 -->
+      <div class="g-box">
+        <div class="g-head">
+          <span>Talking about the Past (2)</span>
+          <span class="g-ref">→ Grammar reference p.106</span>
+        </div>
+        <div class="g-body">
+          <div class="g-2col">
+            <div>
+              <div class="g-col-ttl pos">+/− Irregular verbs</div>
+              <p class="g-ex pos">We <strong>grew</strong> our retail business.</p>
+              <p class="g-ex pos">It <strong>was</strong> a great year. We <strong>made</strong> good progress.</p>
+            </div>
+            <div>
+              <div class="g-col-ttl neg">Negatives</div>
+              <p class="g-ex neg">We <strong>didn't grow</strong> our retail business.</p>
+              <p class="g-ex neg">It <strong>wasn't</strong> <em>(was not)</em> a good year.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex. 3 -->
+      <div class="ex" style="margin-top:20px;">
+        <div class="ex-head">
+          <span class="ex-num">3</span>
+          <span class="ex-instr">Complete the sentences with the correct form of the words in the box.</span>
+          <span class="ex-src">BP p.33</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Word box</div>
+          <span class="chip">buy</span>
+          <span class="chip">hire</span>
+          <span class="chip">make (×2)</span>
+          <span class="chip">miss</span>
+          <span class="chip">not buy</span>
+          <span class="chip">not grow</span>
+          <span class="chip">not meet</span>
+          <span class="chip">win</span>
+        </div>
+        <ol class="nl">
+          <li>We <input type="text" style="width:120px;"> our sales targets, so we need to find new customers.</li>
+          <li>We <input type="text" style="width:120px;"> new desks, but we <input type="text" style="width:120px;"> any new chairs.</li>
+          <li>We <input type="text" style="width:120px;"> a new Sales Manager and we hired a new Office Manager.</li>
+          <li>We <input type="text" style="width:120px;"> new business, but we also <input type="text" style="width:120px;"> some mistakes.</li>
+          <li>We <input type="text" style="width:140px;"> our retail business, so we need to work on this next year.</li>
+          <li>We <input type="text" style="width:140px;"> some sales targets. However, we <input type="text" style="width:120px;"> a lot of money in other areas.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rev-3')">show answers ▾</button>
+        <div class="rev-body" id="rev-3">
+          <div class="ans-box">
+            <div class="ak">Answers</div>
+            <ol>
+              <li><strong>missed</strong></li>
+              <li><strong>bought</strong> / <strong>didn't buy</strong></li>
+              <li><strong>hired</strong></li>
+              <li><strong>won</strong> / <strong>made</strong></li>
+              <li><strong>didn't grow</strong></li>
+              <li><strong>didn't meet</strong> / <strong>made</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex. 4 — Summary of last year -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">4</span>
+          <span class="ex-instr">Complete the summary with the correct past form of the verbs in brackets.</span>
+          <span class="ex-src">BP p.33</span>
+        </div>
+
+        <div style="border:1px solid var(--border);border-top:2px solid var(--dark);border-radius:0 0 3px 3px;overflow:hidden;margin:12px 0;">
+          <div style="background:var(--dark);color:#fff;padding:8px 16px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;">Summary of last year</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+            <!-- left -->
+            <div style="padding:16px;border-right:1px solid var(--border);font-size:14px;color:var(--mid);line-height:2;">
+              <p>We <sup>1</sup><em style="color:var(--red-dk);"><u>didn't have</u></em> (not have) any problems in our retail business and we <sup>2</sup><input type="text" style="width:100px;"> (make) good progress.</p>
+              <p style="margin-top:10px;">We:</p>
+              <ul style="list-style:disc;padding-left:20px;">
+                <li><sup>3</sup><input type="text" style="width:100px;"> (hit) our sales targets.</li>
+                <li><sup>4</sup><input type="text" style="width:100px;"> (buy) new equipment and made production faster.</li>
+                <li><sup>5</sup><input type="text" style="width:100px;"> (win) new customers in some areas.</li>
+                <li><sup>6</sup><input type="text" style="width:120px;"> (not spend) too much money. We were €150,000 under budget.</li>
+              </ul>
+            </div>
+            <!-- right -->
+            <div style="padding:16px;font-size:14px;color:var(--mid);line-height:2;">
+              <p style="font-weight:600;color:var(--dark);margin-bottom:8px;">What we need to do next.</p>
+              <p>We:</p>
+              <ul style="list-style:disc;padding-left:20px;">
+                <li><sup>7</sup><input type="text" style="width:120px;"> (not build) any new business relationships in new markets. We need to build more next year, especially in South America. We have plans for the sales team to visit new customers very soon.</li>
+                <li><sup>8</sup><input type="text" style="width:120px;"> (not grow) our sales profit in China. This is a key market for us, and we want to continue to grow here.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <button class="rev-btn" onclick="reveal('rev-4')">show answers ▾</button>
+        <div class="rev-body" id="rev-4">
+          <div class="ans-box">
+            <div class="ak">Answers</div>
+            <ol>
+              <li>1 = didn't have (given)</li>
+              <li>2 = <strong>made</strong></li>
+              <li>3 = <strong>hit</strong></li>
+              <li>4 = <strong>bought</strong></li>
+              <li>5 = <strong>won</strong></li>
+              <li>6 = <strong>didn't spend</strong></li>
+              <li>7 = <strong>didn't build</strong></li>
+              <li>8 = <strong>didn't grow</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── GRAMMAR REFERENCE 3.3 (p.106) ── -->
+      <div style="border-top:2px dashed var(--border);margin:28px 0 20px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Grammar Reference — p.106</p>
+      </div>
+
+      <div class="g-box">
+        <div class="g-head">
+          <span>3.3 — Talking about the Past (2)</span>
+        </div>
+        <div class="g-body">
+          <p class="g-note">Irregular verbs in the Past Simple do <strong>not</strong> have an <em>-ed</em> ending.</p>
+          <p class="g-note" style="margin-top:8px;font-weight:600;color:var(--dark);">Common irregular Past Simple verbs</p>
+          <div class="vb-grid" style="margin-top:8px;">
+            <div class="vb-pair"><span class="vb-base">be</span><span class="vb-sep">–</span><span class="vb-past">was / were</span></div>
+            <div class="vb-pair"><span class="vb-base">have</span><span class="vb-sep">–</span><span class="vb-past">had</span></div>
+            <div class="vb-pair"><span class="vb-base">build</span><span class="vb-sep">–</span><span class="vb-past">built</span></div>
+            <div class="vb-pair"><span class="vb-base">hit</span><span class="vb-sep">–</span><span class="vb-past">hit</span></div>
+            <div class="vb-pair"><span class="vb-base">buy</span><span class="vb-sep">–</span><span class="vb-past">bought</span></div>
+            <div class="vb-pair"><span class="vb-base">make</span><span class="vb-sep">–</span><span class="vb-past">made</span></div>
+            <div class="vb-pair"><span class="vb-base">go</span><span class="vb-sep">–</span><span class="vb-past">went</span></div>
+            <div class="vb-pair"><span class="vb-base">spend</span><span class="vb-sep">–</span><span class="vb-past">spent</span></div>
+            <div class="vb-pair"><span class="vb-base">grow</span><span class="vb-sep">–</span><span class="vb-past">grew</span></div>
+            <div class="vb-pair"><span class="vb-base">win</span><span class="vb-sep">–</span><span class="vb-past">won</span></div>
+          </div>
+
+          <!-- link button for full list -->
+          <a href="https://www.cambridgeenglish.org/de/Images/734560-egu-irregular-verbs-portrait-web.pdf" class="irr-link" target="_blank">
+            📚 Full list of irregular verbs →
+          </a>
+          <!-- Valerie: insert the URL in href above -->
+
+          <!-- Past Simple Negative -->
+          <p class="g-note" style="margin-top:16px;font-weight:600;color:var(--dark);">Past Simple Negative</p>
+          <p class="g-note">In the Past Simple negative, we use <strong>did not / didn't</strong> + verb. We <strong>don't</strong> change the main verb to the Past Simple.</p>
+          <div class="note" style="font-style:italic;margin:10px 0;">
+            I <strong>worked</strong> at a car company in 2017.<br>
+            I <strong>didn't work</strong> at a car company in 2017.
+          </div>
+          <table class="neg-tbl">
+            <thead>
+              <tr><th>Subject</th><th>Negative</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr><td>I / You / We / They</td><td><strong>did not / didn't start</strong></td><td>the business in 2017.</td></tr>
+              <tr><td>He / She</td><td><strong>did not / didn't win</strong></td><td>the contract.</td></tr>
+              <tr><td></td><td><strong>did not / didn't arrive</strong></td><td>at the hotel until 11.00 p.m.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Grammar ref Ex. 1 -->
+      <div class="ex" style="margin-top:20px;">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-instr">Choose the correct form (Present Simple or Past Simple) to complete the sentences.</span>
+          <span class="ex-src">BP p.106</span>
+        </div>
+        <ol class="nl">
+          <li>These days, I usually <em>spend / spent</em> about €100 per month travelling to work.</li>
+          <li>Last week, I <em>buy / bought</em> a new computer for €700.</li>
+          <li>Last month, we <em>have / had</em> problems at the factory.</li>
+          <li>We all <em>make / made</em> mistakes sometimes.</li>
+          <li>My grandfather <em>grow / grew</em> the business from one shop to 100.</li>
+          <li>The company <em>builds / built</em> over fifty offices every year.</li>
+          <li>Did you <em>win / won</em> the company tennis match?</li>
+          <li>They <em>has / had</em> two meetings yesterday.</li>
+          <li>We <em>go / went</em> to the new offices two days ago.</li>
+          <li>The first car we produced thirty years ago <em>is / was</em> very different to the others.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rev-g1')">show answers ▾</button>
+        <div class="rev-body" id="rev-g1">
+          <div class="ans-box">
+            <div class="ak">Answers</div>
+            <p style="color:var(--mid);font-size:13px;">
+              1. <strong>spend</strong> &nbsp;·&nbsp; 2. <strong>bought</strong> &nbsp;·&nbsp; 3. <strong>had</strong> &nbsp;·&nbsp; 4. <strong>make</strong> &nbsp;·&nbsp; 5. <strong>grew</strong> &nbsp;·&nbsp;
+              6. <strong>builds</strong> &nbsp;·&nbsp; 7. <strong>win</strong> &nbsp;·&nbsp; 8. <strong>had</strong> &nbsp;·&nbsp; 9. <strong>went</strong> &nbsp;·&nbsp; 10. <strong>was</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grammar ref Ex. 2 -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">2</span>
+          <span class="ex-instr">Complete the sentences with the negative Past Simple form of the verbs in brackets.</span>
+          <span class="ex-src">BP p.106</span>
+        </div>
+        <ol class="nl">
+          <li>He <input type="text" style="width:140px;"> (start) his job two years ago.</li>
+          <li>They <input type="text" style="width:140px;"> (work) at TechHub last year.</li>
+          <li>You <input type="text" style="width:140px;"> (finish) high school in 2018.</li>
+          <li>We <input type="text" style="width:140px;"> (grow) the business last year.</li>
+          <li>She <input type="text" style="width:140px;"> (go) to university in London.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rev-g2')">show answers ▾</button>
+        <div class="rev-body" id="rev-g2">
+          <div class="ans-box">
+            <div class="ak">Answers</div>
+            <ol>
+              <li><strong>didn't start</strong></li>
+              <li><strong>didn't work</strong></li>
+              <li><strong>didn't finish</strong></li>
+              <li><strong>didn't grow</strong></li>
+              <li><strong>didn't go</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /Grammar -->
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 8 · WRITING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-wr">
+    <div class="ed-hdr" onclick="toggle('s-wr')">
+      <div class="ed-tag">Writing</div>
+      <div class="ed-title">Company Performance Email</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <div class="ex-head" style="margin-bottom:14px;">
+        <span class="ex-num">5</span>
+        <span class="ex-instr">Read the notes about a company's performance last year. Write an email about the performance to the new Sales Manager.</span>
+        <span class="ex-src">BP p.33</span>
+      </div>
+
+      <!-- Photo + Notes side by side -->
+      <div class="wr-grid">
+        <!-- photo placeholder -->
+        <div>
+          <img src="https://media.licdn.com/dms/image/v2/D4D10AQG2lgZQh3mb0w/image-shrink_800/B4DZU4jyXDGcAc-/0/1740410661229?e=2147483647&v=beta&t=VdRECtGUvEkoXA6Cryf6wK3VUDl_7W67IsH6HaOy_M0" alt="Company writer photo" style="width:100%;border-radius:3px;display:block;">
+          <!-- Valerie: insert src for businessman photo -->
+        </div>
+        <!-- performance notes box -->
+        <div>
+          <div class="perf">
+            <div class="perf-grid">
+              <div class="perf-cell">
+                <div class="p-lbl s">Successes</div>
+                <p class="p-txt">spent €16,000 on advertising = won a lot of new business in North America; made progress in areas with lots of competition – Japan, South Korea</p>
+              </div>
+              <div class="perf-cell">
+                <div class="p-lbl c">Challenges</div>
+                <p class="p-txt">no growth of export business because sales targets not hit in Europe – customers didn't buy new product immediately</p>
+              </div>
+              <div class="perf-cell">
+                <div class="p-lbl r">Reasons to be positive</div>
+                <p class="p-txt">good relationships built with new customers in Europe last year – we can increase sales in first six months this year</p>
+              </div>
+              <div class="perf-cell">
+                <div class="p-lbl a">Aims</div>
+                <p class="p-txt">hire more Sales Reps to sell new products in Europe</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email starter + writing area -->
+      <div class="email" style="margin-top:16px;">
+        <div class="email-meta" style="grid-template-columns:70px 1fr;">
+          <span class="lbl">To:</span><span class="val">Anthony [new Sales Manager]</span>
+          <span class="lbl">Subject:</span><span class="subj">Last year's performance summary</span>
+        </div>
+        <div class="email-body" style="padding-bottom:0;">
+          <p style="color:var(--mid);font-style:italic;">Dear Anthony,</p>
+          <p style="color:var(--mid);font-style:italic;">Welcome to the team! Here is a summary of last year's sales report.</p>
+          <p style="color:var(--mid);font-style:italic;">At the start, …</p>
+        </div>
+        <div style="padding:0 16px 0;">
+          <textarea class="warea" style="border:none;border-top:1.5px dashed var(--border);border-radius:0;padding:14px 0;" placeholder="Continue writing here… Use: First, … We made good progress … However, … Overall, it was …"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /Writing -->
+
+</div><!-- /wrap -->
+
+<script>
+function toggle(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('closed');
+  el.querySelector('.ed-toggle').textContent=el.classList.contains('closed')?'▸':'▾';
+}
+function reveal(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  const btn=el.previousElementSibling;
+  btn.textContent=el.classList.contains('open')?'hide answers ▴':btn.textContent.replace('▴','▾').replace('hide','show');
+}
+function tab(btn,group,id){
+  const wrapper=btn.closest('.tabs');
+  wrapper.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('on'));
+  wrapper.querySelectorAll('.t-body').forEach(c=>c.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(group+'-'+id).classList.add('on');
+}
+</script>
+</body>
+</html>

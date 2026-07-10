@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1D Your Gadgets + Unit 1 Review — Sofia</title>
+<style>
+:root{
+  --navy:#1d2d50;
+  --navy-light:#2a3d6a;
+  --teal:#0097b3;
+  --teal-dark:#006f85;
+  --teal-light:#e0f5f8;
+  --teal-border:#80d0e0;
+  --amber:#c8700a;
+  --amber-light:#fef3e8;
+  --amber-border:#f0b060;
+  --green:#2a8a5c;
+  --green-light:#e8f5ee;
+  --green-border:#80c8a0;
+  --red:#c0392b;
+  --red-light:#fdecea;
+  --purple:#6b4c9a;
+  --purple-light:#f0eafa;
+  --bbc:#bb1919;
+  --text:#1a1f2e;
+  --muted:#5a6070;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --border:#d8dde8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  line-height:1.6;padding-bottom:60px;
+}
+
+/* HEADER */
+header{background:var(--navy);border-bottom:4px solid var(--teal);}
+.header-inner{
+  max-width:1280px;margin:0 auto;padding:24px 40px;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;
+}
+.header-unit{
+  background:var(--teal);color:white;font-weight:800;
+  font-size:1.9rem;padding:8px 18px;border-radius:6px;line-height:1;
+}
+.header-text h1{color:#fff;font-size:1.65rem;font-weight:700;margin-bottom:6px;}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.htag-g{background:rgba(0,151,179,0.2);color:#00c0df;border:1px solid rgba(0,151,179,0.35);}
+.htag-s{background:rgba(42,138,92,0.2);color:#3aaa70;border:1px solid rgba(42,138,92,0.3);}
+.htag-w{background:rgba(200,112,10,0.2);color:#f08030;border:1px solid rgba(200,112,10,0.3);}
+.header-right{text-align:right;color:#90a8c8;font-size:0.8rem;line-height:1.6;}
+.bbc-badge{
+  display:inline-flex;gap:2px;margin-top:6px;
+}
+.bbc-badge span{
+  background:white;color:var(--bbc);font-weight:900;
+  font-size:0.85rem;padding:2px 5px;border-radius:2px;
+}
+
+/* WRAP */
+.wrap{max-width:1280px;margin:0 auto;padding:24px 40px;}
+
+/* PHASE */
+.phase{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;margin-top:20px;overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.phase-stripe{width:6px;flex-shrink:0;}
+.phase-num{
+  color:white;font-weight:800;font-size:0.95rem;
+  padding:14px 18px;display:flex;align-items:center;
+  justify-content:center;min-width:52px;
+}
+.phase-title-row{
+  flex:1;padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.phase-title-row h2{font-size:1rem;font-weight:700;color:var(--navy);margin:0;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+/* phase color sets */
+.c-warmup .phase-stripe,.c-warmup .phase-num{background:var(--amber);}
+.c-rev .phase-stripe,.c-rev .phase-num{background:#5a3a8a;}
+.c-preview .phase-stripe,.c-preview .phase-num{background:var(--navy-light);}
+.c-view .phase-stripe,.c-view .phase-num{background:var(--bbc);}
+.c-gram .phase-stripe,.c-gram .phase-num{background:var(--teal-dark);}
+.c-spk .phase-stripe,.c-spk .phase-num{background:var(--green);}
+.c-write .phase-stripe,.c-write .phase-num{background:var(--amber);}
+.c-review .phase-stripe,.c-review .phase-num{background:#374785;}
+
+.c-warmup .pbadge{background:var(--amber-light);color:var(--amber);}
+.c-rev .pbadge{background:#f0eafa;color:#5a3a8a;}
+.c-preview .pbadge{background:#eaecf5;color:var(--navy-light);}
+.c-view .pbadge{background:#fdecea;color:var(--bbc);}
+.c-gram .pbadge{background:var(--teal-light);color:var(--teal-dark);}
+.c-spk .pbadge{background:var(--green-light);color:var(--green);}
+.c-write .pbadge{background:var(--amber-light);color:var(--amber);}
+.c-review .pbadge{background:#eaecf5;color:#374785;}
+
+/* LAYOUTS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:14px 0;}
+.col-4-8{display:grid;grid-template-columns:4fr 8fr;gap:20px;margin:14px 0;}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:20px;margin:14px 0;}
+@media(max-width:900px){
+  .two-col,.three-col,.col-4-8,.col-7-5{grid-template-columns:1fr;}
+  .wrap,.header-inner{padding:16px 18px;}
+}
+
+/* ELEMENTS */
+.box{background:#f8f9fc;border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-teal{background:var(--teal-light);border-left-color:var(--teal);}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.box-amber{background:var(--amber-light);border-left-color:var(--amber);}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:white;border:1px solid var(--teal);color:var(--teal-dark);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+input.gap{background:#eef6f8;border:none;border-bottom:2px dotted var(--teal);color:var(--text);font-size:1rem;width:120px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--teal);}
+.reveal-btn{background:var(--teal);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
+.reveal-btn:hover{background:var(--teal-dark);}
+.answer{display:none;background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+audio{width:100%;margin:8px 0;border-radius:6px;}
+h3{color:var(--navy);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+.sec-label{display:inline-block;background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+
+/* PAST TENSE TIPS BOX */
+.tips-box{
+  background:var(--amber-light);border:2px solid var(--amber-border);
+  border-radius:10px;padding:16px 20px;
+}
+.tips-box h4{color:var(--amber);font-size:0.78rem;text-transform:uppercase;font-weight:700;letter-spacing:0.5px;margin-bottom:10px;}
+.tips-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px;}
+.tip-card{background:white;border:1px solid var(--amber-border);border-radius:8px;padding:10px 12px;font-size:0.88rem;}
+.tip-card strong{color:var(--amber);display:block;margin-bottom:4px;font-size:0.82rem;}
+
+/* EMOJI CARDS */
+.emoji-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.emoji-card{background:white;border:1px solid var(--border);border-radius:8px;padding:16px;}
+.emoji-strip{font-size:1.75rem;letter-spacing:5px;margin-bottom:10px;display:block;}
+.emoji-card textarea{
+  width:100%;height:76px;border:1px solid var(--border);
+  border-radius:6px;padding:8px;font-family:inherit;
+  font-size:0.87rem;resize:none;background:#f8f9fc;color:var(--text);
+}
+.emoji-card textarea:focus{outline:none;border-color:var(--teal);}
+
+/* VIDEO SLOT */
+.video-slot{
+  background:#0d1118;border-radius:10px;overflow:hidden;margin:12px 0;
+  position:relative;
+}
+.video-slot video{width:100%;display:block;max-height:360px;}
+.video-label{
+  background:#0d1118;color:#90a8c8;font-size:0.8rem;
+  padding:8px 14px;text-align:center;
+}
+
+/* SPEAKER PHOTOS */
+.speakers-row{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;}
+.speaker-card{text-align:center;}
+.speaker-photo{
+  width:110px;height:130px;object-fit:cover;
+  border-radius:8px;display:block;
+  background:#e8ecf4;border:1px solid var(--border);
+}
+.speaker-name{
+  display:block;font-size:0.8rem;font-weight:700;
+  color:var(--navy);margin-top:5px;
+}
+
+/* BBC SECTION STYLE */
+.bbc-header{
+  background:#0d1118;border-radius:8px;padding:14px 18px;
+  margin:16px 0 12px;display:flex;align-items:center;gap:14px;
+}
+.bbc-logo{display:flex;gap:3px;}
+.bbc-logo span{background:white;color:var(--bbc);font-weight:900;font-size:0.95rem;padding:3px 6px;border-radius:2px;}
+.bbc-q{color:var(--amber);font-weight:700;font-size:0.95rem;}
+
+/* KEY PHRASES */
+.key-phrases{
+  background:var(--teal-light);border:1px solid var(--teal-border);
+  border-radius:8px;padding:16px 18px;
+}
+.key-phrases h4{color:var(--teal-dark);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.key-phrases li{font-size:0.92rem;margin:5px 0;}
+
+/* QUESTIONNAIRE */
+.questionnaire{
+  background:#f8f9fc;border:2px solid var(--navy);border-radius:10px;overflow:hidden;margin:14px 0;
+}
+.questionnaire h4{
+  background:var(--navy);color:white;padding:10px 16px;
+  font-size:1rem;font-weight:700;margin:0;
+}
+.questionnaire ol{padding:14px 14px 14px 36px;}
+
+/* FORUM */
+.forum-thread{background:#f8f9fc;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.forum-op{background:white;padding:16px 18px;border-bottom:2px solid var(--border);}
+.forum-op-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.forum-avatar{
+  width:36px;height:36px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:0.78rem;color:white;flex-shrink:0;
+}
+.forum-user{font-weight:700;font-size:0.95rem;}
+.forum-time{color:var(--muted);font-size:0.82rem;margin-left:6px;}
+.forum-question{font-size:1rem;font-weight:600;color:var(--navy);}
+.forum-meta{color:var(--muted);font-size:0.78rem;margin-top:8px;}
+.forum-comment{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;}
+.forum-comment:last-child{border-bottom:none;}
+.comment-body{font-size:0.92rem;flex:1;}
+.comment-actions{color:var(--teal);font-size:0.78rem;margin-top:6px;}
+
+/* GRAMMAR NOTE */
+.gram-note{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:10px 0;font-size:0.93rem;}
+.gram-sub{background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;display:inline-block;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.4px;}
+.ex-phrase{color:var(--teal-dark);font-weight:600;}
+
+/* REVIEW SECTION DIVIDER */
+.review-divider{
+  background:linear-gradient(135deg,#374785,#1d2d50);
+  border-radius:10px;padding:16px 24px;margin:30px 0 0;
+  display:flex;align-items:center;gap:14px;
+}
+.review-divider h3{color:white;margin:0;font-size:1.1rem;}
+.review-divider span{background:rgba(255,255,255,0.15);color:white;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+
+/* STORY TEXT */
+.story-text{background:#f8f9fc;border:1px solid var(--border);border-radius:8px;padding:18px 20px;font-size:0.93rem;line-height:1.8;}
+.story-text h4{color:var(--navy);font-weight:800;font-size:1.05rem;margin-bottom:12px;}
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-unit">1D</div>
+    <div class="header-text">
+      <h1>Your Gadgets</h1>
+      <div class="header-tags">
+        <span class="htag htag-g">Grammar: except for, apart from, (not) even</span>
+        <span class="htag htag-s">Speaking: questionnaire about gadgets</span>
+        <span class="htag htag-w">Writing: online forum comment</span>
+      </div>
+    </div>
+    <div class="header-right">
+      Speakout B1+ · Unit 1
+      <div class="bbc-badge"><span>B</span><span>B</span><span>C</span></div>
+      Street Interviews
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════ WARM-UP ════ -->
+<div class="phase c-warmup">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">W</div>
+    <div class="phase-title-row">
+      <h2>Warm-up — Tell the Story</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking · past tenses</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="col-7-5" style="align-items:start;">
+      <div>
+        <p>Look at each set of emojis and make up a short story. Use past tenses.</p>
+        <div class="emoji-grid" style="grid-template-columns:1fr;">
+          <div class="emoji-card">
+            <span class="emoji-strip">📱 💧 😱 🍚 😅</span>
+            <textarea placeholder="What happened?"></textarea>
+          </div>
+          <div class="emoji-card">
+            <span class="emoji-strip">🎧 🏃 🐕 🌳 😂</span>
+            <textarea placeholder="What happened?"></textarea>
+          </div>
+          <div class="emoji-card">
+            <span class="emoji-strip">💻 🔋 ❌ ☕ 🏪</span>
+            <textarea placeholder="What happened?"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="tips-box">
+        <h4>💡 Past tense tips</h4>
+        <p style="font-size:0.88rem;margin-bottom:12px;">When telling a story in English, mix three past tenses to make it natural:</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="tip-card">
+            <strong>Past Simple — main events</strong>
+            I dropped my phone. She called me. We ran away.
+            <span style="color:var(--muted);font-size:0.82rem;display:block;margin-top:4px;">→ use for actions in order</span>
+          </div>
+          <div class="tip-card">
+            <strong>Past Continuous — background</strong>
+            It was raining. I was walking home. She was waiting.
+            <span style="color:var(--muted);font-size:0.82rem;display:block;margin-top:4px;">→ use for what was happening around the event</span>
+          </div>
+          <div class="tip-card">
+            <strong>Past Perfect — before the story</strong>
+            I had forgotten my bag. She had already left.
+            <span style="color:var(--muted);font-size:0.82rem;display:block;margin-top:4px;">→ use for what happened earlier</span>
+          </div>
+        </div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-top:12px;border-top:1px solid var(--amber-border);padding-top:8px;">⚠️ Stay in the past — don't switch to present when the story gets exciting!</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ REVISION ════ -->
+<div class="phase c-rev">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">R</div>
+    <div class="phase-title-row">
+      <h2>Revision — Indirect Requests</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">phone messages</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <p>Rewrite the direct requests as indirect ones using the words in brackets.</p>
+    <div class="two-col">
+      <ol>
+        <li>Call me back when you get this. <span style="color:var(--muted);font-size:0.88rem;"></span><br>
+        <input class="gap" style="width:95%;" placeholder="..."></li>
+        <li>Tidy up your room before I get home. <span style="color:var(--muted);font-size:0.88rem;"></span><br>
+        <input class="gap" style="width:95%;" placeholder="..."></li>
+        <li>Pick up some milk on the way. <span style="color:var(--muted);font-size:0.88rem;"></span><br>
+        <input class="gap" style="width:95%;" placeholder="..."></li>
+      </ol>
+      <ol start="4">
+        <li>Lock up the house before you leave. <span style="color:var(--muted);font-size:0.88rem;"></span><br>
+        <input class="gap" style="width:95%;" placeholder="..."></li>
+        <li>Go over the instructions with her. <span style="color:var(--muted);font-size:0.88rem;"></span><br>
+        <input class="gap" style="width:95%;" placeholder="..."></li>
+        <li>Turn up the heating a bit. <span style="color:var(--muted);font-size:0.88rem;"></span><br>
+        <input class="gap" style="width:95%;" placeholder="..."></li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 I wonder if you could call me back when you get this.<br>
+      2 Do you think you could tidy up your room before I get home?<br>
+      3 Would you mind picking up some milk on the way?<br>
+      4 I wonder if you'd mind locking up the house before you leave.<br>
+      5 Do you think you could go over the instructions with her?<br>
+      6 Would you be able to turn up the heating a bit?
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ PREVIEW ════ -->
+<div class="phase c-preview">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">1</div>
+    <div class="phase-title-row">
+      <h2>Preview</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+      <div>
+        <p><strong>1A.</strong> Are you a technophile or technophobe? Which statement is closest to the truth for you?</p>
+        <div class="box" style="margin-top:10px;">
+          <ol>
+            <li>I love technology and try to be as up-to-date as possible.</li>
+            <li>I use technology, but I don't need to have all the latest gadgets.</li>
+            <li>I'm not very interested in new technology and think it's a waste of money.</li>
+          </ol>
+        </div>
+        <p style="margin-top:14px;"><strong>1B.</strong> What gadgets you use the most and how you use them.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ VIEW (BBC) ════ -->
+<div class="phase c-view">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">2</div>
+    <div class="phase-title-row">
+      <h2>View — BBC Street Interviews</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">video</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <!-- Speaker photos row -->
+    <div class="speakers-row">
+        <div class="speaker-card"><img src="cath.png" alt="Catherine" class="speaker-photo"><span class="speaker-name">Catherine</span></div>
+      <div class="speaker-card"><img src="sha.png" alt="Shannon" class="speaker-photo"><span class="speaker-name">Shannon</span></div>
+      <div class="speaker-card"><img src="ro.png" alt="Rory" class="speaker-photo"><span class="speaker-name">Rory</span></div>
+      <div class="speaker-card"><img src="ma.png" alt="Marc" class="speaker-photo"><span class="speaker-name">Marc</span></div>
+      <div class="speaker-card"><img src="jo.png" alt="Josh" class="speaker-photo"><span class="speaker-name">Josh</span></div>
+      <div class="speaker-card"><img src="joshua.png" alt="Joshua" class="speaker-photo"><span class="speaker-name">Joshua</span></div>
+      <div class="speaker-card"><img src="con.png" alt="Connor" class="speaker-photo"><span class="speaker-name">Connor</span></div>
+    </div>
+
+    <div class="bbc-header">
+      <div class="bbc-logo"><span>B</span><span>B</span><span>C</span></div>
+      <div>
+        <div class="bbc-q">Q1: Which gadgets do you love, and which could you live without?</div>
+        <div class="bbc-q" style="margin-top:4px;">Q2: Do you think people spend too much time looking at screens?</div>
+      </div>
+    </div>
+
+    <div class="two-col" style="align-items:start;">
+      <div class="video-slot">
+        <video controls>
+          <source src="1D.mp4" type="video/mp4">
+        </video>
+        <div class="video-label">▶ Video</div>
+      </div>
+    </div>
+
+    <!-- 2A -->
+    <h3>2A. Watch the interviews and answer the questions.</h3>
+    <div class="two-col">
+      <div>
+        <p><strong>1</strong> Which of the items below do the speakers mention?</p>
+        <div class="wordbox">
+          <span class="chip">coffee maker</span><span class="chip">gaming console</span><span class="chip">guitar pedals</span>
+          <span class="chip">home computer</span><span class="chip">iPad</span><span class="chip">phone</span>
+          <span class="chip">smart speaker</span><span class="chip">smartwatch</span><span class="chip">VR headset</span>
+        </div>
+      </div>
+      <div>
+        <p><strong>2</strong> How many of the speakers think that people spend too much time looking at screens?</p>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 home computer, gaming console, iPad, smartwatch, guitar pedals, phone<br>
+      2 All of them (all seven speakers)
+    </div>
+
+    <!-- 2B -->
+    <h3>2B. Watch the first part of the interviews again. Write the name of the speaker who:</h3>
+    <ol>
+      <li>uses their phone in bed. <input class="gap" placeholder="..."></li>
+      <li>could live without their smartwatch. <input class="gap" placeholder="..."></li>
+      <li>could live without all their gadgets except for their phone. <input class="gap" placeholder="..."></li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 Joshua &nbsp;·&nbsp; 2 Marc &nbsp;·&nbsp; 3 Rory, Josh</div>
+
+    <!-- 2C -->
+    <h3>2C. Watch the second part of the interviews again. Complete the things the speakers say.</h3>
+    <ol>
+      <li>You lose the <input class="gap" placeholder="..."> contact and that emotion that you get from that interaction.</li>
+      <li>I think people are <input class="gap" placeholder="..."> to screen time, needing information or entertainment more immediately.</li>
+      <li>I think people probably spend <input class="gap" placeholder="..."> on their phone.</li>
+      <li>It prevents you from being able to talk to people in <input class="gap" placeholder="...">.</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 face-to-face &nbsp;·&nbsp; 2 addicted &nbsp;·&nbsp; 3 too much time &nbsp;·&nbsp; 4 person</div>
+
+    <!-- 2D -->
+    <h3>2D. Do you agree with the statements (1–4) in Ex 2C? Why?</h3>
+    
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ GRAMMAR ════ -->
+<div class="phase c-gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">3</div>
+    <div class="phase-title-row">
+      <h2>Grammar — except for, apart from, (not) even</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. Look at the sentences from the video (a–d) and complete the rules (1–3) with <em>except for</em>, <em>apart from</em> or <em>even</em>.</h3>
+
+    <div class="two-col" style="align-items:start;">
+      <div class="box box-teal">
+        <p><strong>a</strong> I think I could live without all my gadgets <strong>apart from</strong> my phone, because it's so important to me.</p>
+        <p style="margin-top:8px;"><strong>b</strong> I love a range of gadgets from my Xbox and my laptop, but I could live without all of them <strong>except for</strong> my phone.</p>
+        <p style="margin-top:8px;"><strong>c</strong> I love my phone. I use it all the time. I <strong>even</strong> use it in bed.</p>
+        <p style="margin-top:8px;"><strong>d</strong> People certainly look at their phones too much. It might <strong>even</strong> be the first thing in the morning.</p>
+      </div>
+      <div>
+        <div class="box">
+          <p><strong>1</strong> We use <input class="gap" style="width:90px;" placeholder="..."> to show something is surprising or unusual, and we want to emphasise the point.</p>
+          <p style="margin-top:8px;"><strong>2</strong> We use <input class="gap" style="width:100px;" placeholder="..."> and <input class="gap" style="width:100px;" placeholder="..."> to say that something is not included.</p>
+          <p style="margin-top:8px;"><strong>3</strong> We usually follow <input class="gap" style="width:100px;" placeholder="..."> and <input class="gap" style="width:100px;" placeholder="..."> with a noun.</p>
+        </div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 even<br>
+          2 apart from &nbsp;·&nbsp; except for<br>
+          3 apart from &nbsp;·&nbsp; except for
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAMMAR BANK -->
+    <div class="sec-label" style="margin-top:24px;">Grammar Bank 1D — except for, apart from, (not) even</div>
+
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <div class="gram-sub">except for</div>
+        <div class="gram-note">
+          <p>We use <strong>except for</strong> + noun to say that something is not included.</p>
+          <p class="ex-phrase" style="margin-top:8px;">The school teaches most ball sports <strong>except for</strong> golf.</p>
+          <p style="margin-top:10px;">We use <strong>except for</strong> to introduce the one person/thing that means a statement isn't 100% true.</p>
+          <p class="ex-phrase">All the children are here <strong>except for</strong> Leila.<br>
+          I like vegetables, <strong>except for</strong> onions.</p>
+          <p style="margin-top:10px;">When <em>except for</em> follows a noun, we can omit <em>for</em>.</p>
+          <p class="ex-phrase">She loves ball games <strong>except (for)</strong> golf.<br>
+          They speak all the Latin-based languages <strong>except (for)</strong> Romanian.</p>
+          <p style="margin-top:10px;color:var(--muted);font-size:0.88rem;">When <em>except</em> joins two clauses, it cannot be followed by <em>for</em>.<br>
+          My dogs are similar <strong>except</strong> the oldest one is bigger.</p>
+        </div>
+
+        <div class="gram-sub">apart from</div>
+        <div class="gram-note">
+          <p><strong>Apart from</strong> + noun means the same as <em>except for</em>.</p>
+          <p class="ex-phrase" style="margin-top:8px;">We're open every day <strong>apart from</strong> Sunday.<br>
+          <strong>Apart from</strong> Kenzo, the whole family came to the wedding.<br>
+          I like all types of films <strong>apart from</strong> documentaries.<br>
+          <strong>Apart from</strong> the sound of the clocks, the house was silent.</p>
+        </div>
+      </div>
+      <div>
+        <div class="gram-sub">even</div>
+        <div class="gram-note">
+          <p>We use <strong>even</strong> to emphasise that something is surprising or unusual.</p>
+          <p class="ex-phrase" style="margin-top:8px;">John doesn't usually watch TV, but <strong>even</strong> he liked that programme!<br>
+          I'll help you with the project. I'll <strong>even</strong> stay with you after work to finish it.</p>
+        </div>
+
+        <div class="gram-sub">not even</div>
+        <div class="gram-note">
+          <p>We use <strong>not even</strong> to emphasise a surprising negative point.</p>
+          <p class="ex-phrase" style="margin-top:8px;"><strong>Not even</strong> Jo, whose English is very good, could understand what he was saying.<br>
+          She'd changed so much I didn't <strong>even</strong> recognise her!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 1 -->
+    <div class="gram-sub" style="margin-top:20px;">Practice 1 — Same (S) or Different (D)?</div>
+    <p>Are the meanings of sentences a and b the same (S) or different (D)?</p>
+    <div class="two-col">
+      <div class="box">
+        <p><strong>1 a</strong> I enjoy reading all types of books apart from romance novels.<br>
+        <strong>&nbsp;&nbsp;&nbsp;b</strong> I enjoy reading all types of books except for romance novels.</p>
+        <input class="gap" style="width:60px;" placeholder="S / D">
+        <p style="margin-top:12px;"><strong>2 a</strong> Not even Juan likes that film.<br>
+        <strong>&nbsp;&nbsp;&nbsp;b</strong> Even Juan likes that film.</p>
+        <input class="gap" style="width:60px;" placeholder="S / D">
+        <p style="margin-top:12px;"><strong>3 a</strong> She eats everything except for seafood.<br>
+        <strong>&nbsp;&nbsp;&nbsp;b</strong> She eats everything except seafood.</p>
+        <input class="gap" style="width:60px;" placeholder="S / D">
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 S (apart from = except for)<br>
+          2 D — Not even Juan = no one including Juan; Even Juan = surprisingly Juan too<br>
+          3 S (except = except for when following a noun)
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 2 -->
+    <div class="gram-sub" style="margin-top:20px;">Practice 2 — Correct the mistakes. One conversation is correct.</div>
+    <div class="two-col">
+      <ol>
+        <li>A: I could live without gadgets, <u>for</u> my phone.<br>B: Me too! I really need it.</li>
+        <li>A: The Tora Grande Hotel is completely empty, isn't it?<br>B: Yes, <u>apart</u> two Spanish tourists.</li>
+        <li>A: Dad said the dog refused to eat yesterday.<br>B: That's right. He <u>even want</u> a bone, which is his favourite food.</li>
+        <li>A: She was so kind when you needed help.<br>B: Yes, she even offered to pay my rent.</li>
+        <li>A: <u>From</u> History, what other school subjects do you like?<br>B: I quite like Maths.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 A: ...except <b>for</b> my phone. (not "for my phone")<br>
+          2 B: ...apart <b>from</b> two Spanish tourists.<br>
+          3 B: He didn't <b>even want</b> a bone... (negative)<br>
+          4 ✓ Correct<br>
+          5 A: <b>Apart from</b> History, what other subjects...
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 3 -->
+    <div class="gram-sub" style="margin-top:20px;">Practice 3 — The Social Media-Free Teen</div>
+    <p>Choose the correct options (A–C) to complete the text.</p>
+    <div class="col-7-5" style="align-items:start;">
+      <div class="story-text">
+        <h4>The Social Media-Free Teen</h4>
+        <p>For seventeen-year-old Soumaya Hart, it was a special moment on a boat that did it. She was with a group of ten friends on the trip of a lifetime off the coast of Sicily. 'It was the most beautiful place I'd ever seen. <sup>1</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> Rome could compare with this. I looked at my friends. <sup>2</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> one person, they were all checking their phones. They'd posted photos on social media and were counting their "likes". They weren't <sup>3</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> looking at the view.'</p>
+        <p>At that moment, Soumaya decided to stop using social media. 'Apart <sup>4</sup><input class="gap" style="width:70px;" placeholder="A/B/C"> calling my family, I don't use my phone. I've seen what it does to people my age. We don't appreciate the things that are important. Half the time we don't <sup>5</sup><input class="gap" style="width:70px;" placeholder="A/B/C"> see them.'</p>
+        <p>Everyone in Soumaya's family <sup>6</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> her grandmother was on social media. What did they think of her decision?</p>
+        <p>'At first, they thought it was strange. <sup>7</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> my dad, who's hopeless with technology, is on social media. But after a while, they saw I was spending my time doing really interesting things like volunteer work and sports. <sup>8</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> from my younger brother, who still thinks I'm strange, the family realises it works for me.'</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:0.85rem;color:var(--muted);">
+          1 A Except &nbsp;&nbsp; B Apart &nbsp;&nbsp; C Not even<br>
+          2 A Except for &nbsp;&nbsp; B Even &nbsp;&nbsp; C Apart<br>
+          3 A apart &nbsp;&nbsp; B for &nbsp;&nbsp; C even<br>
+          4 A for &nbsp;&nbsp; B from &nbsp;&nbsp; C even<br>
+          5 A even &nbsp;&nbsp; B except &nbsp;&nbsp; C apart<br>
+          6 A apart &nbsp;&nbsp; B except &nbsp;&nbsp; C for<br>
+          7 A Apart &nbsp;&nbsp; B Except &nbsp;&nbsp; C Even<br>
+          8 A Except &nbsp;&nbsp; B Apart &nbsp;&nbsp; C Even
+        </div>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1C &nbsp;·&nbsp; 2A &nbsp;·&nbsp; 3C &nbsp;·&nbsp; 4B &nbsp;·&nbsp; 5A &nbsp;·&nbsp; 6B &nbsp;·&nbsp; 7C &nbsp;·&nbsp; 8B</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SPEAKING ════ -->
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">4</div>
+    <div class="phase-title-row">
+      <h2>Speaking — A Questionnaire About Gadgets</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <p><strong>4A.</strong> Write down all the gadgets you use on an average day in the order you use them. Compare with your teacher. Are your lists similar or different?</p>
+    <div class="box box-teal" style="color:var(--teal-dark);font-style:italic;">My phone first, for my alarm and checking social media, then my coffee maker, …</div>
+
+    <p style="margin-top:16px;"><strong>4B.</strong> Read the questionnaire and make a note of your answers.</p>
+
+    <div class="two-col" style="align-items:start;">
+      <div class="questionnaire">
+        <h4>You and your gadgets</h4>
+        <ol>
+          <li>How old were you when you got your first phone? What do you remember about getting it?</li>
+          <li>Apart from your phone, what gadgets do you love, and which could you live without? Why?</li>
+          <li>Are there any gadgets that you would like to have?</li>
+          <li>What gadget would you like to have that hasn't been invented yet?</li>
+          <li>Think of three gadgets that were invented during your lifetime. Which is the best and why?</li>
+          <li>Do you think you spend too much time looking at screens? Why/Why not?</li>
+        </ol>
+      </div>
+      <div>
+        <div class="key-phrases">
+          <h4>Key Phrases</h4>
+          <ul style="list-style:none;padding:0;">
+            <li>Apart from my phone/laptop, I'd say that …</li>
+            <li>I could easily live without …</li>
+            <li>One thing I'd love to have/I could do without is …</li>
+            <li>In my honest opinion, …</li>
+            <li>I would say I definitely …</li>
+            <li>Absolutely! Me too.</li>
+            <li>Really? Are you sure … ?</li>
+            <li>Do you really/honestly think that … ?</li>
+            <li>I don't believe it!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:14px;"><strong>4C.</strong> Ask and answer the questions in the questionnaire. Use your notes and the Key phrases to help you.</p>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ WRITING ════ -->
+<div class="phase c-write">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">5</div>
+    <div class="phase-title-row">
+      <h2>Writing — An Online Forum Comment</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">writing</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <p><strong>5A.</strong> Read the online forum discussion. Do you think the suggestions are good or bad? Why?</p>
+
+    <div class="forum-thread">
+      <div class="forum-op">
+        <div class="forum-op-header">
+          <div class="forum-avatar" style="background:#7b5ea7;">MA</div>
+          <div>
+            <span class="forum-user">Mairat21</span>
+            <span class="forum-time">1h</span>
+          </div>
+        </div>
+        <p class="forum-question">What gadget would you like to have that hasn't been invented yet?</p>
+        <div class="forum-meta">4 Comments &nbsp;|&nbsp; 5 Share &nbsp;|&nbsp; 11 Likes</div>
+      </div>
+
+      <div class="forum-comment">
+        <div class="forum-avatar" style="background:var(--teal-dark);">BB</div>
+        <div class="comment-body">
+          <span class="forum-user">Beatrice86</span> <span class="forum-time">52 mins</span>
+          <p style="margin-top:6px;">One thing I would love to have that hasn't been invented yet is a pet translator. It could tell you what your pet is saying, and could even translate what you say to the pet. I would love to know what my cat is thinking.</p>
+          <div class="comment-actions">Comment &nbsp;|&nbsp; Share &nbsp;|&nbsp; Like</div>
+        </div>
+      </div>
+
+      <div class="forum-comment">
+        <div class="forum-avatar" style="background:var(--red);">MX</div>
+        <div class="comment-body">
+          <span class="forum-user">Marcx991</span> <span class="forum-time">47 mins</span>
+          <p style="margin-top:6px;">Really? Are you sure? You look at all the problems in the world that could be solved with technology and you want to invent a pet translator? I don't believe it!</p>
+          <div class="comment-actions">Comment &nbsp;|&nbsp; Share &nbsp;|&nbsp; Like</div>
+        </div>
+      </div>
+
+      <div class="forum-comment">
+        <div class="forum-avatar" style="background:var(--green);">SM</div>
+        <div class="comment-body">
+          <span class="forum-user">Smithsy42</span> <span class="forum-time">36 mins</span>
+          <p style="margin-top:6px;">I would say that apart from flying cars, one of the best gadgets would be something that can change the size and shape of your vehicle at the push of a button. You would never have to sit in traffic again!</p>
+          <div class="comment-actions">Comment &nbsp;|&nbsp; Share &nbsp;|&nbsp; Like</div>
+        </div>
+      </div>
+
+      <div class="forum-comment">
+        <div class="forum-avatar" style="background:var(--amber);">DD</div>
+        <div class="comment-body">
+          <span class="forum-user">DarrenDarren</span> <span class="forum-time">31 mins</span>
+          <p style="margin-top:6px;">Absolutely! This is a great idea.</p>
+          <div class="comment-actions">Comment &nbsp;|&nbsp; Share &nbsp;|&nbsp; Like</div>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>5B.</strong> Think of a gadget you would like to have that hasn't been invented yet. Write a post describing the gadget and the problem it would solve.</p>
+    <div class="speak-q">Use the key phrases from 4C: <em>Apart from…, I would say that…, One thing I'd love to have is…</em></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ UNIT 1 REVIEW ════ -->
+<div class="review-divider">
+  <h3>Unit 1 Review</h3>
+  <span>page 18</span>
+</div>
+
+<div class="phase c-review">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">R1</div>
+    <div class="phase-title-row">
+      <h2>Review — Grammar: Narrative Tenses & Verb Patterns</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar review</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="gram-sub">Narrative tenses</div>
+    <p><strong>1A.</strong> Choose the correct words to complete the text. What do you think the idiom in the final sentence means?</p>
+
+    <div class="col-7-5" style="align-items:start;">
+      <div class="story-text">
+        <h4>The Story of Me … on Wheels!</h4>
+        <p>The first mode of transport that I remember was my tricycle. My parents gave it to me the year after I <sup>1</sup><strong>was learning / had learnt</strong> to walk, and I loved it. Then came my famous red bike. My dad <sup>2</sup><strong>was teaching / taught</strong> me how to ride it. I was ten years old and I <sup>3</sup><strong>was riding / rode</strong> down the main road when something <sup>4</sup><strong>had happened / happened</strong> that I'll never forget. It <sup>5</sup><strong>had rained / was raining</strong> heavily so I could barely see, and I skidded in a puddle and lost control. Luckily, the road was empty and I <sup>6</sup><strong>wasn't getting / didn't get</strong> hurt. Later, I bought a motorbike. I <sup>7</sup><strong>was wanting / had wanted</strong> one for years, but I <sup>8</sup><strong>hadn't been / wasn't being</strong> able to afford it until my twenties. I rode it everywhere. In my thirties, I got married and started a family, so I <sup>9</sup><strong>was having / had</strong> to sell my motorbike and buy a car. Yesterday I <sup>10</sup><strong>watched / had watched</strong> my three-year-old learning to ride his tricycle. You could say the wheel has come full circle!</p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 had learnt &nbsp;·&nbsp; 2 taught &nbsp;·&nbsp; 3 was riding &nbsp;·&nbsp; 4 happened<br>
+          5 was raining &nbsp;·&nbsp; 6 didn't get &nbsp;·&nbsp; 7 had wanted &nbsp;·&nbsp; 8 hadn't been<br>
+          9 had &nbsp;·&nbsp; 10 watched<br><br>
+          <b>Idiom:</b> "The wheel has come full circle" = the situation has returned to where it started — the speaker is now a parent watching their child learn to ride, just as they once were the child.
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:16px;"><strong>1B.</strong> Do you have stories to tell about yourself on wheels?</p>
+
+    <div class="gram-sub" style="margin-top:24px;">Verb patterns</div>
+    <p><strong>2A.</strong> Make sentences about yourself using the words and phrases in box A and the verbs in box B. Use the correct form of the verbs in box B: <em>-ing</em> or <em>to</em> infinitive.</p>
+    <div class="two-col">
+      <div>
+        <div class="wordbox"><span class="chip">care about</span><span class="chip">dream about</span><span class="chip">give up</span><span class="chip">look forward to</span><span class="chip">plan on</span><span class="chip">remember</span><span class="chip">stop</span></div>
+        <p style="color:var(--muted);font-size:0.85rem;font-style:italic;">Box A</p>
+      </div>
+      <div>
+        <div class="wordbox"><span class="chip">be</span><span class="chip">do</span><span class="chip">eat</span><span class="chip">go</span><span class="chip">help</span><span class="chip">relax</span><span class="chip">travel</span><span class="chip">watch</span><span class="chip">work</span></div>
+        <p style="color:var(--muted);font-size:0.85rem;font-style:italic;">Box B</p>
+      </div>
+    </div>
+    <div class="box box-teal" style="color:var(--teal-dark);font-style:italic;">I dream about travelling to West Africa.</div>
+
+
+    <div class="gram-sub" style="margin-top:24px;">except for, apart from, even</div>
+    <p><strong>3A.</strong> Add the words in the box to complete the sentences. One word isn't used.</p>
+    <div class="wordbox"><span class="chip">apart</span><span class="chip">even</span><span class="chip">except</span><span class="chip">from</span><span class="chip">not</span></div>
+    <div class="two-col">
+      <ol>
+        <li>I'm the quietest person in my family, apart <input class="gap" style="width:70px;" placeholder="..."> my father.</li>
+        <li>Everyone in my family dances, <input class="gap" style="width:70px;" placeholder="..."> my grandparents, who love it.</li>
+        <li>No one in my family knows how to cook <input class="gap" style="width:70px;" placeholder="..."> my mother.</li>
+        <li>Everyone I know plays video games, <input class="gap" style="width:70px;" placeholder="..."> for me.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 from (apart from my father)<br>
+          2 even (even my grandparents)<br>
+          3 except (except my mother) / apart from<br>
+          4 except (except for me)<br>
+          <span style="color:var(--muted);font-size:0.88rem;">Unused word: not</span>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>3B.</strong> Are any of the sentences true for you? Tell a partner.</p>
+
+  </div>
+</div>
+
+<div class="phase c-review">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="phase-stripe"></div><div class="phase-num">R2</div>
+    <div class="phase-title-row">
+      <h2>Review — Vocabulary: Possessions & Narrative</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary review</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="gram-sub">Describing possessions</div>
+    <p><strong>4A.</strong> Choose the correct words to complete the sentences.</p>
+    <div class="two-col">
+      <ol>
+        <li>It's a beautiful old <strong>cotton / silver</strong> ring which <strong>belonged to / owned</strong> my grandmother.</li>
+        <li>They're my favourite pair of <strong>denim / diamond</strong> jeans. They're quite <strong>leather / damaged</strong>, but I would never throw them away.</li>
+        <li>It's a lovely <strong>stone / rubber</strong> vase that a friend gave me as a birthday present. It's <strong>cool / not worth a lot</strong> but it's very <strong>special / gold</strong>.</li>
+        <li>It's a <strong>steel / genuine</strong> Italian suitcase, made of <strong>leather / stone</strong>. It belonged to my father.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 silver, belonged to<br>
+          2 denim, damaged<br>
+          3 stone, not worth a lot, special<br>
+          4 genuine, leather
+        </div>
+      </div>
+    </div>
+
+    <p><strong>4B.</strong> Do you have any objects which you would never throw away? Describe them to and say why they are special to you.</p>
+
+    <div class="gram-sub" style="margin-top:24px;">Narrative tenses in context</div>
+    <p><strong>5A.</strong> Choose the correct option (A–C) to complete the extract from a story.</p>
+
+    <div class="col-7-5" style="align-items:start;">
+      <div class="story-text">
+        <h4>The House that Jock Built</h4>
+        <p>When Elizabeth finally saw the house, it <sup>1</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> part of her family legend for 200 years. It had been built by Jock Phillip, her distant ancestor who <sup>2</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> Scotland for America aged sixteen with nothing but the clothes on his back. Five years after arriving, he discovered a hidden treasure in California: a seam of gold, which he later mined. He had succeeded in <sup>3</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> his fortunes, and with his earnings he built his <sup>4</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> home.</p>
+        <p>It was the <sup>5</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> house, large and beautiful, a house to pass down from generation to generation. It belonged to his children, then his grandchildren, and so on. When Elizabeth was young, she remembered <sup>6</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> stories about it. For this reason she had always dreamed about <sup>7</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> the house. Finally, her chance came.</p>
+        <p>While she <sup>8</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> there, she suddenly felt a sense of sadness. She arrived and saw immediately that the house was badly <sup>9</sup><input class="gap" style="width:90px;" placeholder="A/B/C">. The walls, made of <sup>10</sup><input class="gap" style="width:90px;" placeholder="A/B/C">, were falling down, and the windows were long gone.</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:0.83rem;color:var(--muted);display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+          <span>1 A was being &nbsp;&nbsp; B had been &nbsp;&nbsp; C had</span>
+          <span>2 A had been leaving &nbsp;&nbsp; B was leaving &nbsp;&nbsp; C had left</span>
+          <span>3 A changing &nbsp;&nbsp; B to change &nbsp;&nbsp; C change</span>
+          <span>4 A taste &nbsp;&nbsp; B dream &nbsp;&nbsp; C treasure</span>
+          <span>5 A ideal &nbsp;&nbsp; B big &nbsp;&nbsp; C great</span>
+          <span>6 A hearing &nbsp;&nbsp; B to hear &nbsp;&nbsp; C hear</span>
+          <span>7 A visit &nbsp;&nbsp; B to visit &nbsp;&nbsp; C visiting</span>
+          <span>8 A was driving &nbsp;&nbsp; B had driven &nbsp;&nbsp; C drove</span>
+          <span>9 A damaging &nbsp;&nbsp; B damaged &nbsp;&nbsp; C damage</span>
+          <span>10 A glass &nbsp;&nbsp; B silver &nbsp;&nbsp; C stone</span>
+        </div>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1B &nbsp;·&nbsp; 2B &nbsp;·&nbsp; 3A &nbsp;·&nbsp; 4B &nbsp;·&nbsp; 5A &nbsp;·&nbsp; 6A &nbsp;·&nbsp; 7C &nbsp;·&nbsp; 8A &nbsp;·&nbsp; 9B &nbsp;·&nbsp; 10C</div>
+        <div class="box" style="margin-top:14px;">
+          <p><strong>5B.</strong> Listen and check your answers.</p>
+          <audio controls>
+            <source src="audio/R1_01.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 1D · Your Gadgets · Unit 1 Review</footer>
+
+<script>
+function toggle(headEl){
+  headEl.parentElement.classList.toggle('collapsed');
+}
+function show(btn){
+  const ans=btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent=ans.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
+}
+</script>
+</body>
+</html>

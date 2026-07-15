@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 13</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red:#c8362d;--red-dk:#9e2820;--red-lt:#fdf1f0;
+      --dark:#2e2e2e;--mid:#5f5f5f;--grey:#f5f5f3;--border:#dedede;--white:#fff;
+      --green:#2a6e1a;--wj:#1a3a5c;--hs:#2a6e1a;--em:#8b2020;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--dark);line-height:1.6;}
+
+    /* ─── HEADER ─── */
+    .hdr{background:var(--dark);color:#fff;padding:52px 48px 44px;position:relative;overflow:hidden;}
+    .hdr::before{content:'3.4';position:absolute;right:36px;top:50%;transform:translateY(-50%);
+      font-family:'Playfair Display',serif;font-size:180px;font-weight:900;
+      color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;}
+    .hdr-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+    .hdr-title{font-family:'Playfair Display',serif;font-size:clamp(34px,5vw,60px);font-weight:900;line-height:1.05;margin-bottom:4px;}
+    .hdr-sub{font-size:15px;color:rgba(255,255,255,0.45);margin-top:6px;}
+    .hdr-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);}
+    .hdr-chip{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);}
+    .hdr-chip strong{color:#fff;}
+
+    /* ─── LAYOUT ─── */
+    .wrap{max-width:940px;margin:0 auto;padding:0 44px 80px;}
+
+    /* ─── EDITORIAL SECTION ─── */
+    .ed{border-top:2.5px solid var(--red);margin-top:44px;}
+    .ed-hdr{display:flex;align-items:center;gap:18px;padding:14px 0 0;cursor:pointer;user-select:none;}
+    .ed-tag{background:var(--dark);color:#fff;font-family:'DM Mono',monospace;font-size:9px;
+      letter-spacing:2.5px;text-transform:uppercase;padding:7px 14px;white-space:nowrap;flex-shrink:0;}
+    .ed-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;flex:1;}
+    .ed-toggle{color:var(--mid);font-size:16px;margin-left:8px;transition:transform .3s;}
+    .ed.closed .ed-toggle{transform:rotate(-90deg);}
+    .ed-body{padding:22px 0 8px;}
+    .ed.closed .ed-body{display:none;}
+
+    /* ─── EXERCISE ─── */
+    .ex{margin-bottom:26px;}
+    .ex-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+    .ex-num{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:10px;
+      font-weight:700;width:22px;height:22px;border-radius:50%;display:inline-flex;
+      align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-ltr{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--red);flex-shrink:0;width:18px;}
+    .ex-instr{font-size:14px;font-weight:500;color:var(--dark);flex:1;}
+    .ex-src{font-family:'DM Mono',monospace;font-size:9px;color:var(--mid);background:var(--grey);
+      padding:3px 9px;border-radius:2px;white-space:nowrap;margin-left:auto;}
+
+    /* ─── LISTS ─── */
+    ol.nl{list-style:none;padding:0;margin:8px 0;counter-reset:c;}
+    ol.nl li{display:flex;align-items:baseline;gap:10px;padding:8px 0;
+      border-bottom:1px solid var(--border);font-size:14px;color:var(--mid);counter-increment:c;}
+    ol.nl li::before{content:counter(c);font-family:'DM Mono',monospace;font-size:10px;
+      color:var(--red);font-weight:700;flex-shrink:0;width:18px;}
+    ol.nl li:last-child{border-bottom:none;}
+    ol.alpha{list-style:lower-alpha;padding-left:20px;margin:8px 0;}
+    ol.alpha li{font-size:14px;color:var(--mid);padding:6px 0;border-bottom:1px solid var(--border);}
+    ol.alpha li:last-child{border-bottom:none;}
+
+    /* ─── INPUT ─── */
+    input[type=text]{border:none;border-bottom:1.5px solid var(--border);background:transparent;
+      font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);padding:2px 5px;outline:none;
+      transition:border-color .2s;}
+    input[type=text]:focus{border-bottom-color:var(--red);}
+
+    /* ─── REVEAL ─── */
+    .rev-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+      background:none;border:1px solid var(--border);color:var(--mid);padding:5px 14px;
+      border-radius:2px;cursor:pointer;margin-top:10px;transition:all .2s;display:inline-block;}
+    .rev-btn:hover{border-color:var(--red);color:var(--red);}
+    .rev-body{display:none;margin-top:12px;}
+    .rev-body.open{display:block;}
+    .ans-box{background:var(--grey);border-left:3px solid var(--red);padding:12px 16px;font-size:13px;}
+    .ans-box .ak{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--mid);margin-bottom:8px;}
+    .ans-box ol,.ans-box ul{padding-left:18px;}
+    .ans-box li{padding:3px 0;color:var(--mid);}
+    .ans-box li strong{color:var(--red-dk);}
+
+    /* ─── NOTE ─── */
+    .note{background:var(--grey);border-left:3px solid var(--border);padding:10px 14px;
+      font-size:13px;color:var(--mid);margin:10px 0;line-height:1.6;}
+    .note.red{border-left-color:var(--red);}
+
+    /* ─── IMAGE PLACEHOLDER ─── */
+    .img-ph{border:2px dashed var(--border);border-radius:3px;background:var(--grey);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      color:var(--mid);text-align:center;padding:20px;}
+    .img-ph .ph-icon{font-size:28px;margin-bottom:8px;}
+    .img-ph .ph-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;
+      text-transform:uppercase;}
+
+    /* ─── VIDEO PLACEHOLDER ─── */
+    .vid-ph{position:relative;padding-bottom:56.25%;border-radius:3px;overflow:hidden;
+      background:var(--dark);margin:14px 0;}
+    .vid-ph-inner{position:absolute;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;color:rgba(255,255,255,0.4);}
+    .vid-ph-inner .vi-icon{font-size:40px;margin-bottom:10px;}
+    .vid-ph-inner .vi-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;}
+
+    /* ─── CHECKBOXES ─── */
+    .cbx-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;margin:12px 0;}
+    .cbx-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);cursor:pointer;padding:4px 0;}
+    .cbx-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--red);flex-shrink:0;}
+
+    /* ─── ORDER EXERCISE ─── */
+    .order-list{margin:12px 0;}
+    .order-row{display:flex;align-items:baseline;gap:12px;padding:8px 0;
+      border-bottom:1px solid var(--border);font-size:14px;color:var(--mid);}
+    .order-row:last-child{border-bottom:none;}
+    .order-ltr{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);font-weight:700;
+      flex-shrink:0;width:18px;}
+
+    /* ─── MATCH TABLE ─── */
+    .match-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0;}
+    .match-tbl th{background:var(--dark);color:#fff;padding:8px 14px;text-align:left;font-size:11px;}
+    .match-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--mid);vertical-align:middle;}
+    .match-tbl tr:last-child td{border-bottom:none;}
+    .match-tbl tr:hover td{background:var(--grey);}
+    .match-tbl td:first-child{font-weight:600;color:var(--dark);width:28px;text-align:center;}
+    .match-tbl td:last-child{width:80px;text-align:center;}
+
+    /* ─── VIDEO SCRIPT ─── */
+    .script-block{font-size:14px;line-height:2;padding:16px;border:1px solid var(--border);
+      border-radius:3px;background:#fff;max-height:480px;overflow-y:auto;}
+    .sc-line{margin:1px 0;}
+    .sc-spk{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;margin-right:8px;text-transform:uppercase;}
+    .sc-wj{color:var(--wj);}
+    .sc-hs{color:var(--hs);}
+    .sc-em{color:var(--em);}
+
+    /* ─── TALKING ABOUT PROJECTS BOX ─── */
+    .tap-box{border:1px solid var(--border);border-top:3px solid var(--red);
+      border-radius:0 0 3px 3px;overflow:hidden;margin:14px 0;}
+    .tap-head{background:var(--dark);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:12px;}
+    .tap-head .tap-icon{font-size:16px;}
+    .tap-head span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+    .tap-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+    .tap-tbl th{background:var(--grey);padding:8px 14px;text-align:left;font-size:11px;
+      font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase;
+      color:var(--mid);border-bottom:1px solid var(--border);}
+    .tap-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:top;}
+    .tap-tbl tr:last-child td{border-bottom:none;}
+    .tap-tbl .ask{font-weight:600;color:var(--dark);width:38%;}
+    .tap-tbl .say{color:var(--mid);}
+    .tap-tbl .say em{color:var(--red-dk);}
+
+    /* ─── DIALOGUE FLOWCHART ─── */
+    .flow{display:grid;grid-template-columns:1fr 1fr;gap:8px 32px;margin:14px 0;position:relative;}
+    .flow-col-ttl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      font-weight:700;padding:6px 14px;margin-bottom:4px;}
+    .flow-col-ttl.a{color:var(--wj);background:rgba(26,58,92,0.07);border-radius:2px;}
+    .flow-col-ttl.b{color:var(--em);background:rgba(139,32,32,0.07);border-radius:2px;}
+    .flow-step{border:1px solid var(--border);border-radius:2px;padding:8px 14px;font-size:13px;
+      color:var(--mid);background:#fff;position:relative;}
+    .flow-step.a{border-left:3px solid var(--wj);}
+    .flow-step.b{border-left:3px solid var(--em);}
+    .flow-arr{font-size:11px;color:var(--border);text-align:center;padding:2px 0;align-self:center;grid-column:1/3;color:var(--mid);}
+
+    /* ─── RATE THE PROJECT WARM-UP ─── */
+    .rp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:14px 0;}
+    .rp-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+    .rp-card-head{background:var(--dark);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+    .rp-card-head .rp-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;
+      text-transform:uppercase;color:rgba(255,255,255,0.5);}
+    .rp-card-head .rp-name{font-size:13px;font-weight:600;flex:1;}
+    .rp-criteria{padding:12px;}
+    .rp-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
+    .rp-row:last-child{border-bottom:none;}
+    .rp-icon{font-size:16px;flex-shrink:0;width:24px;text-align:center;}
+    .rp-label{color:var(--dark);font-weight:500;width:110px;flex-shrink:0;}
+    .rp-btns{display:flex;gap:4px;flex-shrink:0;}
+    .rp-btn{background:none;border:1px solid var(--border);border-radius:2px;
+      padding:3px 8px;font-size:14px;cursor:pointer;transition:all .15s;line-height:1;}
+    .rp-btn:hover,.rp-btn.on{background:var(--grey);border-color:var(--red);}
+    .rp-note{flex:1;}
+    .rp-note input{width:100%;}
+
+    /* ─── SPEAKING GRID ─── */
+    .sp-grid{display:grid;grid-template-columns:180px 1fr;gap:20px;margin:14px 0;}
+
+    /* ─── SAMPLE DIALOGUE ─── */
+    .dialogue{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin:12px 0;font-size:14px;}
+    .dl-head{background:var(--grey);padding:8px 14px;font-family:'DM Mono',monospace;
+      font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);
+      border-bottom:1px solid var(--border);}
+    .dl-line{padding:6px 14px;border-bottom:1px solid var(--border);display:flex;gap:8px;}
+    .dl-line:last-child{border-bottom:none;}
+    .dl-spk{font-weight:700;flex-shrink:0;width:18px;}
+    .dl-spk.a{color:var(--wj);}
+    .dl-spk.b{color:var(--em);}
+    .dl-text{color:var(--mid);font-style:italic;}
+
+    @media(max-width:700px){
+      .wrap{padding:0 16px 60px;}.hdr{padding:32px 20px;}.hdr::before{display:none;}
+      .rp-cards,.cbx-grid,.flow,.sp-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<div class="hdr">
+  <div class="hdr-eye">Unit 3 · Changes</div>
+  <div class="hdr-title">Lesson 13<br><em style="font-style:italic;color:rgba(255,255,255,0.7);">How did it go?</em></div>
+  <div class="hdr-sub">Business Partner A2 · Unit 3.4 · Work Skills</div>
+  <div class="hdr-meta">
+    <div class="hdr-chip"><strong>Level:</strong>&nbsp; A2</div>
+    <div class="hdr-chip"><strong>Lesson outcome:</strong>&nbsp; Learners can talk about how a project went</div>
+    <div class="hdr-chip"><strong>Focus:</strong>&nbsp; Talking about projects · Video · Speaking practice</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══════════════════════════════════════════
+       WARM-UP · Rate the project
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-wu">
+    <div class="ed-hdr" onclick="toggle('s-wu')">
+      <div class="ed-tag">Warm-up</div>
+      <div class="ed-title">Rate the Project</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Look at each project card. Give each area a ✅ (went well) or ❌ (had problems). Explain your reasons in 1–2 sentences using Past Simple.</p>
+
+      <div class="rp-cards" style="grid-template-columns:1fr 1fr;">
+
+        <!-- Card 1 -->
+        <div class="rp-card">
+          <div class="rp-card-head">
+            <div>
+              <div class="rp-tag">Project 1 · TechCo</div>
+              <div class="rp-name">Smart Speaker Launch</div>
+            </div>
+          </div>
+          <!-- Scenario -->
+          <div style="padding:14px 14px 6px;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid);line-height:1.75;background:#fafaf8;">
+            <p>Last year, TechCo designed and launched a new smart speaker. The design team had good meetings every week — everyone understood their job and helped each other. They finished the product <strong>two weeks before the deadline</strong>.</p>
+            <p style="margin-top:8px;">However, the team <strong>changed the design three times</strong> during the project. They didn't communicate these changes to the finance manager. Because of this, the project went <strong>20% over budget</strong> — a big surprise at the end.</p>
+          </div>
+          <div class="rp-criteria">
+            <div class="rp-row">
+              <span class="rp-icon">🤝</span>
+              <span class="rp-label">Teamwork</span>
+              <div class="rp-btns">
+                <button class="rp-btn" onclick="rate(this)">✅</button>
+                <button class="rp-btn" onclick="rate(this)">❌</button>
+              </div>
+              <div class="rp-note"><input type="text" placeholder="Because…"></div>
+            </div>
+            <div class="rp-row">
+              <span class="rp-icon">⏰</span>
+              <span class="rp-label">Deadline</span>
+              <div class="rp-btns">
+                <button class="rp-btn" onclick="rate(this)">✅</button>
+                <button class="rp-btn" onclick="rate(this)">❌</button>
+              </div>
+              <div class="rp-note"><input type="text" placeholder="Because…"></div>
+            </div>
+            <div class="rp-row">
+              <span class="rp-icon">💰</span>
+              <span class="rp-label">Budget</span>
+              <div class="rp-btns">
+                <button class="rp-btn" onclick="rate(this)">✅</button>
+                <button class="rp-btn" onclick="rate(this)">❌</button>
+              </div>
+              <div class="rp-note"><input type="text" placeholder="Because…"></div>
+            </div>
+            <div class="rp-row">
+              <span class="rp-icon">📢</span>
+              <span class="rp-label">Communication</span>
+              <div class="rp-btns">
+                <button class="rp-btn" onclick="rate(this)">✅</button>
+                <button class="rp-btn" onclick="rate(this)">❌</button>
+              </div>
+              <div class="rp-note"><input type="text" placeholder="Because…"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="rp-card">
+          <div class="rp-card-head">
+            <div>
+              <div class="rp-tag">Project 2 · LogiMax</div>
+              <div class="rp-name">New Warehouse System</div>
+            </div>
+          </div>
+          <!-- Scenario -->
+          <div style="padding:14px 14px 6px;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid);line-height:1.75;background:#fafaf8;">
+            <p>LogiMax needed a new computer system for their warehouse. The IT team and the warehouse team <strong>didn't agree on the requirements</strong> from the beginning. They had very few meetings and didn't share information with each other.</p>
+            <p style="margin-top:8px;">The project <strong>finished three months late</strong> because of these problems. But the company used cheaper software than they planned, so they <strong>stayed in budget</strong>. The new system works well now and the warehouse team is happy with it.</p>
+          </div>
+          <div class="rp-criteria">
+            <div class="rp-row">
+              <span class="rp-icon">🤝</span>
+              <span class="rp-label">Teamwork</span>
+              <div class="rp-btns">
+                <button class="rp-btn" onclick="rate(this)">✅</button>
+                <button class="rp-btn" onclick="rate(this)">❌</button>
+              </div>
+              <div class="rp-note"><input type="text" placeholder="Because…"></div>
+            </div>
+            <div class="rp-row">
+              <span class="rp-icon">⏰</span>
+              <span class="rp-label">Deadline</span>
+              <div class="rp-btns">
+                <button class="rp-btn" onclick="rate(this)">✅</button>
+                <button class="rp-btn" onclick="rate(this)">❌</button>
+              </div>
+              <div class="rp-note"><input type="text" placeholder="Because…"></div>
+            </div>
+            <div class="rp-row">
+              <span class="rp-icon">💰</span>
+              <span class="rp-label">Budget</span>
+              <div class="rp-btns">
+                <button class="rp-btn" onclick="rate(this)">✅</button>
+                <button class="rp-btn" onclick="rate(this)">❌</button>
+              </div>
+              <div class="rp-note"><input type="text" placeholder="Because…"></div>
+            </div>
+            <div class="rp-row">
+              <span class="rp-icon">📢</span>
+              <span class="rp-label">Communication</span>
+              <div class="rp-btns">
+                <button class="rp-btn" onclick="rate(this)">✅</button>
+                <button class="rp-btn" onclick="rate(this)">❌</button>
+              </div>
+              <div class="rp-note"><input type="text" placeholder="Because…"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="note red" style="font-size:13px;">After you rate the cards — tell your teacher about Card 3 using Past Simple: <em>"The teamwork went well because…"</em> / <em>"We had a problem with the deadline because…"</em></div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       LEAD-IN
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-li">
+    <div class="ed-hdr" onclick="toggle('s-li')">
+      <div class="ed-tag">Lead-in</div>
+      <div class="ed-title">Design · Manufacturing · Delivery</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- Big screenshot placeholder -->
+      <div class="img-ph" style="min-height:260px;margin-bottom:18px;">
+        <img src="pic1.png" alt="Lead-in pictures A–I" style="max-width:100%;display:block;border-radius:2px;">
+        <!-- вставити скріншот з картинками A–I -->
+        <div class="ph-lbl" style="display:none;">вставити скріншот картинок A–I</div>
+      </div>
+      <script>
+        // show placeholder text if img has no src
+        document.addEventListener('DOMContentLoaded',function(){
+          var img=document.querySelector('.img-ph img');
+          if(!img.src||img.src===window.location.href){
+            img.style.display='none';
+            img.nextElementSibling.style.display='';
+            img.nextElementSibling.nextElementSibling.style.display='';
+          }
+        });
+      </script>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Match each picture (A–I) with a process step (1–3).</span>
+          <span class="ex-src">BP p.34</span>
+        </div>
+        <div style="font-size:14px;color:var(--mid);margin:10px 0;">
+          <strong style="color:var(--dark);">1</strong>&nbsp; Design &nbsp;&nbsp;&nbsp;
+          <strong style="color:var(--dark);">2</strong>&nbsp; Manufacturing &nbsp;&nbsp;&nbsp;
+          <strong style="color:var(--dark);">3</strong>&nbsp; Delivery to shops
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;font-size:14px;">
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-weight:700;color:var(--red);">A</span><input type="text" style="width:40px;text-align:center;"> <span style="font-weight:700;color:var(--red);">B</span><input type="text" style="width:40px;text-align:center;"> <span style="font-weight:700;color:var(--red);">C</span><input type="text" style="width:40px;text-align:center;"></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-weight:700;color:var(--red);">D</span><input type="text" style="width:40px;text-align:center;"> <span style="font-weight:700;color:var(--red);">E</span><input type="text" style="width:40px;text-align:center;"> <span style="font-weight:700;color:var(--red);">F</span><input type="text" style="width:40px;text-align:center;"></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-weight:700;color:var(--red);">G</span><input type="text" style="width:40px;text-align:center;"> <span style="font-weight:700;color:var(--red);">H</span><input type="text" style="width:40px;text-align:center;"> <span style="font-weight:700;color:var(--red);">I</span><input type="text" style="width:40px;text-align:center;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rev-1a')">show answers ▾</button>
+        <div class="rev-body" id="rev-1a">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p style="color:var(--mid);font-size:13px;">
+              <strong>Design (1):</strong> A (car drawing), B (fabric sketching), D (drawing/blueprint)<br>
+              <strong>Manufacturing (2):</strong> E (robot arm), F (jacket on mannequin), G (cutting fabric)<br>
+              <strong>Delivery (3):</strong> C (chairs in shop), H (chair), I (car in showroom)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Which three pictures show the design to delivery process for each product?</span>
+        </div>
+        <ol class="nl">
+          <li>a car? &nbsp; <input type="text" style="width:40px;"> , <input type="text" style="width:40px;"> , <input type="text" style="width:40px;"></li>
+          <li>a jacket? &nbsp; <input type="text" style="width:40px;"> , <input type="text" style="width:40px;"> , <input type="text" style="width:40px;"></li>
+          <li>a chair? &nbsp; <input type="text" style="width:40px;"> , <input type="text" style="width:40px;"> , <input type="text" style="width:40px;"></li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rev-1b')">show answers ▾</button>
+        <div class="rev-body" id="rev-1b">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li>a car → <strong>A, E, I</strong></li>
+              <li>a jacket → <strong>B, F, (G)</strong></li>
+              <li>a chair → <strong>D, H, C</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Do you own or use products similar to these? Describe them (colour, design, manufacturer, etc.).</span>
+        </div>
+        <div style="margin-top:8px;"><input type="text" style="width:100%;max-width:560px;" placeholder="e.g. I have a BMW car. It's…"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       VIDEO
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-vid">
+    <div class="ed-hdr" onclick="toggle('s-vid')">
+      <div class="ed-tag">Video</div>
+      <div class="ed-title">The Winter Collection — Project Review</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- Video placeholder -->
+      <div class="vid-ph">
+        <div class="vid-ph-inner">
+          <div class="vi-lbl"><iframe width="560" height="315" src="https://www.youtube.com/embed/PTubgd4Wou4?si=lsoYCmwEdFDBtZq7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        </div>
+       </div>
+
+      <!-- 2A -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">2</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Watch the <strong>start</strong> of the video. Why did William arrange a meeting with the designers?</span>
+          <span class="ex-src">BP p.34</span>
+        </div>
+        <div style="margin-top:8px;"><input type="text" style="width:100%;max-width:560px;" placeholder="He arranged the meeting because…"></div>
+        <button class="rev-btn" onclick="reveal('rev-2a')">show answer ▾</button>
+        <div class="rev-body" id="rev-2a">
+          <div class="ans-box"><div class="ak">Answer</div>
+            <p style="color:var(--mid);font-size:13px;">He wanted to <strong>talk about the production process of the winter collection</strong> — what went well and what didn't.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2B -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Watch the <strong>complete video</strong>. Tick (✓) the topics they talk about.</span>
+        </div>
+        <div class="cbx-grid">
+          <label class="cbx-item"><input type="checkbox"> The customers' comments about the new jacket</label>
+          <label class="cbx-item"><input type="checkbox"> Problems with money</label>
+          <label class="cbx-item"><input type="checkbox"> Ellen's other new clothing designs</label>
+          <label class="cbx-item"><input type="checkbox"> Communication problems</label>
+          <label class="cbx-item"><input type="checkbox"> Problems with teamwork</label>
+          <label class="cbx-item"><input type="checkbox"> Something that needs to change</label>
+          <label class="cbx-item"><input type="checkbox"> The design of the jacket</label>
+          <label class="cbx-item"><input type="checkbox"> Ellen's pay for the work</label>
+          <label class="cbx-item"><input type="checkbox"> Problems with manufacturing</label>
+        </div>
+        <button class="rev-btn" onclick="reveal('rev-2b')">show answers ▾</button>
+        <div class="rev-body" id="rev-2b">
+          <div class="ans-box"><div class="ak">Topics they discuss ✓</div>
+            <ul>
+              <li>✓ <strong>The customers' comments about the new jacket</strong></li>
+              <li>✓ <strong>Problems with teamwork</strong> (at first it was difficult)</li>
+              <li>✓ <strong>The design of the jacket</strong></li>
+              <li>✓ <strong>Communication problems</strong></li>
+              <li>✓ <strong>Problems with manufacturing</strong> (deadline missed)</li>
+              <li>✓ <strong>Something that needs to change</strong> (update meetings)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2C -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Watch the video again. Put the stages of the project (a–f) in the correct order. Write 1–6.</span>
+        </div>
+        <div class="order-list">
+          <div class="order-row"><span class="order-ltr">a</span><span style="flex:1;">They had a problem with the material from the supplier.</span><input type="text" style="width:40px;text-align:center;"></div>
+          <div class="order-row"><span class="order-ltr">b</span><span style="flex:1;">Ellen started designing the jacket.</span><input type="text" style="width:40px;text-align:center;"></div>
+          <div class="order-row"><span class="order-ltr">c</span><span style="flex:1;">They had a problem with the schedule – manufacturing were late.</span><input type="text" style="width:40px;text-align:center;"></div>
+          <div class="order-row"><span class="order-ltr">d</span><span style="flex:1;">The team helped her and answered her questions.</span><input type="text" style="width:40px;text-align:center;"></div>
+          <div class="order-row"><span class="order-ltr">e</span><span style="flex:1;">They didn't meet the delivery deadline for the shops.</span><input type="text" style="width:40px;text-align:center;"></div>
+          <div class="order-row"><span class="order-ltr">f</span><span style="flex:1;">They changed to a different supplier.</span><input type="text" style="width:40px;text-align:center;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rev-2c')">show answers ▾</button>
+        <div class="rev-body" id="rev-2c">
+          <div class="ans-box"><div class="ak">Correct order</div>
+            <p style="color:var(--mid);font-size:13px;">b→<strong>1</strong> · d→<strong>2</strong> · a→<strong>3</strong> · f→<strong>4</strong> · c→<strong>5</strong> · e→<strong>6</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       Ex. 3A + 3B + VIDEO SCRIPT
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-3">
+    <div class="ed-hdr" onclick="toggle('s-3')">
+      <div class="ed-tag">Practice</div>
+      <div class="ed-title">Matching &amp; Video Script</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- 3A -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">3</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Match the questions (1–7) with the answers (a–g).</span>
+          <span class="ex-src">BP p.34</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;margin:12px 0;">
+          <div>
+            <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;">Questions</p>
+            <table class="match-tbl">
+              <tbody>
+                <tr><td>1</td><td>How did it go, generally?</td><td><input type="text" style="width:40px;text-align:center;"></td></tr>
+                <tr><td>2</td><td>What went well in particular?</td><td><input type="text" style="width:40px;text-align:center;"></td></tr>
+                <tr><td>3</td><td>What didn't go well?</td><td><input type="text" style="width:40px;text-align:center;"></td></tr>
+                <tr><td>4</td><td>What did you do?</td><td><input type="text" style="width:40px;text-align:center;"></td></tr>
+                <tr><td>5</td><td>What was the problem?</td><td><input type="text" style="width:40px;text-align:center;"></td></tr>
+                <tr><td>6</td><td>Why did this happen?</td><td><input type="text" style="width:40px;text-align:center;"></td></tr>
+                <tr><td>7</td><td>What do we need to change?</td><td><input type="text" style="width:40px;text-align:center;"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;">Answers</p>
+            <ol class="alpha">
+              <li>There were one or two problems with the jackets.</li>
+              <li>They didn't meet the deadline.</li>
+              <li>The teamwork.</li>
+              <li>We didn't communicate the new dates for delivery.</li>
+              <li>Communicate the dates to everyone. We need to have regular update meetings.</li>
+              <li>We changed to a different supplier.</li>
+              <li>I think it went well.</li>
+            </ol>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rev-3a')">show answers ▾</button>
+        <div class="rev-body" id="rev-3a">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p style="color:var(--mid);font-size:13px;">1–<strong>g</strong> · 2–<strong>c</strong> · 3–<strong>a</strong> · 4–<strong>f</strong> · 5–<strong>b</strong> · 6–<strong>d</strong> · 7–<strong>e</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3B — Script button -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Look at the video script. Practise reading it with your teacher.</span>
+          <span class="ex-src">BP p.130</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;background:rgba(26,58,92,0.1);color:var(--wj);padding:4px 10px;border-radius:2px;font-weight:700;">WJ — William James</span>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;background:rgba(42,110,26,0.1);color:var(--hs);padding:4px 10px;border-radius:2px;font-weight:700;">HS — Haru Sakai</span>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;background:rgba(139,32,32,0.1);color:var(--em);padding:4px 10px;border-radius:2px;font-weight:700;">EM — Ellen Morgan</span>
+        </div>
+        <button class="rev-btn" onclick="reveal('rev-script')" style="padding:8px 20px;font-size:11px;">📄 open video script ▾</button>
+        <div class="rev-body" id="rev-script">
+          <div class="script-block">
+            <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px;">3.4.1 Video Script</p>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> Congratulations, Ellen and Haru. I saw the winter collection in the shops! I talked to customers and they really like it. They made a lot of very positive comments.</div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> Thanks, William. Ellen's designs are great.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> Yes, well done, Ellen.</div>
+            <div class="sc-line"><span class="sc-spk sc-em">EM:</span> Thanks, I'm very happy!</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> As you know, I set this meeting up because I wanted to talk to you about the production process of the winter collection.</div>
+            <div class="sc-line"><span class="sc-spk sc-em">EM:</span> Yes, of course.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> So, let's begin with your views. <strong>How did it go, generally?</strong></div>
+            <div class="sc-line"><span class="sc-spk sc-em">EM:</span> I think it went well.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> Haru?</div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> Yes. I think so, too.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> OK, let's start with the positives. <strong>What went well, in particular?</strong> Ellen?</div>
+            <div class="sc-line"><span class="sc-spk sc-em">EM:</span> Well, the teamwork was really good. It was difficult at first, but then I started to ask questions. Everyone helped me … and answered my questions! I learnt a lot.</div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> Yes, we have a great team.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> Great. That's important.</div>
+            <div class="sc-line"><span class="sc-spk sc-em">EM:</span> And I'm very happy with the design of the jackets. And you said the shops like it, too. So, we created a good design, I think.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> Yes, I can see that. I have to ask … <strong>what didn't go well?</strong> Anything? Haru, <strong>what was your experience?</strong></div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> Well. Yes, there were one or two problems with the jackets. We had some problems with the supplier. First, there was a problem with the quality of the material.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> So, <strong>what did you do?</strong></div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> We changed to a different supplier. We got the right quality material from them.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> OK, I see.</div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> But then, we had a problem with the manufacturer.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> <strong>What was the problem?</strong></div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> They didn't meet the deadline, so we delivered the jackets to the shops a few days late.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> <strong>Why did this happen?</strong></div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> Well, we didn't communicate the new dates for delivery of material to the manufacturer.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> So, <strong>what do we need to change?</strong></div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> Communicate the dates to everyone. We need to have regular update meetings with both manufacturers and suppliers.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> I see.</div>
+            <div class="sc-line"><span class="sc-spk sc-hs">HS:</span> It was OK in the end. And the jackets are in the shops.</div>
+            <div class="sc-line"><span class="sc-spk sc-wj">WJ:</span> Yes, great work. Everyone's really happy with them!</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       SPEAKING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-sp">
+    <div class="ed-hdr" onclick="toggle('s-sp')">
+      <div class="ed-tag">Speaking</div>
+      <div class="ed-title">Talking about Projects</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- TALKING ABOUT PROJECTS box -->
+      <div class="tap-box">
+        <div class="tap-head">
+          <span class="tap-icon">💬</span>
+          <span>Talking about Projects</span>
+        </div>
+        <table class="tap-tbl">
+          <thead>
+            <tr>
+              <th class="ask">Asking about projects</th>
+              <th class="say">Saying how it went</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ask">How did it go, generally?</td>
+              <td class="say"><em>It went well. / Not very well.</em><br><em>It was OK. / There were one or two problems.</em></td>
+            </tr>
+            <tr>
+              <td class="ask">What went well, in particular?</td>
+              <td class="say"><em>We met each (project) deadline.</em></td>
+            </tr>
+            <tr>
+              <td class="ask">What didn't go well?</td>
+              <td class="say"><em>We had a problem with [the suppliers / our client].</em><br><em>There was a problem with [our materials / some of the team].</em></td>
+            </tr>
+            <tr>
+              <td class="ask">What was your experience?</td>
+              <td class="say"><em>The [project / teamwork] was [good / great].</em><br><em>There were one or two problems with [the clients / the designs].</em></td>
+            </tr>
+            <tr>
+              <td class="ask">What did you do?</td>
+              <td class="say"><em>We changed to a different factory.</em><br><em>I started to ask more questions.</em></td>
+            </tr>
+            <tr>
+              <td class="ask">What happened? / Why did this happen?</td>
+              <td class="say"><em>We didn't communicate the changes well.</em><br><em>We made some mistakes in planning.</em></td>
+            </tr>
+            <tr>
+              <td class="ask">What was the problem?</td>
+              <td class="say"><em>The supplier didn't explain the changes.</em><br><em>We didn't meet the deadline.</em></td>
+            </tr>
+            <tr>
+              <td class="ask">What do we need to change?</td>
+              <td class="say"><em>Next time …</em><br><em>We need to improve our design.</em><br><em>I want to make the process clearer.</em></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 4A + vertical image -->
+      <div class="ex" style="margin-top:20px;">
+        <div class="ex-head">
+          <span class="ex-num">4</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Look at the pictures (1–6) and read about the shoe-design project. Answer the questions.</span>
+          <span class="ex-src">BP p.35</span>
+        </div>
+        <div class="sp-grid">
+          <!-- vertical image placeholder -->
+          <div class="img-ph" style="min-height:400px;align-self:start;">
+            <img src="pic2.png" alt="Shoe project pictures 1–6" style="max-width:100%;display:block;border-radius:2px;">
+            <!-- вставити вертикальний скріншот з 6 картинками -->
+            
+          </div>
+          <!-- questions -->
+          <div>
+            <ol class="nl">
+              <li>What is the product?<br><input type="text" style="width:100%;max-width:300px;margin-top:5px;"></li>
+              <li>What three problems did the team have?<br>
+                1. <input type="text" style="width:100%;max-width:280px;margin-top:5px;"><br>
+                2. <input type="text" style="width:100%;max-width:280px;margin-top:5px;"><br>
+                3. <input type="text" style="width:100%;max-width:280px;margin-top:5px;">
+              </li>
+              <li>Did the shops like the product?<br><input type="text" style="width:100%;max-width:300px;margin-top:5px;"></li>
+            </ol>
+            <button class="rev-btn" onclick="reveal('rev-4a')" style="margin-top:12px;">show answers ▾</button>
+            <div class="rev-body" id="rev-4a">
+              <div class="ans-box"><div class="ak">Answers</div>
+                <ol>
+                  <li><strong>A shoe (trainer/sneaker)</strong></li>
+                  <li><strong>Problem with the material</strong> / <strong>They changed the material</strong> / <strong>They missed the deadline</strong> (manufacturing/shipping problems)</li>
+                  <li><strong>Yes</strong> — the shoes are in the shops and customers like them.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4B — Preparation questions -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Before you write your dialogue, answer these preparation questions about the shoe-design project.</span>
+          <span class="ex-src">BP p.35 · p.116</span>
+        </div>
+        <div style="border:1px solid var(--border);border-left:3px solid var(--red);border-radius:0 3px 3px 0;padding:14px 16px;margin:10px 0;">
+          <ol class="nl">
+            <li>How did it go in general? Well? Badly?<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+            <li>What went well? Which stages? Why? Who did a good job?<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+            <li>What didn't go well? Which stages? Why? What were the problems?<br><input type="text" style="width:100%;max-width:480px;margin-top:5px;"></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 4B — Dialogue flowchart -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Work in pairs. Use the flowchart and the "Talking about projects" box to write and practise the dialogue.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;margin:14px 0;align-items:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--wj);background:rgba(26,58,92,0.07);padding:6px 14px;border-radius:2px;text-align:center;">Student A</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--em);background:rgba(139,32,32,0.07);padding:6px 14px;border-radius:2px;text-align:center;">Student B</div>
+
+          <div style="border:1px solid var(--border);border-left:3px solid var(--wj);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Congratulate Student B.</div>
+          <div></div>
+
+          <div></div>
+          <div style="border:1px solid var(--border);border-left:3px solid var(--em);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Thank Student A.</div>
+
+          <div style="border:1px solid var(--border);border-left:3px solid var(--wj);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Ask how the project went.</div>
+          <div></div>
+
+          <div></div>
+          <div style="border:1px solid var(--border);border-left:3px solid var(--em);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Answer.</div>
+
+          <div style="border:1px solid var(--border);border-left:3px solid var(--wj);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Ask what went well.</div>
+          <div></div>
+
+          <div></div>
+          <div style="border:1px solid var(--border);border-left:3px solid var(--em);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Answer.</div>
+
+          <div style="border:1px solid var(--border);border-left:3px solid var(--wj);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Ask what didn't go well.</div>
+          <div></div>
+
+          <div></div>
+          <div style="border:1px solid var(--border);border-left:3px solid var(--em);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Answer, and explain the problems.</div>
+
+          <div style="border:1px solid var(--border);border-left:3px solid var(--wj);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Ask what you need to change.</div>
+          <div></div>
+
+          <div></div>
+          <div style="border:1px solid var(--border);border-left:3px solid var(--em);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Say what you want to change.</div>
+
+          <div style="border:1px solid var(--border);border-left:3px solid var(--wj);border-radius:0 3px 3px 0;padding:8px 14px;font-size:13px;color:var(--mid);">Say that it's OK now and everyone's happy.</div>
+          <div></div>
+        </div>
+      </div>
+
+      <!-- 4C — Sample dialogue + practise -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Read the start of the dialogue, then continue and practise with your teacher.</span>
+        </div>
+        <div class="dialogue">
+          <div class="dl-head">Sample dialogue — shoe-design project</div>
+          <div class="dl-line"><span class="dl-spk a">A:</span><span class="dl-text">Congratulations! The shoes are in the shops today!</span></div>
+          <div class="dl-line"><span class="dl-spk b">B:</span><span class="dl-text">Thanks. Yeah, I'm very happy!</span></div>
+          <div class="dl-line"><span class="dl-spk a">A:</span><span class="dl-text">So how did the project go, generally?</span></div>
+          <div class="dl-line"><span class="dl-spk b">B:</span><span class="dl-text">It went well, thanks.</span></div>
+          <div class="dl-line"><span class="dl-spk a">A:</span><span class="dl-text">Tell me about it. What went well, in particular?</span></div>
+          <div class="dl-line"><span class="dl-spk b">B:</span><span class="dl-text">The teamwork. It was … <em>(continue)</em></span></div>
+        </div>
+        <div class="note red" style="margin-top:10px;font-size:13px;">
+          Now practise the same dialogue but talk about <strong>a real project</strong> — use the "Talking about projects" box and your answers from Ex. 4B.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggle(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('closed');
+  el.querySelector('.ed-toggle').textContent=el.classList.contains('closed')?'▸':'▾';
+}
+function reveal(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  const btn=el.previousElementSibling;
+  const open=el.classList.contains('open');
+  btn.textContent=btn.textContent
+    .replace(open?'▾':'▴',open?'▴':'▾')
+    .replace(open?/^show/:'hide',open?'hide':'show')
+    .replace(open?/^📄 open/:'hide','')
+    .trim();
+  if(btn.textContent.startsWith('▴')||btn.textContent.startsWith('▾'))
+    btn.textContent=(open?'hide':'📄 open')+' video script '+(open?'▴':'▾');
+}
+function rate(btn){
+  const pair=btn.parentElement.querySelectorAll('.rp-btn');
+  pair.forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>

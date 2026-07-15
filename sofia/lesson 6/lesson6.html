@@ -1,1 +1,862 @@
-hh
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2A — Change of Habit — Sofia</title>
+<style>
+:root{
+  --navy:#1d2d50;
+  --navy-light:#2a3d6a;
+  --teal:#0097b3;
+  --teal-dark:#006f85;
+  --teal-light:#e0f5f8;
+  --teal-border:#80d0e0;
+  --amber:#c8700a;
+  --amber-light:#fef3e8;
+  --amber-border:#f0b060;
+  --green:#2a8a5c;
+  --green-light:#e8f5ee;
+  --green-border:#80c8a0;
+  --red:#c0392b;
+  --red-light:#fdecea;
+  --purple:#6b4c9a;
+  --purple-light:#f0eafa;
+  --text:#1a1f2e;
+  --muted:#5a6070;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --border:#d8dde8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;padding-bottom:60px;}
+
+/* HEADER */
+header{background:var(--navy);border-bottom:4px solid var(--teal);}
+.header-inner{max-width:1280px;margin:0 auto;padding:22px 40px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;}
+.header-unit{background:var(--teal);color:white;font-weight:800;font-size:1.9rem;padding:8px 18px;border-radius:6px;line-height:1;}
+.header-text h1{color:#fff;font-size:1.65rem;font-weight:700;margin-bottom:6px;}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.htag-g{background:rgba(0,151,179,0.2);color:#00c0df;border:1px solid rgba(0,151,179,0.35);}
+.htag-v{background:rgba(200,112,10,0.2);color:#f08030;border:1px solid rgba(200,112,10,0.3);}
+.htag-s{background:rgba(42,138,92,0.2);color:#3aaa70;border:1px solid rgba(42,138,92,0.3);}
+.header-right{text-align:right;color:#90a8c8;font-size:0.8rem;line-height:1.6;}
+
+/* WRAP */
+.wrap{max-width:1280px;margin:0 auto;padding:24px 40px;}
+
+/* PHASE */
+.phase{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-top:20px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.ph-stripe{width:6px;flex-shrink:0;}
+.ph-num{color:white;font-weight:800;font-size:0.95rem;padding:14px 18px;display:flex;align-items:center;justify-content:center;min-width:52px;}
+.ph-title{flex:1;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ph-title h2{font-size:1rem;font-weight:700;color:var(--navy);margin:0;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+/* phase colours */
+.c-rev  .ph-stripe,.c-rev  .ph-num{background:#5a3a8a;}
+.c-warm .ph-stripe,.c-warm .ph-num{background:var(--amber);}
+.c-rvw  .ph-stripe,.c-rvw  .ph-num{background:#374785;}
+.c-vlg  .ph-stripe,.c-vlg  .ph-num{background:#bb1919;}
+.c-voc  .ph-stripe,.c-voc  .ph-num{background:var(--amber);}
+.c-read .ph-stripe,.c-read .ph-num{background:var(--green);}
+.c-gram .ph-stripe,.c-gram .ph-num{background:var(--teal-dark);}
+.c-pron .ph-stripe,.c-pron .ph-num{background:#5a3a8a;}
+.c-spk  .ph-stripe,.c-spk  .ph-num{background:var(--green);}
+.c-hw   .ph-stripe,.c-hw   .ph-num{background:var(--muted);}
+
+.c-rev  .pbadge{background:#f0eafa;color:#5a3a8a;}
+.c-warm .pbadge{background:var(--amber-light);color:var(--amber);}
+.c-rvw  .pbadge{background:#eaecf5;color:#374785;}
+.c-vlg  .pbadge{background:#fdecea;color:#bb1919;}
+.c-voc  .pbadge{background:var(--amber-light);color:var(--amber);}
+.c-read .pbadge{background:var(--green-light);color:var(--green);}
+.c-gram .pbadge{background:var(--teal-light);color:var(--teal-dark);}
+.c-pron .pbadge{background:#f0eafa;color:#5a3a8a;}
+.c-spk  .pbadge{background:var(--green-light);color:var(--green);}
+.c-hw   .pbadge{background:#f0f2f5;color:var(--muted);}
+
+/* LAYOUTS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:14px 0;}
+.col-5-7{display:grid;grid-template-columns:5fr 7fr;gap:20px;margin:14px 0;}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:20px;margin:14px 0;}
+.col-4-8{display:grid;grid-template-columns:4fr 8fr;gap:20px;margin:14px 0;}
+@media(max-width:900px){.two-col,.three-col,.col-5-7,.col-7-5,.col-4-8{grid-template-columns:1fr;}.wrap,.header-inner{padding:16px 18px;}}
+
+/* ELEMENTS */
+.box{background:#f8f9fc;border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-teal{background:var(--teal-light);border-left-color:var(--teal);}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.box-amber{background:var(--amber-light);border-left-color:var(--amber);}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:white;border:1px solid var(--teal);color:var(--teal-dark);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+input.gap{background:#eef6f8;border:none;border-bottom:2px dotted var(--teal);color:var(--text);font-size:1rem;width:120px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--teal);}
+.reveal-btn{background:var(--teal);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
+.reveal-btn:hover{background:var(--teal-dark);}
+.answer{display:none;background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+audio{width:100%;margin:8px 0;border-radius:6px;}
+h3{color:var(--navy);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+.sec-label{display:inline-block;background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+
+/* GRAMMAR NOTE */
+.gram-note{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:10px 0;font-size:0.93rem;}
+.gram-sub{background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;display:inline-block;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.4px;}
+.ex-phrase{color:var(--teal-dark);font-weight:600;}
+
+/* VIDEO */
+.video-slot{background:#0d1118;border-radius:10px;overflow:hidden;margin:12px 0;}
+.video-slot video{width:100%;display:block;max-height:340px;}
+.video-label{background:#0d1118;color:#90a8c8;font-size:0.8rem;padding:8px 14px;text-align:center;}
+
+/* GRAMMAR TABLE */
+.gram-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:0.92rem;}
+.gram-table td,.gram-table th{padding:8px 12px;border:1px solid var(--teal-border);}
+.gram-table th{background:var(--navy);color:white;font-weight:700;}
+.gram-table .plus{background:#eafaf1;}
+.gram-table .minus{background:#fdecea;}
+.gram-table .quest{background:#fef9e7;}
+.ex-strong{color:var(--navy);font-weight:700;}
+.ex-green{color:var(--teal-dark);font-weight:600;}
+
+/* READING TEXT */
+.article-body{background:#f8f9fc;border:1px solid var(--border);border-radius:10px;padding:22px 26px;font-size:0.94rem;line-height:1.75;margin:14px 0;}
+.article-body h3{font-size:1.2rem;color:var(--navy);margin-bottom:4px;}
+.article-body h4{font-size:1rem;color:var(--teal-dark);margin:0 0 14px;}
+.article-quote{color:var(--navy);font-weight:700;}
+
+/* FUTURE SKILLS */
+.future-skills{background:#e6f4f4;border:2px solid #5ba8a8;border-radius:10px;padding:16px 18px;margin:14px 0;}
+.fs-label{color:#2a7070;font-weight:700;font-size:0.72rem;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:2px;}
+.future-skills h4{color:#1a5050;margin:2px 0 10px;font-size:1rem;font-weight:700;}
+
+/* PHOTO PLACEHOLDERS */
+.habit-photo{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;display:block;background:#e8ecf4;border:1px solid var(--border);}
+.habit-icon{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block;background:#e8ecf4;border:1px solid var(--border);}
+.photo-card{border-radius:8px;overflow:hidden;}
+.photo-label{background:var(--navy);color:white;font-weight:800;font-size:0.85rem;padding:5px 12px;text-align:center;}
+
+/* SPEECH BUBBLES */
+.chat-area{display:flex;flex-direction:column;gap:10px;margin:14px 0;}
+.bubble{max-width:70%;padding:10px 14px;border-radius:12px;font-size:0.92rem;line-height:1.5;}
+.bubble-left{background:var(--teal-light);border:1px solid var(--teal-border);border-top-left-radius:2px;align-self:flex-start;}
+.bubble-right{background:#f0f3f8;border:1px solid var(--border);border-top-right-radius:2px;align-self:flex-end;}
+
+/* ODD ONE OUT CARDS */
+.ooo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+.ooo-card{background:#f8f9fc;border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
+.ooo-words{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.ooo-chip{background:white;border:2px solid var(--border);color:var(--text);padding:5px 14px;border-radius:20px;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.15s;}
+.ooo-chip:hover{border-color:var(--teal);color:var(--teal-dark);}
+
+/* STORY TEXT */
+.story-text{background:#f8f9fc;border:1px solid var(--border);border-radius:8px;padding:18px 20px;font-size:0.93rem;line-height:1.8;}
+.story-text h4{color:var(--navy);font-weight:800;font-size:1.05rem;margin-bottom:12px;}
+
+/* DIVIDER */
+.unit-divider{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:10px;padding:16px 24px;margin:28px 0 0;display:flex;align-items:center;gap:14px;}
+.unit-divider h3{color:white;margin:0;font-size:1.1rem;}
+.unit-divider span{background:rgba(255,255,255,0.15);color:white;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-unit">2A</div>
+    <div class="header-text">
+      <h1>Change of Habit</h1>
+      <div class="header-tags">
+        <span class="htag htag-v">Vocabulary: making changes</span>
+        <span class="htag htag-g">Grammar: present perfect continuous</span>
+        <span class="htag htag-s">Speaking: lifestyle habits</span>
+      </div>
+    </div>
+    <div class="header-right">Speakout B1+<br>Unit 2 · behaviour</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ═══ REVISION ═══════════════════════════════════════════ -->
+<div class="phase c-rev">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R</div>
+    <div class="ph-title">
+      <h2>Revision — Unit 1D: except for / apart from / even</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar review</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="sec-label">Exercise 1 — Complete with except for, apart from, even or not even</div>
+    <div class="two-col">
+      <ol>
+        <li>I use all my gadgets every day, <input class="gap" placeholder="..."> my VR headset, which I've used once.</li>
+        <li>Everyone in the office has a smartphone, <input class="gap" placeholder="..."> our manager, who still uses a flip phone.</li>
+        <li>The new update improved everything — it <input class="gap" placeholder="..."> made the battery last longer.</li>
+        <li><input class="gap" placeholder="..."> people who hate social media check it sometimes.</li>
+      </ol>
+      <ol start="5">
+        <li><input class="gap" placeholder="..."> my laptop, I could live without all my gadgets.</li>
+        <li>She uses every app on her phone <input class="gap" placeholder="..."> the fitness one.</li>
+        <li>He <input class="gap" placeholder="..."> remembered to charge his phone — it's completely dead.</li>
+        <li>All the students passed the exam <input class="gap" placeholder="..."> two, who had to retake it.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 except for &nbsp;·&nbsp; 2 apart from &nbsp;·&nbsp; 3 even &nbsp;·&nbsp; 4 Not even<br>
+      5 Apart from &nbsp;·&nbsp; 6 except for &nbsp;·&nbsp; 7 didn't even &nbsp;·&nbsp; 8 except for / apart from
+    </div>
+
+    <div class="sec-label" style="margin-top:22px;">Exercise 2 — Correct the mistake in each sentence</div>
+    <div class="two-col">
+      <ol>
+        <li>I love all types of music, besides classical.</li>
+        <li>Apart my phone, I find all gadgets easy to live without.</li>
+        <li>She works every day, even for Sundays.</li>
+        <li>Not even she knew the answer — she always knows everything!</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 <b>except for</b> / apart from (not "besides" in this context)<br>
+          2 Apart <b>from</b> my phone… (missing "from")<br>
+          3 <b>even</b> Sundays (not "even for")<br>
+          4 Not even <b>she</b> → correct as is ✓ — or if "she" is wrong, it should be <b>her</b> depending on position (this is actually fine — "Not even she" is correct)
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ WARM-UP ════════════════════════════════════════════ -->
+<div class="phase c-warm">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-title">
+      <h2>Warm-up — Odd One Out</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary · discussion</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <p>Which word doesn't belong? Circle the odd one out and explain why.</p>
+
+    <div class="ooo-grid">
+      <div class="ooo-card">
+        <p style="font-weight:700;color:var(--muted);font-size:0.8rem;margin-bottom:8px;">1</p>
+        <div class="ooo-words">
+          <span class="ooo-chip">phone</span><span class="ooo-chip">smartwatch</span>
+          <span class="ooo-chip">laptop</span><span class="ooo-chip">leather jacket</span>
+        </div>
+      </div>
+      <div class="ooo-card">
+        <p style="font-weight:700;color:var(--muted);font-size:0.8rem;margin-bottom:8px;">2</p>
+        <div class="ooo-words">
+          <span class="ooo-chip">give up</span><span class="ooo-chip">put off</span>
+          <span class="ooo-chip">keep on</span><span class="ooo-chip">apart from</span>
+        </div>
+      </div>
+      <div class="ooo-card">
+        <p style="font-weight:700;color:var(--muted);font-size:0.8rem;margin-bottom:8px;">3</p>
+        <div class="ooo-words">
+          <span class="ooo-chip">leather</span><span class="ooo-chip">denim</span>
+          <span class="ooo-chip">genuine</span><span class="ooo-chip">cotton</span>
+        </div>
+      </div>
+      <div class="ooo-card">
+        <p style="font-weight:700;color:var(--muted);font-size:0.8rem;margin-bottom:8px;">4</p>
+        <div class="ooo-words">
+          <span class="ooo-chip">since</span><span class="ooo-chip">for</span>
+          <span class="ooo-chip">ago</span><span class="ooo-chip">recently</span>
+        </div>
+      </div>
+      <div class="ooo-card">
+        <p style="font-weight:700;color:var(--muted);font-size:0.8rem;margin-bottom:8px;">5</p>
+        <div class="ooo-words">
+          <span class="ooo-chip">set a goal</span><span class="ooo-chip">stick to</span>
+          <span class="ooo-chip">not even</span><span class="ooo-chip">make an effort</span>
+        </div>
+      </div>
+      <div class="ooo-card">
+        <p style="font-weight:700;color:var(--muted);font-size:0.8rem;margin-bottom:8px;">6</p>
+        <div class="ooo-words">
+          <span class="ooo-chip">binge-watch</span><span class="ooo-chip">scroll</span>
+          <span class="ooo-chip">charge</span><span class="ooo-chip">achieve</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 <b>leather jacket</b> — not a digital gadget<br>
+      2 <b>apart from</b> — not a phrasal verb about habits; it's a grammar expression meaning "except for"<br>
+      3 <b>genuine</b> — not a material; it describes authenticity<br>
+      4 <b>ago</b> — used with past simple ("I started ago"), not with present perfect<br>
+      5 <b>not even</b> — grammar/focusing expression, not a habit-change phrase<br>
+      6 <b>achieve</b> — positive action; the others are all screen/gadget-related activities
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ UNIT 1 REVIEW ══════════════════════════════════════ -->
+<div class="unit-divider"><h3>Unit 1 Review</h3><span>page 18</span></div>
+
+<div class="phase c-rvw">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">1R</div>
+    <div class="ph-title">
+      <h2>Review — Grammar: Narrative Tenses · Verb Patterns · except / apart / even</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar review</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="sec-label">Narrative tenses</div>
+    <p><strong>1A.</strong> Choose the correct words to complete the text. What do you think the idiom in the final sentence means?</p>
+    <div class="col-7-5" style="align-items:start;">
+      <div class="story-text">
+        <h4>The Story of Me … on Wheels!</h4>
+        <p>The first mode of transport that I remember was my tricycle. My parents gave it to me the year after I <sup>1</sup><strong>was learning / had learnt</strong> to walk, and I loved it. Then came my famous red bike. My dad <sup>2</sup><strong>was teaching / taught</strong> me how to ride it. I was ten years old and I <sup>3</sup><strong>was riding / rode</strong> down the main road when something <sup>4</sup><strong>had happened / happened</strong> that I'll never forget. It <sup>5</sup><strong>had rained / was raining</strong> heavily so I could barely see, and I skidded in a puddle and lost control. Luckily, the road was empty and I <sup>6</sup><strong>wasn't getting / didn't get</strong> hurt. Later, I bought a motorbike. I <sup>7</sup><strong>was wanting / had wanted</strong> one for years, but I <sup>8</sup><strong>hadn't been / wasn't being</strong> able to afford it until my twenties. I rode it everywhere. In my thirties, I got married and started a family, so I <sup>9</sup><strong>was having / had</strong> to sell my motorbike and buy a car. Yesterday I <sup>10</sup><strong>watched / had watched</strong> my three-year-old learning to ride his tricycle. You could say the wheel has come full circle!</p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 had learnt &nbsp;·&nbsp; 2 taught &nbsp;·&nbsp; 3 was riding<br>
+          4 happened &nbsp;·&nbsp; 5 was raining &nbsp;·&nbsp; 6 didn't get<br>
+          7 had wanted &nbsp;·&nbsp; 8 hadn't been &nbsp;·&nbsp; 9 had &nbsp;·&nbsp; 10 watched<br><br>
+          <b>Idiom:</b> "The wheel has come full circle" = the situation has returned to where it started.
+        </div>
+      </div>
+    </div>
+    <p><strong>1B.</strong> Do you have stories to tell about yourself on wheels?</p>
+
+    <div class="sec-label" style="margin-top:20px;">Verb patterns</div>
+    <p><strong>2A.</strong> Make sentences about yourself using the words in box A and verbs in box B. Use the correct form: <em>-ing</em> or <em>to</em> infinitive.</p>
+    <div class="two-col">
+      <div class="wordbox"><span class="chip">care about</span><span class="chip">dream about</span><span class="chip">give up</span><span class="chip">look forward to</span><span class="chip">plan on</span><span class="chip">remember</span><span class="chip">stop</span></div>
+      <div class="wordbox"><span class="chip">be</span><span class="chip">do</span><span class="chip">eat</span><span class="chip">go</span><span class="chip">help</span><span class="chip">relax</span><span class="chip">travel</span><span class="chip">watch</span><span class="chip">work</span></div>
+    </div>
+    <div class="box box-teal" style="color:var(--teal-dark);font-style:italic;">I dream about travelling to West Africa.</div>
+
+
+    <div class="sec-label" style="margin-top:20px;">except for / apart from / even</div>
+    <p><strong>3A.</strong> Add the words in the box to complete the sentences. One word isn't used.</p>
+    <div class="wordbox"><span class="chip">apart</span><span class="chip">even</span><span class="chip">except</span><span class="chip">from</span><span class="chip">not</span></div>
+    <div class="two-col">
+      <ol>
+        <li>I'm the quietest person in my family, apart <input class="gap" style="width:70px;" placeholder="..."> my father.</li>
+        <li>Everyone in my family dances, <input class="gap" style="width:70px;" placeholder="..."> my grandparents, who love it.</li>
+        <li>No one in my family knows how to cook <input class="gap" style="width:70px;" placeholder="..."> my mother.</li>
+        <li>Everyone I know plays video games, <input class="gap" style="width:70px;" placeholder="..."> for me.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 from &nbsp;·&nbsp; 2 even &nbsp;·&nbsp; 3 except &nbsp;·&nbsp; 4 except<br><span style="color:var(--muted);font-size:0.88rem;">Unused word: not</span></div>
+      </div>
+    </div>
+    <p><strong>3B.</strong> Are any of the sentences true for you?</p>
+
+    <div class="sec-label" style="margin-top:20px;">Vocabulary: describing possessions</div>
+    <p><strong>4A.</strong> Choose the correct words to complete the sentences.</p>
+    <div class="two-col">
+      <ol>
+        <li>It's a beautiful old <strong>cotton / silver</strong> ring which <strong>belonged to / owned</strong> my grandmother.</li>
+        <li>They're my favourite pair of <strong>denim / diamond</strong> jeans. They're quite <strong>leather / damaged</strong>, but I would never throw them away.</li>
+        <li>It's a lovely <strong>stone / rubber</strong> vase that a friend gave me as a birthday present. It's <strong>cool / not worth a lot</strong> but it's very <strong>special / gold</strong>.</li>
+        <li>It's a <strong>steel / genuine</strong> Italian suitcase, made of <strong>leather / stone</strong>. It belonged to my father.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 silver, belonged to &nbsp;·&nbsp; 2 denim, damaged<br>3 stone, not worth a lot, special &nbsp;·&nbsp; 4 genuine, leather</div>
+      </div>
+    </div>
+    <p><strong>4B.</strong> Do you have any objects which you would never throw away? Describe them and say why they are special to you.</p>
+
+    <div class="sec-label" style="margin-top:20px;">The House that Jock Built</div>
+    <p><strong>5A.</strong> Choose the correct option (A–C) to complete the extract from a story.</p>
+    <div class="col-7-5" style="align-items:start;">
+      <div class="story-text">
+        <h4>The House that Jock Built</h4>
+        <p>When Elizabeth finally saw the house, it <sup>1</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> part of her family legend for 200 years. It had been built by Jock Phillip, her distant ancestor who <sup>2</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> Scotland for America aged sixteen with nothing but the clothes on his back. Five years after arriving, he discovered a hidden treasure in California: a seam of gold, which he later mined. He had succeeded in <sup>3</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> his fortunes, and with his earnings he built his <sup>4</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> home.</p>
+        <p>It was the <sup>5</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> house, large and beautiful, a house to pass down from generation to generation. When Elizabeth was young, she remembered <sup>6</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> stories about it. For this reason she had always dreamed about <sup>7</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> the house. Finally, her chance came.</p>
+        <p>While she <sup>8</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> there, she suddenly felt a sense of sadness. She arrived and saw immediately that the house was badly <sup>9</sup><input class="gap" style="width:85px;" placeholder="A/B/C">. The walls, made of <sup>10</sup><input class="gap" style="width:85px;" placeholder="A/B/C">, were falling down, and the windows were long gone.</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:0.83rem;color:var(--muted);display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+          <span>1 A was being &nbsp; B had been &nbsp; C had</span>
+          <span>2 A had been leaving &nbsp; B was leaving &nbsp; C had left</span>
+          <span>3 A changing &nbsp; B to change &nbsp; C change</span>
+          <span>4 A taste &nbsp; B dream &nbsp; C treasure</span>
+          <span>5 A ideal &nbsp; B big &nbsp; C great</span>
+          <span>6 A hearing &nbsp; B to hear &nbsp; C hear</span>
+          <span>7 A visit &nbsp; B to visit &nbsp; C visiting</span>
+          <span>8 A was driving &nbsp; B had driven &nbsp; C drove</span>
+          <span>9 A damaging &nbsp; B damaged &nbsp; C damage</span>
+          <span>10 A glass &nbsp; B silver &nbsp; C stone</span>
+        </div>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1B &nbsp;·&nbsp; 2C &nbsp;·&nbsp; 3A &nbsp;·&nbsp; 4B &nbsp;·&nbsp; 5A &nbsp;·&nbsp; 6A &nbsp;·&nbsp; 7C &nbsp;·&nbsp; 8A &nbsp;·&nbsp; 9B &nbsp;·&nbsp; 10C</div>
+        <div class="box" style="margin-top:12px;"><p><strong>5B.</strong> Listen and check.</p><audio controls><source src="R1_01.mp3" type="audio/mpeg"></audio></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ UNIT 2 DIVIDER ════════════════════════════════════ -->
+<div class="unit-divider" style="background:linear-gradient(135deg,#0a5c70,#0097b3);margin-top:28px;">
+  <h3>Unit 2 · behaviour</h3><span>2A Change of Habit</span>
+</div>
+
+<!-- ═══ VLOGS ══════════════════════════════════════════════ -->
+<div class="phase c-vlg">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">V</div>
+    <div class="ph-title">
+      <h2>Unit 2 Opener — BBC Vlogs</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">video · speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="col-4-8" style="align-items:start;">
+      <div>
+        <div class="video-slot">
+          <video controls>
+            <source src="besthabit.mp4" type="video/mp4">
+          </video>
+          <div class="video-label">▶ BBC Vlogs — Unit 2</div>
+        </div>
+        <div class="box box-teal" style="margin-top:10px;"><p style="color:var(--teal-dark);font-weight:700;font-size:0.9rem;">Q: What good habits do you have?</p></div>
+      </div>
+      <div>
+        <p><strong>1.</strong> Watch the video. What habits do they talk about?</p>
+        <div class="speak-q">Make a note of each habit mentioned.</div>
+        <p style="margin-top:16px;"><strong>2.</strong> What good habits do you have? Talk about one or two of them.</p>
+        <div class="speak-q">How long have you had this habit? When did you start? Is it easy to keep it up?</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ VOCABULARY ════════════════════════════════════════ -->
+<div class="phase c-voc">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">1</div>
+    <div class="ph-title">
+      <h2>Vocabulary — Making Changes</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>1A. Work in pairs. Which bad habits (1–6) are in the photos (A–C)?</h3>
+    <div class="three-col" style="margin-bottom:14px;">
+      <div class="photo-card"><img src="ph1.png" alt="Photo A" class="habit-photo"><div class="photo-label">A</div></div>
+      <div class="photo-card"><img src="ph2.png" alt="Photo B" class="habit-photo"><div class="photo-label">B</div></div>
+      <div class="photo-card"><img src="ph3.png" alt="Photo C" class="habit-photo"><div class="photo-label">C</div></div>
+    </div>
+    <ol>
+      <li>'I spend over three hours on social media every day.'</li>
+      <li>'I leave the tap running when I clean my teeth.'</li>
+      <li>'I sometimes binge-watch TV series for hours at a time.'</li>
+      <li>'I often leave the lights on when I go out of a room.'</li>
+      <li>'I throw away quite a lot of food.'</li>
+      <li>'I never stop work for lunch.'</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">A → 3 (binge-watching) &nbsp;·&nbsp; B → 2 (tap running) &nbsp;·&nbsp; C → 6 (never stops for lunch)</div>
+
+    <h3>1B. Do you do any of the things in Ex 1A?</h3>
+    <div class="speak-q">Which of these bad habits do you have? Are any of them difficult to break?</div>
+
+    <h3>2A. Look at the statements (1–6). Which are true for you?</h3>
+    <div class="box">
+      <ol>
+        <li>I <strong>make an effort</strong> to walk away from my screen every hour, but I don't always succeed.</li>
+        <li>I often <strong>put off</strong> important jobs if they're difficult and do easy tasks instead or just check my messages.</li>
+        <li>I've tried to stop biting my nails, but I <strong>keep on</strong> doing it.</li>
+        <li>I <strong>can't resist</strong> coffee. I drink about eight cups a day. I want to <strong>give up</strong> drinking coffee, but I can't.</li>
+        <li>Every time I <strong>take up</strong> a sport, for example swimming, or something like that, I only <strong>manage</strong> to do it for a few weeks.</li>
+        <li>I'm good at <strong>setting goals</strong> for changing my habits, but I'm not very good at <strong>sticking to</strong> them, so I rarely <strong>achieve</strong> my goals.</li>
+      </ol>
+    </div>
+
+    <h3>2B. Complete the sentences (1–10) with the correct form of the phrases in bold in Ex 2A.</h3>
+    <div class="two-col">
+      <ol>
+        <li>I decided what I want to do – I <input class="gap" placeholder="..."> a <input class="gap" style="width:70px;" placeholder="...">.</li>
+        <li>She's talking and talking and talking – she just <input class="gap" placeholder="..."> talking.</li>
+        <li>I can't say no to it, I <input class="gap" placeholder="..."> it.</li>
+        <li>I wanted to stop doing it, so I tried to <input class="gap" placeholder="..."> it <input class="gap" style="width:50px;" placeholder="...">.</li>
+        <li>I've started something new – badminton. I <input class="gap" placeholder="..."> it <input class="gap" style="width:50px;" placeholder="..."> last month.</li>
+      </ol>
+      <ol start="6">
+        <li>I practise the guitar every day. If I don't <input class="gap" placeholder="..."> it, I'll never get better at it.</li>
+        <li>He tried to finish it on time, but it was too difficult so he didn't <input class="gap" placeholder="..."> to do it.</li>
+        <li>I don't want to do it now, but I should. I'll do it later. I'm <input class="gap" placeholder="..."> it <input class="gap" style="width:50px;" placeholder="...">.</li>
+        <li>I've done many things in my life, but I still haven't <input class="gap" placeholder="..."> my <input class="gap" style="width:70px;" placeholder="..."> of becoming a lawyer.</li>
+        <li>I'm trying, I'm trying – I'm <input class="gap" placeholder="..."> to do it.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 set / goal &nbsp;·&nbsp; 2 keeps on &nbsp;·&nbsp; 3 can't resist &nbsp;·&nbsp; 4 give / up &nbsp;·&nbsp; 5 took / up<br>
+      6 stick to &nbsp;·&nbsp; 7 manage &nbsp;·&nbsp; 8 putting / off &nbsp;·&nbsp; 9 achieved / goal &nbsp;·&nbsp; 10 making an effort
+    </div>
+
+    <h3>2C. Look at Ex 2A and 2B and answer the questions.</h3>
+    <ol>
+      <li>Which phrases are followed by <em>to</em> + infinitive?</li>
+      <li>Which phrases are followed by verb + <em>-ing</em>?</li>
+      <li>Which phrases are phrasal verbs?</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 <em>to</em> + infinitive: <b>make an effort to</b>, <b>manage to</b><br>
+      2 verb + <em>-ing</em>: <b>keep on</b>, <b>give up</b> (also: put off, take up, stick to, can't resist — can be followed by -ing too)<br>
+      3 Phrasal verbs: <b>put off</b>, <b>keep on</b>, <b>give up</b>, <b>take up</b>, <b>stick to</b>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ READING ════════════════════════════════════════════ -->
+<div class="phase c-read">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">2</div>
+    <div class="ph-title">
+      <h2>Reading — Make or Break: the habits we'd like to change</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">reading</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. Discuss the questions.</h3>
+    <div class="speak-q">1 Have you ever tried to stop a bad habit or build a new positive habit? What happened?</div>
+    <div class="speak-q">2 Why is it difficult to break bad habits, do you think?</div>
+
+    <h3>3B. Read the article and choose the best summary (1–3).</h3>
+    <ol>
+      <li>If you understand how habits work, you'll be better able to change them.</li>
+      <li>Changing bad habits and forming good habits are more or less the same thing.</li>
+      <li>Everyday mistakes are the reason why people often fail to break a habit.</li>
+    </ol>
+
+    <div class="article-body">
+      <h3>Make or Break:</h3>
+      <h4>the habits we'd like to change</h4>
+      <p>I've been a life coach for the past seven years, and before this I worked as a psychologist for over ten years. I've been helping people to change their habits since the start of my career, and yes, I've been trying to change my own habits recently, so I know how hard it is. Time and time again, people have asked me questions like <span class="article-quote">¹'I want to stop looking at my phone all the time. Why is it so difficult?'</span> and <span class="article-quote">²'I've been working seven days a week since I was twenty-two. Can I really change that?'</span></p>
+      <p>To answer these questions, let's look at an example. Suppose you want to give up coffee and you currently drink eight cups a day. All that coffee makes you feel nervous and you know it's bad for you. So, you decide to drink water instead of coffee. Everything's fine for the first four days and you manage to follow your plan. But then on the fifth day you come home late and tired – that tiredness is one of your 'triggers' – and you head straight for the coffee. You tell yourself, <span class="article-quote">³'Just this one time. I'm definitely going to stick to my plan after this.'</span> But that one cup turns into two and then before you know it, you're back to eight cups a day.</p>
+      <p>So, what's happening here? Well, you've given yourself an impossible task. You can't go from eight cups to zero overnight. You've probably been drinking coffee for a long time and you didn't go from zero cups to eight overnight either! So, tip number one: give yourself mini-goals that you can achieve on a daily basis. Going from eight cups to seven, then six and so on brings you the satisfaction of achieving a new goal almost every day.</p>
+      <p>Another mistake you've made is that you haven't prepared for the triggers – the things that make you want to 'do' the bad habit, which can be a feeling (e.g. tiredness) or something external (e.g. the smell of coffee). When changing a habit, you need to be ready for these moments, which brings us to tip number two: when a trigger makes your brain scream for coffee (or whatever), just stop and focus on that feeling. Tell yourself <span class="article-quote">⁴'Yes, I knew there would be moments like this.'</span> Then pour yourself a glass of water.</p>
+      <p>And that leads to the next point: just do it! Your brain says coffee and you have a water. Skip the argument (with yourself), just do it, just pour yourself that glass of water. Do you keep putting off a difficult task that is actually important, and take the easy way instead? Tell yourself, <span class="article-quote">⁵'I have one task, one goal. Just do it.'</span> Do you look at your phone too much at night? Well, turn it off, put it in another room and go to bed. Just do it.</p>
+      <p>Finally, from time to time it's important to remind yourself of why you're doing this. Remember, all that coffee makes you feel nervous and you know it's bad for you; your goal is to be a healthier person. Say it to yourself, out loud. You'll be surprised how much motivation you'll feel.</p>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answer (3B)</button>
+    <div class="answer">Summary <b>1</b> — If you understand how habits work, you'll be better able to change them.</div>
+
+    <h3>3C. Read the article again and answer the questions.</h3>
+    <ol>
+      <li>What three reasons does the writer give for being qualified to write on this topic?</li>
+      <li>What are the four main tips?</li>
+      <li>What are two types of triggers?</li>
+      <li>Which words best describe the style of this article: factual, formal, helpful, humorous, informal, scientific?</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 Life coach for 7 years; psychologist for 10 years before that; has been trying to change own habits recently.<br>
+      2 Give yourself mini-goals; be prepared for triggers; just do it; remind yourself of your goals.<br>
+      3 A feeling (internal, e.g. tiredness) or something external (e.g. the smell of coffee).<br>
+      4 Helpful, informal.
+    </div>
+
+    <h3>4A. Read the Future Skills box and do the task.</h3>
+    <div class="future-skills">
+      <div class="fs-label">Future Skills</div>
+      <h4>Critical thinking</h4>
+      <p>Writers use many different techniques to connect with and influence their readers. It is useful and important while you are reading to notice these techniques and reflect on the writer's purpose in using them. One technique is the use of quotes.</p>
+      <p style="margin-top:8px;font-weight:600;">Complete Exercise 4B to find out the writer's purpose in using these quotes.</p>
+    </div>
+
+    <h3>4B. Look at the article. What is the writer's purpose for using the quotes (1–5) in bold? Choose at least two purposes (a–e) for each quote.</h3>
+    <div class="two-col" style="align-items:start;">
+      <div class="box">
+        <p><strong>a</strong> to create a connection with the reader – the reader can imagine saying or thinking this</p>
+        <p><strong>b</strong> to make the passage more interesting, the way dialogue does in a story</p>
+        <p><strong>c</strong> to give the reader an idea of what to do in the situation</p>
+        <p><strong>d</strong> to give an example of the suggestion that was just made, to make it clearer</p>
+        <p><strong>e</strong> to help show how the tip might work in practice</p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          Quote ¹ → a, b<br>
+          Quote ² → a, b<br>
+          Quote ³ → a, b<br>
+          Quote ⁴ → a, b, c, d<br>
+          Quote ⁵ → a, b, c, d, e
+        </div>
+      </div>
+    </div>
+
+    <h3>5. Discuss the questions.</h3>
+    <div class="speak-q">1 Which of the tips in the article do you think are the most and least useful? Why?</div>
+    <div class="speak-q">2 What other advice would you give someone who is trying to break a bad habit?</div>
+
+  </div>
+</div>
+
+<!-- ═══ GRAMMAR ════════════════════════════════════════════ -->
+<div class="phase c-gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">3</div>
+    <div class="ph-title">
+      <h2>Grammar — Present Perfect Continuous</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>6A. Find the time phrases at the end of the sentences (1–5).</h3>
+    <div class="two-col">
+      <ol>
+        <li>Before this I worked as a psychologist for over ten years.</li>
+        <li>I've been helping people to change their habits since the start of my career.</li>
+        <li>I've been trying to change my own habits recently.</li>
+        <li>I've been working seven days a week since I was twenty-two.</li>
+        <li>You've probably been drinking coffee for a long time.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show time phrases</button>
+        <div class="answer">
+          1 for over ten years<br>
+          2 since the start of my career<br>
+          3 recently<br>
+          4 since I was twenty-two<br>
+          5 for a long time
+        </div>
+      </div>
+    </div>
+
+    <h3>6B. Choose the correct words to complete the rules. Use the sentences in Ex 6A to help.</h3>
+    <div class="box">
+      <ol>
+        <li>We use the past simple for actions or situations that are <strong>finished / unfinished</strong>.</li>
+        <li>We use the present perfect continuous for actions or situations that are <strong>finished / unfinished</strong>.</li>
+        <li>We form the present perfect continuous with <em>have</em> + <em>been</em> + <strong>-ing form / past participle</strong>.</li>
+        <li>We use <em>since</em> to talk about a <strong>period of / point in</strong> time.</li>
+        <li>We use <em>for</em> to talk about a <strong>period of / point in</strong> time.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 finished &nbsp;·&nbsp; 2 unfinished &nbsp;·&nbsp; 3 -ing form &nbsp;·&nbsp; 4 point in &nbsp;·&nbsp; 5 period of</div>
+
+    <!-- GRAMMAR BANK -->
+    <div class="sec-label" style="margin-top:24px;">Grammar Bank 2A — Present Perfect Continuous</div>
+
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <div class="gram-note">
+          <p>We use the present perfect continuous to talk about actions and situations which started in the past, but are <strong>not finished</strong>. They continue until now.</p>
+          <p class="ex-phrase" style="margin-top:10px;">I<strong>'ve been studying</strong> Mandarin since last year. <em>(I'm still studying.)</em><br>
+          He<strong>'s been living</strong> in the UK for ten years. <em>(He still lives there.)</em></p>
+          <p style="margin-top:10px;">We use the <strong>past simple</strong> when the action is <strong>finished</strong>.</p>
+          <p class="ex-phrase">I <strong>studied</strong> Mandarin last year. <em>(I'm not studying now.)</em><br>
+          He <strong>lived</strong> in the UK for ten years. <em>(He's not living there now.)</em></p>
+        </div>
+
+        <table class="gram-table" style="margin-top:14px;">
+          <tr><th>+</th><td class="plus"><span class="ex-strong">I've / She's</span> been <span class="ex-green">reading</span> a book.</td></tr>
+          <tr><th>−</th><td class="minus"><span class="ex-strong">They haven't / He hasn't</span> been <span class="ex-green">listening</span> to me.</td></tr>
+          <tr><th>?</th><td class="quest"><span class="ex-strong">Have you / Has she</span> been <span class="ex-green">working</span> here for a long time?</td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="gram-note">
+          <p>We use <strong>for</strong> or <strong>since</strong> to talk about the duration of an activity.</p>
+          <p class="ex-phrase" style="margin-top:8px;">They've been living in New Zealand <strong>since</strong> 2020.<br>
+          We've been working together <strong>for</strong> over twenty years.</p>
+          <p style="margin-top:10px;">We use <strong>How long … ?</strong> to ask about the length of time.</p>
+          <p class="ex-phrase">A: <strong>How long have you been playing</strong> the drums?<br>
+          B: I<strong>'ve been playing since</strong> I was six years old.</p>
+          <p style="margin-top:10px;">We use the present perfect continuous with <strong>recently/lately</strong>.</p>
+          <p class="ex-phrase">I <strong>haven't been sleeping</strong> very well <strong>recently</strong>.<br>
+          She<strong>'s been working</strong> very hard <strong>lately</strong>.</p>
+          <p style="margin-top:10px;">We often use present perfect simple or continuous with little change for: <em>live, work, teach, study</em>.</p>
+          <p class="ex-phrase">I<strong>'ve lived</strong> here for years. &nbsp;=&nbsp; I<strong>'ve been living</strong> here for years.</p>
+          <p style="margin-top:10px;color:var(--muted);font-size:0.88rem;">⚠️ Do NOT use present perfect continuous with state verbs (<em>love, hate, like, have, enjoy, know, understand, believe</em> etc.)<br>
+          I<strong>'ve known</strong> him for ages. NOT <s>I've been knowing him for ages.</s></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 1 -->
+    <div class="gram-sub" style="margin-top:22px;">Practice 1 — Present perfect continuous: complete with verbs from the box</div>
+    <div class="wordbox"><span class="chip">do</span><span class="chip">get up</span><span class="chip">live</span><span class="chip">rain</span><span class="chip">run</span><span class="chip">study</span><span class="chip">try</span><span class="chip">watch</span></div>
+    <div class="two-col">
+      <ol>
+        <li>A: How long <input class="gap" placeholder="..."> he <input class="gap" style="width:80px;" placeholder="..."> in Berlin?<br>
+        B: About two years. He's just bought an apartment.</li>
+        <li>I haven't been outside yet – it <input class="gap" placeholder="..."> all day!</li>
+        <li><input class="gap" placeholder="..."> you <input class="gap" style="width:100px;" placeholder="..."> that new crime series? It's brilliant!</li>
+        <li>They <input class="gap" placeholder="..."> together at the same university for the last two years.</li>
+      </ol>
+      <ol start="5">
+        <li>She's exhausted. Lately, she <input class="gap" placeholder="..."> very early for work.</li>
+        <li>A: You look really fit!<br>B: Thank you. I <input class="gap" placeholder="..."> five kilometres every morning since the beginning of the year.</li>
+        <li>I didn't know you sang in a band! How long <input class="gap" placeholder="..."> that?</li>
+        <li>A: I thought you'd stopped drinking coffee.<br>B: I <input class="gap" placeholder="..."> to give up, but I just can't resist.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 has / been living &nbsp;·&nbsp; 2 's/has been raining &nbsp;·&nbsp; 3 Have / been watching &nbsp;·&nbsp; 4 've/have been studying<br>
+      5 's/has been getting up &nbsp;·&nbsp; 6 've/have been running &nbsp;·&nbsp; 7 have you been doing &nbsp;·&nbsp; 8 've/have been trying
+    </div>
+
+    <!-- PRACTICE 2 -->
+    <div class="gram-sub" style="margin-top:22px;">Practice 2 — Choose the correct words to complete the text</div>
+    <div class="col-7-5" style="align-items:start;">
+      <div class="box">
+        <p><sup>1</sup><strong>I work / I've been working</strong> in a small tech company for about five years. My business partner, Salman, and I <sup>2</sup><strong>have been knowing / have known</strong> each other since we were children and we've been best friends. We <sup>3</sup><strong>have been starting / started</strong> the company when we were university students. Our main product is digital games, although <sup>4</sup><strong>we develop / we've been developing</strong> educational tools for about a year, too. Recently, <sup>5</sup><strong>we get / we've been getting</strong> a lot of attention from the media, which is great. The only problem is that we work far too much. This <sup>6</sup><strong>began / has been beginning</strong> in the early years of the company. When we were just starting, we <sup>7</sup><strong>have been having / had</strong> to work long hours because it's a very competitive industry. But in the last two years, <sup>8</sup><strong>we work / we've been working</strong> very long days and it's become too much. We're trying to change our working habits!</p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 I've been working<br>2 have known<br>3 started<br>4 we've been developing<br>
+          5 we've been getting<br>6 began<br>7 had<br>8 we've been working
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 3 -->
+    <div class="gram-sub" style="margin-top:22px;">Practice 3 — Tick the possible sentences. Sometimes both are possible.</div>
+    <div class="two-col">
+      <div class="box">
+        <p><strong>1 a</strong> She's always liked music since she was very young. <input type="checkbox"></p>
+        <p><strong>&nbsp;&nbsp;b</strong> She's always been liking music since she was very young. <input type="checkbox"></p>
+        <p style="margin-top:10px;"><strong>2 a</strong> How long have you lived in Turkey? <input type="checkbox"></p>
+        <p><strong>&nbsp;&nbsp;b</strong> How long have you been living in Turkey? <input type="checkbox"></p>
+        <p style="margin-top:10px;"><strong>3 a</strong> I've known my friend Waleed Bakri for sixteen years. <input type="checkbox"></p>
+        <p><strong>&nbsp;&nbsp;b</strong> I've been knowing my friend Waleed Bakri for sixteen years. <input type="checkbox"></p>
+      </div>
+      <div class="box">
+        <p><strong>4 a</strong> What have you done this morning? <input type="checkbox"></p>
+        <p><strong>&nbsp;&nbsp;b</strong> What have you been doing this morning? <input type="checkbox"></p>
+        <p style="margin-top:10px;"><strong>5 a</strong> They haven't worked here for long. <input type="checkbox"></p>
+        <p><strong>&nbsp;&nbsp;b</strong> They haven't been working here for long. <input type="checkbox"></p>
+        <p style="margin-top:10px;"><strong>6 a</strong> I've understood everything so far. <input type="checkbox"></p>
+        <p><strong>&nbsp;&nbsp;b</strong> I've been understanding everything so far. <input type="checkbox"></p>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 <b>a only</b> — <em>like</em> is a state verb, can't use continuous<br>
+      2 <b>both</b> — little change in meaning for <em>live</em><br>
+      3 <b>a only</b> — <em>know</em> is a state verb<br>
+      4 <b>both</b> — a focuses on completion; b focuses on the activity<br>
+      5 <b>both</b> — little change in meaning for <em>work</em><br>
+      6 <b>a only</b> — <em>understand</em> is a state verb
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══ SPEAKING ═══════════════════════════════════════════ -->
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">5</div>
+    <div class="ph-title">
+      <h2>Speaking — Your Lifestyle Habits</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>8A. Make a list of three to five lifestyle habits you want to change, and how long you've had each habit. Include bad habits that you want to stop and good habits that you want to start. Use the pictures for ideas.</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;">
+      <img src="diet.png" alt="diet / healthy eating" class="habit-icon">
+      <img src="ex.png" alt="exercise / sport" class="habit-icon">
+      <img src="work.png" alt="work / productivity" class="habit-icon">
+      <img src="read.png" alt="reading / learning" class="habit-icon">
+      <img src="soc.png" alt="social media" class="habit-icon">
+      <img src="phone.png" alt="phone use" class="habit-icon">
+      <img src="home.png" alt="home / tidiness" class="habit-icon">
+      <img src="sleep.png" alt="sleep / notifications" class="habit-icon">
+      <img src="shop.png" alt="shopping / spending" class="habit-icon">
+    </div>
+
+    <h3>8B. Next to each item on your list, make notes about the steps you can take to change or start the habit.</h3>
+    <div class="speak-q">Think about mini-goals, possible triggers, and what you'll do when it's difficult.</div>
+
+    <h3>8C.Talk about each habit, what you've been doing to change it and what you're going to do to change or start it. Give each other advice on steps to take.</h3>
+    <div class="chat-area">
+      <div class="bubble bubble-left">I've been … for years. Now I'd like to …</div>
+      <div class="bubble bubble-right">I've been trying to stop/start … and now it's time to …</div>
+      <div class="bubble bubble-left">I haven't been making an effort to …</div>
+      <div class="bubble bubble-right">I'd like to take up …</div>
+      <div class="bubble bubble-left">I've set myself a goal of … and I'm going to try to stick at it for …</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ HOMEWORK ═══════════════════════════════════════════ -->
+<div class="phase c-hw">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">HW</div>
+    <div class="ph-title">
+      <h2>Homework — Exercise 9</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">homework</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="box box-amber">
+      <p>At home, choose one habit from your list in Ex 8A. Do research about how to change that habit, or how to start it if it's a good habit.</p>
+      <ul style="margin-top:10px;">
+        <li>Make notes of the new ideas you find.</li>
+        <li>Prepare to tell other students in the next lesson.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 2A · Change of Habit</footer>
+
+<script>
+function toggle(headEl){
+  headEl.parentElement.classList.toggle('collapsed');
+}
+function show(btn){
+  const ans=btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent=ans.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
+}
+</script>
+</body>
+</html>

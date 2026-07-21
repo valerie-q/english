@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 9 — Root Causes & What's Next</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ee; --bg2:#eef1f2; --panel:#ffffff; --panel2:#f3f1e9;
+  --line:#dcd7c8; --line-soft:#e8e4d8;
+  --cyan:#0f8a7d; --cyan-dim:#bfe3dd;
+  --amber:#c17a2b; --amber-dim:#f0dcb8;
+  --violet:#6a52d6; --violet-dim:#e1dbf7;
+  --text:#1c2130; --text-soft:#4f5665; --text-dim:#8b8f7f;
+  --white-card:#1a1d24; --white-card-ink:#f3f1ea;
+  --shadow:0 4px 18px rgba(30,25,10,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.65;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;}
+
+body{
+  background-image:
+    radial-gradient(circle at 8% 15%, rgba(15,138,125,0.07) 0%, transparent 35%),
+    radial-gradient(circle at 92% 75%, rgba(106,82,214,0.06) 0%, transparent 35%);
+}
+
+.header{position:relative; padding:56px 6vw 44px; overflow:hidden; border-bottom:1px solid var(--line);}
+.header::before{content:''; position:absolute; top:0; right:0; width:45%; height:100%;
+  background:repeating-linear-gradient(115deg, transparent, transparent 34px, rgba(15,138,125,0.05) 34px, rgba(15,138,125,0.05) 35px);
+  pointer-events:none;}
+.header-eyebrow{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:3px; color:var(--cyan); text-transform:uppercase; display:flex; align-items:center; gap:10px;}
+.header-eyebrow::before{content:''; width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 10px var(--cyan);}
+.header h1{font-size:clamp(38px,6vw,64px); font-weight:700; margin-top:14px; line-height:1.05; max-width:780px;}
+.header h1 span{color:var(--cyan);}
+.header-sub{color:var(--text-soft); font-size:15px; margin-top:14px; max-width:580px;}
+
+.agenda-term{margin-top:32px; max-width:520px; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.35);}
+.agenda-term-bar{background:#1c2537; padding:9px 14px; display:flex; gap:6px; align-items:center; border-bottom:1px solid var(--line);}
+.agenda-dot{width:10px;height:10px;border-radius:50%;}
+.agenda-term-bar .d1{background:#ff6060;} .agenda-term-bar .d2{background:#ffbd4a;} .agenda-term-bar .d3{background:#4fd8c4;}
+.agenda-term-title{margin-left:10px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-dim);}
+.agenda-term-body{padding:16px 20px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--text-soft);}
+.agenda-row{padding:5px 0; display:flex; gap:10px;}
+.agenda-row .k{color:var(--cyan); flex-shrink:0;}
+.agenda-row .v{color:var(--text-soft);}
+
+.trace-nav{display:flex; align-items:center; gap:0; padding:18px 6vw; flex-wrap:wrap; background:var(--bg2); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:50;}
+.trace-node{display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--text-dim); cursor:pointer; padding:6px 10px; border-radius:20px; transition:.2s;}
+.trace-node:hover{color:var(--cyan); background:rgba(15,138,125,0.08);}
+.trace-node .b{width:6px;height:6px;border-radius:50%;background:var(--line);}
+.trace-node:hover .b{background:var(--cyan);}
+.trace-seg{width:22px; height:1px; background:var(--line);}
+
+.main{max-width:1180px; margin:0 auto; padding:0 6vw 100px;}
+
+.phase{margin-top:56px; scroll-margin-top:70px;}
+.phase-head{display:flex; align-items:baseline; gap:18px; cursor:pointer; user-select:none;}
+.phase-num{font-family:'Space Grotesk',sans-serif; font-size:52px; font-weight:700; color:var(--line); line-height:1; flex-shrink:0;}
+.phase-titles{flex:1;}
+.phase-tag{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--cyan);}
+.phase-title{font-size:26px; font-weight:700; margin-top:4px;}
+.phase-caret{margin-left:auto; font-family:'IBM Plex Mono',monospace; color:var(--text-dim); transition:transform .25s;}
+.phase.collapsed .phase-caret{transform:rotate(-90deg);}
+.phase-body{margin-top:26px; border-left:1px solid var(--line-soft); padding-left:28px; margin-left:26px;}
+.phase.collapsed .phase-body{display:none;}
+@media(max-width:700px){.phase-body{padding-left:16px;margin-left:10px;} .phase-num{font-size:36px;}}
+
+.activity{position:relative; background:var(--panel); border:1px solid var(--line); border-radius:12px; margin-top:22px; overflow:hidden; box-shadow:var(--shadow);}
+.activity-tag{position:absolute; top:0; right:0; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#fff; background:var(--cyan); padding:5px 12px; border-radius:0 0 0 10px; font-weight:600; letter-spacing:1px;}
+.activity-head{padding:20px 22px 4px;}
+.activity-title{font-size:16px; font-weight:600; color:var(--text);}
+.activity-src{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-dim); margin-top:3px;}
+.activity-body{padding:14px 22px 22px; color:var(--text-soft); font-size:14.5px;}
+.activity-body p{margin:8px 0;}
+.activity-body strong{color:var(--text);}
+
+.speaking-box{border:1px solid var(--violet-dim); border-radius:10px; overflow:hidden; margin:16px 0; background:rgba(106,82,214,0.04);}
+.speaking-box-head{background:rgba(106,82,214,0.12); padding:9px 16px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:var(--violet);}
+.speaking-box-body{padding:14px 16px;}
+.speaking-row{padding:7px 0; border-bottom:1px dotted var(--line-soft); font-size:14px; color:var(--text);}
+.speaking-row:last-child{border-bottom:none;}
+
+.bonus{border-left:3px solid var(--amber); background:rgba(193,122,43,0.06); border-radius:0 8px 8px 0; padding:12px 16px; margin-top:14px; font-size:13.5px; color:var(--text-soft);}
+.bonus .lbl{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--amber); margin-bottom:5px; display:block;}
+
+.reveal-btn{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:none; border:1px solid var(--line); color:var(--text-dim); padding:6px 14px; border-radius:6px; cursor:pointer; margin-top:12px; transition:.2s;}
+.reveal-btn:hover{border-color:var(--cyan); color:var(--cyan);}
+.reveal-content{display:none; margin-top:10px;}
+.reveal-content.open{display:block;}
+.answer-key{background:var(--bg2); border:1px solid var(--line); border-radius:8px; padding:14px 18px; font-size:13px;}
+.ak-label{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px;}
+.answer-key ol,.answer-key ul{padding-left:18px;}
+.answer-key li{padding:3px 0; color:var(--text-soft);}
+.answer-key li strong{color:var(--cyan);}
+
+.word-box{background:var(--bg2); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+.word-box-label{font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); width:100%; margin-bottom:2px;}
+.word-chip{background:var(--panel2); border:1px solid var(--line); color:var(--text); font-size:13px; font-weight:500; padding:5px 13px; border-radius:20px; white-space:nowrap;}
+
+.fill-input{border:none; border-bottom:2px solid var(--cyan-dim); background:transparent; font-family:'Inter',sans-serif; font-size:14.5px; color:var(--text); outline:none; padding:0 4px; min-width:110px;}
+.fill-input:focus{border-bottom-color:var(--amber);}
+
+ol.exercise{padding-left:20px;}
+ol.exercise li{font-size:14.5px; color:var(--text-soft); padding:7px 0; border-bottom:1px dotted var(--line-soft);}
+ol.exercise li:last-child{border-bottom:none;}
+ol.exercise li strong{color:var(--text);}
+
+.match-wrap{display:grid; grid-template-columns:1fr 1fr; gap:28px; margin:14px 0;}
+@media(max-width:640px){.match-wrap{grid-template-columns:1fr;}}
+.match-col-label{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px;}
+.match-item{display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px dotted var(--line-soft); font-size:14px;}
+.match-num{font-family:'IBM Plex Mono',monospace; color:var(--cyan); font-weight:600; width:20px; flex-shrink:0;}
+.match-input{width:34px; border:1px solid var(--line); background:var(--bg2); border-radius:5px; text-align:center; color:var(--text); font-family:'IBM Plex Mono',monospace; padding:4px 0; outline:none;}
+.match-input:focus{border-color:var(--cyan);}
+.match-def{color:var(--text-soft);}
+.match-letter{font-family:'IBM Plex Mono',monospace; color:var(--amber); font-weight:600; margin-right:6px;}
+
+.tweet-card{background:var(--white-card); color:var(--white-card-ink); border-radius:16px; padding:18px 20px; max-width:460px; box-shadow:0 18px 38px rgba(30,25,10,0.18); transform:rotate(-1.2deg); margin:16px 0;}
+.tweet-top{display:flex; align-items:center; gap:10px;}
+.tweet-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet)); display:flex;align-items:center;justify-content:center;font-weight:700;color:#0b0f16;font-family:'Space Grotesk',sans-serif;flex-shrink:0;}
+.tweet-name{font-weight:700; font-size:14px; display:flex; align-items:center; gap:4px;}
+.tweet-handle{color:#8992a8; font-size:13px;}
+.tweet-body{margin-top:10px; font-size:14.5px; line-height:1.6;}
+.tweet-body .beat{color:var(--text-dim); font-style:italic; font-size:12.5px;}
+.tweet-note{margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.14); font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8992a8;}
+
+.teacher-tip{border:1px solid var(--amber-dim); background:rgba(193,122,43,0.06); border-radius:10px; padding:16px 18px; margin-top:18px;}
+.teacher-tip-head{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);}
+.teacher-tip-head::before{content:'💡';font-size:14px;}
+.teacher-tip p{color:var(--text-soft); font-size:13.5px; margin-top:8px;}
+
+.note-box{background:rgba(106,82,214,0.06); border:1px solid var(--violet-dim); border-radius:8px; padding:12px 16px; margin-top:12px; font-size:13px; color:var(--text-soft);}
+
+/* worksheet — rule of 3 whys */
+.worksheet{border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-top:14px; background:var(--bg2);}
+.worksheet + .worksheet{margin-top:14px;}
+.ws-head{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--cyan); margin-bottom:6px;}
+.ws-row{display:flex; gap:10px; align-items:baseline; margin-top:8px; flex-wrap:wrap;}
+.ws-row .lbl{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-dim); min-width:78px; flex-shrink:0;}
+.ws-row input{flex:1; min-width:160px; border:none; border-bottom:1.5px solid var(--line); background:transparent; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text); padding:4px 2px; outline:none;}
+.ws-row input:focus{border-bottom-color:var(--cyan);}
+
+/* glossary */
+.glossary-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:18px;}
+@media(max-width:700px){.glossary-grid{grid-template-columns:1fr;}}
+.glossary-term{border:1px solid var(--line); border-radius:10px; padding:14px 16px; background:var(--bg2);}
+.glossary-term .term{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--cyan); font-size:13.5px;}
+.glossary-term .def{margin-top:6px; font-size:13.5px; color:var(--text-soft);}
+
+/* quiz */
+.quiz-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:16px;}
+@media(max-width:760px){.quiz-grid{grid-template-columns:1fr;}}
+.quiz-card{border:1px solid var(--line); border-radius:10px; padding:14px 16px; background:var(--bg2);}
+.quiz-q{font-size:14px; color:var(--text); font-weight:600; margin-bottom:8px;}
+.quiz-q .qn{color:var(--cyan); font-family:'IBM Plex Mono',monospace; margin-right:6px;}
+.quiz-opts{display:flex; flex-direction:column; gap:5px;}
+.quiz-opt{display:flex; gap:8px; align-items:baseline; font-size:13.5px; color:var(--text-soft);}
+.quiz-opt .ol{font-family:'IBM Plex Mono',monospace; color:var(--text-dim); flex-shrink:0;}
+
+/* trend cards */
+.trend-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:18px;}
+@media(max-width:700px){.trend-grid{grid-template-columns:1fr;}}
+.trend-card{position:relative; border:1px solid var(--line); border-radius:12px; padding:18px 18px 16px; background:var(--panel); overflow:hidden; box-shadow:var(--shadow);}
+.trend-num{position:absolute; top:-8px; right:8px; font-family:'Space Grotesk',sans-serif; font-size:54px; font-weight:700; color:var(--bg2); z-index:0; line-height:1;}
+.trend-title{position:relative; z-index:1; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; color:var(--cyan);}
+.trend-desc{position:relative; z-index:1; margin-top:6px; font-size:13.5px; color:var(--text-soft);}
+
+.source-note{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-dim); margin-top:16px;}
+
+footer.end{margin-top:70px; padding-top:24px; border-top:1px solid var(--line); text-align:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-dim); letter-spacing:1px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Lesson 09 · English for Tech</div>
+  <h1>Root Causes & <span>What's Next</span></h1>
+  <p class="header-sub">A soft-skill for solving problems, a full review of Lesson 3, and a look at where enterprise tech is heading in 2026.</p>
+
+  <div class="agenda-term">
+    <div class="agenda-term-bar">
+      <span class="agenda-dot d1"></span><span class="agenda-dot d2"></span><span class="agenda-dot d3"></span>
+      <span class="agenda-term-title">agenda.log</span>
+    </div>
+    <div class="agenda-term-body">
+      <div class="agenda-row"><span class="k">$ skill</span><span class="v">the rule of three "whys"</span></div>
+      <div class="agenda-row"><span class="k">$ review</span><span class="v">Lesson 3 vocabulary & grammar quiz</span></div>
+      <div class="agenda-row"><span class="k">$ reading</span><span class="v">10 tech trends to watch in 2026</span></div>
+      <div class="agenda-row"><span class="k">$ status</span><span class="v">pronunciation, LinkedIn writing → next session</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="trace-nav">
+  <div class="trace-node" onclick="jump('ph1')"><span class="b"></span>01 · Rule of 3 Whys</div><div class="trace-seg"></div>
+  <div class="trace-node" onclick="jump('ph2')"><span class="b"></span>02 · Glossary</div><div class="trace-seg"></div>
+  <div class="trace-node" onclick="jump('ph3')"><span class="b"></span>03 · Quiz</div><div class="trace-seg"></div>
+  <div class="trace-node" onclick="jump('ph4')"><span class="b"></span>04 · Tech Trends 2026</div>
+</div>
+
+<div class="main">
+
+  <!-- ============ PHASE 1 — RULE OF 3 WHYS ============ -->
+  <div class="phase" id="ph1">
+    <div class="phase-head" onclick="togglePhase('ph1')">
+      <div class="phase-num">01</div>
+      <div class="phase-titles">
+        <div class="phase-tag">EfT p.63 · Speaking & Soft Skills</div>
+        <div class="phase-title">The rule of three "whys"</div>
+      </div>
+      <div class="phase-caret">▾</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-tag">1A</div>
+        <div class="activity-head"><span class="activity-title">Read the text</span></div>
+        <div class="activity-body">
+          <p><strong>The rule of 3 "whys"</strong></p>
+          <p>The best way to tackle complex issues is to break them down step-by-step until you get to the root cause of the problem. Once you know what is actually causing the issue, the solution will be much easier to find!</p>
+          <p>One way you can go about breaking issues down is by asking the "why" question at least three times. For example:</p>
+          <p><strong>Problem:</strong> I'm not getting enough sleep.</p>
+          <ul style="margin:8px 0 12px 20px; color:var(--text-soft); font-size:14.5px;">
+            <li><strong>Question 1:</strong> Why am I not getting enough sleep? <br><strong>Answer:</strong> Because I always go to bed late.</li>
+            <li style="margin-top:8px"><strong>Question 2:</strong> Why do I go to bed late? <br><strong>Answer:</strong> Because I stay up scrolling social media.</li>
+            <li style="margin-top:8px"><strong>Question 3:</strong> Why do I stay up scrolling social media? <br><strong>Answer:</strong> Because that's how I unwind from a stressful day at work.</li>
+          </ul>
+          <p><strong>Solution:</strong> Replace evening social media time with a different relaxing activity: exercising, reading a book, learning a language and set a time limit for it (for instance, 15 minutes).</p>
+          <p>You can apply this technique to all areas of your life: work, relationships, personal development, etc.</p>
+
+          <div class="speaking-box">
+            <div class="speaking-box-head">Answer the question</div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What is the purpose of the rule of three "whys"?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">1B</div>
+        <div class="activity-head"><span class="activity-title">Try it on your own problems</span></div>
+        <div class="activity-body">
+          <p>Identify 3 problem areas that you need solutions for. For each one, keep asking "why" questions until you get to the root cause — then write down a solution.</p>
+
+          <div class="worksheet">
+            <div class="ws-head">Problem 1</div>
+            <div class="ws-row"><span class="lbl">Problem</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 1?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 2?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 3?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Solution</span><input type="text"></div>
+          </div>
+          <div class="worksheet">
+            <div class="ws-head">Problem 2</div>
+            <div class="ws-row"><span class="lbl">Problem</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 1?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 2?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 3?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Solution</span><input type="text"></div>
+          </div>
+          <div class="worksheet">
+            <div class="ws-head">Problem 3</div>
+            <div class="ws-row"><span class="lbl">Problem</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 1?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 2?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Why 3?</span><input type="text"></div>
+            <div class="ws-row"><span class="lbl">Solution</span><input type="text"></div>
+          </div>
+
+          <div class="bonus"><span class="lbl">From your experience</span>Pick a real problem from work — a recurring bug report, a stalled feature, low adoption of something you shipped — and actually run it through this technique out loud.</div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">EX. 2</div>
+        <div class="activity-head"><span class="activity-title">Sam Altman on studying AI</span></div>
+        <div class="activity-body">
+          <p>Sam Altman is the CEO of OpenAI and the former president of Y Combinator. Read his tweet below. Can you think of 3 reasons why studying AI is a useful thing to do for a teenager?</p>
+
+          <div class="tweet-card">
+            <div class="tweet-top">
+              <div class="tweet-avatar">SA</div>
+              <div>
+                <div class="tweet-name">Sam Altman</div>
+                <div class="tweet-handle">@sama</div>
+              </div>
+            </div>
+            <div class="tweet-body">
+              Lots of nice feedback on the OpenAI API but the best yet is from a friend's 13 year old kid:<br><br>
+              "Is it really a computer doing this? Not a person?"<br>
+              "Yes."<br>
+              <span class="beat">...5 seconds of silence...</span><br>
+              "That is the coolest thing <strong>in the entire world</strong>!"<br>
+              <span class="beat">...10 seconds of silence...</span><br>
+              "I'm going to study AI"
+            </div>
+            <div class="tweet-note">the best yet — the best (piece of feedback) so far &nbsp;·&nbsp; in the entire world — in the whole world</div>
+          </div>
+
+          <div class="speaking-box">
+            <div class="speaking-box-head">Discuss</div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What 3 reasons can you think of for why studying AI would be useful for a teenager today?</div>
+            </div>
+          </div>
+
+          <div class="bonus"><span class="lbl">From your experience</span>Would your advice to a 13-year-old be "learn to build AI" or "learn to use AI well"? Is there a difference, in your opinion?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ PHASE 2 — GLOSSARY ============ -->
+  <div class="phase" id="ph2">
+    <div class="phase-head" onclick="togglePhase('ph2')">
+      <div class="phase-num">02</div>
+      <div class="phase-titles">
+        <div class="phase-tag">EfT · Reference</div>
+        <div class="phase-title">Glossary of technical terms</div>
+      </div>
+      <div class="phase-caret">▾</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Lesson 3 terms — a quick reference</span></div>
+        <div class="activity-body">
+          <div class="glossary-grid">
+            <div class="glossary-term"><div class="term">Encryption</div><div class="def">A method of securing data by scrambling it so that only authorized parties can understand it by decrypting (unscrambling) it.</div></div>
+            <div class="glossary-term"><div class="term">Supercomputer</div><div class="def">An extremely powerful computer with superior computing power.</div></div>
+            <div class="glossary-term"><div class="term">Virtual Reality</div><div class="def">A computer-generated simulation in which a person can interact within an artificial three-dimensional environment using electronic devices, such as special goggles or gloves fitted with sensors.</div></div>
+            <div class="glossary-term"><div class="term">Augmented Reality</div><div class="def">A technology that superimposes a computer-generated image on a user's view of the real world, providing a composite view.</div></div>
+            <div class="glossary-term"><div class="term">Artificial Intelligence</div><div class="def">Computer systems that are able to perform tasks normally requiring human intelligence, such as visual perception, speech recognition, decision-making, and translation between languages.</div></div>
+            <div class="glossary-term"><div class="term">Early adopter</div><div class="def">An individual or business who uses a new product, innovation, or technology before others.</div></div>
+            <div class="glossary-term"><div class="term">Primary</div><div class="def">In UI design, a "primary" color is a color that makes up most of the design, as opposed to the "accent" color used to highlight buttons and other calls-to-action.</div></div>
+            <div class="glossary-term"><div class="term">Business forecasting</div><div class="def">The process of predicting future developments in business based on analysis of trends in past and present data.</div></div>
+            <div class="glossary-term"><div class="term">Gaming (the gaming industry)</div><div class="def">The industry involved with the development, marketing, and monetization of video games.</div></div>
+          </div>
+          <div class="note-box">Quick check: cover the definitions and try explaining each term out loud, in your own words, before you look.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ PHASE 3 — QUIZ ============ -->
+  <div class="phase" id="ph3">
+    <div class="phase-head" onclick="togglePhase('ph3')">
+      <div class="phase-num">03</div>
+      <div class="phase-titles">
+        <div class="phase-tag">EfT p.67 · Quiz</div>
+        <div class="phase-title">Test your knowledge — Lesson 3</div>
+      </div>
+      <div class="phase-caret">▾</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Vocabulary & grammar from Lesson 3</span></div>
+        <div class="activity-body">
+          <div class="quiz-grid">
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">1.</span>I've never heard this ___ before. What does it stand for?</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>termin</div><div class="quiz-opt"><span class="ol">b)</span>term</div><div class="quiz-opt"><span class="ol">c)</span>theremin</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">2.</span>"Fascinating" stands for:</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>very interesting</div><div class="quiz-opt"><span class="ol">b)</span>very challenging</div><div class="quiz-opt"><span class="ol">c)</span>very advanced</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">3.</span>The opposite of "upside" is:</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>oversight</div><div class="quiz-opt"><span class="ol">b)</span>downside</div><div class="quiz-opt"><span class="ol">c)</span>outside</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">4.</span>We need to be more strategic so that we can ___ growth.</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>drive</div><div class="quiz-opt"><span class="ol">b)</span>move</div><div class="quiz-opt"><span class="ol">c)</span>push</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">5.</span>Mark is a big fan of cutting-edge technology. He loves being an early ___.</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>adopter</div><div class="quiz-opt"><span class="ol">b)</span>adapter</div><div class="quiz-opt"><span class="ol">c)</span>acquisition</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">6.</span>That was a very productive meeting. We came ___ with a few good ideas and ___ out a couple of issues we should fix later.</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>out; put</div><div class="quiz-opt"><span class="ol">b)</span>in; fixed</div><div class="quiz-opt"><span class="ol">c)</span>up; pointed</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">7.</span>Are you going to try and capitalize ___ your success?</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>in</div><div class="quiz-opt"><span class="ol">b)</span>on</div><div class="quiz-opt"><span class="ol">c)</span>for</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">8.</span>Our sales numbers have been good this quarter. Looks like our product is ___.</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>taking over</div><div class="quiz-opt"><span class="ol">b)</span>gaining traction</div><div class="quiz-opt"><span class="ol">c)</span>leveraging itself</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">9.</span>If you ___ your mouse ___ this icon, what happens?</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>move; over</div><div class="quiz-opt"><span class="ol">b)</span>point; to</div><div class="quiz-opt"><span class="ol">c)</span>hover; over</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">10.</span>Which of the following is NOT a rude way to disagree?</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>I think you're wrong</div><div class="quiz-opt"><span class="ol">b)</span>I don't know about that</div><div class="quiz-opt"><span class="ol">c)</span>it's useless to consider this idea</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">11.</span>___ watch any TV shows this weekend?</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>are you going to</div><div class="quiz-opt"><span class="ol">b)</span>you going to</div><div class="quiz-opt"><span class="ol">c)</span>will you</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">12.</span>I'm not sure I ___ have time for that.</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>will</div><div class="quiz-opt"><span class="ol">b)</span>going to</div><div class="quiz-opt"><span class="ol">c)</span>am going to</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">13.</span>I didn't know this was a problem. I ___ sure to look into it.</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>am going to be</div><div class="quiz-opt"><span class="ol">b)</span>going to be</div><div class="quiz-opt"><span class="ol">c)</span>will be</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">14.</span>— ___ to the store later today? — Yes, as usual.</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>will you go</div><div class="quiz-opt"><span class="ol">b)</span>are you going to going</div><div class="quiz-opt"><span class="ol">c)</span>are you going to go</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">15.</span>So, what ___ do about this bug?</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>is your team will</div><div class="quiz-opt"><span class="ol">b)</span>will your team</div><div class="quiz-opt"><span class="ol">c)</span>is your team going to</div></div></div>
+
+            <div class="quiz-card"><div class="quiz-q"><span class="qn">16.</span>She definitely ___ have time for this.</div>
+              <div class="quiz-opts"><div class="quiz-opt"><span class="ol">a)</span>won't</div><div class="quiz-opt"><span class="ol">b)</span>will be going to</div><div class="quiz-opt"><span class="ol">c)</span>is not going to</div></div></div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rvquiz')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rvquiz">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <ol>
+                <li>1 – <strong>b</strong></li><li>2 – <strong>a</strong></li><li>3 – <strong>b</strong></li><li>4 – <strong>a</strong></li>
+                <li>5 – <strong>a</strong></li><li>6 – <strong>c</strong></li><li>7 – <strong>b</strong></li><li>8 – <strong>b</strong></li>
+                <li>9 – <strong>c</strong></li><li>10 – <strong>b</strong></li><li>11 – <strong>a</strong></li><li>12 – <strong>a</strong></li>
+                <li>13 – <strong>c</strong></li><li>14 – <strong>c</strong></li><li>15 – <strong>b</strong></li><li>16 – <strong>a</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ PHASE 4 — TECH TRENDS 2026 ============ -->
+  <div class="phase" id="ph4">
+    <div class="phase-head" onclick="togglePhase('ph4')">
+      <div class="phase-num">04</div>
+      <div class="phase-titles">
+        <div class="phase-tag">Extra reading · adapted from a LinkedIn article</div>
+        <div class="phase-title">10 tech trends to watch in 2026</div>
+      </div>
+      <div class="phase-caret">▾</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Before you read — predict</span></div>
+        <div class="activity-body">
+          <p>Here are the 10 trend names, with no explanation yet. Before reading anything else, guess: which 3 do you think will matter most for your line of work in the next year or two?</p>
+          <div class="word-box">
+            <div class="word-box-label">10 trends</div>
+            <span class="word-chip">AI-native platforms</span><span class="word-chip">Multi-agent AI</span><span class="word-chip">Domain-specific AI</span>
+            <span class="word-chip">Advanced AI infrastructure</span><span class="word-chip">Confidential computing</span><span class="word-chip">AI security platforms</span>
+            <span class="word-chip">Intelligent automation</span><span class="word-chip">Real-time analytics</span><span class="word-chip">Sustainable IT</span><span class="word-chip">Integrated digital ecosystems</span>
+          </div>
+          <div class="speaking-box">
+            <div class="speaking-box-head">Discuss before reading</div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Based on the names alone, which 3 would you bet on? What do you think each one actually means?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Read: what's actually behind each trend</span></div>
+        <div class="activity-body">
+          <p>Technology keeps moving fast, and for businesses, keeping up isn't optional anymore. Based on insights from Gartner, here are 10 trends expected to shape how companies build products and compete in 2026.</p>
+
+          <div class="trend-grid">
+            <div class="trend-card"><div class="trend-num">01</div><div class="trend-title">AI-Native Platforms</div><div class="trend-desc">Software built with AI at its core, not bolted on as an extra feature — using it to automate processes and support decision-making across the whole product.</div></div>
+            <div class="trend-card"><div class="trend-num">02</div><div class="trend-title">Multi-Agent AI Systems</div><div class="trend-desc">Several AI "agents" working together on one task, each handling a different part of the process, to complete complex jobs faster than a single model could.</div></div>
+            <div class="trend-card"><div class="trend-num">03</div><div class="trend-title">Domain-Specific AI Models</div><div class="trend-desc">AI trained specifically for one industry — finance, healthcare, retail — instead of a generic model, which makes its output far more accurate for that field.</div></div>
+            <div class="trend-card"><div class="trend-num">04</div><div class="trend-title">Advanced AI Infrastructure</div><div class="trend-desc">The computing power behind all this AI: scalable cloud systems, high-performance hardware, and modern data platforms built to handle heavy AI workloads.</div></div>
+            <div class="trend-card"><div class="trend-num">05</div><div class="trend-title">Confidential Computing</div><div class="trend-desc">A way of protecting data even while it's actively being processed, not just when it's stored — important for companies handling sensitive or regulated information.</div></div>
+            <div class="trend-card"><div class="trend-num">06</div><div class="trend-title">AI Security Platforms</div><div class="trend-desc">Tools built specifically to protect AI systems themselves: the models, the training data, and the automated decisions they make.</div></div>
+            <div class="trend-card"><div class="trend-num">07</div><div class="trend-title">Intelligent Automation</div><div class="trend-desc">Automation that goes beyond simple, rule-based tasks — using AI to handle more complex, judgment-based work and reduce manual effort.</div></div>
+            <div class="trend-card"><div class="trend-num">08</div><div class="trend-title">Real-Time Data Analytics</div><div class="trend-desc">Instead of waiting for end-of-day or end-of-week reports, companies analyze data as it comes in, so they can react to changes immediately.</div></div>
+            <div class="trend-card"><div class="trend-num">09</div><div class="trend-title">Sustainable IT Infrastructure</div><div class="trend-desc">Energy-efficient data centers and "greener" tech setups, driven by both environmental concerns and the desire to cut operating costs.</div></div>
+            <div class="trend-card"><div class="trend-num">10</div><div class="trend-title">Integrated Digital Ecosystems</div><div class="trend-desc">Different apps, tools, and data sources connected so they work together smoothly, instead of existing as separate, disconnected systems.</div></div>
+          </div>
+
+          <p style="margin-top:16px">The common thread across all 10? Smarter systems, tighter security, and decisions made on real-time data. Companies that start adapting now will have the advantage later.</p>
+          <div class="source-note">adapted from an article on LinkedIn, based on Gartner's top technology trends for 2026</div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Match the trend to what it's really about</span></div>
+        <div class="activity-body">
+          <p>Same 10 trends — different, shorter wording this time. Match each number to its letter.</p>
+          <div class="match-wrap">
+            <div>
+              <div class="match-col-label">trend</div>
+              <div class="match-item"><span class="match-num">1</span><input class="match-input" maxlength="1"><span>AI-Native Platforms</span></div>
+              <div class="match-item"><span class="match-num">2</span><input class="match-input" maxlength="1"><span>Multi-Agent AI Systems</span></div>
+              <div class="match-item"><span class="match-num">3</span><input class="match-input" maxlength="1"><span>Domain-Specific AI Models</span></div>
+              <div class="match-item"><span class="match-num">4</span><input class="match-input" maxlength="1"><span>Advanced AI Infrastructure</span></div>
+              <div class="match-item"><span class="match-num">5</span><input class="match-input" maxlength="1"><span>Confidential Computing</span></div>
+              <div class="match-item"><span class="match-num">6</span><input class="match-input" maxlength="1"><span>AI Security Platforms</span></div>
+              <div class="match-item"><span class="match-num">7</span><input class="match-input" maxlength="1"><span>Intelligent Automation</span></div>
+              <div class="match-item"><span class="match-num">8</span><input class="match-input" maxlength="1"><span>Real-Time Data Analytics</span></div>
+              <div class="match-item"><span class="match-num">9</span><input class="match-input" maxlength="1"><span>Sustainable IT Infrastructure</span></div>
+              <div class="match-item"><span class="match-num">10</span><input class="match-input" maxlength="1"><span>Integrated Digital Ecosystems</span></div>
+            </div>
+            <div>
+              <div class="match-col-label">what it's about</div>
+              <div class="match-item"><span class="match-letter">a</span><span class="match-def">protecting data while it's being processed</span></div>
+              <div class="match-item"><span class="match-letter">b</span><span class="match-def">AI trained for one specific industry</span></div>
+              <div class="match-item"><span class="match-letter">c</span><span class="match-def">several AI agents working together</span></div>
+              <div class="match-item"><span class="match-letter">d</span><span class="match-def">automation that goes beyond simple rules</span></div>
+              <div class="match-item"><span class="match-letter">e</span><span class="match-def">software built with AI at its core</span></div>
+              <div class="match-item"><span class="match-letter">f</span><span class="match-def">analyzing data the moment it arrives</span></div>
+              <div class="match-item"><span class="match-letter">g</span><span class="match-def">protecting the AI systems themselves</span></div>
+              <div class="match-item"><span class="match-letter">h</span><span class="match-def">energy-efficient data centers</span></div>
+              <div class="match-item"><span class="match-letter">i</span><span class="match-def">scalable cloud & compute power for AI</span></div>
+              <div class="match-item"><span class="match-letter">j</span><span class="match-def">connected apps and systems working as one</span></div>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rvtrend')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rvtrend">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <ol><li>1 – <strong>e</strong></li><li>2 – <strong>c</strong></li><li>3 – <strong>b</strong></li><li>4 – <strong>i</strong></li><li>5 – <strong>a</strong></li>
+              <li>6 – <strong>g</strong></li><li>7 – <strong>d</strong></li><li>8 – <strong>f</strong></li><li>9 – <strong>h</strong></li><li>10 – <strong>j</strong></li></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Discussion points</span></div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-head">Talk it through</div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which 2–3 of these trends are already part of your product or roadmap, even informally?</div>
+              <div class="speaking-row">Which one feels more like hype than something your team would actually invest in this year?</div>
+              <div class="speaking-row">If you had to bet on ONE trend having the biggest impact on your industry in the next two years, which would it be — and why?</div>
+              <div class="speaking-row">How would you explain "confidential computing" to a stakeholder with no technical background?</div>
+              <div class="speaking-row">Do you think AI-native platforms will eventually render traditional, non-AI software obsolete?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+function togglePhase(id){document.getElementById(id).classList.toggle('collapsed');}
+function toggleReveal(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  const btn=el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? '> hide_answers' : '> reveal_answers';
+}
+function jump(id){
+  const el=document.getElementById(id);
+  if(el.classList.contains('collapsed')) el.classList.remove('collapsed');
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>

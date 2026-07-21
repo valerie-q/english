@@ -1,1 +1,1129 @@
-h
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 6 — Small Talk & Writing Emails</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #2d5a27;
+      --green-mid:   #4a8c3f;
+      --green-light: #7bbf6a;
+      --green-pale:  #e8f5e3;
+      --green-bg:    #f4faf2;
+      --ink:         #1a1f1a;
+      --ink-soft:    #3a453a;
+      --warm-grey:   #6a7a6a;
+      --border:      #c8ddc4;
+      --paper:       #fafcf9;
+      --paper-dark:  #edf5eb;
+      --white:       #ffffff;
+      --accent-red:  #c0392b;
+      --gold:        #d4a017;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+
+    .mag-header { background:var(--green-dark); position:relative; overflow:hidden; }
+    .mag-header-top { background:var(--green-mid); padding:8px 40px; display:flex; align-items:center; gap:16px; }
+    .mag-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.7); }
+    .mag-label-accent { color:#fff; }
+    .mag-header-body { padding:40px 40px 32px; display:grid; grid-template-columns:1fr auto; gap:40px; align-items:end; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
+    .mag-header::before { content:''; position:absolute; top:0; right:0; width:320px; height:100%; background:var(--green-mid); clip-path:polygon(15% 0,100% 0,100% 100%,0% 100%); }
+    .mag-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--green-light); margin-bottom:8px; }
+    .mag-h1 { font-family:'Playfair Display',serif; font-size:clamp(32px,4.5vw,54px); font-weight:900; color:#fff; line-height:1.05; margin-bottom:12px; }
+    .mag-h1 em { font-style:italic; color:var(--green-light); }
+    .mag-deck { font-size:14px; color:rgba(255,255,255,0.7); max-width:540px; line-height:1.6; }
+    .mag-meta { display:flex; flex-wrap:wrap; gap:20px; margin-top:24px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.15); }
+    .mag-chip { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1.5px; color:rgba(255,255,255,0.6); display:flex; align-items:center; gap:6px; }
+    .mag-chip strong { color:#fff; }
+    .mag-chip::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--green-light); flex-shrink:0; }
+    .mag-aside { text-align:right; position:relative; z-index:1; }
+    .mag-issue { font-family:'Barlow Condensed',sans-serif; font-size:60px; font-weight:800; color:rgba(255,255,255,0.12); line-height:1; letter-spacing:-2px; }
+    .mag-units { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; color:rgba(255,255,255,0.5); text-align:right; }
+
+    .obj-strip { background:var(--green-pale); border-bottom:2px solid var(--green-light); }
+    .obj-strip-inner { max-width:1200px; margin:0 auto; padding:20px 40px; display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+    .obj-item { display:flex; gap:10px; align-items:flex-start; }
+    .obj-num { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:800; color:var(--green-light); line-height:1; flex-shrink:0; width:24px; }
+    .obj-text { font-size:12px; color:var(--ink-soft); line-height:1.4; }
+
+    .main { max-width:1200px; margin:0 auto; padding:0 40px 60px; }
+
+    .section-rule { display:flex; align-items:center; gap:14px; margin:40px 0 0; }
+    .section-rule-line { flex:1; height:2px; background:var(--green-mid); }
+    .section-rule-label { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--green-mid); white-space:nowrap; }
+
+    .phase { margin-top:16px; border-radius:4px; overflow:hidden; border:1px solid var(--border); box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .phase-header { padding:16px 22px; display:flex; align-items:center; gap:14px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:18px; font-size:16px; color:rgba(255,255,255,0.55); transition:transform .3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-num { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; background:rgba(255,255,255,0.2); padding:3px 10px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:#fff; line-height:1.2; }
+    .phase-sub { font-size:11px; color:rgba(255,255,255,0.6); margin-top:1px; }
+    .phase-time { margin-left:auto; margin-right:28px; font-family:'DM Mono',monospace; font-size:11px; color:rgba(255,255,255,0.75); white-space:nowrap; background:rgba(0,0,0,0.18); padding:3px 10px; border-radius:20px; }
+    .phase-body { padding:0 22px 22px; background:var(--paper); }
+    .ph-green-dark .phase-header { background:var(--green-dark); }
+    .ph-green-mid .phase-header  { background:var(--green-mid); }
+    .ph-green-dkr .phase-header  { background:#1e3e1a; }
+
+    .activity { border:1px solid var(--border); border-radius:4px; margin-top:14px; overflow:hidden; background:var(--white); }
+    .activity-head { background:var(--paper-dark); padding:10px 14px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+    .activity-icon { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; background:var(--green-pale); }
+    .activity-title { font-weight:600; font-size:13.5px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:9px; color:var(--green-dark); background:#d6ecd0; border:1px solid var(--green-light); padding:2px 7px; border-radius:3px; white-space:nowrap; }
+    .activity-badge { font-family:'DM Mono',monospace; font-size:9px; background:var(--green-dark); color:#fff; padding:2px 7px; border-radius:3px; white-space:nowrap; }
+    .activity-body { padding:14px; }
+
+    p { font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:7px 0; }
+    p:first-child { margin-top:0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:13.5px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); line-height:1.6; }
+    ol.exercise li:last-child { border-bottom:none; }
+    input[type="text"] { border:none; border-bottom:1.5px solid var(--border); background:transparent; font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--ink); padding:2px 4px; outline:none; transition:border-color .2s; }
+    input[type="text"]:focus { border-bottom-color:var(--green-mid); }
+    input[type="checkbox"] { accent-color:var(--green-mid); width:16px; height:16px; cursor:pointer; }
+
+    .word-box { background:var(--white); border:2px solid var(--green-mid); border-radius:6px; padding:10px 14px; margin:10px 0; display:flex; flex-wrap:wrap; gap:7px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--green-mid); width:100%; margin-bottom:2px; }
+    .word-chip { background:var(--green-dark); color:#fff; font-size:12px; font-weight:600; padding:3px 11px; border-radius:20px; white-space:nowrap; }
+
+    .phrase-box { background:var(--green-dark); border-radius:4px; padding:14px 18px; margin:10px 0; }
+    .phrase-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--green-light); margin-bottom:8px; }
+    .phrase-row { display:flex; align-items:baseline; gap:14px; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .phrase-row:last-child { border-bottom:none; }
+    .phrase-en { font-size:13.5px; font-weight:500; flex:1; color:#fff; }
+    .phrase-de { font-size:12px; color:rgba(255,255,255,0.5); flex:1; }
+
+    .speaking-box { border:2px solid var(--green-mid); border-radius:6px; overflow:hidden; margin:10px 0; }
+    .speaking-box-header { background:var(--green-dark); padding:9px 14px; }
+    .speaking-box-header span { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#fff; font-weight:600; }
+    .speaking-box-body { background:var(--white); padding:14px; }
+    .speaking-row { display:flex; gap:10px; padding:5px 0; border-bottom:1px dotted var(--border); font-size:13.5px; color:var(--ink); }
+    .speaking-row:last-child { border-bottom:none; }
+
+    .answer-key { background:var(--paper-dark); border:1px solid var(--border); border-radius:4px; padding:10px 14px; margin:10px 0; font-size:12.5px; }
+    .ak-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:6px; }
+    .answer-key ol { padding-left:18px; }
+    .answer-key ol li { padding:2px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--green-dark); }
+    .answer-key p { font-size:12.5px; margin:3px 0; }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; background:none; border:1px solid var(--border); color:var(--warm-grey); padding:4px 12px; border-radius:20px; cursor:pointer; margin-top:8px; transition:all .2s; }
+    .reveal-btn:hover { border-color:var(--green-mid); color:var(--green-mid); }
+    .reveal-content { display:none; margin-top:8px; }
+    .reveal-content.open { display:block; }
+
+    .tip-box { background:var(--green-pale); border:1px solid var(--green-light); border-radius:4px; padding:10px 14px; margin:10px 0; font-size:13px; display:flex; gap:8px; }
+    .tip-icon { font-size:15px; flex-shrink:0; }
+    .tip-text { color:#1e3a1a; line-height:1.5; }
+    .tip-text strong { color:var(--green-dark); }
+
+    .warn-box { background:#fdf8e8; border:1px solid #d4a017; border-radius:4px; padding:10px 14px; margin:10px 0; font-size:13px; display:flex; gap:8px; color:#5a4000; }
+
+    .teacher-says { background:var(--green-pale); border-left:3px solid var(--green-mid); border-radius:0 4px 4px 0; padding:10px 14px; margin:10px 0; font-size:13.5px; }
+    .teacher-says .label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--green-mid); margin-bottom:5px; }
+    .teacher-says p { color:var(--ink-soft); }
+    .teacher-says em { font-style:italic; color:var(--ink); }
+
+    .audio-wrap { background:#1a2e18; border-radius:6px; padding:14px; margin:10px 0; min-height:72px; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px; }
+    .video-wrap { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:6px; margin:10px 0; background:#0f1a0f; }
+    .video-wrap iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+    .video-placeholder-inner { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.35); font-family:'DM Mono',monospace; font-size:11px; }
+
+    .vocab-table { width:100%; border-collapse:collapse; font-size:13px; margin:10px 0; }
+    .vocab-table th { background:var(--green-dark); color:#fff; padding:7px 11px; text-align:left; font-weight:500; font-size:11px; }
+    .vocab-table td { padding:7px 11px; border-bottom:1px solid var(--border); color:var(--ink-soft); vertical-align:top; }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--paper-dark); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+
+    .match-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
+    .match-col { border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+    .match-col-header { background:var(--green-mid); color:#fff; padding:7px 12px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; }
+    .match-item { padding:7px 12px; border-bottom:1px solid var(--border); font-size:13px; color:var(--ink-soft); display:flex; gap:8px; }
+    .match-item:last-child { border-bottom:none; }
+    .match-num { font-weight:700; color:var(--green-dark); flex-shrink:0; }
+
+    .fl-table { width:100%; border-collapse:collapse; font-size:13px; margin:10px 0; }
+    .fl-table th { background:var(--green-mid); color:#fff; padding:8px 12px; text-align:left; font-size:11px; font-weight:600; }
+    .fl-table td { padding:8px 12px; border:1px solid var(--border); color:var(--ink-soft); vertical-align:top; }
+    .fl-table tr:nth-child(even) td { background:var(--green-pale); }
+    .fl-table .existing { color:var(--ink); font-weight:500; }
+
+    .checklist { margin:10px 0; }
+    .checklist-item { display:flex; gap:10px; padding:6px 0; border-bottom:1px dotted var(--border); align-items:flex-start; font-size:13.5px; color:var(--ink-soft); }
+    .checklist-item:last-child { border-bottom:none; }
+    .checklist-label { font-weight:600; color:var(--green-dark); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; width:22px; flex-shrink:0; margin-top:1px; }
+
+    .scenario-card { background:var(--paper-dark); border:2px dashed var(--border); border-radius:8px; padding:18px; margin:10px 0; }
+    .scenario-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--warm-grey); margin-bottom:8px; }
+    .scenario-text { font-size:14px; color:var(--ink); line-height:1.7; font-style:italic; }
+
+    .steps { list-style:none; margin:10px 0; }
+    .steps li { display:flex; gap:12px; padding:8px 0; border-bottom:1px dotted var(--border); font-size:13.5px; align-items:flex-start; color:var(--ink-soft); }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:500; color:#fff; background:var(--green-dark); width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+
+    .revision-tag { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; background:var(--gold); color:#fff; padding:2px 8px; border-radius:2px; }
+
+    /* ── GRAMMAR REFERENCE BLOCK ── */
+    .grammar-block { background:var(--white); border:1px solid var(--border); border-radius:6px; padding:18px 22px; margin:12px 0; }
+    .grammar-block h4 { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--green-mid); margin:14px 0 6px; }
+    .grammar-block h4:first-child { margin-top:0; }
+    .grammar-block p { font-size:13px; color:var(--ink-soft); margin:4px 0; }
+    .grammar-block .ex { color:var(--green-dark); font-style:italic; display:block; margin:3px 0 3px 14px; font-size:13px; }
+    .grammar-block .ex strong { color:var(--green-dark); }
+    .grammar-block .note { color:var(--warm-grey); font-size:12px; font-style:italic; margin-top:5px; display:block; }
+    .grammar-block ul { padding-left:16px; margin:6px 0; }
+    .grammar-block ul li { font-size:13px; color:var(--ink-soft); padding:2px 0; }
+
+    /* ── EMAIL MOCK ── */
+    .email-mock { border:1px solid var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+    .email-mock-bar { background:var(--paper-dark); padding:8px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+    .email-dot { width:10px; height:10px; border-radius:50%; }
+    .email-mock-body { background:var(--white); padding:18px 20px; font-size:13.5px; color:var(--ink-soft); line-height:1.8; }
+    .email-mock-body .email-gap { display:inline-block; min-width:80px; border-bottom:1.5px solid var(--border); vertical-align:bottom; margin:0 2px; }
+    .email-mock-body .gap-num { font-family:'DM Mono',monospace; font-size:10px; color:var(--green-mid); vertical-align:super; margin-right:2px; }
+
+    /* ── WRITING STAGES ── */
+    .writing-stage { border-left:3px solid var(--green-mid); padding:12px 16px; margin:10px 0; background:var(--white); border-radius:0 4px 4px 0; }
+    .writing-stage-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--green-mid); margin-bottom:6px; }
+    .writing-stage p { margin:4px 0; }
+
+    /* ── CARD GRID (warm-up) ── */
+    .warmup-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin:12px 0; }
+    .warmup-card { background:var(--green-dark); border-radius:8px; padding:16px; color:#fff; }
+    .warmup-card-num { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:800; color:rgba(255,255,255,0.15); line-height:1; margin-bottom:8px; }
+    .warmup-card-q { font-size:13.5px; color:rgba(255,255,255,0.9); line-height:1.5; }
+    .warmup-card-hint { font-size:11px; color:var(--green-light); margin-top:8px; font-family:'DM Mono',monospace; }
+
+    .hw-block { background:var(--green-dark); border-radius:8px; padding:22px 26px; margin-top:8px; }
+
+    @media (max-width:700px) {
+      .mag-header-body { grid-template-columns:1fr; }
+      .obj-strip-inner { grid-template-columns:1fr 1fr; }
+      .main { padding-left:20px; padding-right:20px; }
+      .match-grid, .warmup-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="mag-header">
+  <div class="mag-header-top">
+    <span class="mag-label">Business Partner <span class="mag-label-accent">B1+</span></span>
+    <span class="mag-label" style="margin-left:auto;">Units 1.4 cont. · 1.5</span>
+  </div>
+  <div class="mag-header-body">
+    <div>
+      <div class="mag-eyebrow">Lesson 6</div>
+      <h1 class="mag-h1">Small Talk<br><em>& Writing</em><br>Professional Emails</h1>
+      <p class="mag-deck">Revision of first meetings language, continuing 1.4 small talk functional language, and 1.5 writing emails — organising information clearly.</p>
+      <div class="mag-meta">
+        <span class="mag-chip"><strong>Level:</strong>&nbsp;B1+</span>
+        <span class="mag-chip"><strong>Units:</strong>&nbsp;1.4 cont. + 1.5</span>
+        <span class="mag-chip"><strong>Duration:</strong>&nbsp;60+ min</span>
+      </div>
+    </div>
+    <div class="mag-aside">
+      <div class="mag-issue">06</div>
+      <div class="mag-units">1.4 · 1.5</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES -->
+<div class="obj-strip">
+  <div class="obj-strip-inner">
+    <div class="obj-item"><div class="obj-num">1</div><div class="obj-text">Revise functional language for greetings, introductions and goodbyes from 1.3</div></div>
+    <div class="obj-item"><div class="obj-num">2</div><div class="obj-text">Complete 1.4 small talk functional language exercises</div></div>
+    <div class="obj-item"><div class="obj-num">3</div><div class="obj-text">Read and complete a model email for an induction day</div></div>
+    <div class="obj-item"><div class="obj-num">4</div><div class="obj-text">Use Present Simple and Continuous in a professional email context</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══════════════════════════════════════
+       WARM-UP
+  ══════════════════════════════════════ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Warm-up</div>
+    <div class="section-rule-line" style="max-width:40px;"></div>
+  </div>
+
+  <div class="phase ph-green-mid" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Warm-up — Two Truths and a Lie</div>
+        <div class="phase-sub">Professional edition</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎯</div>
+          <span class="activity-title">Two Truths and a Lie — work & professional life</span>
+          <span class="activity-badge">10 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Tell me three statements about yourself — two true, one false. I have to guess which is the lie. Then we swap.</p>
+          <p>The twist: <strong>all three statements must be about your professional life</strong> — your job, colleagues, clients, work habits, career, business travel, meetings, etc.</p>
+
+          <div class="warmup-grid">
+            <div class="warmup-card">
+              <div class="warmup-card-num">01</div>
+              <div class="warmup-card-q">Something you've done at work that sounds unusual or surprising</div>
+              <div class="warmup-card-hint">e.g. "I once presented to 200 people..."</div>
+            </div>
+            <div class="warmup-card">
+              <div class="warmup-card-num">02</div>
+              <div class="warmup-card-q">Something about a colleague, client or work relationship</div>
+              <div class="warmup-card-hint">e.g. "I work closely with someone in three different countries..."</div>
+            </div>
+            <div class="warmup-card">
+              <div class="warmup-card-num">03</div>
+              <div class="warmup-card-q">Something about your daily routine or work habits</div>
+              <div class="warmup-card-hint">e.g. "I never check my email before 10am..."</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       REVISION 1.3
+  ══════════════════════════════════════ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Revision · 1.3</div>
+    <div class="section-rule-line" style="max-width:40px;"></div>
+  </div>
+
+  <div class="phase ph-green-dkr" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Revision — Managing First Meetings</div>
+        <div class="phase-sub">Greetings · Introductions · Goodbyes · Communication styles</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔀</div>
+          <span class="activity-title">Revision A — Sort the phrases</span>
+          <span class="revision-tag" style="margin-left:auto;">1.3 Ex 7</span>
+          <span class="activity-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Put each phrase into the correct category — Meeting & greeting, Introducing people, or Saying goodbye. Write M, I, or G.</p>
+          <ol class="exercise">
+            <li>[Good/Great/Lovely/Nice] to finally meet you in person. <input type="text" size="4"></li>
+            <li>OK, so we need to leave it there. <input type="text" size="4"></li>
+            <li>[Guys,] this is Stefanie. <input type="text" size="4"></li>
+            <li>Did you have a good trip? <input type="text" size="4"></li>
+            <li>Sorry to be in a rush like this. <input type="text" size="4"></li>
+            <li>I'd like to introduce you to… <input type="text" size="4"></li>
+            <li>Thank you for coming and have a safe trip. <input type="text" size="4"></li>
+            <li>So, first time in London? <input type="text" size="4"></li>
+            <li>Have you met [Name] before? She works for… <input type="text" size="4"></li>
+            <li>[Good/Great/Lovely/Nice] to see you again. <input type="text" size="4"></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_ra')">show answers ▾</button>
+          <div class="reveal-content" id="rev_ra">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li><strong>M</strong> — meeting & greeting</li>
+                <li><strong>G</strong> — saying goodbye</li>
+                <li><strong>I</strong> — introducing</li>
+                <li><strong>M</strong> — meeting & greeting</li>
+                <li><strong>G</strong> — saying goodbye</li>
+                <li><strong>I</strong> — introducing</li>
+                <li><strong>G</strong> — saying goodbye</li>
+                <li><strong>M</strong> — meeting & greeting</li>
+                <li><strong>I</strong> — introducing</li>
+                <li><strong>G</strong> — saying goodbye</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">❌</div>
+          <span class="activity-title">Revision B — Find the wrong phrase</span>
+          <span class="revision-tag" style="margin-left:auto;">1.3 Ex 2B</span>
+          <span class="activity-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Each mini-dialogue has one awkward or wrong phrase. Find it and suggest a better alternative.</p>
+          <ol class="exercise">
+            <li>
+              <strong>A:</strong> Hi! Good to finally meet you in person — I've seen you so many times on video calls.<br>
+              <strong>B:</strong> <em>"Likewise. You look different to what I imagined. Anyway, let's get straight to the agenda."</em>
+            </li>
+            <li>
+              <strong>A:</strong> Let me introduce you to our Head of Operations — have you met before?<br>
+              <strong>B:</strong> <em>"No, I don't think so. Hi. What exactly is it that you do here?"</em>
+            </li>
+            <li>
+              <strong>A:</strong> Sorry, I have to run — I must take this call.<br>
+              <strong>B:</strong> <em>"Oh fine, no problem. Bye."</em>
+            </li>
+          </ol>
+
+          <div class="tip-box">
+            <span class="tip-icon">💬</span>
+            <div class="tip-text">There's no single right answer — discuss what feels natural vs what sounds rude or abrupt. Focus on <strong>tone</strong> as much as the words.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       1.4 CONTINUATION (pasted code)
+  ══════════════════════════════════════ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">1.4 · Small Talk </div>
+    <div class="section-rule-line" style="max-width:40px;"></div>
+  </div>
+
+  <!-- 1.4 Lead-in -->
+  <div class="phase ph-green-dark" id="ph7">
+    <div class="phase-header" onclick="togglePhase('ph7')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Lead-in — What is Small Talk?</div>
+        <div class="phase-sub">BP B1+ p.14 — Exercise 1</div>
+      </div>
+      <span class="phase-time">4 min</span>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Exercise 1 — Discussion</span>
+          <span class="activity-src">BP p.14</span>
+          <span class="activity-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">What is "small talk"? How important is it during first meetings?</div>
+              <div class="speaking-row">What questions would you normally ask when meeting someone for the first time professionally?</div>
+              <div class="speaking-row">Are there any problems with asking questions in a first meeting? What topics are "safe" and which might be awkward?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.4 Listening 2A/2B/2C -->
+  <div class="phase ph-green-mid" id="ph8">
+    <div class="phase-header" onclick="togglePhase('ph8')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Listening — Angela Dawson on Small Talk</div>
+        <div class="phase-sub">BP B1+ p.14 — Exercises 2A, 2B, 2C</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎧</div>
+          <span class="activity-title">Exercise 2A — Listen and answer</span>
+          <span class="activity-src">BP p.14 · audio 1.03</span>
+          <span class="activity-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Listen to a short interview with Angela Dawson, a communication coach based in New York, about how to use small talk and manage first meetings. Answer the questions.</p>
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1119160189&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/unienglish" title="Uni English Radio" target="_blank" style="color: #cccccc; text-decoration: none;">Uni English Radio</a> · <a href="https://soundcloud.com/unienglish/1-03-2" title="1.03" target="_blank" style="color: #cccccc; text-decoration: none;">1.03</a></div>
+          <ol class="exercise">
+            <li>Why is managing first meetings in international business often difficult?</li>
+            <li>What is the value of asking questions?</li>
+            <li>Which types of question are most effective? Why?</li>
+            <li>What should you ask questions about?</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎧</div>
+          <span class="activity-title">Exercise 2B — Listen again</span>
+          <span class="activity-src">BP p.14 · audio 1.03</span>
+          <span class="activity-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>What two things does Angela say about silence?</li>
+            <li>Why does she say that some questions don't matter?</li>
+            <li>What is the relationship between asking questions and building trust?</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev2b14')">show key ideas ▾</button>
+          <div class="reveal-content" id="rev2b14">
+            <div class="answer-key">
+              <div class="ak-label">Key ideas from the recording</div>
+              <ol>
+                <li>Silence can feel uncomfortable and is interpreted differently across cultures — some see it as respectful, others as awkward</li>
+                <li>The content of the question matters less than the act of asking — showing interest in the other person is what builds connection</li>
+                <li>Asking questions shows you are interested → the other person feels valued → trust begins to build naturally</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Exercise 2C — React to Angela's ideas</span>
+          <span class="activity-src">BP p.14</span>
+          <span class="activity-badge">3 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discussion</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">How far do you agree with Angela's ideas about asking questions? Why?</div>
+              <div class="speaking-row">Angela talks about the need to find something in common. When you and the other person have similar interests, the conversation often goes better. Do you agree?</div>
+              <div class="speaking-row">What other things should you do, in your opinion, to make a conversation go well?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 1.4 Listening 3A/3B/3C -->
+  <div class="phase ph-green-dark" id="ph9">
+    <div class="phase-header" onclick="togglePhase('ph9')">
+      <span class="phase-num">05</span>
+      <div>
+        <div class="phase-title">Listening — Paul & Eva: Small Talk in Action</div>
+        <div class="phase-sub">BP B1+ p.14 — Exercises 3A, 3B, 3C</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎧</div>
+          <span class="activity-title">Exercise 3A — True or False</span>
+          <span class="activity-src">BP p.14 · audio 1.04</span>
+          <span class="activity-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Paul Robson works for a London-based international company. He is welcoming Eva Neumann, a colleague from another office of his company. Listen and decide if these sentences are true (T) or false (F).</p>
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1119160174&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/unienglish" title="Uni English Radio" target="_blank" style="color: #cccccc; text-decoration: none;">Uni English Radio</a> · <a href="https://soundcloud.com/unienglish/1-04-1" title="1.04" target="_blank" style="color: #cccccc; text-decoration: none;">1.04</a></div>
+          <ol class="exercise">
+            <li>Eva travelled directly from the airport to the meeting. <input type="text" size="6" placeholder="T/F"></li>
+            <li>This is Eva's first visit to London. <input type="text" size="6" placeholder="T/F"></li>
+            <li>Eva works full time in Geneva. <input type="text" size="6" placeholder="T/F"></li>
+            <li>Paul is head of Customer Service. <input type="text" size="6" placeholder="T/F"></li>
+            <li>Eva is leading a project called Service Excellence. <input type="text" size="6" placeholder="T/F"></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev3a14')">show answers ▾</button>
+          <div class="reveal-content" id="rev3a14">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li><strong>T</strong></li>
+                <li><strong>F</strong> — she has been to London before</li>
+                <li><strong>F</strong> — she splits her time between Geneva and another office</li>
+                <li><strong>T</strong> — </li>
+                <li><strong>T</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✅</div>
+          <span class="activity-title">Exercise 3B — Tips for small talk checklist</span>
+          <span class="activity-src">BP p.14 · audio 1.04</span>
+          <span class="activity-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at the list of tips for small talk in first meetings. Listen again and tick (✓) which tips Paul uses in his conversation with Eva.</p>
+          <div class="checklist">
+            <div class="checklist-item"><span class="checklist-label">a</span><input type="checkbox"> Give a clear and positive welcome.</div>
+            <div class="checklist-item"><span class="checklist-label">b</span><input type="checkbox"> Offer to take the other person's coat.</div>
+            <div class="checklist-item"><span class="checklist-label">c</span><input type="checkbox"> Ask about their journey to the office.</div>
+            <div class="checklist-item"><span class="checklist-label">d</span><input type="checkbox"> Offer them a drink.</div>
+            <div class="checklist-item"><span class="checklist-label">e</span><input type="checkbox"> Check if their hotel is OK.</div>
+            <div class="checklist-item"><span class="checklist-label">f</span><input type="checkbox"> Offer help to organise a taxi.</div>
+            <div class="checklist-item"><span class="checklist-label">g</span><input type="checkbox"> Ask if it's their first time in the city.</div>
+            <div class="checklist-item"><span class="checklist-label">h</span><input type="checkbox"> Suggest going for dinner later in the evening.</div>
+            <div class="checklist-item"><span class="checklist-label">i</span><input type="checkbox"> Ask where the other person works.</div>
+            <div class="checklist-item"><span class="checklist-label">j</span><input type="checkbox"> Check when they joined the company.</div>
+            <div class="checklist-item"><span class="checklist-label">k</span><input type="checkbox"> Make a positive comment about working with them.</div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev3b14')">show answers ▾</button>
+          <div class="reveal-content" id="rev3b14">
+            <div class="answer-key">
+              <div class="ak-label">Paul uses: a, b, c, d, g, h, i, j, k</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Exercise 3C — How effective was Paul?</span>
+          <span class="activity-src">BP p.14</span>
+          <span class="activity-badge">2 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Discuss</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">How effectively do you think Paul handled the first meeting with Eva? Why?</div>
+              <div class="speaking-row">Which tips did he NOT use — and do you think he should have? Would they have made the conversation better?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 1.4 Functional Language — Ex 4A, 4B -->
+  <div class="phase ph-green-mid" id="ph10">
+    <div class="phase-header" onclick="togglePhase('ph10')">
+      <span class="phase-num">06</span>
+      <div>
+        <div class="phase-title">Functional Language — Asking Questions in First Meetings</div>
+        <div class="phase-sub">BP B1+ p.15 — Exercises 4A, 4B</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Exercise 4A — Complete the questions</span>
+          <span class="activity-src">BP p.15 · audio 1.04</span>
+          <span class="activity-badge">6 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Complete the questions from the recording with the words in the box.</p>
+          <div class="word-box">
+            <div class="word-box-label">Word bank</div>
+            <span class="word-chip">time</span>
+            <span class="word-chip">join</span>
+            <span class="word-chip">have</span>
+            <span class="word-chip">free</span>
+            <span class="word-chip">offer</span>
+            <span class="word-chip">take</span>
+            <span class="word-chip">work</span>
+            <span class="word-chip">report</span>
+          </div>
+
+          <table class="vocab-table" style="margin-top:12px;">
+            <thead><tr><th>Topic</th><th>Question</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">1 Offer help / hospitality</td><td>Can I <input type="text" size="8"> your [coat/bag]?<br>Can I <input type="text" size="8"> you [something to drink / a coffee / a glass of water]?<br>Can I order you a taxi?</td></tr>
+              <tr><td class="eng">2 Journey</td><td>Did you <input type="text" size="8"> a good [flight/journey/trip]?</td></tr>
+              <tr><td class="eng">3 Experience</td><td>Is it your first <input type="text" size="8"> [in the London office / at the conference]?</td></tr>
+              <tr><td class="eng">4 Place of work</td><td>Where do you <input type="text" size="8"> exactly?<br>Where are you based?<br>Are you in the [Zurich] office at the moment?</td></tr>
+              <tr><td class="eng">5 Time with company</td><td>When did you <input type="text" size="8"> the company?</td></tr>
+              <tr><td class="eng">6 Colleagues</td><td>Do you <input type="text" size="8"> to [Paul Blaettner]?<br>Do you work with [Davide in the Mexico office]?</td></tr>
+              <tr><td class="eng">7 Socialising</td><td>Are you <input type="text" size="8"> for [lunch today / dinner this evening]?</td></tr>
+            </tbody>
+          </table>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev4a')">show answers ▾</button>
+          <div class="reveal-content" id="rev4a">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li><strong>take</strong> / <strong>offer</strong></li>
+                <li><strong>have</strong></li>
+                <li><strong>time</strong></li>
+                <li><strong>work</strong></li>
+                <li><strong>join</strong></li>
+                <li><strong>report</strong></li>
+                <li><strong>free</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔗</div>
+          <span class="activity-title">Exercise 4B — Match answers with topics</span>
+          <span class="activity-src">BP p.15</span>
+          <span class="activity-badge">4 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Match the answers (a–g) with the topics (1–7) in Exercise 4A.</p>
+          <div class="match-grid">
+            <div class="match-col">
+              <div class="match-col-header">Answers</div>
+              <div class="match-item"><span class="match-num">a</span>I'm actually based in Warsaw at the moment.</div>
+              <div class="match-item"><span class="match-num">b</span>About five years ago.</div>
+              <div class="match-item"><span class="match-num">c</span>Sorry, I'm meeting a friend today. Are you free tomorrow?</div>
+              <div class="match-item"><span class="match-num">d</span>Yes, I do. Do you know him?</div>
+              <div class="match-item"><span class="match-num">e</span>That would be great, thanks.</div>
+              <div class="match-item"><span class="match-num">f</span>Actually, I had a delay at the airport.</div>
+              <div class="match-item"><span class="match-num">g</span>No, I was here last month, actually.</div>
+            </div>
+            <div class="match-col">
+              <div class="match-col-header">Your matches (1–7)</div>
+              <div class="match-item"><span class="match-num">1</span>Offer help / hospitality → <input type="text" size="4"></div>
+              <div class="match-item"><span class="match-num">2</span>Journey → <input type="text" size="4"></div>
+              <div class="match-item"><span class="match-num">3</span>Experience → <input type="text" size="4"></div>
+              <div class="match-item"><span class="match-num">4</span>Place of work → <input type="text" size="4"></div>
+              <div class="match-item"><span class="match-num">5</span>Time with company → <input type="text" size="4"></div>
+              <div class="match-item"><span class="match-num">6</span>Colleagues → <input type="text" size="4"></div>
+              <div class="match-item"><span class="match-num">7</span>Socialising → <input type="text" size="4"></div>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev4b')">show answers ▾</button>
+          <div class="reveal-content" id="rev4b">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <p>1→<strong>e</strong> · 2→<strong>f</strong> · 3→<strong>g</strong> · 4→<strong>a</strong> · 5→<strong>b</strong> · 6→<strong>d</strong> · 7→<strong>c</strong></p>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:12px;">
+            <div class="speaking-box-header"><span>Discussion — personalise it</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which of these 7 topics would feel natural to you in a first meeting with a client? Which would feel too personal?</div>
+              <div class="speaking-row">In a lot of situations, meetings are often short and focused. Which 3 of these small talk topics would you use if you only had 5 minutes before a meeting starts?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       1.5 WRITING EMAILS
+  ══════════════════════════════════════ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">1.5 · Writing — Emails</div>
+    <div class="section-rule-line" style="max-width:40px;"></div>
+  </div>
+
+  <!-- 1.5 Lead-in Ex 1 -->
+  <div class="phase ph-green-dark" id="ph11">
+    <div class="phase-header" onclick="togglePhase('ph11')">
+      <span class="phase-num">07</span>
+      <div>
+        <div class="phase-title">Lead-in — Induction Day Email</div>
+        <div class="phase-sub">BP B1+ p.16 — Exercise 1</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📧</div>
+          <span class="activity-title">Exercise 1 — Complete the email</span>
+          <span class="activity-src">BP p.16</span>
+          <span class="activity-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Read the email about an induction day. Complete it with the phrases in the box and add capital letters where necessary.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">Phrases</div>
+            <span class="word-chip">after</span>
+            <span class="word-chip">all the best</span>
+            <span class="word-chip">dear Jill</span>
+            <span class="word-chip">feel free to call me if you have any questions</span>
+            <span class="word-chip">firstly</span>
+            <span class="word-chip">just a quick email to let you know</span>
+            <span class="word-chip">then</span>
+          </div>
+
+          <div class="email-mock" style="margin-top:14px;">
+            <div class="email-mock-bar">
+              <span class="email-dot" style="background:#ff5f57;"></span>
+              <span class="email-dot" style="background:#febc2e;"></span>
+              <span class="email-dot" style="background:#28c840;"></span>
+              <span style="font-family:'DM Mono',monospace; font-size:11px; color:var(--warm-grey); margin-left:8px;">Induction Day — Thursday/Friday</span>
+            </div>
+            <div class="email-mock-body">
+              <p><span class="gap-num">1</span><span class="email-gap"></span>,</p>
+              <p><span class="gap-num">2</span><span class="email-gap" style="min-width:200px;"></span> that we are organising an induction day for you on Thursday or Friday next week.</p>
+              <p><span class="gap-num">3</span><span class="email-gap"></span>, Mike Evans, the Production Supervisor, plans to show you around the factory at 8.00 a.m. <span class="gap-num">4</span><span class="email-gap"></span>, at 10.00 a.m. Anna Hargreave, who is responsible for Marketing, would like to introduce you to her team and explain the new projects they are working on. I think you'll find it very interesting.</p>
+              <p><span class="gap-num">5</span><span class="email-gap"></span> lunch, Dana Porter, who deals with customer service, feels that it's a good idea for you to accompany her on a visit to some of our most important clients. In the afternoon Dana Porter, who deals with customer service, feels that it's a good idea for you to accompany her on a visit to some of our most important clients.</p>
+              <p>Let me know which day is best for you and <span class="gap-num">6</span><span class="email-gap" style="min-width:260px;"></span> or need any help.</p>
+              <p><span class="gap-num">7</span><span class="email-gap"></span>,<br>Greg</p>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_ex1')">show answers ▾</button>
+          <div class="reveal-content" id="rev_ex1">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li><strong>Dear Jill</strong></li>
+                <li><strong>Just a quick email to let you know</strong></li>
+                <li><strong>Firstly</strong></li>
+                <li><strong>Then</strong></li>
+                <li><strong>After</strong></li>
+                <li><strong>feel free to call me if you have any questions</strong></li>
+                <li><strong>All the best</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 1.5 Functional Language 2A/2B -->
+  <div class="phase ph-green-mid" id="ph12">
+    <div class="phase-header" onclick="togglePhase('ph12')">
+      <span class="phase-num">08</span>
+      <div>
+        <div class="phase-title">Functional Language — Organising an Email</div>
+        <div class="phase-sub">BP B1+ p.16 — Exercises 2A, 2B</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📋</div>
+          <span class="activity-title">Exercise 2A — Categorise the phrases</span>
+          <span class="activity-src">BP p.16</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at the email again. Write the words and phrases from Exercise 1 in the correct place in the table.</p>
+
+          <table class="fl-table">
+            <thead>
+              <tr><th>Email section</th><th>Phrase(s) from Exercise 1</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="existing">Greeting / Opening</td><td><input type="text" style="width:100%"></td></tr>
+              <tr><td class="existing">Reason for writing</td><td><input type="text" style="width:100%"></td></tr>
+              <tr><td class="existing">Ordering information</td><td><input type="text" style="width:100%"></td></tr>
+              <tr><td class="existing">Concluding email</td><td><input type="text" style="width:100%"></td></tr>
+              <tr><td class="existing">Closing</td><td><input type="text" style="width:100%"></td></tr>
+            </tbody>
+          </table>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev2a15')">show answers ▾</button>
+          <div class="reveal-content" id="rev2a15">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <p><strong>Greeting / Opening:</strong> Dear Jill</p>
+              <p><strong>Reason for writing:</strong> Just a quick email to let you know…</p>
+              <p><strong>Ordering information:</strong> Firstly… Then… After…</p>
+              <p><strong>Concluding email:</strong> Feel free to call me if you have any questions</p>
+              <p><strong>Closing:</strong> All the best</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">➕</div>
+          <span class="activity-title">Exercise 2B — Add more phrases</span>
+          <span class="activity-src">BP p.16</span>
+        </div>
+        <div class="activity-body">
+          <p>Write these words and phrases in the correct place in the table from Exercise 2A.</p>
+
+          <div class="word-box">
+            <div class="word-box-label">Additional phrases</div>
+            <span class="word-chip">Dear Sir/Madam</span>
+            <span class="word-chip">I'm writing to inform you that…</span>
+            <span class="word-chip">Finally</span>
+            <span class="word-chip">Good morning Jacques</span>
+            <span class="word-chip">Yours</span>
+            <span class="word-chip">Further to our conversation, I confirm that…</span>
+            <span class="word-chip">Hope to hear from you soon.</span>
+            <span class="word-chip">Kind regards</span>
+            <span class="word-chip">Hello/Hi George</span>
+            <span class="word-chip">I look forward to hearing from you.</span>
+            <span class="word-chip">Thank you for your email.</span>
+            <span class="word-chip">Thirdly</span>
+            <span class="word-chip">Please do not hesitate to contact me if you have any questions.</span>
+            <span class="word-chip">Regards</span>
+            <span class="word-chip">Yours sincerely</span>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev2b15')">show answers ▾</button>
+          <div class="reveal-content" id="rev2b15">
+            <div class="answer-key">
+              <div class="ak-label">Sorted by category</div>
+              <p><strong>Greeting / Opening:</strong> Dear Sir/Madam · Good morning Jacques · Hello/Hi George</p>
+              <p><strong>Reason for writing:</strong> I'm writing to inform you that… · Further to our conversation, I confirm that… · Thank you for your email.</p>
+              <p><strong>Ordering information:</strong> Finally · Thirdly</p>
+              <p><strong>Concluding email:</strong> Hope to hear from you soon. · I look forward to hearing from you. · Please do not hesitate to contact me if you have any questions.</p>
+              <p><strong>Closing:</strong> Yours · Kind regards · Regards · Yours sincerely</p>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:12px;">
+            <div class="speaking-box-header"><span>Discussion</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Which phrases are formal and which are more informal? How do you know?</div>
+              <div class="speaking-row">In your work, which style of email do you write most — formal, semi-formal, or informal? Does it depend on who you're writing to?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 1.5 Grammar — Present Simple & Continuous -->
+  <div class="phase ph-green-dark" id="ph13">
+    <div class="phase-header" onclick="togglePhase('ph13')">
+      <span class="phase-num">09</span>
+      <div>
+        <div class="phase-title">Grammar — Present Simple & Present Continuous</div>
+        <div class="phase-sub">BP B1+ p.118 — Grammar reference</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Grammar reference — Present Simple and Continuous</span>
+          <span class="activity-src">BP p.118</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="grammar-block">
+            <h4>Present Simple — when to use</h4>
+            <p>We can use the <strong>Present Simple</strong> to talk about:</p>
+            <ul>
+              <li><strong>Permanent situations</strong>
+                <span class="ex">He <strong>supervises</strong> the production line.</span>
+                <span class="ex">He <strong>works</strong> in the finance department.</span>
+              </li>
+              <li><strong>General facts</strong>
+                <span class="ex">Water <strong>freezes</strong> at 0 degrees.</span>
+                <span class="ex">It's one of the biggest companies in the world.</span>
+              </li>
+              <li><strong>Repeated / regular actions</strong>
+                <span class="ex">They <strong>work</strong> in an office.</span>
+                <span class="ex">She <strong>deals</strong> with customers.</span>
+              </li>
+            </ul>
+
+            <h4>Present Continuous — when to use</h4>
+            <p>We can use the <strong>Present Continuous</strong> to talk about:</p>
+            <ul>
+              <li><strong>Things happening at the same time as we are speaking or writing</strong>
+                <span class="ex">We'<strong>re waiting</strong> for a delivery.</span>
+                <span class="ex">He'<strong>s showing</strong> Mr Jones around the factory.</span>
+              </li>
+              <li><strong>Temporary situations</strong>
+                <span class="ex">I'<strong>m staying</strong> with a friend while I'm in London this week.</span>
+                <span class="ex">He'<strong>s acting</strong> as Head of Finance while his boss is on maternity leave.</span>
+              </li>
+              <li><strong>Future plans/arrangements</strong>
+                <span class="ex">We'<strong>re meeting</strong> the clients tomorrow morning.</span>
+                <span class="ex">She <strong>is visiting</strong> our offices next week.</span>
+              </li>
+            </ul>
+
+            <h4>Verbs rarely used in the continuous</h4>
+            <p>These verbs are rarely used in the Present Continuous:</p>
+            <p style="font-style:italic; color:var(--warm-grey);">be, believe, contain, dislike, hate, hear, know, like, love, need, own, possess, smell, sound, understand</p>
+
+            <h4>Verbs that change meaning</h4>
+            <p>Some common verbs change their meaning in Present Simple vs Present Continuous:</p>
+            <ul>
+              <li><strong>think</strong>
+                <span class="ex">I <strong>think</strong> you're going to find it very interesting. (= my opinion)</span>
+                <span class="ex">I'<strong>m thinking</strong> about the induction day. (= the topic in my mind)</span>
+              </li>
+              <li><strong>have</strong>
+                <span class="ex">I <strong>have</strong> a good car. (= own / possess)</span>
+                <span class="ex">He'<strong>s having</strong> breakfast. (= eating)</span>
+              </li>
+              <li><strong>see</strong>
+                <span class="ex">I <strong>see</strong> your point. (= understand)</span>
+                <span class="ex">I'<strong>m seeing</strong> him tomorrow. (= meeting)</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">⚠️</span>
+            <div class="tip-text"><strong>Common mistake:</strong> "I'm knowing him" → WRONG. Know is a stative verb — always use simple: <em>"I know him."</em></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 1.5 Writing Task 3A/3B/3C -->
+  <div class="phase ph-green-mid" id="ph14">
+    <div class="phase-header" onclick="togglePhase('ph14')">
+      <span class="phase-num">10</span>
+      <div>
+        <div class="phase-title">Writing Task — Reply to Greg's Email</div>
+        <div class="phase-sub">BP B1+ p.16 — Exercises 3A, 3B, 3C</div>
+      </div>
+      <span class="phase-time">12 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🗂️</div>
+          <span class="activity-title">Exercise 3A — Plan the order of your reply</span>
+          <span class="activity-src">BP p.16 · p.126</span>
+          <span class="activity-badge">3 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Look at the notes below. Discuss the best order to put the information in your reply.</p>
+
+          <div class="match-grid">
+            <div class="match-col">
+              <div class="match-col-header">Jill's notes</div>
+              <div class="match-item"><span class="match-num">a</span>Going to conference.</div>
+              <div class="match-item"><span class="match-num">b</span>But may be late Friday.</div>
+              <div class="match-item"><span class="match-num">c</span>Can go Friday.</div>
+              <div class="match-item"><span class="match-num">d</span>Sorry.</div>
+              <div class="match-item"><span class="match-num">e</span>Thanks for email re induction day.</div>
+              <div class="match-item"><span class="match-num">f</span>Dentist appointment at 8.30 that day.</div>
+              <div class="match-item"><span class="match-num">g</span>I'm not free Thursday.</div>
+            </div>
+            <div class="match-col">
+              <div class="match-col-header">Suggested order</div>
+              <div class="match-item" style="flex-direction:column; gap:4px;">
+                <p style="margin:0; font-size:12px; color:var(--warm-grey);">Number the notes 1–7 in the order you'd use them in the email.</p>
+                <div style="display:flex; flex-direction:column; gap:4px; margin-top:6px;">
+                  <div>a → <input type="text" size="4" placeholder="#"></div>
+                  <div>b → <input type="text" size="4" placeholder="#"></div>
+                  <div>c → <input type="text" size="4" placeholder="#"></div>
+                  <div>d → <input type="text" size="4" placeholder="#"></div>
+                  <div>e → <input type="text" size="4" placeholder="#"></div>
+                  <div>f → <input type="text" size="4" placeholder="#"></div>
+                  <div>g → <input type="text" size="4" placeholder="#"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev3a15')">show suggested order ▾</button>
+          <div class="reveal-content" id="rev3a15">
+            <div class="answer-key">
+              <div class="ak-label">Suggested order</div>
+              <p><strong>e (1)</strong> Thank for email → <strong>g (2)</strong> Not free Thursday → <strong>d (3)</strong> Sorry → <strong>f (4)</strong> Dentist appointment → <strong>a (5)</strong> Going to conference → <strong>c (6)</strong> Can go Friday → <strong>b (7)</strong> May be late</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✍️</div>
+          <span class="activity-title">Exercise 3B — Write the reply</span>
+          <span class="activity-src">BP p.16</span>
+          <span class="activity-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Write a reply to Greg's email in around 80 words. Thank him and confirm which day you can attend and why you cannot attend on the other day. Work on it section by section.</p>
+
+          <div class="writing-stage">
+            <div class="writing-stage-label">Stage 1 — Opening (2–3 lines)</div>
+            <p>Use a greeting + reason for writing. Try: <em>"Thank you for your email about…"</em> or <em>"Further to your email, I…"</em></p>
+          </div>
+
+          <div class="writing-stage">
+            <div class="writing-stage-label">Stage 2 — Main information (3–4 lines)</div>
+            <p>Explain which day you can't attend and why. Then confirm which day works. Use: <em>"Unfortunately, I'm not able to… because…"</em> and <em>"I would be happy to attend on…"</em></p>
+          </div>
+
+          <div class="writing-stage">
+            <div class="writing-stage-label">Stage 3 — Additional detail (1–2 lines)</div>
+            <p>Mention the possible late arrival on Friday if relevant. Use: <em>"Please note that I may be slightly late as…"</em></p>
+          </div>
+
+          <div class="writing-stage">
+            <div class="writing-stage-label">Stage 4 — Closing (1 line)</div>
+            <p>Use an appropriate closing phrase from Exercise 2B. Match the level of formality.</p>
+          </div>
+
+          <div class="scenario-card" style="margin-top:14px;">
+            <div class="scenario-label">Model answer — reveal after writing</div>
+            <div class="scenario-text" id="model_hidden" style="display:none;">
+              Dear Greg,<br><br>
+              Thank you for your email about the induction day. Unfortunately, I'm not able to attend on Thursday as I have a dentist's appointment at 8.30 a.m. and I'm also going to a conference that day.<br><br>
+              I would be happy to attend on Friday instead. However, please note that I may be slightly late arriving in the morning.<br><br>
+              I look forward to meeting everyone. Kind regards,<br>
+              Jill
+            </div>
+            <button class="reveal-btn" onclick="document.getElementById('model_hidden').style.display='block'; this.style.display='none'">show model answer ▾</button>
+          </div>
+
+          <div class="tip-box" style="margin-top:10px;">
+            <span class="tip-icon">🎯</span>
+            <div class="tip-text">After writing — check: Did you use Present Simple for facts? Present Continuous for arrangements? Did you use at least 2 phrases from Exercise 2B?</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+</script>
+</body>
+</html>

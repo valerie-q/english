@@ -445,7 +445,7 @@
        <a id="meet-btn" href="#" target="_blank" style="display:none; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6bffb8; background:rgba(107,255,184,0.06); border:1px solid rgba(107,255,184,0.3); border-radius:6px; padding:8px 16px; text-decoration:none;">
   📹 join lesson
 </a>
-      <button class="btn-logout" id="btn-logout">← вийти</button>
+      <button class="btn-logout" id="btn-logout">← go back</button>
     </div>
 
     <div class="section-label">уроки</div>
@@ -467,21 +467,21 @@ const STUDENTS = {
     password: "sun2024",
     meet: "https://meet.google.com/eor-nuun-xod",
     lessons: [
-      { title: "Working Day", date: "19.05.2026", file: "svitlana/lesson1.html", followup: "svitlana/lesson1_followup.pdf" },
-      { title: "A work plan", date: "22.05.2026", file: "svitlana/lesson2.html", followup: "svitlana/lesson2_followup.pdf" },
-      { title: "Talking about People and Roles", date: "26.05.2026", file: "svitlana/lesson3.html", followup: "svitlana/lesson3_followup.pdf" },
-      { title: "Doing business", date: "08.06.2026", file: "svitlana/lesson4.html", followup: "svitlana/lesson4_followup.pdf" },
-      { title: "Doing business II", date: "18.06.2026", file: "svitlana/lesson5.html", followup: "svitlana/lesson5_followup.pdf" },
-      { title: "Doing business III", date: "19.06.2026", file: "svitlana/lesson6.html", },
-      { title: "Planning a Work Party", date: "25.06.2026", file: "svitlana/lesson7/lesson7.html", followup: "svitlana/lesson7/lesson7_followup.pdf"},
-      { title: "Planning a work party II", date: "27.06.2026", file: "svitlana/lesson 8/lesson8.html", followup: "svitlana/lesson 8/lesson8_followup.pdf"},
-      { title: "Changes", date: "30.06.2026", file: "svitlana/lesson 9/lesson9.html"},
-      { title: "New office", date: "03.07.2026", file: "svitlana/lesson 10/lesson10.html"},
-      { title: "Company Performance", date: "09.07.2026", file: "svitlana/lesson 11/lesson11.html"},
-      { title: "Company Performance + Listening", date: "10.07.2026", file: "svitlana/lesson 12/lesson12.html"},
-      { title: "How did it go?", date: "15.07.2026", file: "svitlana/lesson 13/lesson13.html"},
-      { title: "Our first year", date: "17.07.2026", file: "svitlana/lesson 14/lesson14.html"},
-      { title: "I'm flying to tokyo tomorrow", date: "24.07.2026", file: "svitlana/lesson 15/lesson15.html"},
+      { title: "Working Day", date: "19.05.2026", file: "svitlana/lesson1.html", followup: "svitlana/lesson1_followup.pdf", num: "1" },
+      { title: "A work plan", date: "22.05.2026", file: "svitlana/lesson2.html", followup: "svitlana/lesson2_followup.pdf", num: "2" },
+      { title: "Talking about People and Roles", date: "26.05.2026", file: "svitlana/lesson3.html", followup: "svitlana/lesson3_followup.pdf", num: "3" },
+      { title: "Doing business", date: "08.06.2026", file: "svitlana/lesson4.html", followup: "svitlana/lesson4_followup.pdf", num: "4" },
+      { title: "Doing business II", date: "18.06.2026", file: "svitlana/lesson5.html", followup: "svitlana/lesson5_followup.pdf", num: "5" },
+      { title: "Doing business III", date: "19.06.2026", file: "svitlana/lesson6.html", num: "6" },
+      { title: "Planning a Work Party", date: "25.06.2026", file: "svitlana/lesson7/lesson7.html", followup: "svitlana/lesson7/lesson7_followup.pdf", num: "7"},
+      { title: "Planning a work party II", date: "27.06.2026", file: "svitlana/lesson 8/lesson8.html", followup: "svitlana/lesson 8/lesson8_followup.pdf", num: "8"},
+      { title: "Changes", date: "30.06.2026", file: "svitlana/lesson 9/lesson9.html", num: "9"},
+      { title: "New office", date: "03.07.2026", file: "svitlana/lesson 10/lesson10.html", num: "10"},
+      { title: "Company Performance", date: "09.07.2026", file: "svitlana/lesson 11/lesson11.html", num: "11"},
+      { title: "Company Performance + Listening", date: "10.07.2026", file: "svitlana/lesson 12/lesson12.html", num: "12"},
+      { title: "How did it go?", date: "15.07.2026", file: "svitlana/lesson 13/lesson13.html", num: "13"},
+      { title: "Our first year", date: "17.07.2026", file: "svitlana/lesson 14/lesson14.html", num: "14-15" },
+      { title: "I'm flying to tokyo tomorrow", date: "24.07.2026", file: "svitlana/lesson 15/lesson15.html", num: "16" },
    
     ]
   },
@@ -613,7 +613,7 @@ if (student.meet) {
       ? `<a class="followup-btn" href="${lesson.followup}" target="_blank" onclick="event.stopPropagation()">📄 follow up</a>`
       : `<span></span>`;
     card.innerHTML = `
-      <div class="lesson-num">lesson ${String(i + 1).padStart(2, '0')}</div>
+      <div class="lesson-num">lesson ${lesson.num ?? String(i + 1).padStart(2, '0')}</div>
       <div class="lesson-title">${lesson.title}</div>
       <div class="lesson-footer">
         <div class="lesson-date">${lesson.date}</div>

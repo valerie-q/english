@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 17</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red:#c8362d;--red-dk:#9e2820;--red-lt:#fdf1f0;
+      --dark:#2e2e2e;--mid:#5f5f5f;--grey:#f5f5f3;--border:#dedede;--white:#fff;
+      --green:#2a6e1a;--blue:#1a3a5c;--amber:#b06a00;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--dark);line-height:1.6;}
+
+    /* ─── HEADER ─── */
+    .hdr{background:var(--dark);color:#fff;padding:52px 48px 44px;position:relative;overflow:hidden;}
+    .hdr::before{content:'4.2';position:absolute;right:36px;top:50%;transform:translateY(-50%);
+      font-family:'Playfair Display',serif;font-size:160px;font-weight:900;
+      color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;}
+    .hdr-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+    .hdr-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4.5vw,56px);font-weight:900;line-height:1.05;}
+    .hdr-sub{font-size:15px;color:rgba(255,255,255,0.45);margin-top:6px;}
+    .hdr-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);}
+    .hdr-chip{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);}
+    .hdr-chip strong{color:#fff;}
+
+    /* ─── LAYOUT ─── */
+    .wrap{max-width:940px;margin:0 auto;padding:0 44px 80px;}
+
+    /* ─── SECTION ─── */
+    .ed{border-top:2.5px solid var(--red);margin-top:44px;}
+    .ed-hdr{display:flex;align-items:center;gap:18px;padding:14px 0 0;cursor:pointer;user-select:none;}
+    .ed-tag{background:var(--dark);color:#fff;font-family:'DM Mono',monospace;font-size:9px;
+      letter-spacing:2.5px;text-transform:uppercase;padding:7px 14px;white-space:nowrap;flex-shrink:0;}
+    .ed-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;flex:1;}
+    .ed-toggle{color:var(--mid);font-size:16px;margin-left:8px;transition:transform .3s;}
+    .ed.closed .ed-toggle{transform:rotate(-90deg);}
+    .ed-body{padding:22px 0 8px;}
+    .ed.closed .ed-body{display:none;}
+
+    /* ─── EXERCISE ─── */
+    .ex{margin-bottom:26px;}
+    .ex-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+    .ex-num{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:10px;
+      font-weight:700;width:22px;height:22px;border-radius:50%;display:inline-flex;
+      align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-ltr{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--red);flex-shrink:0;width:18px;}
+    .ex-instr{font-size:14px;font-weight:500;color:var(--dark);flex:1;}
+    .ex-src{font-family:'DM Mono',monospace;font-size:9px;color:var(--mid);background:var(--grey);
+      padding:3px 9px;border-radius:2px;white-space:nowrap;margin-left:auto;}
+
+    /* ─── INPUT ─── */
+    input[type=text]{border:none;border-bottom:1.5px solid var(--border);background:transparent;
+      font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);padding:2px 5px;outline:none;
+      transition:border-color .2s;}
+    input[type=text]:focus{border-bottom-color:var(--red);}
+    textarea.warea{width:100%;min-height:180px;border:1.5px solid var(--border);border-radius:3px;
+      padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);
+      background:#fff;resize:vertical;outline:none;line-height:1.85;}
+    textarea.warea:focus{border-color:var(--red);}
+
+    /* ─── LISTS ─── */
+    ol.nl{list-style:none;padding:0;margin:8px 0;counter-reset:c;}
+    ol.nl li{display:flex;align-items:baseline;gap:10px;padding:8px 0;
+      border-bottom:1px solid var(--border);font-size:14px;color:var(--mid);counter-increment:c;}
+    ol.nl li::before{content:counter(c);font-family:'DM Mono',monospace;font-size:10px;
+      color:var(--red);font-weight:700;flex-shrink:0;width:18px;}
+    ol.nl li:last-child{border-bottom:none;}
+    ol.alpha{list-style:lower-alpha;padding-left:20px;margin:8px 0;}
+    ol.alpha li{font-size:14px;color:var(--mid);padding:7px 0;border-bottom:1px solid var(--border);}
+    ol.alpha li:last-child{border-bottom:none;}
+
+    /* ─── REVEAL ─── */
+    .rev-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+      background:none;border:1px solid var(--border);color:var(--mid);padding:5px 14px;
+      border-radius:2px;cursor:pointer;margin-top:10px;transition:all .2s;display:inline-block;}
+    .rev-btn:hover{border-color:var(--red);color:var(--red);}
+    .rev-body{display:none;margin-top:10px;}
+    .rev-body.open{display:block;}
+    .ans-box{background:var(--grey);border-left:3px solid var(--red);padding:12px 16px;font-size:13px;}
+    .ans-box .ak{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+    .ans-box ol,.ans-box ul{padding-left:18px;}
+    .ans-box li{padding:3px 0;color:var(--mid);}
+    .ans-box li strong{color:var(--red-dk);}
+    .ans-box p{color:var(--mid);font-size:13px;line-height:1.7;}
+
+    /* ─── NOTE ─── */
+    .note{background:var(--grey);border-left:3px solid var(--border);padding:10px 14px;
+      font-size:13px;color:var(--mid);margin:10px 0;line-height:1.6;}
+    .note.red{border-left-color:var(--red);}
+    .note.blue{border-left-color:var(--blue);}
+    .note.green{border-left-color:var(--green);}
+
+    /* ─── WORD BOX ─── */
+    .wbox{border:1.5px solid var(--border);border-radius:3px;padding:10px 14px;margin:10px 0;
+      display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--grey);}
+    .wbox-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--mid);width:100%;margin-bottom:4px;}
+    .chip{background:var(--dark);color:#fff;font-size:12px;font-weight:500;padding:4px 11px;
+      border-radius:2px;white-space:nowrap;}
+
+    /* ─── AUDIO PLACEHOLDER ─── */
+    .audio-ph{background:var(--dark);padding:14px 18px;margin:12px 0;
+      display:flex;align-items:center;gap:14px;}
+    .audio-ph .ap-icon{font-size:20px;}
+    .audio-ph .ap-info .ap-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;
+      text-transform:uppercase;color:rgba(255,255,255,0.5);}
+    .audio-ph .ap-info .ap-title{font-size:13px;color:#fff;font-weight:600;}
+
+    /* ─── IMG PLACEHOLDER ─── */
+    .img-ph{border:2px dashed var(--border);border-radius:3px;background:var(--grey);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      color:var(--mid);text-align:center;padding:0px;min-height:120px;}
+    .img-ph .ph-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;
+      text-transform:uppercase;margin-top:6px;}
+
+    /* ─── GRAMMAR BOX ─── */
+    .g-box{border:1px solid var(--border);border-top:2px solid var(--red);border-radius:0 0 3px 3px;overflow:hidden;margin:14px 0;}
+    .g-head{background:var(--dark);color:#fff;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;}
+    .g-head span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+    .g-head .g-ref{font-size:9px;opacity:.5;font-weight:400;}
+    .g-body{background:#fff;padding:16px;}
+    .g-note{font-size:13px;color:var(--mid);line-height:1.65;margin:4px 0 10px;}
+    .g-ex{font-style:italic;color:var(--blue);margin:3px 0;font-size:14px;}
+    .g-ex strong{color:var(--blue);}
+    .g-use{font-weight:700;color:var(--dark);font-size:13px;margin:10px 0 4px;}
+
+    /* ─── WILL TABLE ─── */
+    .will-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+    .will-tbl th{background:var(--dark);color:#fff;padding:8px 14px;text-align:left;font-size:11px;}
+    .will-tbl td{padding:8px 14px;border-bottom:1px solid var(--border);vertical-align:top;}
+    .will-tbl tr:last-child td{border-bottom:none;}
+    .will-tbl .pos{color:var(--green);font-weight:700;}
+    .will-tbl .neg{color:var(--red-dk);font-weight:700;}
+    .will-tbl .subj{color:var(--mid);}
+    .will-tbl .aux{color:var(--dark);font-weight:700;}
+    .will-tbl .inf{color:var(--blue);font-style:italic;}
+
+    /* ─── FUTURE COMPARISON TABLE ─── */
+    .fut-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+    .fut-tbl th{background:var(--dark);color:#fff;padding:8px 12px;text-align:left;font-size:11px;}
+    .fut-tbl td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--mid);}
+    .fut-tbl tr:last-child td{border-bottom:none;}
+    .fut-tbl td:first-child{font-weight:700;color:var(--dark);width:140px;}
+    .fut-tbl tr:hover td{background:var(--grey);}
+
+    /* ─── MATCH TABLE ─── */
+    .match-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0;}
+    .match-tbl th{background:var(--dark);color:#fff;padding:8px 14px;text-align:left;font-size:11px;}
+    .match-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--mid);}
+    .match-tbl tr:last-child td{border-bottom:none;}
+    .match-tbl tr:hover td{background:var(--grey);}
+    .match-tbl .qn{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);font-weight:700;width:28px;}
+    .match-tbl .ans-col{width:70px;text-align:center;}
+
+    /* ─── TWO COL ─── */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;}
+
+    /* ─── EMOJI WARM-UP ─── */
+    .emoji-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:14px 0;}
+    .emoji-card{border:1px solid var(--border);border-radius:3px;padding:18px 14px;text-align:center;}
+    .ecard-n{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+    .emj{font-size:24px;letter-spacing:6px;display:block;margin-bottom:12px;}
+    .emoji-card textarea{width:100%;min-height:80px;border:1px solid var(--border);border-radius:2px;
+      font-family:'DM Sans',sans-serif;font-size:13px;padding:8px;resize:vertical;outline:none;color:var(--dark);}
+    .emoji-card textarea:focus{border-color:var(--red);}
+
+    /* ─── SIGNS GRID ─── */
+    .signs-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0;}
+    .sign{border:2px solid #f5c400;border-radius:2px;background:#f5c400;padding:10px 6px;
+      text-align:center;font-size:11px;font-weight:700;color:#000;}
+    .sign .sign-ltr{font-family:'DM Mono',monospace;font-size:9px;color:rgba(0,0,0,0.5);margin-bottom:4px;}
+    .sign .sign-txt{font-weight:900;font-size:13px;line-height:1.2;}
+    .sign .sign-num{font-size:22px;font-weight:900;}
+
+    /* ─── 4 PHOTO GRID ─── */
+    .photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0;}
+    .photo-cell{display:flex;flex-direction:column;gap:6px;}
+    .photo-cell .ph-num{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:var(--red);}
+
+    /* ─── SENTENCE ORDER ─── */
+    .sent-list{margin:12px 0;}
+    .sent-row{display:flex;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--mid);}
+    .sent-row:last-child{border-bottom:none;}
+    .sent-ltr{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);font-weight:700;flex-shrink:0;width:16px;}
+
+    /* ─── SCHEDULE TABLE (revision) ─── */
+    .sch-wrap{overflow-x:auto;margin:14px 0;}
+    .sch{width:100%;border-collapse:collapse;font-size:13px;}
+    .sch th{background:var(--dark);color:#fff;padding:9px 14px;text-align:left;font-size:11px;}
+    .sch th:first-child{width:100px;}
+    .sch td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--mid);}
+    .sch tr:last-child td{border-bottom:none;}
+    .sch td:first-child{font-weight:600;color:var(--dark);}
+    .sch .ps{color:var(--green);font-weight:500;}
+    .sch .pc{color:var(--blue);font-weight:500;}
+    .sch .blank{font-style:italic;color:var(--mid);}
+
+    /* ─── SPOT MISTAKE ─── */
+    .mistake-list{margin:10px 0;}
+    .mistake-row{padding:10px 0;border-bottom:1px solid var(--border);}
+    .mistake-row:last-child{border-bottom:none;}
+    .mistake-wrong{font-size:14px;color:var(--mid);margin-bottom:6px;}
+    .mistake-wrong span{font-style:italic;}
+
+    /* ─── TEXT MESSAGES ─── */
+    .messages-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+    .msg-wrap{border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+    .msg-header{padding:9px 14px;font-family:'DM Mono',monospace;font-size:9px;
+      letter-spacing:1.5px;text-transform:uppercase;font-weight:700;border-bottom:1px solid rgba(0,0,0,0.1);}
+    .msg-body{padding:14px;}
+    .msg-bubble{border-radius:14px;padding:12px 16px;font-size:14px;line-height:1.65;position:relative;}
+    .msg-name{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;
+      margin-bottom:6px;font-weight:700;}
+    .msg-sign{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;
+      margin-top:6px;font-weight:700;text-align:right;}
+
+    /* Sent (green-ish) */
+    .msg-sent .msg-header{background:#dcf8c6;color:var(--green);}
+    .msg-sent .msg-bubble{background:#dcf8c6;color:#1a2e1a;}
+    .msg-sent .msg-name{color:var(--green);}
+    .msg-sent .msg-sign{color:var(--green);}
+
+    /* Received (light) */
+    .msg-recv .msg-header{background:#f0f0f0;color:var(--dark);}
+    .msg-recv .msg-bubble{background:#f0f0f0;color:var(--dark);}
+    .msg-recv .msg-name{color:var(--mid);}
+    .msg-recv .msg-sign{color:var(--mid);}
+
+    /* Writing messages (blank style) */
+    .msg-write .msg-header{background:var(--grey);color:var(--mid);}
+    .msg-write .msg-bubble{background:var(--grey);min-height:120px;}
+
+    /* ─── ANNOUNCEMENT BOX ─── */
+    .ann-box{border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:0 3px 3px 0;
+      padding:12px 16px;margin:8px 0;font-size:14px;color:var(--mid);}
+    .ann-box .ann-lbl{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;
+      letter-spacing:2px;color:var(--amber);margin-bottom:6px;font-weight:700;}
+
+    @media(max-width:700px){
+      .wrap{padding:0 16px 60px;}.hdr{padding:32px 20px;}.hdr::before{display:none;}
+      .emoji-row,.two-col,.messages-grid,.photo-grid{grid-template-columns:1fr;}
+      .signs-grid{grid-template-columns:repeat(3,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-eye">Unit 4 · Travelling for Work</div>
+  <div class="hdr-title">Lesson 17<br><em style="font-style:italic;color:rgba(255,255,255,0.7);">The 12.05 is delayed</em></div>
+  <div class="hdr-sub">Business Partner A2 · Unit 4.2 · Airports &amp; delays · will / won't</div>
+  <div class="hdr-meta">
+    <div class="hdr-chip"><strong>Level:</strong>&nbsp; A2</div>
+    <div class="hdr-chip"><strong>Lesson outcome:</strong>&nbsp; Write a text message to apologise and explain why you are late</div>
+    <div class="hdr-chip"><strong>Grammar:</strong>&nbsp; will / won't</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══════════════════════════════════════════
+       REVISION — Present Continuous
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-rev">
+    <div class="ed-hdr" onclick="toggle('s-rev')">
+      <div class="ed-tag">Revision</div>
+      <div class="ed-title">Present Continuous — Spot &amp; Sort</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- A: Spot the mistake -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Find the mistake in each sentence and write the correct version.</span>
+        </div>
+        <div class="mistake-list">
+          <div class="mistake-row">
+            <div class="mistake-wrong">1. <span>"She go to Munich on Monday."</span></div>
+            <input type="text" style="width:100%;max-width:420px;" placeholder="Correct sentence…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-wrong">2. <span>"I staying at a hotel next week."</span></div>
+            <input type="text" style="width:100%;max-width:420px;" placeholder="Correct sentence…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-wrong">3. <span>"Where you are meeting the clients?"</span></div>
+            <input type="text" style="width:100%;max-width:420px;" placeholder="Correct sentence…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-wrong">4. <span>"They not visiting the factory tomorrow."</span></div>
+            <input type="text" style="width:100%;max-width:420px;" placeholder="Correct sentence…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-wrong">5. <span>"Is he fly to London on Tuesday?"</span></div>
+            <input type="text" style="width:100%;max-width:420px;" placeholder="Correct sentence…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-wrong">6. <span>"We are book a flight tomorrow."</span></div>
+            <input type="text" style="width:100%;max-width:420px;" placeholder="Correct sentence…">
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-A')">show answers ▾</button>
+        <div class="rev-body" id="rv-A">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li>She <strong>is going</strong> to Munich on Monday.</li>
+              <li><strong>I'm staying</strong> at a hotel next week.</li>
+              <li>Where <strong>are you meeting</strong> the clients?</li>
+              <li>They <strong>aren't visiting</strong> the factory tomorrow.</li>
+              <li>Is he <strong>flying</strong> to London on Tuesday?</li>
+              <li>We are <strong>booking</strong> a flight tomorrow.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- B: Elena's schedule — mixed -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Read the 10 facts about Elena. For each one, decide: is it a <strong>habit</strong> or a <strong>specific plan</strong>? Write a sentence using the correct tense.</span>
+        </div>
+
+        <div class="note" style="margin-bottom:14px;">
+          <strong>Elena</strong> — Sales Manager at AutoTech. She travels a lot for work and has a busy week ahead.
+        </div>
+
+        <div style="margin:12px 0;display:grid;gap:8px;">
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">1.</strong> start work at 8.30 a.m.
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">2.</strong> board presentation to the CEO — Monday, 9 a.m.
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">3.</strong> speak English in international client meetings
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">4.</strong> travel to Frankfurt on Tuesday — meeting with new clients
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">5.</strong> have team lunch on Wednesdays
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">6.</strong> fly to Berlin on Thursday — annual sales conference
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">7.</strong> go to the gym after work
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">8.</strong> stay at the Frankfurt hotel — booking confirmed
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">9.</strong> read industry news in the morning
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+          <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--mid);">
+            <strong style="color:var(--dark);">10.</strong> take the 5.30 a.m. train to the airport on Thursday
+            <br><input type="text" style="width:100%;margin-top:6px;" placeholder="Write the sentence…">
+          </div>
+        </div>
+
+        <button class="rev-btn" onclick="reveal('rv-B')">show answers ▾</button>
+        <div class="rev-body" id="rv-B">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>She starts</strong> work at 8.30 a.m. <span style="color:var(--green);">(habit → PS)</span></li>
+              <li><strong>She is giving</strong> a board presentation to the CEO on Monday at 9 a.m. <span style="color:var(--blue);">(specific plan → PC)</span></li>
+              <li><strong>She speaks</strong> English in international client meetings. <span style="color:var(--green);">(habit → PS)</span></li>
+              <li><strong>She is travelling</strong> to Frankfurt on Tuesday to meet new clients. <span style="color:var(--blue);">(specific plan → PC)</span></li>
+              <li><strong>She has</strong> team lunch on Wednesdays. <span style="color:var(--green);">(habit → PS)</span></li>
+              <li><strong>She is flying</strong> to Berlin on Thursday for the annual sales conference. <span style="color:var(--blue);">(specific plan → PC)</span></li>
+              <li><strong>She goes</strong> to the gym after work. <span style="color:var(--green);">(habit → PS)</span></li>
+              <li><strong>She is staying</strong> at the Frankfurt hotel. <span style="color:var(--blue);">(specific plan → PC — already booked)</span></li>
+              <li><strong>She reads</strong> industry news in the morning. <span style="color:var(--green);">(habit → PS)</span></li>
+              <li><strong>She is taking</strong> the 5.30 a.m. train to the airport on Thursday. <span style="color:var(--blue);">(specific plan → PC)</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       WARM-UP — Emoji Stories
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-wu">
+    <div class="ed-hdr" onclick="toggle('s-wu')">
+      <div class="ed-tag">Warm-up</div>
+      <div class="ed-title">Emoji Stories — Travel Edition</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Look at each set of emojis. Create a short story. Use Past Simple and Present Continuous where possible.</p>
+      <div class="emoji-row">
+        <div class="emoji-card">
+          <div class="ecard-n">Story 1</div>
+          <span class="emj">🚂 ⏰ ❌ 😤 📱</span>
+          <textarea placeholder="The train was delayed…"></textarea>
+        </div>
+        <div class="emoji-card">
+          <div class="ecard-n">Story 2</div>
+          <span class="emj">✈️ 🛄 😱 🚕 🏨</span>
+          <textarea placeholder="She arrived at the airport…"></textarea>
+        </div>
+        <div class="emoji-card">
+          <div class="ecard-n">Story 3</div>
+          <span class="emj">🗺️ 🔍 ☕ 📍 ✅</span>
+          <textarea placeholder="He looked at the map…"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       LEAD-IN
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-li">
+    <div class="ed-hdr" onclick="toggle('s-li')">
+      <div class="ed-tag">Lead-in</div>
+      <div class="ed-title">Airport &amp; Train Station Signs</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-instr">Look at the signs (A–I). Which do you see: 1 at an airport? &nbsp; 2 in a train station? &nbsp; 3 in both places?</span>
+          <span class="ex-src">BP p.40</span>
+        </div>
+        <!-- Wide screenshot placeholder -->
+        <div class="img-ph" style="min-height:160px;margin-bottom:14px;">
+          <img src="signs.png" alt="Signs A–I" style="width:100%;display:block;border-radius:2px;">
+        </div>
+        <div style="font-size:14px;color:var(--mid);margin:12px 0;">
+          <div style="margin-bottom:6px;">1 Airport only: <input type="text" style="width:260px;"></div>
+          <div style="margin-bottom:6px;">2 Train station only: <input type="text" style="width:260px;"></div>
+          <div>3 Both: <input type="text" style="width:260px;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-1')">show answers ▾</button>
+        <div class="rev-body" id="rv-1">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1 <strong>Airport:</strong> C (Gate 32), D (Flight Connections), E (Arrivals / Departures), F (Baggage Claim), G (Passport Control), H (Customs)<br>
+            2 <strong>Train station:</strong> B (Platform 2)<br>
+            3 <strong>Both:</strong> A (Terminal 1), I (Taxi)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       VOCABULARY — Airports and train stations
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-voc">
+    <div class="ed-hdr" onclick="toggle('s-voc')">
+      <div class="ed-tag">Vocabulary</div>
+      <div class="ed-title">Airports and Train Stations</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- 2A — Match pictures -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">2</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Match each picture (1–4) with the words in <strong>bold</strong> in Exercise 2B.</span>
+          <span class="ex-src">BP p.40</span>
+        </div>
+        <div class="photo-grid">
+          <div class="photo-cell">
+            <div class="ph-num">1</div>
+            <div class="img-ph" style="min-height:100px;">
+              <img src="picp1.png" alt="Picture 1" style="max-width:100%;display:block;border-radius:2px;">
+            </div>
+            <input type="text" placeholder="word…" style="margin-top:4px;">
+          </div>
+          <div class="photo-cell">
+            <div class="ph-num">2</div>
+            <div class="img-ph" style="min-height:100px;">
+              <img src="picp2.png" alt="Picture 2" style="max-width:100%;display:block;border-radius:2px;">
+
+            </div>
+            <input type="text" placeholder="word…" style="margin-top:4px;">
+          </div>
+          <div class="photo-cell">
+            <div class="ph-num">3</div>
+            <div class="img-ph" style="min-height:100px;">
+              <img src="picp3.png" alt="Picture 3" style="max-width:100%;display:block;border-radius:2px;">
+
+            </div>
+            <input type="text" placeholder="word…" style="margin-top:4px;">
+          </div>
+          <div class="photo-cell">
+            <div class="ph-num">4</div>
+            <div class="img-ph" style="min-height:100px;">
+              <img src="picp4.png" alt="Picture 4" style="max-width:100%;display:block;border-radius:2px;">
+
+            </div>
+            <input type="text" placeholder="word…" style="margin-top:4px;">
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-2a')">show answers ▾</button>
+        <div class="rev-body" id="rv-2a">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1 — <strong>change trains</strong> &nbsp;·&nbsp; 2 — <strong>departed</strong> / plane on runway &nbsp;·&nbsp; 3 — <strong>security</strong> &nbsp;·&nbsp; 4 — <strong>taxi</strong> (arriving passenger)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2B — Put in order -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Put the sentences in the correct order to make a travel story. Sentence c is given.</span>
+        </div>
+        <div class="sent-list">
+          <div class="sent-row"><span class="sent-ltr">a</span><span style="flex:1;">The 7.00 train to Manchester airport was cancelled.</span><input type="text" style="width:44px;text-align:center;flex-shrink:0;"></div>
+          <div class="sent-row"><span class="sent-ltr">b</span><span style="flex:1;">The train stopped at every station, so I arrived at the airport an hour late.</span><input type="text" style="width:44px;text-align:center;flex-shrink:0;"></div>
+          <div class="sent-row"><span class="sent-ltr">c</span><span style="flex:1;">I left my hotel at 6.30 in a <strong>taxi</strong>.</span><em style="color:var(--red-dk);font-size:13px;flex-shrink:0;margin-left:8px;">1 (given)</em></div>
+          <div class="sent-row"><span class="sent-ltr">d</span><span style="flex:1;">But there was good news. My plane was delayed!</span><input type="text" style="width:44px;text-align:center;flex-shrink:0;"></div>
+          <div class="sent-row"><span class="sent-ltr">e</span><span style="flex:1;">I arrived at the train station at 6.45.</span><input type="text" style="width:44px;text-align:center;flex-shrink:0;"></div>
+          <div class="sent-row"><span class="sent-ltr">f</span><span style="flex:1;">There was a queue to board the plane. It <strong>departed</strong> an hour late, but I was on it.</span><input type="text" style="width:44px;text-align:center;flex-shrink:0;"></div>
+          <div class="sent-row"><span class="sent-ltr">g</span><span style="flex:1;">I went through <strong>security</strong>, but it was very slow. I ran quickly to the gate.</span><input type="text" style="width:44px;text-align:center;flex-shrink:0;"></div>
+          <div class="sent-row"><span class="sent-ltr">h</span><span style="flex:1;">I took the 7.30 train from platform three. I had to <strong>change trains</strong> at Manchester Victoria Station.</span><input type="text" style="width:44px;text-align:center;flex-shrink:0;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-2b')">show answers ▾</button>
+        <div class="rev-body" id="rv-2b">
+          <div class="ans-box"><div class="ak">Correct order</div>
+            <p>c–<strong>1</strong> · e–<strong>2</strong> · a–<strong>3</strong> · h–<strong>4</strong> · b–<strong>5</strong> · d–<strong>6</strong> · g–<strong>7</strong> · f–<strong>8</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2C — Gap fill -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Complete the sentences with the words in the box.</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Words</div>
+          <span class="chip">arrive</span><span class="chip">cancelled</span><span class="chip">change</span>
+          <span class="chip">delayed</span><span class="chip">depart</span><span class="chip">gate</span>
+          <span class="chip">late</span><span class="chip">platform</span><span class="chip">security</span><span class="chip">stop</span>
+        </div>
+        <ol class="nl" style="margin-top:10px;">
+          <li>Flight 450 to Tokyo isn't departing today. It's <input type="text" style="width:110px;">.</li>
+          <li>The train is <input type="text" style="width:90px;"> until 7.30 so I'll be fifteen minutes late.</li>
+          <li>We <input type="text" style="width:80px;"> at 10.00 and arrive at 12.30.</li>
+          <li>Does this train <input type="text" style="width:80px;"> at York?</li>
+          <li>Please <input type="text" style="width:80px;"> at Victoria Station for an airport train.</li>
+          <li>You need thirty minutes to go through <input type="text" style="width:100px;">.</li>
+          <li>When you <input type="text" style="width:80px;"> at the airport, go through passport control.</li>
+          <li>Sorry I'm <input type="text" style="width:70px;">! There were no taxis.</li>
+          <li>The 6.30 train for Prague leaves from <input type="text" style="width:90px;"> ten.</li>
+          <li>Passengers on flight EZ 345 please go to <input type="text" style="width:70px;"> 28.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-2c')">show answers ▾</button>
+        <div class="rev-body" id="rv-2c">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>cancelled</strong> · 2.<strong>delayed</strong> · 3.<strong>depart</strong> · 4.<strong>stop</strong> · 5.<strong>change</strong> · 6.<strong>security</strong> · 7.<strong>arrive</strong> · 8.<strong>late</strong> · 9.<strong>platform</strong> · 10.<strong>gate</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       READING AND LISTENING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-rl">
+    <div class="ed-hdr" onclick="toggle('s-rl')">
+      <div class="ed-tag">Reading &amp; Listening</div>
+      <div class="ed-title">Dealing with Delays</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- 3A -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">3</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">🎧 4.03 &nbsp;Listen to the announcements (1–8). Write <strong>(T)</strong> for train station or <strong>(A)</strong> for airport.</span>
+          <span class="ex-src">BP p.41</span>
+        </div>
+        
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004894&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_4_03-9" title="BP_A2_CB_Tk_4_03" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_4_03</a></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px 20px;margin:12px 0;font-size:14px;color:var(--mid);">
+          <div>1 &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>2 &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>3 &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>4 &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>5 &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>6 &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>7 &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>8 &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-3a')">show answers ▾</button>
+        <div class="rev-body" id="rv-3a">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>A</strong> · 2.<strong>T</strong> · 3.<strong>T</strong> · 4.<strong>A</strong> · 5.<strong>A</strong> · 6.<strong>T</strong> · 7.<strong>A</strong> · 8.<strong>A</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3B -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Listen again. Complete the sentences with <strong>one word</strong>.</span>
+        </div>
+        <ol class="nl">
+          <li>AI663 to Rome is <input type="text" style="width:120px;"> .</li>
+          <li>The 10.15 to Paris is <input type="text" style="width:120px;"> .</li>
+          <li>The service to Leeds on <input type="text" style="width:100px;"> 7 is delayed by 30 minutes.</li>
+          <li>Flight EY825 to New York is <input type="text" style="width:120px;"> .</li>
+          <li>Passengers for Abu Dhabi need to go to a different <input type="text" style="width:100px;"> .</li>
+          <li>Passengers for Brussels need to go to a different <input type="text" style="width:100px;"> .</li>
+          <li>You need extra time to go through <input type="text" style="width:100px;"> today.</li>
+          <li>Follow the signs if you need to make a flight <input type="text" style="width:120px;"> .</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-3b')">show answers ▾</button>
+        <div class="rev-body" id="rv-3b">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>?</strong></li><li><strong>cancelled</strong></li>
+              <li><strong>platform</strong></li><li><strong>cancelled</strong></li>
+              <li><strong>gate</strong></li><li><strong>platform</strong></li>
+              <li><strong>security</strong></li><li><strong>connections</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3C — Text messages -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Complete the text messages about travel delays with the words in the box.</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Words</div>
+          <span class="chip">hotel</span><span class="chip">meeting</span>
+          <span class="chip">security</span><span class="chip">train</span>
+        </div>
+        <div class="messages-grid" style="margin-top:14px;">
+
+          <!-- a — Sara (sent, green) -->
+          <div class="msg-wrap msg-sent">
+            <div class="msg-header">a &nbsp;·&nbsp; Sara → Dan</div>
+            <div class="msg-body">
+              <div class="msg-bubble">
+                <div class="msg-name">Sara</div>
+                Hi Dan,<br><br>
+                My train to Paris is cancelled because of the weather. But don't worry, I'll join the
+                <input type="text" style="width:90px;border-color:#a0c878;"> online.<br><br>
+                <div class="msg-sign">Sara</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- b — Roberto (received, grey) -->
+          <div class="msg-wrap msg-recv">
+            <div class="msg-header">b &nbsp;·&nbsp; Roberto → Bella</div>
+            <div class="msg-body">
+              <div class="msg-bubble">
+                <div class="msg-name">Roberto</div>
+                Hello Bella,<br><br>
+                My flight to JFK is cancelled. I'll stay in a
+                <input type="text" style="width:80px;border-color:#aaa;"> tonight and fly to New York tomorrow.<br><br>
+                <div class="msg-sign">Roberto</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- c — Liz (sent, green) -->
+          <div class="msg-wrap msg-sent">
+            <div class="msg-header">c &nbsp;·&nbsp; Liz → Martin</div>
+            <div class="msg-body">
+              <div class="msg-bubble">
+                <div class="msg-name">Liz</div>
+                Martin,<br><br>
+                I'm sorry, but my <input type="text" style="width:80px;border-color:#a0c878;"> is delayed by thirty minutes. I'll be late for the meeting.<br><br>
+                <div class="msg-sign">Liz</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- d — Naomi (received, grey) -->
+          <div class="msg-wrap msg-recv">
+            <div class="msg-header">d &nbsp;·&nbsp; Naomi → Ella</div>
+            <div class="msg-body">
+              <div class="msg-bubble">
+                <div class="msg-name">Naomi</div>
+                Ella,<br><br>
+                Did you hear the announcement?
+                <input type="text" style="width:100px;border-color:#aaa;"> takes forty-five minutes! Meet me at the gate!<br><br>
+                <div class="msg-sign">Naomi</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-3c')">show answers ▾</button>
+        <div class="rev-body" id="rv-3c">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>a — <strong>meeting</strong> &nbsp;·&nbsp; b — <strong>hotel</strong> &nbsp;·&nbsp; c — <strong>train</strong> &nbsp;·&nbsp; d — <strong>Security</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">D</span>
+          <span class="ex-instr">🎧 4.04 &nbsp;Listen. Match the messages in Exercise 3C (a–d) with the correct announcement.</span>
+        </div>
+        <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004855&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_4_04-10" title="BP_A2_CB_Tk_4_04" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_4_04</a></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px 24px;margin:12px 0;font-size:14px;color:var(--mid);">
+          <div>Announcement 1 → message &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>Announcement 2 → message &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>Announcement 3 → message &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          <div>Announcement 4 → message &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-3d')">show answers ▾</button>
+        <div class="rev-body" id="rv-3d">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1–<strong>d</strong> · 2–<strong>a</strong> · 3–<strong>b</strong> · 4–<strong>c</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── GRAMMAR BOX: WILL/WON'T ── -->
+      <div class="g-box" style="margin-top:28px;">
+        <div class="g-head">
+          <span>Will / Won't</span>
+          <span class="g-ref">→ Grammar reference p.107</span>
+        </div>
+        <div class="g-body">
+          <p class="g-ex" style="margin-bottom:4px;">I'<strong>ll be</strong> late for the meeting.</p>
+          <p class="g-ex" style="margin-bottom:4px;">I'<strong>ll join</strong> the meeting online.</p>
+          <p class="g-ex">I <strong>won't stay</strong> in a hotel tonight.</p>
+        </div>
+      </div>
+
+      <!-- ── GRAMMAR REFERENCE p.107 ── -->
+      <div style="border-top:2px dashed var(--border);margin:28px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Grammar Reference — p.107</p>
+      </div>
+
+      <div class="g-box">
+        <div class="g-head"><span>4.2 — Will / Won't: Three Uses</span></div>
+        <div class="g-body">
+
+          <div class="g-use">1. Promises and agreements</div>
+          <p class="g-note">We use <em>will / won't</em> to make promises and to agree to do (or not do) something.</p>
+          <p class="g-ex">Thanks for the invitation. I <strong>will</strong> (I'<strong>ll</strong>) <strong>confirm</strong> on Friday.</p>
+          <p class="g-ex">I <strong>will not</strong> (<strong>won't</strong>) <strong>forget</strong> to send the list.</p>
+
+          <div class="g-use" style="margin-top:14px;">2. Decisions (at the moment of speaking)</div>
+          <p class="g-note">We use <em>will / won't</em> to make decisions right now — when you decide as you speak.</p>
+          <p class="g-ex">A: What time is lunch? &nbsp; B: I'<strong>ll check</strong> the break times.</p>
+          <p class="g-ex">My flight is cancelled. I'<strong>ll stay</strong> in a hotel tonight. I <strong>won't go</strong> home.</p>
+
+          <div class="g-use" style="margin-top:14px;">3. Offers</div>
+          <p class="g-note">We also use <em>will</em> to make offers.</p>
+          <p class="g-ex">A: I can't use this computer. &nbsp; B: I'<strong>ll try</strong> and fix it for you.</p>
+          <p class="g-ex">A: I'm really busy. &nbsp; B: Don't worry, I'<strong>ll get</strong> something from the canteen for us.</p>
+
+          <div style="margin-top:16px;font-size:13px;color:var(--mid);">We use an <strong>infinitive</strong> (base) verb after <em>will / won't</em>.</div>
+          <table class="will-tbl" style="margin-top:10px;">
+            <thead><tr><th></th><th>Subject</th><th>will / won't</th><th>Infinitive</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="pos">+</td>
+                <td class="subj">I / You / We / They / He / She / It</td>
+                <td class="aux">will ('ll)</td>
+                <td class="inf">phone you tomorrow<br>check the details<br>send it immediately</td>
+              </tr>
+              <tr>
+                <td class="neg">−</td>
+                <td class="subj">I / You / We / They / He / She / It</td>
+                <td class="aux">won't (= will not)</td>
+                <td class="inf">forget to call<br>charge for Wi-Fi access<br>miss the deadline</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Reference Exercise 1 -->
+      <div class="ex" style="margin-top:20px;">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-instr">Complete the responses with <em>will</em> and a verb from the box.</span>
+          <span class="ex-src">BP p.107</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Verbs</div>
+          <span class="chip">be</span><span class="chip">do</span><span class="chip">get</span>
+          <span class="chip">help</span><span class="chip">(not) be</span>
+          <span class="chip">open (×2)</span><span class="chip">phone</span><span class="chip">send</span>
+        </div>
+        <ol class="nl" style="margin-top:10px;">
+          <li>A: I don't have time to phone the client. &nbsp;&nbsp; B: I <input type="text" style="width:120px;"> her for you.</li>
+          <li>A: Can you talk to the catering manager? &nbsp;&nbsp; B: Certainly, I <input type="text" style="width:120px;"> it now.</li>
+          <li>A: It's hot in this office. &nbsp;&nbsp; B: Yes, it is. I <input type="text" style="width:120px;"> a window.</li>
+          <li>A: I can't operate this data projector. &nbsp;&nbsp; B: Don't worry. The assistant <input type="text" style="width:100px;"> you.</li>
+          <li>A: Can you send our order as soon as possible? &nbsp;&nbsp; B: Certainly. We <input type="text" style="width:110px;"> it tomorrow.</li>
+          <li>A: There's no paper in the photocopier. &nbsp;&nbsp; B: I <input type="text" style="width:110px;"> some from the computer shop.</li>
+          <li>A: I really need to eat, but there's another meeting at 12.30. &nbsp;&nbsp; B: Don't worry, there <input type="text" style="width:110px;"> lunch at the meeting.</li>
+          <li>A: Can I come to the bank after work? &nbsp;&nbsp; B: I'm sorry, it <input type="text" style="width:130px;"> possible after 5.30. The bank <input type="text" style="width:110px;"> again at 9am tomorrow.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-ref1')">show answers ▾</button>
+        <div class="rev-body" id="rv-ref1">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>I'll phone</strong></li><li><strong>I'll do</strong></li>
+              <li><strong>I'll open</strong></li><li><strong>will help</strong></li>
+              <li><strong>We'll send</strong></li><li><strong>I'll get</strong></li>
+              <li><strong>will be</strong></li>
+              <li><strong>won't be</strong> · <strong>will open</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FUTURE COMPARISON BOX ── -->
+      <div style="border-top:2px dashed var(--border);margin:28px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Talking about the future — comparing forms</p>
+      </div>
+
+      <div class="g-box">
+        <div class="g-head"><span>will / Present Continuous — what's the difference?</span></div>
+        <div class="g-body">
+          <table class="fut-tbl">
+            <thead><tr><th>Form</th><th>When to use</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>will / won't</td>
+                <td>Decision <em>at the moment of speaking</em>; offer; promise — you decide <strong>right now</strong></td>
+                <td style="font-style:italic;color:var(--blue);">"The train is cancelled. I'll take a taxi." <br><em style="color:var(--mid);font-style:normal;font-size:12px;">(decided at this moment)</em></td>
+              </tr>
+              <tr>
+                <td>Present Continuous</td>
+                <td>Fixed, confirmed arrangement — already <strong>booked, agreed, or in the diary</strong></td>
+                <td style="font-style:italic;color:var(--blue);">"I'm flying to Tokyo tomorrow." <br><em style="color:var(--mid);font-style:normal;font-size:12px;">(ticket already booked)</em></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick practice exercise -->
+      <div class="ex" style="margin-top:16px;">
+        <div class="ex-head">
+          <span class="ex-num">2</span>
+          <span class="ex-instr">Choose <em>will</em> or <em>Present Continuous</em>. Write the correct form and explain your choice.</span>
+        </div>
+        <ol class="nl">
+          <li>A: We have no coffee! &nbsp; B: I _____ (go) to get some. &nbsp;<em style="font-size:12px;color:var(--mid);">(spontaneous decision)</em><br><input type="text" style="width:100%;max-width:360px;margin-top:5px;"></li>
+          <li>A: When is your flight? &nbsp; B: I _____ (fly) to Munich at 8 a.m. &nbsp;<em style="font-size:12px;color:var(--mid);">(ticket booked)</em><br><input type="text" style="width:100%;max-width:360px;margin-top:5px;"></li>
+          <li>A: These bags look heavy! &nbsp; B: Don't worry, I _____ (help) you. &nbsp;<em style="font-size:12px;color:var(--mid);">(offer)</em><br><input type="text" style="width:100%;max-width:360px;margin-top:5px;"></li>
+          <li>A: When are you seeing the clients? &nbsp; B: I _____ (meet) them at 2 p.m. &nbsp;<em style="font-size:12px;color:var(--mid);">(in the diary)</em><br><input type="text" style="width:100%;max-width:360px;margin-top:5px;"></li>
+          <li>My train is cancelled. I _____ (take) a taxi to the office. &nbsp;<em style="font-size:12px;color:var(--mid);">(decision right now)</em><br><input type="text" style="width:100%;max-width:360px;margin-top:5px;"></li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-ref2')">show answers ▾</button>
+        <div class="rev-body" id="rv-ref2">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>I'll go</strong> — will (spontaneous decision)</li>
+              <li><strong>I'm flying</strong> — Present Continuous (already booked)</li>
+              <li><strong>I'll help</strong> — will (offer)</li>
+              <li><strong>I'm meeting</strong> — Present Continuous (arranged, in the diary)</li>
+              <li><strong>I'll take</strong> — will (decision at the moment of speaking)</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       WRITING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-wr">
+    <div class="ed-hdr" onclick="toggle('s-wr')">
+      <div class="ed-tag">Writing</div>
+      <div class="ed-title">Write Two Text Messages</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- 4A — Notes from audio -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">4</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">🎧 4.05 &nbsp;Listen to two travel announcements. Make notes on the problem in each one.</span>
+          <span class="ex-src">BP p.41</span>
+        </div>
+        <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004900&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_4_05-11" title="BP_A2_CB_Tk_4_05" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_4_05</a></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;">
+          <div class="ann-box">
+            <div class="ann-lbl">Announcement 1 — notes</div>
+            <input type="text" style="width:100%;margin-bottom:6px;" placeholder="What is the problem?">
+            <input type="text" style="width:100%;margin-bottom:6px;" placeholder="Train / flight / what?">
+            <input type="text" style="width:100%;" placeholder="Details…">
+          </div>
+          <div class="ann-box">
+            <div class="ann-lbl">Announcement 2 — notes</div>
+            <input type="text" style="width:100%;margin-bottom:6px;" placeholder="What is the problem?">
+            <input type="text" style="width:100%;margin-bottom:6px;" placeholder="Train / flight / what?">
+            <input type="text" style="width:100%;" placeholder="Details…">
+          </div>
+        </div>
+      </div>
+
+      <!-- 4B+C — Individual writing task -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">You are affected by both announcements. Write two text messages — one for each problem. Explain what happened and what you <em>will</em> do.</span>
+        </div>
+        <div class="note blue" style="margin-bottom:16px;font-size:13px;">
+          <strong>Useful language:</strong> &nbsp;
+          My train / flight is delayed / cancelled. &nbsp;·&nbsp;
+          I'll be late for… &nbsp;·&nbsp;
+          I'll join the meeting… &nbsp;·&nbsp;
+          Don't worry, I'll… &nbsp;·&nbsp;
+          I won't be able to…
+        </div>
+
+        <!-- Message 1 -->
+        <div style="margin-bottom:20px;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:8px;">Message 1 — Announcement 1 problem</div>
+          <div class="msg-wrap msg-write" style="max-width:480px;">
+            <div class="msg-header">New message</div>
+            <div class="msg-body">
+              <div style="font-size:12px;color:var(--mid);margin-bottom:6px;">To: <input type="text" style="width:200px;font-size:13px;"></div>
+              <textarea class="warea" style="min-height:130px;border:1px dashed var(--border);" placeholder="Hi [name],&#10;&#10;My [train/flight] to [destination] is [delayed/cancelled]…&#10;&#10;I'll…&#10;&#10;[Your name]"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message 2 -->
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:8px;">Message 2 — Announcement 2 problem</div>
+          <div class="msg-wrap msg-write" style="max-width:480px;">
+            <div class="msg-header">New message</div>
+            <div class="msg-body">
+              <div style="font-size:12px;color:var(--mid);margin-bottom:6px;">To: <input type="text" style="width:200px;font-size:13px;"></div>
+              <textarea class="warea" style="min-height:130px;border:1px dashed var(--border);" placeholder="Hi [name],&#10;&#10;My [train/flight] to [destination] is [delayed/cancelled]…&#10;&#10;I'll…&#10;&#10;[Your name]"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggle(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('closed');
+  el.querySelector('.ed-toggle').textContent=el.classList.contains('closed')?'▸':'▾';
+}
+function reveal(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  const btn=el.previousElementSibling;
+  const open=el.classList.contains('open');
+  btn.textContent=open
+    ?btn.textContent.replace('show','hide').replace('▾','▴')
+    :btn.textContent.replace('hide','show').replace('▴','▾');
+}
+</script>
+</body>
+</html>

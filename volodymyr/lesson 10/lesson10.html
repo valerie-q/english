@@ -1,1 +1,747 @@
-ee
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 10 — Programming Languages</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ee; --bg2:#eef1f2; --panel:#ffffff; --panel2:#f3f1e9;
+  --line:#dcd7c8; --line-soft:#e8e4d8;
+  --cyan:#0f8a7d; --cyan-dim:#bfe3dd;
+  --amber:#c17a2b; --amber-dim:#f0dcb8;
+  --violet:#6a52d6; --violet-dim:#e1dbf7;
+  --green:#3f9142; --green-dim:#dcefdc;
+  --red:#c1502b; --red-dim:#f3ddd3;
+  --text:#1c2130; --text-soft:#4f5665; --text-dim:#8b8f7f;
+  --white-card:#1a1d24; --white-card-ink:#f3f1ea;
+  --shadow:0 4px 18px rgba(30,25,10,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.65;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;}
+
+body{
+  background-image:
+    radial-gradient(circle at 8% 15%, rgba(15,138,125,0.07) 0%, transparent 35%),
+    radial-gradient(circle at 92% 75%, rgba(106,82,214,0.06) 0%, transparent 35%);
+}
+
+.header{position:relative; padding:56px 6vw 44px; overflow:hidden; border-bottom:1px solid var(--line);}
+.header::before{content:''; position:absolute; top:0; right:0; width:45%; height:100%;
+  background:repeating-linear-gradient(115deg, transparent, transparent 34px, rgba(15,138,125,0.05) 34px, rgba(15,138,125,0.05) 35px);
+  pointer-events:none;}
+.header-eyebrow{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:3px; color:var(--cyan); text-transform:uppercase; display:flex; align-items:center; gap:10px;}
+.header-eyebrow::before{content:''; width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 10px var(--cyan);}
+.header h1{font-size:clamp(38px,6vw,64px); font-weight:700; margin-top:14px; line-height:1.05; max-width:780px;}
+.header h1 span{color:var(--cyan);}
+.header-sub{color:var(--text-soft); font-size:15px; margin-top:14px; max-width:580px;}
+
+.agenda-term{margin-top:32px; max-width:520px; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.35);}
+.agenda-term-bar{background:#1c2537; padding:9px 14px; display:flex; gap:6px; align-items:center; border-bottom:1px solid var(--line);}
+.agenda-dot{width:10px;height:10px;border-radius:50%;}
+.agenda-term-bar .d1{background:#ff6060;} .agenda-term-bar .d2{background:#ffbd4a;} .agenda-term-bar .d3{background:#4fd8c4;}
+.agenda-term-title{margin-left:10px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-dim);}
+.agenda-term-body{padding:16px 20px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--text-soft);}
+.agenda-row{padding:5px 0; display:flex; gap:10px;}
+.agenda-row .k{color:var(--cyan); flex-shrink:0;}
+.agenda-row .v{color:var(--text-soft);}
+
+.trace-nav{display:flex; align-items:center; gap:0; padding:18px 6vw; flex-wrap:wrap; background:var(--bg2); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:50;}
+.trace-node{display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--text-dim); cursor:pointer; padding:6px 10px; border-radius:20px; transition:.2s;}
+.trace-node:hover{color:var(--cyan); background:rgba(15,138,125,0.08);}
+.trace-node .b{width:6px;height:6px;border-radius:50%;background:var(--line);}
+.trace-node:hover .b{background:var(--cyan);}
+.trace-seg{width:22px; height:1px; background:var(--line);}
+
+.main{max-width:1180px; margin:0 auto; padding:0 6vw 100px;}
+
+.phase{margin-top:56px; scroll-margin-top:70px;}
+.phase-head{display:flex; align-items:baseline; gap:18px; cursor:pointer; user-select:none;}
+.phase-num{font-family:'Space Grotesk',sans-serif; font-size:52px; font-weight:700; color:var(--line); line-height:1; flex-shrink:0;}
+.phase-titles{flex:1;}
+.phase-tag{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--cyan);}
+.phase-title{font-size:26px; font-weight:700; margin-top:4px;}
+.phase-caret{margin-left:auto; font-family:'IBM Plex Mono',monospace; color:var(--text-dim); transition:transform .25s;}
+.phase.collapsed .phase-caret{transform:rotate(-90deg);}
+.phase-body{margin-top:26px; border-left:1px solid var(--line-soft); padding-left:28px; margin-left:26px;}
+.phase.collapsed .phase-body{display:none;}
+@media(max-width:700px){.phase-body{padding-left:16px;margin-left:10px;} .phase-num{font-size:36px;}}
+
+.activity{position:relative; background:var(--panel); border:1px solid var(--line); border-radius:12px; margin-top:22px; overflow:hidden; box-shadow:var(--shadow);}
+.activity-tag{position:absolute; top:0; right:0; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#fff; background:var(--cyan); padding:5px 12px; border-radius:0 0 0 10px; font-weight:600; letter-spacing:1px;}
+.activity-head{padding:20px 22px 4px;}
+.activity-title{font-size:16px; font-weight:600; color:var(--text);}
+.activity-src{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-dim); margin-top:3px;}
+.activity-body{padding:14px 22px 22px; color:var(--text-soft); font-size:14.5px;}
+.activity-body p{margin:8px 0;}
+.activity-body strong{color:var(--text);}
+
+.speaking-box{border:1px solid var(--violet-dim); border-radius:10px; overflow:hidden; margin:16px 0; background:rgba(106,82,214,0.04);}
+.speaking-box-head{background:rgba(106,82,214,0.12); padding:9px 16px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:var(--violet);}
+.speaking-box-body{padding:14px 16px;}
+.speaking-row{padding:7px 0; border-bottom:1px dotted var(--line-soft); font-size:14px; color:var(--text);}
+.speaking-row:last-child{border-bottom:none;}
+
+.bonus{border-left:3px solid var(--amber); background:rgba(193,122,43,0.06); border-radius:0 8px 8px 0; padding:12px 16px; margin-top:14px; font-size:13.5px; color:var(--text-soft);}
+.bonus .lbl{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--amber); margin-bottom:5px; display:block;}
+
+.reveal-btn{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:none; border:1px solid var(--line); color:var(--text-dim); padding:6px 14px; border-radius:6px; cursor:pointer; margin-top:12px; transition:.2s;}
+.reveal-btn:hover{border-color:var(--cyan); color:var(--cyan);}
+.reveal-content{display:none; margin-top:10px;}
+.reveal-content.open{display:block;}
+.answer-key{background:var(--bg2); border:1px solid var(--line); border-radius:8px; padding:14px 18px; font-size:13px;}
+.ak-label{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px;}
+.answer-key ol,.answer-key ul{padding-left:18px;}
+.answer-key li{padding:3px 0; color:var(--text-soft);}
+.answer-key li strong{color:var(--cyan);}
+
+.word-box{background:var(--bg2); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+.word-box-label{font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); width:100%; margin-bottom:2px;}
+.word-chip{background:var(--panel2); border:1px solid var(--line); color:var(--text); font-size:13px; font-weight:500; padding:5px 13px; border-radius:20px; white-space:nowrap;}
+
+.fill-input{border:none; border-bottom:2px solid var(--cyan-dim); background:transparent; font-family:'Inter',sans-serif; font-size:14.5px; color:var(--text); outline:none; padding:0 4px; min-width:90px;}
+.fill-input:focus{border-bottom-color:var(--amber);}
+
+ol.exercise{padding-left:20px;}
+ol.exercise li{font-size:14.5px; color:var(--text-soft); padding:7px 0; border-bottom:1px dotted var(--line-soft);}
+ol.exercise li:last-child{border-bottom:none;}
+ol.exercise li strong{color:var(--text);}
+
+.match-wrap{display:grid; grid-template-columns:1fr 1fr; gap:28px; margin:14px 0;}
+@media(max-width:640px){.match-wrap{grid-template-columns:1fr;}}
+.match-item{display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px dotted var(--line-soft); font-size:14px;}
+.match-num{font-family:'IBM Plex Mono',monospace; color:var(--cyan); font-weight:600; width:20px; flex-shrink:0;}
+
+.tweet-card{background:var(--white-card); color:var(--white-card-ink); border-radius:16px; padding:18px 20px; max-width:460px; box-shadow:0 18px 38px rgba(30,25,10,0.18); transform:rotate(-1.2deg); margin:16px 0;}
+.tweet-card.flip-rot{transform:rotate(1.1deg);}
+.tweet-top{display:flex; align-items:center; gap:10px;}
+.tweet-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet)); display:flex;align-items:center;justify-content:center;font-weight:700;color:#0b0f16;font-family:'Space Grotesk',sans-serif;flex-shrink:0;}
+.tweet-name{font-weight:700; font-size:14px; display:flex; align-items:center; gap:4px;}
+.tweet-handle{color:#8992a8; font-size:13px;}
+.tweet-body{margin-top:10px; font-size:14.5px; line-height:1.6;}
+.tweet-note{margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.14); font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8992a8;}
+
+.teacher-tip{border:1px solid var(--amber-dim); background:rgba(193,122,43,0.06); border-radius:10px; padding:16px 18px; margin-top:18px;}
+.teacher-tip-head{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);}
+.teacher-tip-head::before{content:'💡';font-size:14px;}
+.teacher-tip p{color:var(--text-soft); font-size:13.5px; margin-top:8px;}
+
+.note-box{background:rgba(106,82,214,0.06); border:1px solid var(--violet-dim); border-radius:8px; padding:12px 16px; margin-top:12px; font-size:13px; color:var(--text-soft);}
+
+/* icon frame — small square logo, just drop a src */
+.icon-frame{width:64px; height:64px; border-radius:14px; overflow:hidden; background:var(--bg2); border:1px solid var(--line); box-shadow:var(--shadow); flex-shrink:0;}
+.icon-frame img{width:100%; height:100%; object-fit:contain; display:block; padding:8px;}
+
+/* wide graphic frame (non-square content image) */
+.wide-frame{width:100%; max-width:320px; aspect-ratio:16/10; border-radius:12px; overflow:hidden; background:var(--bg2); border:1px solid var(--line); box-shadow:var(--shadow); margin:14px 0;}
+.wide-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* language rank card */
+.lang-card{display:flex; gap:16px; align-items:flex-start; border:1px solid var(--line); border-radius:12px; padding:18px; margin-top:16px; background:var(--panel); box-shadow:var(--shadow); position:relative;}
+.lang-rank{position:absolute; top:10px; right:14px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px; color:var(--cyan); background:var(--cyan-dim); padding:3px 10px; border-radius:20px;}
+.lang-title{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; margin-bottom:6px;}
+.lang-text{font-size:14px; color:var(--text-soft);}
+
+/* glossary */
+.glossary-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:12px;}
+@media(max-width:700px){.glossary-grid{grid-template-columns:1fr;}}
+.glossary-term{border:1px solid var(--line); border-radius:10px; padding:14px 16px; background:var(--bg2);}
+.glossary-term .term{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--cyan); font-size:13.5px;}
+.glossary-term .def{margin-top:6px; font-size:13.5px; color:var(--text-soft);}
+.glossary-term .tr{margin-top:6px; font-size:12.5px; color:var(--amber); display:none; border-top:1px dotted var(--line-soft); padding-top:6px;}
+.glossary-term .tr.show{display:block;}
+.gloss-toggle{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:var(--cyan); color:#fff; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; margin-bottom:4px;}
+.gloss-toggle:hover{opacity:0.88;}
+
+/* comparatives/superlatives rule box */
+.rule-box{border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:14px 0;}
+.rule-head{background:var(--panel2); padding:10px 16px; font-weight:700; font-family:'Space Grotesk',sans-serif; font-size:14px; letter-spacing:0.5px;}
+.rule-body{padding:14px 16px; background:var(--panel);}
+.rule-cols{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:10px; padding-top:12px; border-top:1px solid var(--line-soft);}
+@media(max-width:600px){.rule-cols{grid-template-columns:1fr;}}
+.rule-cols h4{font-size:12px; font-family:'IBM Plex Mono',monospace; color:var(--cyan); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;}
+.rule-cols ul{list-style:none; font-size:13.5px; color:var(--text-soft);}
+.rule-cols li{padding:2px 0;}
+
+table.irregular-table{width:100%; border-collapse:collapse; font-size:13.5px; margin-top:10px;}
+table.irregular-table th{background:var(--panel2); color:var(--cyan); padding:8px 12px; text-align:left; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:1px;}
+table.irregular-table td{padding:8px 12px; border-bottom:1px solid var(--line-soft); color:var(--text-soft);}
+
+/* sorting exercise */
+.sort-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px;}
+@media(max-width:600px){.sort-grid{grid-template-columns:1fr;}}
+.sort-col{border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+.sort-col-head{background:var(--panel2); padding:9px 14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--cyan);}
+.sort-col textarea{width:100%; min-height:90px; border:none; background:var(--bg2); font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text); padding:12px 14px; outline:none; resize:vertical;}
+
+/* compare cards (Apple vs Android) */
+.compare-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:16px;}
+@media(max-width:640px){.compare-grid{grid-template-columns:1fr;}}
+.compare-card{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--panel); box-shadow:var(--shadow);}
+.compare-head{padding:12px 16px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; background:var(--panel2); color:var(--cyan);}
+.compare-sec{padding:12px 16px;}
+.compare-sec .lbl{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;}
+.compare-sec.pros .lbl{color:var(--green);}
+.compare-sec.cons .lbl{color:var(--red);}
+.compare-sec ul{list-style:none; font-size:13.5px; color:var(--text-soft);}
+.compare-sec.pros li::before{content:'+ '; color:var(--green); font-weight:700;}
+.compare-sec.cons li::before{content:'− '; color:var(--red); font-weight:700;}
+.compare-sec li{padding:3px 0;}
+
+footer.end{margin-top:70px; padding-top:24px; border-top:1px solid var(--line); text-align:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-dim); letter-spacing:1px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Lesson 10 · English for Tech</div>
+  <h1>Programming <span>Languages</span></h1>
+  <p class="header-sub">Which language actually wins? Vocabulary for talking tech trade-offs, plus the grammar to compare anything — Comparatives & Superlatives.</p>
+
+  <div class="agenda-term">
+    <div class="agenda-term-bar">
+      <span class="agenda-dot d1"></span><span class="agenda-dot d2"></span><span class="agenda-dot d3"></span>
+      <span class="agenda-term-title">agenda.log</span>
+    </div>
+    <div class="agenda-term-body">
+      <div class="agenda-row"><span class="k">$ vocab</span><span class="v">programming languages</span></div>
+      <div class="agenda-row"><span class="k">$ grammar</span><span class="v">comparative & superlative adjectives</span></div>
+      <div class="agenda-row"><span class="k">$ speaking</span><span class="v">comparing advantages and disadvantages</span></div>
+      <div class="agenda-row"><span class="k">$ status</span><span class="v">pronunciation, bug-report writing → next session</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="trace-nav">
+  <div class="trace-node" onclick="jump('ph1')"><span class="b"></span>01 · Warm-up</div><div class="trace-seg"></div>
+  <div class="trace-node" onclick="jump('ph2')"><span class="b"></span>02 · Reading & Glossary</div><div class="trace-seg"></div>
+  <div class="trace-node" onclick="jump('ph3')"><span class="b"></span>03 · Grammar</div><div class="trace-seg"></div>
+  <div class="trace-node" onclick="jump('ph4')"><span class="b"></span>04 · Speaking</div>
+</div>
+
+<div class="main">
+
+  <!-- ============ PHASE 1 — WARM UP ============ -->
+  <div class="phase" id="ph1">
+    <div class="phase-head" onclick="togglePhase('ph1')">
+      <div class="phase-num">01</div>
+      <div class="phase-titles">
+        <div class="phase-tag">Warm-up</div>
+        <div class="phase-title">Name your languages</div>
+      </div>
+      <div class="phase-caret">▾</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Answer the questions</span></div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-head">Warm-up</div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">1. Name 6 programming languages you know or have heard of. What can you use them for?</div>
+              <div class="speaking-row">2. In your opinion, what is the fastest and most effective way to learn a programming language?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ PHASE 2 — READING & GLOSSARY ============ -->
+  <div class="phase" id="ph2">
+    <div class="phase-head" onclick="togglePhase('ph2')">
+      <div class="phase-num">02</div>
+      <div class="phase-titles">
+        <div class="phase-tag">EfT p.70–74 · Reading & Vocabulary</div>
+        <div class="phase-title">The 6 languages that matter most</div>
+      </div>
+      <div class="phase-caret">▾</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-tag">1A</div>
+        <div class="activity-head"><span class="activity-title">Read the tweet</span></div>
+        <div class="activity-body">
+          <p>Do you think there is a shortage of software engineers in the modern world? Why / why not?</p>
+          <div class="tweet-card">
+            <div class="tweet-top">
+              <div class="tweet-avatar">N</div>
+              <div><div class="tweet-name">Naval</div><div class="tweet-handle">@naval</div></div>
+            </div>
+            <div class="tweet-body">The engineer shortage won't end until coding fluency is as common as literacy and numeracy.</div>
+            <div class="tweet-note">Shortage — not enough of something &nbsp;·&nbsp; Literacy — ability to read and write &nbsp;·&nbsp; Numeracy — ability to use mathematics</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">1B</div>
+        <div class="activity-head"><span class="activity-title">Predict the prepositions</span></div>
+        <div class="activity-body">
+          <p>Before you read the text, try to complete the sentences with the prepositions below. Read the text in 1C to check your answers.</p>
+          <div class="word-box">
+            <div class="word-box-label">prepositions</div>
+            <span class="word-chip">up</span><span class="word-chip">for</span><span class="word-chip">on</span><span class="word-chip">out</span><span class="word-chip">at</span>
+            <span class="word-chip">of</span><span class="word-chip">to</span><span class="word-chip">into</span><span class="word-chip">in</span><span class="word-chip">by</span>
+          </div>
+          <ol class="exercise">
+            <li>I'm looking <input class="fill-input" size="6"> a new job in technical recruiting.</li>
+            <li>You need to back <input class="fill-input" size="6"> your opinions with facts.</li>
+            <li>The number of programming jobs is growing <input class="fill-input" size="6"> the day.</li>
+            <li>You will need to change your work routine <input class="fill-input" size="6"> some point.</li>
+            <li>I've heard that PHP is going <input class="fill-input" size="6"> of use.</li>
+            <li>You have a natural talent for logical thinking that you can tap <input class="fill-input" size="6">.</li>
+            <li>It is up <input class="fill-input" size="6"> you what you decide to do.</li>
+            <li>She can easily take advantage <input class="fill-input" size="6"> this situation.</li>
+            <li>He's an amazing coder, <input class="fill-input" size="6"> top of being a great guy.</li>
+            <li>He coded the entire application <input class="fill-input" size="6"> C++.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv1b')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rv1b">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <ol><li><strong>for</strong></li><li><strong>up</strong></li><li><strong>by</strong></li><li><strong>at</strong></li><li><strong>out</strong></li>
+              <li><strong>into</strong></li><li><strong>to</strong></li><li><strong>of</strong></li><li><strong>on</strong></li><li><strong>in</strong></li></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">1C</div>
+        <div class="activity-head"><span class="activity-title">True or False?</span></div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>The majority of web browsers are programmed in C++. <input class="fill-input" size="4" placeholder="T/F"></li>
+            <li>The number of C# jobs is 75% higher than C++ jobs. <input class="fill-input" size="4" placeholder="T/F"></li>
+            <li>PHP is famous for its elegance. <input class="fill-input" size="4" placeholder="T/F"></li>
+            <li>Python's syntax is a little complicated. <input class="fill-input" size="4" placeholder="T/F"></li>
+            <li>Java remains a viable programming language. <input class="fill-input" size="4" placeholder="T/F"></li>
+            <li>JavaScript can be used for a wide range of projects. <input class="fill-input" size="4" placeholder="T/F"></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv1c')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rv1c">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <ol><li><strong>T</strong> — most browsers, e.g. Chrome, are written in C++</li><li><strong>F</strong> — C# has double the jobs of C++ (20,000 vs 10,000), not 75% higher</li>
+              <li><strong>F</strong> — PHP is notorious for being cumbersome, not elegant</li><li><strong>F</strong> — Python is praised for its straightforward syntax</li>
+              <li><strong>T</strong> — still worth learning despite some calling it a "dying language"</li><li><strong>T</strong> — from web pages to apps and video games</li></ol>
+            </div>
+          </div>
+
+          <p style="margin-top:16px">There are 6 programming languages that are far above the rest, and there is data to back it up. To give you a detailed understanding, we're going to look at 4 major dimensions:</p>
+          <ol class="exercise">
+            <li>Number of jobs.</li><li>Number of learning resources.</li><li>How many people use it at work.</li><li>Popularity (is the language trending up or down?).</li>
+          </ol>
+          <p>Then, we're going to give each language a score and rank them <strong>relative</strong> to each other. Let's jump into it!</p>
+
+          <div class="lang-card">
+            <div class="icon-frame"><img src="https://download.logo.wine/logo/C%2B%2B/C%2B%2B-Logo.wine.png" alt="C++ logo"></div>
+            <div>
+              <div class="lang-rank">#6</div>
+              <div class="lang-title">C++</div>
+              <div class="lang-text">C++ is the fastest performing language. If you're going to write software where every millisecond counts, then C++ is the language you're <strong>looking for</strong>. Fun fact: most browsers (such as Chrome) are programmed in C++. <strong>Overall,</strong> there are only 10,000 remote C++ dev jobs on Indeed. It also has the lowest use, at 24% of developers reporting that they <strong>code in</strong> C++ daily. But this doesn't mean it's going to <strong>go out of use</strong> soon — it just means this language is used for very specific low-level tasks.</div>
+            </div>
+          </div>
+
+          <div class="lang-card">
+            <div class="icon-frame"><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/csharp.webp" alt="C# logo"></div>
+            <div>
+              <div class="lang-rank">#5</div>
+              <div class="lang-title">C#</div>
+              <div class="lang-text">If you want to work with the Microsoft .NET framework, you're going to need C#. You can also use it for Unity game development and a variety of other things. C# has double the amount of jobs of C++, at 20,000. There's also some demand for it on the freelance market which you can <strong>take advantage of</strong>. About 30% of the development community use it at work. The trend line for this language is kind of flat.</div>
+            </div>
+          </div>
+
+          <div class="lang-card">
+            <div class="icon-frame"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/PHP-logo.svg/3840px-PHP-logo.svg.png" alt="PHP logo"></div>
+            <div>
+              <div class="lang-rank">#4</div>
+              <div class="lang-title">PHP</div>
+              <div class="lang-text">The language most developers hate. PHP is <strong>notorious</strong> for being a <strong>cumbersome</strong> language, but honestly, it's not THAT bad. PHP is the traditional language of the web. These days it has two big <strong>competitors</strong> — Python and JavaScript — which are becoming more popular <strong>by the day</strong>. <strong>That said,</strong> this is the exact reason to learn it: because so many people want to program in anything other than PHP, there is a <strong>demand</strong> for PHP developers that you can <strong>tap into</strong> if you're an expert.</div>
+            </div>
+          </div>
+
+          <div class="lang-card">
+            <div class="icon-frame"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/3840px-Python-logo-notext.svg.png" alt="Python logo"></div>
+            <div>
+              <div class="lang-rank">#3</div>
+              <div class="lang-title">Python</div>
+              <div class="lang-text">Many people say Python is the best language for beginners because of its <strong>straightforward</strong> syntax. It's also very popular for <strong>trendy</strong> Machine Learning and AI. 44% of people use Python at work — almost half of all developers. <strong>Chances are,</strong> you're going to have to learn Python <strong>at some point</strong> in your career no matter what, so it's not <strong>a waste of time</strong> to learn it.</div>
+            </div>
+          </div>
+
+          <div class="lang-card">
+            <div class="icon-frame"><img src="https://logolook.net/wp-content/uploads/2022/11/Java-Logo.png" alt="Java logo"></div>
+            <div>
+              <div class="lang-rank">#2</div>
+              <div class="lang-title">Java</div>
+              <div class="lang-text">Java is the number one choice for big <strong>enterprise</strong> projects. It has pretty good performance and can be effective for writing large backend applications. The main <strong>concern</strong> about Java is that some people say it's a dying language, with others like Go able to replace it. However, so many big companies have their code written in Java that it's still worth learning today.</div>
+            </div>
+          </div>
+
+          <div class="lang-card">
+            <div class="icon-frame"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/960px-JavaScript-logo.png" alt="JavaScript logo"></div>
+            <div>
+              <div class="lang-rank">#1</div>
+              <div class="lang-title">JavaScript</div>
+              <div class="lang-text">No surprise there. JS is the <strong>go-to</strong> language for front-end, running in the browser. You can also use it on the backend with runtimes such as Node and Deno. Knowing JavaScript definitely opens a huge door of opportunity. Over 65% of developers use JS at work and its <strong>market share keeps growing</strong>. <strong>On top of that,</strong> JavaScript is an extremely <strong>versatile</strong> language, used for anything from dynamic web pages to apps and video games.<br><br>Now that you have this overview, <strong>it is up to you</strong> to decide which language you want to learn this year.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">1D</div>
+        <div class="activity-head"><span class="activity-title">Discuss</span></div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-head">Answer the question</div>
+            <div class="speaking-box-body"><div class="speaking-row">Which of these 6 languages would you be most interested in learning? Which do you already know?</div></div>
+          </div>
+          <div class="bonus"><span class="lbl">From your experience</span>Do you find yourself needing to actually understand these languages, or just enough to have informed conversations with engineers?</div>
+        </div>
+      </div>
+
+      <div class="teacher-tip" style="margin:22px 0 0">
+        <div class="teacher-tip-head">Teacher tip</div>
+        <p>One thing that can really elevate your communication skills is using connective phrases. If you pay attention to great public speakers, you'll notice that they use a lot of such phrases to link their ideas together.</p>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">1F</div>
+        <div class="activity-head"><span class="activity-title">Complete the speech with connective phrases</span></div>
+        <div class="activity-body">
+          <div class="word-box">
+            <div class="word-box-label">connective phrases</div>
+            <span class="word-chip">on top of that</span><span class="word-chip">chances are</span><span class="word-chip">that said</span><span class="word-chip">overall</span>
+          </div>
+          <div class="speaking-box">
+            <div class="speaking-box-head">Dialogue</div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">— Can you tell me about the most interesting course you've ever taken?</div>
+              <div class="speaking-row">— Sure. It was a web development course that I took last October. <input class="fill-input" size="18"> I was very happy with how the course was structured. <input class="fill-input" size="16">, there were certain parts that were very difficult and not explained in enough detail. What made this course stand out to me were the useful and practical project sections. <input class="fill-input" size="18">, there were also plenty of quizzes and gamification features. <input class="fill-input" size="16">, if you've ever googled "web development course", you've seen it on the first page — that's how popular it is.</div>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rv1f')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rv1f">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <ol><li><strong>Overall,</strong></li><li><strong>That said</strong></li><li><strong>On top of that</strong></li><li><strong>Chances are</strong></li></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Glossary of technical terms</span></div>
+        <div class="activity-body">
+          <p>Make sure you understand the meaning of each phrase.</p>
+          <button class="gloss-toggle" onclick="toggleTranslations()">🇺🇦 показати / сховати переклад</button>
+          <div class="glossary-grid">
+            <div class="glossary-term"><div class="term">Back (something) up</div><div class="def">Support something or someone.</div><div class="tr">підтримати, підкріпити аргументами</div></div>
+            <div class="glossary-term"><div class="term">Dimension</div><div class="def">An aspect or feature of a situation.</div><div class="tr">аспект, вимір</div></div>
+            <div class="glossary-term"><div class="term">Rank (verb)</div><div class="def">Give something a rank or place within a grading system.</div><div class="tr">ранжувати, присвоювати місце</div></div>
+            <div class="glossary-term"><div class="term">Relative</div><div class="def">Considered in relation or in proportion to something else.</div><div class="tr">відносний</div></div>
+            <div class="glossary-term"><div class="term">Look for (something)</div><div class="def">Try to find someone or something.</div><div class="tr">шукати</div></div>
+            <div class="glossary-term"><div class="term">Overall</div><div class="def">Taken as a whole; in all.</div><div class="tr">загалом</div></div>
+            <div class="glossary-term"><div class="term">Code / program in (language)</div><div class="def">Write code in a certain language.</div><div class="tr">писати код певною мовою</div></div>
+            <div class="glossary-term"><div class="term">Go out of use</div><div class="def">Stop being used (opposite of "to be in use").</div><div class="tr">виходити з ужитку</div></div>
+            <div class="glossary-term"><div class="term">Take advantage of</div><div class="def">Use something for your own benefit.</div><div class="tr">скористатися чимось</div></div>
+            <div class="glossary-term"><div class="term">Notorious</div><div class="def">Famous or well known, typically for something bad.</div><div class="tr">сумнозвісний</div></div>
+            <div class="glossary-term"><div class="term">Cumbersome</div><div class="def">Slow or complicated, and therefore inefficient.</div><div class="tr">громіздкий, незручний</div></div>
+            <div class="glossary-term"><div class="term">Competitors</div><div class="def">Business rivals.</div><div class="tr">конкуренти</div></div>
+            <div class="glossary-term"><div class="term">By the day</div><div class="def">With each day.</div><div class="tr">з кожним днем</div></div>
+            <div class="glossary-term"><div class="term">That said</div><div class="def">Despite what one just said.</div><div class="tr">тим не менш, при цьому</div></div>
+            <div class="glossary-term"><div class="term">Demand</div><div class="def">The desire of consumers/employers for a particular thing.</div><div class="tr">попит</div></div>
+            <div class="glossary-term"><div class="term">Straightforward</div><div class="def">Uncomplicated and easy to do or understand.</div><div class="tr">простий, зрозумілий</div></div>
+            <div class="glossary-term"><div class="term">Trendy</div><div class="def">Very fashionable or up to date.</div><div class="tr">модний, актуальний</div></div>
+            <div class="glossary-term"><div class="term">Chances are</div><div class="def">It is very likely that.</div><div class="tr">цілком ймовірно</div></div>
+            <div class="glossary-term"><div class="term">At some point</div><div class="def">At an unspecified time in the future.</div><div class="tr">колись, у певний момент</div></div>
+            <div class="glossary-term"><div class="term">A waste of time</div><div class="def">Something inefficient or unproductive.</div><div class="tr">марна трата часу</div></div>
+            <div class="glossary-term"><div class="term">Enterprise</div><div class="def">A for-profit business or company.</div><div class="tr">підприємство, компанія</div></div>
+            <div class="glossary-term"><div class="term">Concern</div><div class="def">A matter of interest or importance to someone.</div><div class="tr">занепокоєння, проблема</div></div>
+            <div class="glossary-term"><div class="term">Go-to</div><div class="def">Regularly chosen or used for reliably good results.</div><div class="tr">перевірений, "той самий"</div></div>
+            <div class="glossary-term"><div class="term">Market share</div><div class="def">The portion of a market controlled by a company or product.</div><div class="tr">частка ринку</div></div>
+            <div class="glossary-term"><div class="term">Keep (growing)</div><div class="def">Continue (to grow) constantly.</div><div class="tr">продовжувати (зростати)</div></div>
+            <div class="glossary-term"><div class="term">On top of that</div><div class="def">In addition to that.</div><div class="tr">до того ж</div></div>
+            <div class="glossary-term"><div class="term">Versatile</div><div class="def">Having many applications.</div><div class="tr">багатофункціональний, універсальний</div></div>
+            <div class="glossary-term"><div class="term">It is up to you</div><div class="def">It depends on what you decide.</div><div class="tr">це залежить від тебе</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ PHASE 3 — GRAMMAR ============ -->
+  <div class="phase" id="ph3">
+    <div class="phase-head" onclick="togglePhase('ph3')">
+      <div class="phase-num">03</div>
+      <div class="phase-titles">
+        <div class="phase-tag">EfT p.75–79 · Grammar</div>
+        <div class="phase-title">Comparatives & Superlatives</div>
+      </div>
+      <div class="phase-caret">▾</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-tag">1A</div>
+        <div class="activity-head"><span class="activity-title">Apple vs. Android</span></div>
+        <div class="activity-body">
+          <p>Read the text. What does the choice of highlighted words depend on?</p>
+          <p>The struggle between Apple and Android seems infinite. However, these days you really can't go wrong with either platform. Each one has advantages over the other, and each one is loved by a huge portion of its user base.</p>
+          <p>According to data shared by Apple CEO Tim Cook, Android users switch to the iPhone <strong>more often than</strong> iPhone users bail on Apple's platform.</p>
+          <p>On the other hand, the latest figures from StatCounter show that not only is Android used <strong>by more</strong> people <strong>than</strong> iOS, but it's also challenging Windows to be <strong>the most used</strong> OS in the world (for internet access, at least).</p>
+
+          <div class="wide-frame"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTD_fwJYKWjCVtJs_pLzTgyRvAl1TEHmuI8uXJPCXE4Q&s=10" alt="Apple vs Android comparison graphic"></div>
+
+          <p>Let's do a quick comparison:</p>
+          <div class="compare-grid">
+            <div class="compare-card">
+              <div class="compare-head">Apple</div>
+              <div class="compare-sec pros"><div class="lbl">Pros</div><ul><li>generally good support</li><li>fewer worries of malware due to the curated app store</li></ul></div>
+              <div class="compare-sec cons"><div class="lbl">Cons</div><ul><li>walled-garden ecosystem</li><li>fewer opportunities for customization</li></ul></div>
+            </div>
+            <div class="compare-card">
+              <div class="compare-head">Android</div>
+              <div class="compare-sec pros"><div class="lbl">Pros</div><ul><li>easier to customize</li><li>wider choice of phones</li></ul></div>
+              <div class="compare-sec cons"><div class="lbl">Cons</div><ul><li>higher chance of malware</li><li>less reliable support</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head"><span class="activity-title">Review the rules</span></div>
+        <div class="activity-body">
+
+          <div class="rule-box">
+            <div class="rule-head">Comparative adjectives</div>
+            <div class="rule-body">
+              <p><em>Android smartphones are easier to customize than Apple smartphones.</em><br><em>Apple smartphones have more reliable support than Android smartphones.</em></p>
+              <p style="margin-top:8px"><strong>Rule:</strong> for short adjectives, add <strong>-er</strong> (or "less + adjective"). For long adjectives, add <strong>"more/less"</strong> before the adjective.</p>
+              <div class="rule-cols">
+                <div><h4>Short adjectives</h4><ul>
+                  <li>High + er = higher</li><li>Easy + ier = easier</li><li>Big + ger = bigger</li><li>Wide + r = wider</li><li>Less + high</li><li>Less + easy</li>
+                </ul></div>
+                <div><h4>Long adjectives</h4><ul><li>More / less + reliable</li></ul></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-tag" style="position:static;display:inline-block;margin-bottom:8px">1B</div>
+          <p><strong>Sort the adjectives below into two columns.</strong></p>
+          <div class="word-box">
+            <span class="word-chip">important</span><span class="word-chip">significant</span><span class="word-chip">healthy</span><span class="word-chip">strong</span>
+            <span class="word-chip">difficult</span><span class="word-chip">satisfied</span><span class="word-chip">cold</span><span class="word-chip">clean</span><span class="word-chip">early</span>
+          </div>
+          <div class="sort-grid">
+            <div class="sort-col"><div class="sort-col-head">+ er</div><textarea placeholder="e.g. stronger"></textarea></div>
+            <div class="sort-col"><div class="sort-col-head">+ more</div><textarea placeholder="e.g. more important"></textarea></div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rv1b_g')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rv1b_g">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <p style="color:var(--text-soft)"><strong>+er:</strong> stronger, colder, cleaner, earlier, healthier<br><strong>+more:</strong> more important, more significant, more difficult, more satisfied</p>
+            </div>
+          </div>
+
+          <div class="rule-box" style="margin-top:20px">
+            <div class="rule-head">Superlative adjectives</div>
+            <div class="rule-body">
+              <p><em>Windows is the most common OS in the world.</em><br><em>This is the greatest phone I've ever owned.</em></p>
+              <p style="margin-top:8px"><strong>Rule:</strong> for short adjectives, add <strong>-est</strong> (or "the least + adjective"), and normally add "the" before the adjective. For long adjectives, add <strong>"the most / the least"</strong> before the adjective.</p>
+              <div class="rule-cols">
+                <div><h4>Short adjectives</h4><ul>
+                  <li>The + great + est = the greatest</li><li>The + big + gest = the biggest</li><li>The + wide + st = the widest</li><li>The least great</li><li>The least wide</li>
+                </ul></div>
+                <div><h4>Long adjectives</h4><ul>
+                  <li>The most common</li><li>The most popular</li><li>The most difficult</li><li>The least important</li><li>The least supported</li>
+                </ul></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note-box"><strong>NB:</strong> some adjectives have special comparative & superlative forms.</div>
+          <table class="irregular-table">
+            <tr><th>Adjective</th><th>Comparative</th><th>Superlative</th></tr>
+            <tr><td>Good</td><td>Better</td><td>The best</td></tr>
+            <tr><td>Bad</td><td>Worse</td><td>The worst</td></tr>
+            <tr><td>Far</td><td>Farther / further</td><td>The farthest / the furthest</td></tr>
+            <tr><td>Much</td><td>More</td><td>The most</td></tr>
+            <tr><td>Little</td><td>Less</td><td>The least</td></tr>
+          </table>
+
+          <div class="activity-tag" style="position:static;display:inline-block;margin:20px 0 8px">1C</div>
+          <p><strong>Sort the adjectives below into two columns.</strong></p>
+          <div class="word-box">
+            <span class="word-chip">Important</span><span class="word-chip">low</span><span class="word-chip">cumbersome</span><span class="word-chip">famous</span>
+            <span class="word-chip">new</span><span class="word-chip">amazing</span><span class="word-chip">smart</span><span class="word-chip">long</span>
+          </div>
+          <div class="sort-grid">
+            <div class="sort-col"><div class="sort-col-head">+ est</div><textarea placeholder="e.g. lowest"></textarea></div>
+            <div class="sort-col"><div class="sort-col-head">The most +</div><textarea placeholder="e.g. the most important"></textarea></div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rv1c_g')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rv1c_g">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <p style="color:var(--text-soft)"><strong>+est:</strong> lowest, newest, smartest, longest<br><strong>the most +:</strong> the most important, the most cumbersome, the most famous, the most amazing</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">2A</div>
+        <div class="activity-head"><span class="activity-title">Choose the correct option</span></div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>Can you recommend a <strong>safer / more safe</strong> alternative?</li>
+            <li>I would agree to have a <strong>lower-paid / more low-paid</strong> job, if that meant I could spend more time with my family and friends.</li>
+            <li>Leonardo DiCaprio finally got the award for <strong>better / best</strong> actor in the leading role.</li>
+            <li>This is <strong>more elegant / the most elegant</strong> code I have ever seen.</li>
+            <li>The meeting today was awful. I think this is <strong>more boring / the most boring</strong> presentation I have ever had to sit through.</li>
+            <li>This is the <strong>baddest / worst</strong> coffee I've had in my life.</li>
+            <li>Unfortunately, we cannot afford this. It seems like we have to look for a <strong>more cheap / cheaper</strong> option.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv2a')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rv2a">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <ol><li><strong>safer</strong></li><li><strong>lower-paid</strong></li><li><strong>best</strong></li><li><strong>the most elegant</strong></li>
+              <li><strong>the most boring</strong></li><li><strong>worst</strong></li><li><strong>cheaper</strong></li></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">2B</div>
+        <div class="activity-head"><span class="activity-title">Use the right form to complete the sentence</span></div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>The <input class="fill-input" size="10"> (close) people get to their deadlines, the <input class="fill-input" size="10"> (nervous) they become.</li>
+            <li>She is by far <input class="fill-input" size="14"> (good) developer in the company.</li>
+            <li>English is <input class="fill-input" size="10"> (little) difficult than Japanese.</li>
+            <li>My PC runs <input class="fill-input" size="10"> (fast) than yours.</li>
+            <li>He is <input class="fill-input" size="14"> (experienced) person in our team.</li>
+            <li>This is <input class="fill-input" size="14"> (exciting) task I have ever had.</li>
+            <li>Generally, Android smartphones are <input class="fill-input" size="14"> (expensive) than Apple smartphones.</li>
+            <li>iPhone is possibly <input class="fill-input" size="14"> (profitable) product in modern history.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rv2b')">&gt; reveal_answers</button>
+          <div class="reveal-content" id="rv2b">
+            <div class="answer-key"><div class="ak-label">Answer key</div>
+              <ol><li><strong>closer</strong> / <strong>more nervous</strong></li><li><strong>the best</strong></li><li><strong>less</strong> difficult</li>
+              <li><strong>faster</strong></li><li><strong>the most experienced</strong></li><li><strong>the most exciting</strong></li>
+              <li><strong>less / more expensive</strong> — both are grammatically fine, the point here is the comparative form itself</li><li><strong>the most profitable</strong></li></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">EX. 3</div>
+        <div class="activity-head"><span class="activity-title">Make comparative sentences</span></div>
+        <div class="activity-body">
+          <p>Use the words in brackets. Discuss your answers with a peer (or expand on each topic with 2-3 more sentences of your own).</p>
+          <p style="color:var(--text-dim); font-style:italic">E.g. Cats are friendlier than dogs (friendly).</p>
+          <div class="match-wrap">
+            <div>
+              <div class="match-item"><span class="match-num">•</span><span>Cats vs. Dogs (good pets)</span></div>
+              <div class="match-item"><span class="match-num">•</span><span>iOS vs. Android (secure)</span></div>
+              <div class="match-item"><span class="match-num">•</span><span>Analog clocks vs. Digital clocks (reliable)</span></div>
+              <div class="match-item"><span class="match-num">•</span><span>Vim vs. Emacs (easy to use)</span></div>
+              <div class="match-item"><span class="match-num">•</span><span>Tea vs. Coffee (bitter)</span></div>
+            </div>
+            <div>
+              <div class="match-item"><span class="match-num">•</span><span>Adidas vs. Nike (comfortable)</span></div>
+              <div class="match-item"><span class="match-num">•</span><span>MacOS vs. Windows (powerful)</span></div>
+              <div class="match-item"><span class="match-num">•</span><span>The US vs. the UK (big)</span></div>
+              <div class="match-item"><span class="match-num">•</span><span>Glasses vs. Contact lenses (trendy)</span></div>
+              <div class="match-item"><span class="match-num">•</span><span>Big companies vs. Startups (interesting to work at)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-tag">EX. 4</div>
+        <div class="activity-head"><span class="activity-title">Read the tweet</span></div>
+        <div class="activity-body">
+          <p>Think of 2–3 recently developed software tools. How have they helped businesses and individuals?</p>
+          <div class="tweet-card flip-rot">
+            <div class="tweet-top">
+              <div class="tweet-avatar">AL</div>
+              <div><div class="tweet-name">Aaron Levie</div><div class="tweet-handle">@levie</div></div>
+            </div>
+            <div class="tweet-body">The promise that software would make companies quicker, <strong>flatter</strong>, more collaborative, and connected was a distant reality for <strong>decades</strong>. Now that we're all working in the cloud, this vision is finally happening. And with it we'll see a new era of enterprise software.</div>
+            <div class="tweet-note">Flat organization — an organization with few or no levels of middle management &nbsp;·&nbsp; Decade — a period of 10 years</div>
+          </div>
+          <div class="bonus"><span class="lbl">From your experience</span>Which recent tool changed how your team actually works — not just what you use, but how decisions get made or how fast you ship?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ PHASE 4 — SPEAKING ============ -->
+  <div class="phase" id="ph4">
+    <div class="phase-head" onclick="togglePhase('ph4')">
+      <div class="phase-num">04</div>
+      <div class="phase-titles">
+        <div class="phase-tag">EfT p.80 · Speaking & Soft Skills</div>
+        <div class="phase-title">Compare two languages of your choice</div>
+      </div>
+      <div class="phase-caret">▾</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-tag">EX. 1</div>
+        <div class="activity-head"><span class="activity-title">Compare two programming languages</span></div>
+        <div class="activity-body">
+          <p>Pick any two programming languages you like. Consider their advantages and disadvantages, and answer the following questions.</p>
+          <ol class="exercise">
+            <li>Which language is more popular / more widely used?</li>
+            <li>Which language is more versatile (meaning one is more multi-purpose)?</li>
+            <li>Which language is older?</li>
+            <li>Which one is easier to learn for a beginner?</li>
+            <li>Which language is less complex?</li>
+            <li>Which kinds of projects are these two languages more appropriate for?</li>
+          </ol>
+          <div class="bonus"><span class="lbl">From your experience</span>If your product team had to pick a new language for a project tomorrow, what would actually drive that decision — the language itself, or things like hiring pool and existing team skills?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer class="end">// end of lesson 10 — pronunciation & replying to bug reports still to come</footer>
+
+<script>
+function togglePhase(id){document.getElementById(id).classList.toggle('collapsed');}
+function toggleReveal(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  const btn=el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? '> hide_answers' : '> reveal_answers';
+}
+function toggleTranslations(){
+  document.querySelectorAll('.glossary-term .tr').forEach(function(el){ el.classList.toggle('show'); });
+}
+function jump(id){
+  const el=document.getElementById(id);
+  if(el.classList.contains('collapsed')) el.classList.remove('collapsed');
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>

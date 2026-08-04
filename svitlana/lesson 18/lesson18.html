@@ -1,1 +1,930 @@
-rhrh
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 18</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red:#c8362d;--red-dk:#9e2820;--red-lt:#fdf1f0;
+      --dark:#2e2e2e;--mid:#5f5f5f;--grey:#f5f5f3;--border:#dedede;--white:#fff;
+      --green:#2a6e1a;--blue:#1a3a5c;--teal:#1a5c52;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--dark);line-height:1.6;}
+
+    /* ─── HEADER ─── */
+    .hdr{background:var(--dark);color:#fff;padding:52px 48px 44px;position:relative;overflow:hidden;}
+    .hdr::before{content:'4.3';position:absolute;right:36px;top:50%;transform:translateY(-50%);
+      font-family:'Playfair Display',serif;font-size:160px;font-weight:900;
+      color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;}
+    .hdr-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+    .hdr-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4.5vw,56px);font-weight:900;line-height:1.05;}
+    .hdr-sub{font-size:15px;color:rgba(255,255,255,0.45);margin-top:6px;}
+    .hdr-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);}
+    .hdr-chip{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);}
+    .hdr-chip strong{color:#fff;}
+
+    .wrap{max-width:940px;margin:0 auto;padding:0 44px 80px;}
+
+    /* ─── SECTION ─── */
+    .ed{border-top:2.5px solid var(--red);margin-top:44px;}
+    .ed-hdr{display:flex;align-items:center;gap:18px;padding:14px 0 0;cursor:pointer;user-select:none;}
+    .ed-tag{background:var(--dark);color:#fff;font-family:'DM Mono',monospace;font-size:9px;
+      letter-spacing:2.5px;text-transform:uppercase;padding:7px 14px;white-space:nowrap;flex-shrink:0;}
+    .ed-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;flex:1;}
+    .ed-toggle{color:var(--mid);font-size:16px;margin-left:8px;transition:transform .3s;}
+    .ed.closed .ed-toggle{transform:rotate(-90deg);}
+    .ed-body{padding:22px 0 8px;}
+    .ed.closed .ed-body{display:none;}
+
+    /* ─── EXERCISE ─── */
+    .ex{margin-bottom:26px;}
+    .ex-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+    .ex-num{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:10px;
+      font-weight:700;width:22px;height:22px;border-radius:50%;display:inline-flex;
+      align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-ltr{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--red);flex-shrink:0;width:18px;}
+    .ex-instr{font-size:14px;font-weight:500;color:var(--dark);flex:1;}
+    .ex-src{font-family:'DM Mono',monospace;font-size:9px;color:var(--mid);background:var(--grey);
+      padding:3px 9px;border-radius:2px;white-space:nowrap;margin-left:auto;}
+
+    /* ─── INPUT ─── */
+    input[type=text]{border:none;border-bottom:1.5px solid var(--border);background:transparent;
+      font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);padding:2px 5px;outline:none;
+      transition:border-color .2s;}
+    input[type=text]:focus{border-bottom-color:var(--red);}
+    textarea.warea{width:100%;min-height:200px;border:1.5px solid var(--border);border-radius:3px;
+      padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);
+      background:#fff;resize:vertical;outline:none;line-height:1.85;}
+    textarea.warea:focus{border-color:var(--red);}
+
+    /* ─── LISTS ─── */
+    ol.nl{list-style:none;padding:0;margin:8px 0;counter-reset:c;}
+    ol.nl li{display:flex;align-items:baseline;gap:10px;padding:8px 0;
+      border-bottom:1px solid var(--border);font-size:14px;color:var(--mid);counter-increment:c;}
+    ol.nl li::before{content:counter(c);font-family:'DM Mono',monospace;font-size:10px;
+      color:var(--red);font-weight:700;flex-shrink:0;width:18px;}
+    ol.nl li:last-child{border-bottom:none;}
+    ol.alpha{list-style:lower-alpha;padding-left:20px;margin:8px 0;}
+    ol.alpha li{font-size:14px;color:var(--mid);padding:7px 0;border-bottom:1px solid var(--border);}
+    ol.alpha li:last-child{border-bottom:none;}
+
+    /* ─── REVEAL ─── */
+    .rev-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+      background:none;border:1px solid var(--border);color:var(--mid);padding:5px 14px;
+      border-radius:2px;cursor:pointer;margin-top:10px;transition:all .2s;display:inline-block;}
+    .rev-btn:hover{border-color:var(--red);color:var(--red);}
+    .rev-body{display:none;margin-top:10px;}
+    .rev-body.open{display:block;}
+    .ans-box{background:var(--grey);border-left:3px solid var(--red);padding:12px 16px;font-size:13px;}
+    .ans-box .ak{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+    .ans-box ol,.ans-box ul{padding-left:18px;}
+    .ans-box li{padding:3px 0;color:var(--mid);}
+    .ans-box li strong{color:var(--red-dk);}
+    .ans-box p{color:var(--mid);font-size:13px;line-height:1.7;}
+
+    /* ─── NOTE ─── */
+    .note{background:var(--grey);border-left:3px solid var(--border);padding:10px 14px;
+      font-size:13px;color:var(--mid);margin:10px 0;line-height:1.6;}
+    .note.red{border-left-color:var(--red);}
+    .note.blue{border-left-color:var(--blue);}
+
+    /* ─── WORD BOX ─── */
+    .wbox{border:1.5px solid var(--border);border-radius:3px;padding:10px 14px;margin:10px 0;
+      display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--grey);}
+    .wbox-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--mid);width:100%;margin-bottom:4px;}
+    .chip{background:var(--dark);color:#fff;font-size:12px;font-weight:500;padding:4px 11px;
+      border-radius:2px;white-space:nowrap;}
+
+    /* ─── GRAMMAR BOX ─── */
+    .g-box{border:1px solid var(--border);border-top:2px solid var(--red);border-radius:0 0 3px 3px;overflow:hidden;margin:14px 0;}
+    .g-head{background:var(--dark);color:#fff;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;}
+    .g-head span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+    .g-head .g-ref{font-size:9px;opacity:.5;font-weight:400;}
+    .g-body{background:#fff;padding:16px;}
+    .g-row{display:flex;gap:10px;padding:5px 0;border-bottom:1px dotted var(--border);font-size:14px;align-items:baseline;}
+    .g-row:last-child{border-bottom:none;}
+    .g-plus{color:var(--green);font-weight:700;flex-shrink:0;width:14px;}
+    .g-minus{color:var(--red-dk);font-weight:700;flex-shrink:0;width:14px;}
+    .g-q{color:var(--blue);font-weight:700;flex-shrink:0;width:14px;}
+    .g-ex{font-style:italic;color:var(--blue);}
+    .g-ex strong{font-weight:700;color:var(--blue);}
+    .g-note{font-size:13px;color:var(--mid);line-height:1.65;margin:6px 0;}
+
+    /* ─── GRAMMAR TABLE ─── */
+    .gram-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+    .gram-tbl th{background:var(--dark);color:#fff;padding:7px 12px;text-align:left;font-size:11px;}
+    .gram-tbl td{padding:7px 12px;border:1px solid var(--border);color:var(--mid);}
+    .gram-tbl td.subj{font-weight:600;color:var(--dark);}
+    .gram-tbl td.aux{color:var(--red-dk);font-weight:700;}
+    .gram-tbl td.verb{color:var(--blue);font-style:italic;font-weight:600;}
+    .gram-tbl-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0;}
+    .spell-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+    .spell-tbl th{background:var(--grey);padding:7px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--dark);border:1px solid var(--border);}
+    .spell-tbl td{padding:7px 12px;border:1px solid var(--border);color:var(--mid);}
+    .spell-tbl td:first-child{font-weight:600;color:var(--dark);width:160px;}
+
+    /* ─── IMAGE PLACEHOLDER ─── */
+    .img-ph{border:2px dashed var(--border);border-radius:3px;background:var(--grey);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      color:var(--mid);text-align:center;padding:20px;}
+    .img-ph .ph-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-top:6px;}
+
+    /* ─── MATCH TABLE ─── */
+    .match-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0;}
+    .match-tbl th{background:var(--dark);color:#fff;padding:8px 14px;text-align:left;font-size:11px;}
+    .match-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--mid);}
+    .match-tbl tr:last-child td{border-bottom:none;}
+    .match-tbl tr:hover td{background:var(--grey);}
+    .match-tbl .qn{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);font-weight:700;width:28px;}
+    .match-tbl .ans-col{width:70px;text-align:center;}
+
+    /* ─── EMAIL CARD ─── */
+    .email-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;font-size:14px;}
+    .ec-hdr{background:var(--grey);padding:9px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+    .ec-num{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:10px;
+      font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ec-from{font-weight:600;color:var(--dark);font-size:13px;flex:1;}
+    .ec-to{font-size:11px;color:var(--mid);}
+    .ec-body{padding:14px 16px;color:var(--mid);line-height:1.85;}
+    .ec-body p{margin-bottom:8px;}
+    .ec-body p:last-child{margin-bottom:0;}
+    .ec-body .pc{font-weight:700;font-style:normal;color:var(--dark);}
+    .ec-sign{font-style:normal;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+
+    /* ─── EMAIL GRID ─── */
+    .email-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0;}
+    .email-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+
+    /* ─── REPLY CARD ─── */
+    .reply-card{border:1px solid #b0c4de;border-radius:3px;overflow:hidden;font-size:13px;}
+    .rc-hdr{background:#e8f0f8;padding:8px 12px;border-bottom:1px solid #b0c4de;display:flex;align-items:center;gap:8px;}
+    .rc-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);font-weight:700;}
+    .rc-body{padding:12px 14px;color:var(--mid);line-height:1.8;}
+    .rc-body .pc{font-weight:700;color:var(--blue);}
+
+    /* ─── PHOTO STRIP ─── */
+    .photo-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0;}
+    .p-cell{display:flex;flex-direction:column;gap:5px;}
+    .p-cell .p-lbl{font-size:11px;color:var(--mid);text-align:center;font-style:italic;}
+
+    /* ─── WARM-UP CARDS ─── */
+    .wu-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0;}
+    .wu-card{border:1px solid var(--border);border-radius:3px;padding:12px 10px;text-align:center;}
+    .wu-icon{font-size:22px;display:block;margin-bottom:6px;}
+    .wu-n{font-family:'DM Mono',monospace;font-size:9px;color:var(--red);font-weight:700;margin-bottom:6px;}
+    .wu-scene{font-size:12px;color:var(--dark);font-weight:600;margin-bottom:8px;line-height:1.4;}
+    .wu-card textarea{width:100%;min-height:70px;border:1px solid var(--border);border-radius:2px;
+      font-family:'DM Sans',sans-serif;font-size:12px;padding:6px;resize:vertical;outline:none;}
+    .wu-card textarea:focus{border-color:var(--red);}
+
+    /* ─── REVISION ─── */
+    .mistake-row{padding:10px 0;border-bottom:1px solid var(--border);}
+    .mistake-row:last-child{border-bottom:none;}
+    .mistake-src{font-size:14px;color:var(--mid);font-style:italic;margin-bottom:6px;}
+
+    /* ─── FUNCTION TABLE (bonus) ─── */
+    .fn-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+    .fn-tbl th{background:var(--dark);color:#fff;padding:8px 14px;text-align:left;font-size:11px;}
+    .fn-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--mid);vertical-align:middle;}
+    .fn-tbl tr:last-child td{border-bottom:none;}
+    .fn-tbl tr:hover td{background:var(--grey);}
+    .fn-tbl td:first-child{color:var(--dark);font-weight:500;width:55%;}
+    .fn-tbl .fn-ans{width:100px;text-align:center;}
+
+    /* ─── TWO COL ─── */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;}
+
+    @media(max-width:700px){
+      .wrap{padding:0 16px 60px;}.hdr{padding:32px 20px;}.hdr::before{display:none;}
+      .email-grid,.email-grid-2,.gram-tbl-wrap,.two-col,.wu-cards,.photo-strip{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-eye">Unit 4 · Travelling for Work</div>
+  <div class="hdr-title">Lesson 18<br><em style="font-style:italic;color:rgba(255,255,255,0.7);">An Update Email</em></div>
+  <div class="hdr-sub">Business Partner A2 · Unit 4.3 · Things happening now · Update emails</div>
+  <div class="hdr-meta">
+    <div class="hdr-chip"><strong>Level:</strong>&nbsp; A2</div>
+    <div class="hdr-chip"><strong>Lesson outcome:</strong>&nbsp; Write an update email about work happening now</div>
+    <div class="hdr-chip"><strong>Grammar:</strong>&nbsp; Present Continuous — things happening now</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══════════════════════════════════════════
+       REVISION — Lessons 15–16
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-rev">
+    <div class="ed-hdr" onclick="toggle('s-rev')">
+      <div class="ed-tag">Revision</div>
+      <div class="ed-title">will / won't · Present Continuous for arrangements</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- A: will/won't — complete the text message -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Your flight to Frankfurt is cancelled. Complete the text message to your manager using <em>will / won't</em> + a verb from the box.</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Verbs</div>
+          <span class="chip">arrive</span><span class="chip">be (×2)</span><span class="chip">come</span>
+          <span class="chip">join</span><span class="chip">send</span><span class="chip">stay</span>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;max-width:460px;margin:14px 0;font-size:14px;">
+          <div style="background:#e8f0f8;padding:8px 14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);border-bottom:1px solid #b0c4de;">Text message — to: Manager</div>
+          <div style="padding:14px 16px;background:#f8f9fa;color:var(--mid);line-height:2.2;">
+            Hi,<br>
+            Sorry — my flight is cancelled. I ¹<input type="text" style="width:130px;"> late for the meeting, but don't worry — I ²<input type="text" style="width:110px;"> the meeting online. I ³<input type="text" style="width:110px;"> at the airport hotel tonight and ⁴<input type="text" style="width:120px;"> to Frankfurt tomorrow morning. I ⁵<input type="text" style="width:110px;"> you the presentation before 9 p.m. tonight. I ⁶<input type="text" style="width:130px;"> at the office before 10 a.m. tomorrow.
+            <br><br>Best,<br>Svitlana
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-A')">show answers ▾</button>
+        <div class="rev-body" id="rv-A">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>will be</strong> · 2.<strong>will join</strong> · 3.<strong>will stay</strong> · 4.<strong>will come</strong> · 5.<strong>will send</strong> · 6.<strong>will arrive / will be</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- B: Spot the mistake — PC for arrangements -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Find the mistake in each sentence about next week's schedule. Write the correct sentence.</span>
+        </div>
+        <div>
+          <div class="mistake-row">
+            <div class="mistake-src">1. "She fly to Berlin on Tuesday morning."</div>
+            <input type="text" style="width:100%;max-width:480px;" placeholder="Correct…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-src">2. "Are they stay at the Marriott hotel?"</div>
+            <input type="text" style="width:100%;max-width:480px;" placeholder="Correct…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-src">3. "He not is presenting to the board on Friday."</div>
+            <input type="text" style="width:100%;max-width:480px;" placeholder="Correct…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-src">4. "I am not meet the clients until 3 p.m."</div>
+            <input type="text" style="width:100%;max-width:480px;" placeholder="Correct…">
+          </div>
+          <div class="mistake-row">
+            <div class="mistake-src">5. "What time they are landing in Munich?"</div>
+            <input type="text" style="width:100%;max-width:480px;" placeholder="Correct…">
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-B')">show answers ▾</button>
+        <div class="rev-body" id="rv-B">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li>She <strong>is flying</strong> to Berlin on Tuesday morning.</li>
+              <li>Are they <strong>staying</strong> at the Marriott hotel?</li>
+              <li>He <strong>isn't presenting</strong> to the board on Friday.</li>
+              <li>I <strong>am not meeting</strong> the clients until 3 p.m.</li>
+              <li>What time <strong>are they landing</strong> in Munich?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       WARM-UP — What's happening right now?
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-wu">
+    <div class="ed-hdr" onclick="toggle('s-wu')">
+      <div class="ed-tag">Warm-up</div>
+      <div class="ed-title">What's happening right now?</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Look at each office scene. Write one Present Continuous sentence saying what is happening <strong>right now</strong>. Then answer the question about your own work.</p>
+      <div class="wu-cards">
+        <div class="wu-card">
+          <div class="wu-n">Scene 1</div>
+          <span class="wu-icon">👩‍💼📊🎤</span>
+          <div class="wu-scene">Elena / give / presentation / sales team</div>
+          <textarea placeholder="Elena is…"></textarea>
+        </div>
+        <div class="wu-card">
+          <div class="wu-n">Scene 2</div>
+          <span class="wu-icon">👨‍💻🖥️🔧</span>
+          <div class="wu-scene">The IT team / fix / server / office</div>
+          <textarea placeholder="The IT team is…"></textarea>
+        </div>
+        <div class="wu-card">
+          <div class="wu-n">Scene 3</div>
+          <span class="wu-icon">👥☕🗣️</span>
+          <div class="wu-scene">Customers / wait / reception</div>
+          <textarea placeholder="Customers are…"></textarea>
+        </div>
+        <div class="wu-card">
+          <div class="wu-n">Scene 4</div>
+          <span class="wu-icon">📋✏️📈</span>
+          <div class="wu-scene">Manager / review / quarterly report</div>
+          <textarea placeholder="The manager is…"></textarea>
+        </div>
+        <div class="wu-card">
+          <div class="wu-n">Your turn</div>
+          <span class="wu-icon">💬</span>
+          <div class="wu-scene">What are you working on right now at work?</div>
+          <textarea placeholder="At the moment, I'm…"></textarea>
+        </div>
+      </div>
+      <button class="rev-btn" onclick="reveal('rv-wu')">sample answers ▾</button>
+      <div class="rev-body" id="rv-wu">
+        <div class="ans-box"><div class="ak">Sample sentences</div>
+          <ol>
+            <li>Elena <strong>is giving</strong> a presentation to the sales team.</li>
+            <li>The IT team <strong>is fixing</strong> the server in the office.</li>
+            <li>Customers <strong>are waiting</strong> at reception.</li>
+            <li>The manager <strong>is reviewing</strong> the quarterly report.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       LEAD-IN
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-li">
+    <div class="ed-hdr" onclick="toggle('s-li')">
+      <div class="ed-tag">Lead-in</div>
+      <div class="ed-title">World Computer Solutions — Global Team</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-instr">Match each sentence (a–d) with the correct place on the world map. Write the number.</span>
+          <span class="ex-src">BP p.42</span>
+        </div>
+        <!-- Wide image placeholder -->
+        <div class="img-ph" style="min-height:200px;margin-bottom:16px;padding:0;">
+          <img src="floc.png" alt="World map with 4 locations" style="width:100%;display:block;border-radius:2px;">
+        </div>
+        <div style="font-size:14px;color:var(--mid);margin:10px 0;line-height:1.8;">
+          Right now, employees from <strong>World Computer Solutions Ireland</strong> are working in four countries.
+        </div>
+        <div style="display:grid;gap:6px;font-size:14px;color:var(--mid);margin:10px 0;">
+          <div><strong style="color:var(--red);">a</strong> &nbsp;Alex is visiting the sales team in Shanghai, China. &nbsp;<input type="text" style="width:44px;text-align:center;"></div>
+          <div><strong style="color:var(--red);">b</strong> &nbsp;Alicia is managing the project in Dublin, Ireland. &nbsp;<input type="text" style="width:44px;text-align:center;"></div>
+          <div><strong style="color:var(--red);">c</strong> &nbsp;Liz is meeting customers in Mexico City, Mexico. &nbsp;<input type="text" style="width:44px;text-align:center;"></div>
+          <div><strong style="color:var(--red);">d</strong> &nbsp;Eduardo is setting up a computer system in Krakow, Poland. &nbsp;<input type="text" style="width:44px;text-align:center;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-1')">show answers ▾</button>
+        <div class="rev-body" id="rv-1">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>a–<strong>4</strong> (Shanghai) · b–<strong>2</strong> (Dublin) · c–<strong>1</strong> (Mexico City) · d–<strong>3</strong> (Krakow)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       READING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-rd">
+    <div class="ed-hdr" onclick="toggle('s-rd')">
+      <div class="ed-tag">Reading</div>
+      <div class="ed-title">Emails from the Team</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- 2A -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">2</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Alicia is a Project Manager for World Computer Solutions based in Ireland. Read three emails from her colleagues. Answer the questions. Which person…</span>
+          <span class="ex-src">BP p.42</span>
+        </div>
+
+        <div class="email-grid">
+
+          <!-- Email 1 — Liz -->
+          <div class="email-card">
+            <div class="ec-hdr">
+              <div class="ec-num">1</div>
+              <div>
+                <div class="ec-from">Liz</div>
+                <div class="ec-to">→ Alicia</div>
+              </div>
+            </div>
+            <div class="ec-body">
+              <p>Hello Alicia,</p>
+              <p>How are you? <span class="pc">I'm writing</span> to update you on the project. Yesterday's customer meetings in Mexico City were good, but we <span class="pc">aren't hitting</span> our targets this month. We need to make more sales. <span class="pc">I'm preparing</span> for more customer meetings tomorrow.</p>
+              <p class="ec-sign">Best regards,<br>Liz</p>
+            </div>
+          </div>
+
+          <!-- Email 2 — Eduardo -->
+          <div class="email-card">
+            <div class="ec-hdr">
+              <div class="ec-num">2</div>
+              <div>
+                <div class="ec-from">Eduardo</div>
+                <div class="ec-to">→ Alicia</div>
+              </div>
+            </div>
+            <div class="ec-body">
+              <p>Dear Alicia,</p>
+              <p>How are things going in Dublin? <span class="pc">We're starting</span> work in the Krakow factory today. Right now, Roger <span class="pc">is managing</span> the computer delivery. <span class="pc">It's going</span> well — we <span class="pc">aren't having</span> any problems. This week, <span class="pc">I'm trying</span> to talk to a supplier about new computers for Mexico City, but he <span class="pc">isn't answering</span> my calls.</p>
+              <p class="ec-sign">Speak soon,<br>Eduardo</p>
+            </div>
+          </div>
+
+          <!-- Email 3 — Alex (with gaps) -->
+          <div class="email-card">
+            <div class="ec-hdr">
+              <div class="ec-num">3</div>
+              <div>
+                <div class="ec-from">Alex</div>
+                <div class="ec-to">→ Alicia</div>
+              </div>
+            </div>
+            <div class="ec-body">
+              <p><input type="text" style="width:140px;" placeholder="greeting…"></p>
+              <p>Here's an update on what <span class="pc">we're doing</span> today. My team <span class="pc">are finalising</span> the sales figures for the meeting next week. <span class="pc">We're having</span> problems with some missing data from some markets, but <span class="pc">we're expecting</span> it today. <span class="pc">I'm writing</span> the sales report and preparing the presentation.</p>
+              <p class="ec-sign"><input type="text" style="width:120px;" placeholder="ending…"> ,<br>Alex</p>
+            </div>
+          </div>
+
+        </div>
+
+        <ol class="nl" style="margin-top:14px;">
+          <li>has a problem with communication? <input type="text" style="width:120px;"></li>
+          <li>thinks they need to sell more? <input type="text" style="width:120px;"></li>
+          <li>needs some important information to prepare for a meeting? <input type="text" style="width:120px;"></li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-2a')">show answers ▾</button>
+        <div class="rev-body" id="rv-2a">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>Eduardo</strong> (supplier isn't answering his calls)</li>
+              <li><strong>Liz</strong> (aren't hitting targets, need more sales)</li>
+              <li><strong>Alex</strong> (needs missing data to prepare for meeting)</li>
+            </ol>
+            <p style="margin-top:8px;">Email 3 — beginning: <strong>Dear Alicia,</strong> &nbsp;·&nbsp; ending: <strong>Best regards,</strong> / <strong>Speak soon,</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2B -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Complete the beginning and ending of email 3. Use ideas from email 1 or 2.</span>
+        </div>
+        <div class="note">Look at how Liz starts: <em>"Hello Alicia,"</em> and Eduardo starts: <em>"Dear Alicia,"</em>. Liz ends: <em>"Best regards,"</em> and Eduardo ends: <em>"Speak soon,"</em>. Choose one for Alex.</div>
+      </div>
+
+      <!-- 2C — Alicia's replies -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Read Alicia's replies to her team. Write the name of the person she is replying to in each email.</span>
+        </div>
+        <div class="email-grid">
+
+          <div class="reply-card">
+            <div class="rc-hdr">
+              <div class="rc-lbl">Reply A &nbsp;·&nbsp; Alicia → <input type="text" style="width:80px;border-color:#b0c4de;font-size:13px;"></div>
+            </div>
+            <div class="rc-body">
+              <p>Good to hear from you. Thanks for the update. <span class="pc">I'm planning</span> my talk for the sales meeting now so I need the sales figures this week. Everything's going well here. I hope <span class="pc">you're having</span> a good week.</p>
+              <p style="margin-top:8px;color:var(--mid);">Best wishes,<br>Alicia</p>
+            </div>
+          </div>
+
+          <div class="reply-card">
+            <div class="rc-hdr">
+              <div class="rc-lbl">Reply B &nbsp;·&nbsp; Alicia → <input type="text" style="width:80px;border-color:#b0c4de;font-size:13px;"></div>
+            </div>
+            <div class="rc-body">
+              <p>That's great news! At the moment, <span class="pc">I'm preparing</span> the new price list. I'll send it to you before tomorrow's meetings. Good luck with the sales. I'm sure things will go well tomorrow.</p>
+              <p style="margin-top:8px;color:var(--mid);">Best wishes,<br>Alicia</p>
+            </div>
+          </div>
+
+          <div class="reply-card">
+            <div class="rc-hdr">
+              <div class="rc-lbl">Reply C &nbsp;·&nbsp; Alicia → <input type="text" style="width:80px;border-color:#b0c4de;font-size:13px;"></div>
+            </div>
+            <div class="rc-body">
+              <p>Thanks. That sounds good! Right now, <span class="pc">I'm dealing</span> with the paperwork for next week's job in Bremen. The order is for sixty computers, but the supplier says they have forty. <span class="pc">I'm trying</span> to find twenty more computers! I hope you hear from that supplier soon.</p>
+              <p style="margin-top:8px;color:var(--mid);">Best regards,<br>Alicia</p>
+            </div>
+          </div>
+
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-2c')">show answers ▾</button>
+        <div class="rev-body" id="rv-2c">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>Reply A → <strong>Alex</strong> (needs sales figures for meeting)<br>
+            Reply B → <strong>Liz</strong> (price list for tomorrow's meetings, good luck with sales)<br>
+            Reply C → <strong>Eduardo</strong> (dealing with supplier / computers)</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       COMMUNICATIVE GRAMMAR
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-gr">
+    <div class="ed-hdr" onclick="toggle('s-gr')">
+      <div class="ed-tag">Grammar</div>
+      <div class="ed-title">Things Happening Now</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- Grammar box -->
+      <div class="g-box">
+        <div class="g-head">
+          <span>Things Happening Now</span>
+          <span class="g-ref">→ Grammar reference p.107</span>
+        </div>
+        <div class="g-body">
+          <div class="g-row"><span class="g-plus">+</span><span class="g-ex">I'<strong>m planning</strong> my talk for the sales meeting now.</span></div>
+          <div class="g-row"><span class="g-plus">+</span><span class="g-ex">At the moment, we'<strong>re preparing</strong> the new price list.</span></div>
+          <div class="g-row"><span class="g-plus">+</span><span class="g-ex">Right now, they'<strong>re dealing with</strong> the paperwork for next week's job.</span></div>
+          <div class="g-row"><span class="g-minus">−</span><span class="g-ex">We <strong>aren't having</strong> any problems at the moment.</span></div>
+          <div class="g-row"><span class="g-minus">−</span><span class="g-ex">It <strong>isn't going</strong> well today. Things <strong>aren't going</strong> well.</span></div>
+          <div class="g-row"><span class="g-q">?</span><span class="g-ex"><strong>Are</strong> you <strong>working</strong> in the Shanghai office today? &nbsp;→&nbsp; Yes, I <strong>am</strong>. / No, I'<strong>m not</strong>.</span></div>
+          <div class="g-row"><span class="g-q">?</span><span class="g-ex"><strong>Is</strong> Henrik <strong>writing</strong> the report today? &nbsp;→&nbsp; Yes, he <strong>is</strong>. / No, he <strong>isn't</strong>.</span></div>
+          <div class="g-row"><span class="g-q">?</span><span class="g-ex">What <strong>are</strong> you <strong>working</strong> on right now? &nbsp;→&nbsp; I'<strong>m finalising</strong> the sales figures.</span></div>
+          <div class="g-row"><span class="g-q">?</span><span class="g-ex">What <strong>is</strong> Ellie <strong>doing</strong> at the moment? &nbsp;→&nbsp; She'<strong>s giving</strong> a presentation.</span></div>
+        </div>
+      </div>
+
+      <!-- Grammar Reference p.107 -->
+      <div style="border-top:2px dashed var(--border);margin:28px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Grammar Reference — p.107</p>
+      </div>
+
+      <div class="g-box">
+        <div class="g-head"><span>4.3 — The Present Continuous (things happening now)</span></div>
+        <div class="g-body">
+          <p class="g-note">We use the Present Continuous to describe activities <strong>happening now</strong>, at this moment.</p>
+          <div style="margin:10px 0 12px;">
+            <p class="g-ex" style="margin:3px 0;">What <strong>are</strong> you <strong>doing</strong>? &nbsp; I'<strong>m reading</strong> a book. &nbsp; I'<strong>m writing</strong> a report.</p>
+          </div>
+          <p class="g-note" style="margin-bottom:10px;">We often use time references: <strong>now, today, at the moment, right now</strong>.</p>
+          <p class="g-ex" style="margin:3px 0;">I'<strong>m working</strong> at home <strong>today</strong>.</p>
+          <p class="g-ex" style="margin:3px 0;">She'<strong>s waiting</strong> for the delivery <strong>at the moment</strong>.</p>
+          <p class="g-ex" style="margin:3px 0 12px 0;">Is she giving a presentation <strong>right now</strong>?</p>
+
+          <div class="gram-tbl-wrap">
+            <div>
+              <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;">Positive / Negative</p>
+              <table class="gram-tbl">
+                <thead><tr><th>Subject</th><th>Auxiliary</th><th>Verb</th></tr></thead>
+                <tbody>
+                  <tr><td class="subj">I</td><td class="aux">'m / 'm not</td><td class="verb" rowspan="3">writing a report at the moment.</td></tr>
+                  <tr><td class="subj">He / She / It</td><td class="aux">'s / isn't</td></tr>
+                  <tr><td class="subj">You / We / They</td><td class="aux">'re / aren't</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;">Yes / No Questions</p>
+              <table class="gram-tbl">
+                <thead><tr><th>Aux</th><th>Subject</th><th>Verb</th></tr></thead>
+                <tbody>
+                  <tr><td class="aux">Am</td><td class="subj">I</td><td class="verb" rowspan="3">giving a presentation right now?</td></tr>
+                  <tr><td class="aux">Is</td><td class="subj">he / she / it</td></tr>
+                  <tr><td class="aux">Are</td><td class="subj">you / we / they</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin:14px 0 8px;">Wh- Questions</p>
+          <table class="gram-tbl" style="max-width:400px;">
+            <thead><tr><th>Wh-</th><th>Aux</th><th>Subject</th><th>Verb</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700;color:var(--dark);">What</td><td class="aux">am</td><td class="subj">I</td><td class="verb" rowspan="3">working on today?</td></tr>
+              <tr><td></td><td class="aux">is</td><td class="subj">he / she / it</td></tr>
+              <tr><td></td><td class="aux">are</td><td class="subj">you / we / they</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Ref Ex.1 — choose correct words -->
+      <div class="ex" style="margin-top:20px;">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-instr">Choose the correct words.</span>
+          <span class="ex-src">BP p.107</span>
+        </div>
+        <ol class="nl">
+          <li>I <em>'m / 's</em> working at my desk.</li>
+          <li>She <em>aren't / isn't</em> giving a presentation.</li>
+          <li>We <em>'re / 'm</em> looking after the new employees.</li>
+          <li>A: <em>Is / Are</em> you giving a presentation? &nbsp; B: Yes, I <em>am / 'm</em>.</li>
+          <li>A: <em>Is / Are</em> she meeting customers? &nbsp; B: No, she <em>isn't / is</em>.</li>
+          <li>What <em>they are / are they</em> working on?</li>
+          <li>They <em>aren't / isn't</em> finalising the sales figures.</li>
+          <li>She <em>'s / 're</em> meeting the sales team.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-ref1')">show answers ▾</button>
+        <div class="rev-body" id="rv-ref1">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>'m</strong> · 2.<strong>isn't</strong> · 3.<strong>'re</strong> · 4.<strong>Are / am</strong> · 5.<strong>Is / isn't</strong> · 6.<strong>are they</strong> · 7.<strong>aren't</strong> · 8.<strong>'s</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex.3A — 5 pictures + sentences -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num" style="background:var(--red);">3</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Look at the pictures. Complete the sentences with the correct form of the verbs in brackets.</span>
+          <span class="ex-src">BP p.43</span>
+        </div>
+
+        <!-- 5 photo placeholders -->
+        <div class="photo-strip">
+          <div class="p-cell">
+            <div class="img-ph" style="min-height:90px;padding:8px;">
+              <img src="mikhail.png" alt="Mikhail, Rita, Pablo, Richard" style="width:100%;display:block;border-radius:2px;">
+            </div>
+            <div class="p-lbl">Mikhail, Rita,<br>Pablo, Richard</div>
+          </div>
+          <div class="p-cell">
+            <div class="img-ph" style="min-height:90px;padding:8px;">
+              <img src="andres.png" alt="Andres" style="width:100%;display:block;border-radius:2px;">
+            </div>
+            <div class="p-lbl">Andres</div>
+          </div>
+          <div class="p-cell">
+            <div class="img-ph" style="min-height:90px;padding:8px;">
+              <img src="paola.png" alt="Paola" style="width:100%;display:block;border-radius:2px;">
+            </div>
+            <div class="p-lbl">Paola</div>
+          </div>
+          <div class="p-cell">
+            <div class="img-ph" style="min-height:90px;padding:8px;">
+              <img src="peter.png" alt="Peter" style="width:100%;display:block;border-radius:2px;">
+            </div>
+            <div class="p-lbl">Peter</div>
+          </div>
+          <div class="p-cell">
+            <div class="img-ph" style="min-height:90px;padding:8px;">
+              <img src="katrina.png" alt="Katrina and Will" style="width:100%;display:block;border-radius:2px;">
+            </div>
+            <div class="p-lbl">Katrina and Will</div>
+          </div>
+        </div>
+
+        <ol class="nl">
+          <li>Mikhail, Rita, Pablo and Richard <input type="text" style="width:130px;"> (have) a meeting. It <input type="text" style="width:130px;"> (not go) well.</li>
+          <li>Andres <input type="text" style="width:130px;"> (not work) at his desk. He <input type="text" style="width:170px;"> (look after) the machines in the factory. He <input type="text" style="width:130px;"> (not have) problems.</li>
+          <li>Paola <input type="text" style="width:130px;"> (not meet) customers. She <input type="text" style="width:120px;"> (write) a report.</li>
+          <li>Peter <input type="text" style="width:120px;"> (repair) the computer. He <input type="text" style="width:130px;"> (have) problems.</li>
+          <li>Katrina and Will <input type="text" style="width:150px;"> (not prepare) a report. They <input type="text" style="width:120px;"> (give) a presentation. It <input type="text" style="width:110px;"> (go) well.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-3a')">show answers ▾</button>
+        <div class="rev-body" id="rv-3a">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>are having</strong> / <strong>isn't going</strong></li>
+              <li><strong>isn't working</strong> / <strong>is looking after</strong> / <strong>isn't having</strong></li>
+              <li><strong>isn't meeting</strong> / <strong>is writing</strong></li>
+              <li><strong>is repairing</strong> / <strong>is having</strong></li>
+              <li><strong>aren't preparing</strong> / <strong>are giving</strong> / <strong>is going</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex.3B — Complete the questions -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Complete the questions with the correct form of verbs in the box.</span>
+          <span class="ex-src">BP p.43</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Verbs</div>
+          <span class="chip">do</span><span class="chip">give</span><span class="chip">have</span>
+          <span class="chip">talk</span><span class="chip">use</span><span class="chip">work</span>
+        </div>
+        <ol class="nl" style="margin-top:10px;">
+          <li><input type="text" style="width:60px;"> Mikhail, Rita, Pablo and Richard <input type="text" style="width:100px;"> a good meeting?</li>
+          <li><input type="text" style="width:60px;"> Andres <input type="text" style="width:100px;"> at his desk?</li>
+          <li><input type="text" style="width:60px;"> Paola <input type="text" style="width:100px;"> her computer?</li>
+          <li>What <input type="text" style="width:60px;"> Peter <input type="text" style="width:100px;"> ?</li>
+          <li>Who <input type="text" style="width:80px;"> Katrina and Will <input type="text" style="width:100px;"> to?</li>
+          <li><input type="text" style="width:60px;"> Katrina and Will <input type="text" style="width:100px;"> a presentation?</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-3b')">show answers ▾</button>
+        <div class="rev-body" id="rv-3b">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>Are</strong> / <strong>having</strong></li>
+              <li><strong>Is</strong> / <strong>working</strong></li>
+              <li><strong>Is</strong> / <strong>using</strong></li>
+              <li><strong>is</strong> / <strong>doing</strong></li>
+              <li><strong>are</strong> / <strong>talking</strong></li>
+              <li><strong>Are</strong> / <strong>giving</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex.3C — Match answers -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Match the answers (a–f) with the questions in Exercise 3B. Write the question number.</span>
+          <span class="ex-src">BP p.43</span>
+        </div>
+        <div class="two-col">
+          <div style="font-size:14px;color:var(--mid);display:grid;gap:8px;">
+            <div><strong style="color:var(--red);">a</strong> &nbsp;No, he isn't. &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+            <div><strong style="color:var(--red);">b</strong> &nbsp;Customers. &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+            <div><strong style="color:var(--red);">c</strong> &nbsp;No, they aren't. &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          </div>
+          <div style="font-size:14px;color:var(--mid);display:grid;gap:8px;">
+            <div><strong style="color:var(--red);">d</strong> &nbsp;Repairing a computer. &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+            <div><strong style="color:var(--red);">e</strong> &nbsp;Yes, they are. &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+            <div><strong style="color:var(--red);">f</strong> &nbsp;Yes, she is. &nbsp;<input type="text" style="width:40px;text-align:center;"></div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-3c')">show answers ▾</button>
+        <div class="rev-body" id="rv-3c">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>a–<strong>2</strong> · b–<strong>5</strong> · c–<strong>1</strong> · d–<strong>4</strong> · e–<strong>6</strong> · f–<strong>3</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       WRITING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-wr">
+    <div class="ed-hdr" onclick="toggle('s-wr')">
+      <div class="ed-tag">Writing</div>
+      <div class="ed-title">An Update Email to Your Boss</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- Ex.4 — main writing task -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">4</span>
+          <span class="ex-instr">Alicia is writing an update email to her boss Veronika in Zurich. Imagine you are Alicia. Use the information in the emails on p.42 to write your email.</span>
+          <span class="ex-src">BP p.43</span>
+        </div>
+        <div class="note blue" style="margin-bottom:14px;">
+          <strong>Structure:</strong>
+          <ul style="margin:6px 0 0 16px;list-style:disc;line-height:1.9;">
+            <li>Start the email — say you hope everything is going well in Zurich.</li>
+            <li>Say why you are writing — give an update on work and the team.</li>
+            <li>Paragraph 1: Mexico sales (Liz's situation).</li>
+            <li>Paragraph 2: Supplier / computers (Eduardo's situation).</li>
+            <li>Complete the email with an appropriate ending.</li>
+          </ul>
+        </div>
+        <div class="note" style="margin-bottom:14px;">
+          <strong>Useful phrases:</strong> &nbsp;
+          <em>I'm writing to update you on… &nbsp;·&nbsp; Right now / At the moment… &nbsp;·&nbsp; We're having problems with… &nbsp;·&nbsp; I hope things are going well…</em>
+        </div>
+        <div class="email-card">
+          <div class="ec-hdr">
+            <div style="font-size:12px;color:var(--mid);">To: Veronika (boss in Zurich) &nbsp;·&nbsp; From: Alicia &nbsp;·&nbsp; Subject: <input type="text" style="width:200px;font-size:13px;"></div>
+          </div>
+          <div style="padding:0 16px;">
+            <textarea class="warea" style="border:none;border-top:1.5px dashed var(--border);border-radius:0;padding:14px 0;min-height:280px;"
+              placeholder="Dear Veronika,&#10;&#10;I hope everything is going well in Zurich. I'm writing to give you an update on…&#10;&#10;[Mexico paragraph]&#10;&#10;[Supplier / computers paragraph]&#10;&#10;Best regards,&#10;Alicia"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- BONUS Ex.5 — Language functions matching -->
+      <div style="border-top:2px dashed var(--border);margin:28px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Bonus exercises</p>
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">5</span>
+          <span class="ex-instr">Match each phrase (1–8) from the emails with its function (a–d). Write the letter.</span>
+        </div>
+        <div class="two-col" style="align-items:start;gap:20px 32px;">
+          <table class="fn-tbl">
+            <thead><tr><th>#</th><th>Phrase</th><th style="width:50px;text-align:center;">Function</th></tr></thead>
+            <tbody>
+              <tr><td class="qn">1</td><td>"I'm writing to update you on the project."</td><td class="fn-ans"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">2</td><td>"Here's an update on what we're doing today."</td><td class="fn-ans"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">3</td><td>"Right now, Roger is managing the computer delivery."</td><td class="fn-ans"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">4</td><td>"At the moment, I'm preparing the new price list."</td><td class="fn-ans"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">5</td><td>"We're having problems with some missing data."</td><td class="fn-ans"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">6</td><td>"We aren't hitting our targets this month."</td><td class="fn-ans"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">7</td><td>"I hope you're having a good week."</td><td class="fn-ans"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">8</td><td>"Speak soon, / Best regards,"</td><td class="fn-ans"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            </tbody>
+          </table>
+          <div style="border:1px solid var(--border);border-radius:3px;overflow:hidden;font-size:13px;align-self:start;">
+            <div style="background:var(--dark);color:#fff;padding:8px 14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;">Functions</div>
+            <div style="padding:12px 14px;display:grid;gap:8px;color:var(--mid);">
+              <div><strong style="color:var(--red);">a</strong> &nbsp;Starting the email / saying why you write</div>
+              <div><strong style="color:var(--red);">b</strong> &nbsp;Describing what is happening now</div>
+              <div><strong style="color:var(--red);">c</strong> &nbsp;Describing a problem</div>
+              <div><strong style="color:var(--red);">d</strong> &nbsp;Ending the email</div>
+            </div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-5')">show answers ▾</button>
+        <div class="rev-body" id="rv-5">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1–<strong>a</strong> · 2–<strong>a</strong> · 3–<strong>b</strong> · 4–<strong>b</strong> · 5–<strong>c</strong> · 6–<strong>c</strong> · 7–<strong>d</strong> · 8–<strong>d</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BONUS Ex.6 — Your own update (personalized to MB) -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">6</span>
+          <span class="ex-instr">Write a short update email from yourself to a colleague. Use real or imagined information about your work at Mercedes-Benz R&amp;D.</span>
+        </div>
+        <div class="note" style="margin-bottom:12px;font-size:13px;">
+          Use at least <strong>4 Present Continuous sentences</strong> describing what you and your team are doing right now. Include:
+          <ul style="margin:6px 0 0 16px;list-style:disc;">
+            <li>one sentence about a current project or task</li>
+            <li>one sentence about a problem or challenge</li>
+            <li>one sentence about a plan or next step</li>
+          </ul>
+        </div>
+        <div class="email-card">
+          <div class="ec-hdr">
+            <div style="font-size:12px;color:var(--mid);">
+              To: <input type="text" style="width:160px;font-size:13px;"> &nbsp;·&nbsp;
+              Subject: <input type="text" style="width:200px;font-size:13px;">
+            </div>
+          </div>
+          <div style="padding:0 16px;">
+            <textarea class="warea" style="border:none;border-top:1.5px dashed var(--border);border-radius:0;padding:14px 0;min-height:260px;"
+              placeholder="Hi [name],&#10;&#10;I hope things are going well. I'm writing to give you a quick update on…&#10;&#10;Right now, I'm…&#10;&#10;At the moment, my team is…&#10;&#10;We're also having [a challenge]…&#10;&#10;Best regards,&#10;Svitlana"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggle(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('closed');
+  el.querySelector('.ed-toggle').textContent=el.classList.contains('closed')?'▸':'▾';
+}
+function reveal(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  const btn=el.previousElementSibling;
+  const open=el.classList.contains('open');
+  btn.textContent=open
+    ?btn.textContent.replace('show','hide').replace('sample','↑ sample').replace('▾','▴')
+    :btn.textContent.replace('hide','show').replace('↑ sample','sample').replace('▴','▾');
+}
+</script>
+</body>
+</html>

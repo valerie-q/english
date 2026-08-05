@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2B People Pleaser — Sofia</title>
+<style>
+:root{
+  --navy:#1d2d50;
+  --navy-light:#2a3d6a;
+  --pink:#c4186a;
+  --pink-dark:#96125a;
+  --pink-light:#fde8f4;
+  --pink-border:#f090c0;
+  --pink-mid:#e84498;
+  --teal:#0097b3;
+  --teal-dark:#006f85;
+  --teal-light:#e0f5f8;
+  --teal-border:#80d0e0;
+  --green:#2a8a5c;
+  --green-light:#e8f5ee;
+  --green-border:#80c8a0;
+  --amber:#c8700a;
+  --amber-light:#fef3e8;
+  --amber-border:#f0b060;
+  --text:#1a1f2e;
+  --muted:#5a6070;
+  --bg:#f8f4f6;
+  --card:#ffffff;
+  --border:#e0d8de;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;padding-bottom:60px;}
+
+/* HEADER */
+header{background:var(--navy);border-bottom:4px solid var(--pink);}
+.header-inner{max-width:1280px;margin:0 auto;padding:22px 40px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;}
+.header-unit{background:var(--pink);color:white;font-weight:800;font-size:1.9rem;padding:8px 18px;border-radius:6px;line-height:1;}
+.header-text h1{color:#fff;font-size:1.65rem;font-weight:700;margin-bottom:6px;}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.htag-v{background:rgba(196,24,106,0.25);color:#ff6ab8;border:1px solid rgba(196,24,106,0.35);}
+.htag-g{background:rgba(0,151,179,0.2);color:#00c0df;border:1px solid rgba(0,151,179,0.35);}
+.htag-w{background:rgba(200,112,10,0.2);color:#f08030;border:1px solid rgba(200,112,10,0.3);}
+.header-right{text-align:right;color:#90a8c8;font-size:0.8rem;line-height:1.6;}
+
+/* WRAP */
+.wrap{max-width:1280px;margin:0 auto;padding:24px 40px;}
+
+/* PHASE */
+.phase{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-top:20px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.ph-stripe{width:6px;flex-shrink:0;}
+.ph-num{color:white;font-weight:800;font-size:0.95rem;padding:14px 18px;display:flex;align-items:center;justify-content:center;min-width:52px;}
+.ph-title{flex:1;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ph-title h2{font-size:1rem;font-weight:700;color:var(--navy);margin:0;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+.c-voc  .ph-stripe,.c-voc  .ph-num{background:var(--pink);}
+.c-list .ph-stripe,.c-list .ph-num{background:var(--teal-dark);}
+.c-gram .ph-stripe,.c-gram .ph-num{background:var(--navy);}
+.c-spk  .ph-stripe,.c-spk  .ph-num{background:var(--green);}
+.c-write.ph-stripe,.c-write .ph-num{background:var(--amber);}
+
+.c-voc  .pbadge{background:var(--pink-light);color:var(--pink);}
+.c-list .pbadge{background:var(--teal-light);color:var(--teal-dark);}
+.c-gram .pbadge{background:#eaecf5;color:var(--navy);}
+.c-spk  .pbadge{background:var(--green-light);color:var(--green);}
+.c-write .pbadge{background:var(--amber-light);color:var(--amber);}
+
+/* LAYOUTS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:14px 0;}
+.col-5-7{display:grid;grid-template-columns:5fr 7fr;gap:20px;margin:14px 0;}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:20px;margin:14px 0;}
+@media(max-width:900px){.two-col,.three-col,.col-5-7,.col-7-5{grid-template-columns:1fr;}.wrap,.header-inner{padding:16px 18px;}}
+
+/* ELEMENTS */
+.box{background:#f8f4f6;border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-pink{background:var(--pink-light);border-left-color:var(--pink);}
+.box-teal{background:var(--teal-light);border-left-color:var(--teal);}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--pink-light);border:1px solid var(--pink-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:white;border:1px solid var(--pink);color:var(--pink-dark);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+input.gap{background:#f8f0f4;border:none;border-bottom:2px dotted var(--pink);color:var(--text);font-size:1rem;width:120px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--pink);}
+.reveal-btn{background:var(--pink);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
+.reveal-btn:hover{background:var(--pink-dark);}
+.answer{display:none;background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+audio{width:100%;margin:8px 0;border-radius:6px;}
+h3{color:var(--navy);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+.sec-label{display:inline-block;background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+
+/* QUIZ */
+.quiz-wrap{background:var(--pink-light);border:2px solid var(--pink-border);border-radius:12px;overflow:hidden;margin:14px 0;}
+.quiz-header{background:var(--pink);color:white;padding:14px 20px;}
+.quiz-header h3{color:white;margin:0 0 4px;font-size:1.1rem;}
+.quiz-header p{color:rgba(255,255,255,0.85);font-size:0.88rem;margin:0;}
+.quiz-body{padding:16px 20px;}
+.quiz-item{background:white;border:1px solid var(--pink-border);border-radius:8px;padding:12px 16px;margin:8px 0;display:flex;align-items:center;gap:14px;}
+.quiz-num{background:var(--pink);color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0;}
+.quiz-text{flex:1;font-size:0.93rem;}
+.quiz-choices{display:flex;gap:10px;flex-shrink:0;}
+.quiz-choices label{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:0.88rem;font-weight:600;padding:4px 10px;border-radius:20px;border:2px solid var(--border);white-space:nowrap;transition:all 0.15s;}
+.quiz-choices input[type=radio]{display:none;}
+.quiz-choices input[type=radio]:checked + span{color:white;}
+.quiz-choices label:has(input:checked){background:var(--pink);border-color:var(--pink);color:white;}
+.quiz-key{background:#f0eafa;border-top:2px solid var(--pink-border);padding:16px 20px;}
+.quiz-key h4{color:var(--pink-dark);font-weight:700;margin-bottom:10px;}
+.key-item{margin:6px 0;font-size:0.9rem;}
+.key-item strong{color:var(--pink-dark);}
+.quiz-result{background:white;border:2px solid var(--pink);border-radius:8px;padding:12px 16px;margin-top:10px;font-weight:700;color:var(--pink-dark);display:none;}
+.quiz-result.show{display:block;}
+.quiz-score-btn{background:var(--pink-dark);border:none;color:white;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:0.9rem;font-weight:700;margin-top:10px;}
+.quiz-score-btn:hover{background:var(--pink);}
+
+/* GRAMMAR NOTE */
+.gram-note{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:10px 0;font-size:0.93rem;}
+.gram-sub{background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;display:inline-block;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.4px;}
+.ex-phrase{color:var(--teal-dark);font-weight:600;}
+.ex-delete{text-decoration:line-through;color:var(--muted);}
+
+/* EMAIL */
+.email-card{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:12px 0;font-size:0.92rem;}
+.email-header{background:#f0f2f8;border-bottom:1px solid var(--border);padding:10px 16px;}
+.email-header p{margin:3px 0;font-size:0.88rem;}
+.email-header p strong{color:var(--navy);}
+.email-body{padding:14px 16px;line-height:1.65;}
+.email-alt{background:#fdecea;border:1px solid #f0a0a0;border-radius:8px;}
+.email-good{background:#e8f5ee;border:1px solid var(--green-border);}
+
+/* TIPS LIST */
+.tips-list{background:white;border:2px solid var(--pink-border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.tips-list-header{background:linear-gradient(135deg,var(--pink-dark),var(--pink));color:white;padding:14px 18px;}
+.tips-list-header h4{margin:0 0 4px;font-size:1.05rem;}
+.tips-list-header p{margin:0;font-size:0.88rem;opacity:0.9;}
+.tip-item{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-bottom:1px solid var(--pink-border);}
+.tip-item:last-child{border-bottom:none;}
+.tip-num{background:var(--pink-light);color:var(--pink-dark);font-weight:800;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.82rem;flex-shrink:0;margin-top:1px;}
+.tip-text{font-size:0.93rem;flex:1;}
+input[type=checkbox].tip-check{width:16px;height:16px;cursor:pointer;accent-color:var(--pink);flex-shrink:0;margin-top:3px;}
+
+/* SPEAKING IMAGE */
+.spk-img-wrap{float:right;margin:0 0 12px 16px;width:160px;}
+.spk-img{width:160px;aspect-ratio:1;object-fit:contain;border-radius:8px;display:block;background:#f0eafa;border:1px solid var(--border);}
+
+/* ARTICLE */
+.article-wrap{background:#f8f4f6;border:1px solid var(--border);border-radius:10px;padding:20px 24px;font-size:0.94rem;line-height:1.75;margin:14px 0;}
+
+/* SENTENCES TABLE */
+.sent-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.92rem;}
+.sent-table td{padding:8px 12px;border:1px solid var(--border);vertical-align:top;}
+.sent-table td:first-child{font-weight:700;color:var(--navy);width:32px;text-align:center;}
+
+/* GRAMMAR TABLE */
+.gram-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:0.92rem;}
+.gram-table td,.gram-table th{padding:8px 12px;border:1px solid var(--teal-border);}
+.gram-table th{background:var(--navy);color:white;font-weight:700;text-align:left;}
+.gram-table .plus{background:#eafaf1;}
+.gram-table .minus{background:#fdecea;}
+.gram-table .quest{background:#fef9e7;}
+
+  .ann-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-bottom:1px solid var(--pink-border);
+  gap:16px;
+}
+.ann-item:last-child{border-bottom:none;}
+.ann-text{font-size:0.93rem;flex:1;}
+.ann-stars{display:flex;gap:6px;cursor:pointer;flex-shrink:0;}
+.ann-stars span{
+  font-size:1.4rem;opacity:0.35;transition:all 0.15s;user-select:none;
+}
+.ann-stars span.active{opacity:1;transform:scale(1.15);}
+#annoyance-list{
+  background:white;border:2px solid var(--pink-border);
+  border-radius:10px;overflow:hidden;
+}
+  
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-unit">2B</div>
+    <div class="header-text">
+      <h1>People Pleaser</h1>
+      <div class="header-tags">
+        <span class="htag htag-v">Vocabulary: feelings & behaviour</span>
+        <span class="htag htag-g">Grammar: relative clauses</span>
+        <span class="htag htag-w">Writing: decline invitations</span>
+      </div>
+    </div>
+    <div class="header-right">Speakout B1+<br>Unit 2 · behaviour</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+
+<div class="phase c-voc">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-title">
+      <h2>Warm-up — How Annoying Is It?</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="pbadge">speaking</span><span class="arrow">&#9660;</span>
+      </div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <p style="margin-bottom:14px;">Rate each situation from 1 to 5. Then compare with your partner.</p>
+
+    <div style="display:inline-flex;gap:6px;margin-bottom:16px;background:var(--pink-light);border:2px solid var(--pink-border);border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;">
+      <span>1 = barely notice</span>
+      <span style="color:var(--muted);">·</span>
+      <span>3 = quite annoying</span>
+      <span style="color:var(--muted);">·</span>
+      <span>5 = drives me crazy</span>
+    </div>
+
+    <div id="annoyance-list">
+      <div class="ann-item">
+        <span class="ann-text">People who talk loudly on the phone in public.</span>
+        <div class="ann-stars" onclick="rate(this)">
+          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+        </div>
+      </div>
+      <div class="ann-item">
+        <span class="ann-text">Someone who cancels plans at the last minute.</span>
+        <div class="ann-stars" onclick="rate(this)">
+          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+        </div>
+      </div>
+      <div class="ann-item">
+        <span class="ann-text">When someone doesn't reply to a message for days.</span>
+        <div class="ann-stars" onclick="rate(this)">
+          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+        </div>
+      </div>
+      <div class="ann-item">
+        <span class="ann-text">People who stand too close in a queue.</span>
+        <div class="ann-stars" onclick="rate(this)">
+          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+        </div>
+      </div>
+      <div class="ann-item">
+        <span class="ann-text">Noisy eating — chewing with an open mouth.</span>
+        <div class="ann-stars" onclick="rate(this)">
+          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+        </div>
+      </div>
+      <div class="ann-item">
+        <span class="ann-text">When someone gives you unsolicited advice.</span>
+        <div class="ann-stars" onclick="rate(this)">
+          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+        </div>
+      </div>
+      <div class="ann-item">
+        <span class="ann-text">Slow walkers in a busy street when you're in a hurry.</span>
+        <div class="ann-stars" onclick="rate(this)">
+          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+        </div>
+      </div>
+      <div class="ann-item">
+        <span class="ann-text">People who don't say thank you when you hold the door.</span>
+        <div class="ann-stars" onclick="rate(this)">
+          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div class="speak-q">Which one got a 5 from you? Tell me about a specific time it happened.</div>
+      <div class="speak-q">Which one do you think other people rate higher than you? Why?</div>
+      <div class="speak-q">Add one pet hate of your own that isn't on the list.</div>
+    </div>
+
+  </div>
+</div>
+  
+<!-- ═══ LISTENING ═════════════════════════════════════════ -->
+<div class="phase c-list">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">2</div>
+    <div class="ph-title">
+      <h2>Listening — People Pleaser Podcast</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">listening</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. Listen to the podcast. Are all three speakers, Greta, Colin and Anna, 'people pleasers'?</h3>
+    <audio controls><source src="2_04.mp3" type="audio/mpeg"></audio>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">No. Greta and Colin are 'people pleasers', but Anna isn't.</div>
+
+    <h3>3B. Look at the examples the speakers give in the podcast. How is each one connected to the idea of 'people pleasing'?</h3>
+    <div class="two-col">
+      <ol>
+        <li>working late</li>
+        <li>a new dress</li>
+        <li>pizza or sushi</li>
+        <li>a film</li>
+        <li>a negative comment on social media</li>
+        <li>a terrible idea at a meeting</li>
+      </ol>
+      <div class="speak-q">Discuss before listening again.</div>
+    </div>
+
+    <h3>3C. Listen again and check your ideas in Ex 3B.</h3>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 Greta works late every time her manager asks her to.<br>
+      2 Greta doesn't feel comfortable in a new dress until someone has said something nice about it. It's even better if a stranger says something nice.<br>
+      3 Colin always does what his friend wants — order a pizza — when in fact he would like to order sushi.<br>
+      4 Colin saw a film recently and thought it was boring, but he said nothing because his friends liked it.<br>
+      5 Anna doesn't pay attention to negative comments on social media and she doesn't get upset about them. Maybe the person is in a bad mood.<br>
+      6 Anna is happy to say that she thinks an idea is terrible even if everyone else in the meeting thinks it's a good idea.
+    </div>
+
+    <h3>4A. Look at audioscript 2.04. What phrases do the speakers use to introduce the examples in Ex 3B?</h3>
+        <div class="box" style="font-size:0.93rem;line-height:1.75;">
+            <p style="font-weight:700;margin-bottom:10px;">Audio 2.04 &nbsp;|&nbsp; G = Greta &nbsp; C = Colin &nbsp; A = Anna</p>
+          
+            <p><strong>G:</strong> Am I a people pleaser? Well, when someone asks me to do them a favour, I almost always say yes. For instance, last week when my manager asked me to stay and work late, I just said yes without thinking. And I do that all the time. I'm always the person who stays late or does extra work.</p>
+            <p>I think the problem is that I care too much about what other people think of me. Like when I buy a new dress and wear it for the first time. I know it's crazy, but I don't really feel comfortable until someone says something nice about it. And it's even better if I don't know the person saying it. And if someone makes a negative comment, I get really upset and I might never wear that dress again.</p>
+          
+            <p style="margin-top:10px;"><strong>C:</strong> I'll do anything to avoid an argument. I just listen to other people's opinions or what they want and agree with them. It's just easier that way. Like when my friend says, 'Let's go and get a pizza' and I feel like having sushi. I just do what he wants. We always have pizza.</p>
+            <p>One of my friends recently said I don't seem to have my own opinions. He isn't the first person to tell me that. It's true, when I'm in a group of classmates at college and we're discussing something, I don't say very much. I listen, and then I basically agree with the majority. For example, last weekend I was out with some friends. We were talking about a film we'd just seen and my friends really liked it. I thought it was boring, but I didn't say so. I don't know why. It makes life easier, I suppose.</p>
+          
+            <p style="margin-top:10px;"><strong>A:</strong> It's important to me that people like me. But I think people who care too much about other people's opinions are wasting their time. For example, on social media I don't pay attention to comments that are negative. I don't get upset. It's not my problem. Maybe the person is just in a bad mood.</p>
+            <p>Yeah, basically, I'm a very positive person, but I don't go with the crowd. Like at work in a meeting. If someone has an idea and I think it's terrible, I'm the first person to say, 'I really don't think that will work', even if everyone else thinks it's a good idea.</p>
+          </div>
+    
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      <strong>Greta</strong> uses: <em>For instance, …</em> and <em>Like when …</em><br>
+      <strong>Colin</strong> uses: <em>Like when …</em> and <em>For example, …</em><br>
+      <strong>Anna</strong> uses: <em>For example, …</em> and <em>Like …</em> (also <em>Like if …</em>)
+    </div>
+
+    <h3>4B. Discuss. How would you behave in the situations in the podcast? Give examples of any similar situations you have experienced.</h3>
+    <div class="speak-q">Have you ever stayed late at work or changed your plans to please someone? What happened?</div>
+    <div class="speak-q">Do you ever say nothing when you disagree with everyone else? Why / why not?</div>
+
+  </div>
+</div>
+
+<!-- ═══ GRAMMAR ════════════════════════════════════════════ -->
+<div class="phase c-gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">3</div>
+    <div class="ph-title">
+      <h2>Grammar — Relative Clauses</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>5A. Choose two correct alternatives for each sentence.</h3>
+    <div class="two-col">
+      <ol>
+        <li>I think people <strong>which / who / that</strong> care too much about other people's opinions are wasting their time.</li>
+        <li>I don't pay attention to comments <strong>which / who / that</strong> are negative.</li>
+        <li>We were talking about a film <strong>which / who / that</strong> we'd just seen.</li>
+        <li>And it's even better if I don't know the person <strong>who says / says / saying</strong> it.</li>
+        <li>He isn't the first person <strong>who has told / tells / to tell</strong> me that.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 <b>who, that</b> (people = person → not "which")<br>
+          2 <b>which, that</b> (comments = thing)<br>
+          3 <b>which, that</b> (film = thing)<br>
+          4 <b>who says, saying</b> (verb + -ing replaces relative clause)<br>
+          5 <b>who has told, to tell</b> (to + inf with "the first")
+        </div>
+      </div>
+    </div>
+
+    <h3>5B. Answer the questions about the sentences in Ex 5A.</h3>
+    <ol>
+      <li>In each sentence what do the words and phrases in bold refer to?</li>
+      <li>In which sentence can you leave out the relative pronoun: <em>who</em>, <em>which</em> or <em>that</em>? Why?</li>
+      <li>In sentences 4 and 5, what can we use instead of a relative pronoun + verb?</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 &nbsp;1 people &nbsp;·&nbsp; 2 comments &nbsp;·&nbsp; 3 a film &nbsp;·&nbsp; 4 the person &nbsp;·&nbsp; 5 the first person<br>
+      2 Sentence 3 — we can leave out <em>which/that</em> because the verb in the following clause (<em>we'd just seen</em>) already has a subject (<em>we</em>). The relative pronoun is the object of the verb.<br>
+      3 Sentence 4: verb + <em>-ing</em> (<em>saying</em>) &nbsp;·&nbsp; Sentence 5: <em>to</em> + infinitive (<em>to tell</em>) — used with "the first/last/only" and superlatives.
+    </div>
+
+    <!-- GRAMMAR BANK -->
+    <div class="sec-label" style="margin-top:24px;">Grammar Bank 2B — Relative Clauses</div>
+
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <div class="gram-note">
+          <p>We use <strong>defining relative clauses</strong> to give essential information about a person, a thing, a place, a time or a possessive.</p>
+          <p style="margin-top:10px;">We use relative pronouns <strong>who, which, where, when, whose</strong> to introduce the relative clause.</p>
+          <p class="ex-phrase" style="margin-top:8px;">A specialist is someone <strong>who knows a lot about a subject</strong>.<br>
+          Do you remember the time <strong>when we went on holiday together</strong>?<br>
+          Once there was a girl <strong>whose name was Lilibet</strong>.</p>
+          <p style="margin-top:10px;">In defining relative clauses we can use <strong>that</strong> to replace <em>who</em>, <em>which</em> or <em>when</em>.</p>
+          <p class="ex-phrase">Swimming is something <strong>that always makes me feel better</strong>.</p>
+        </div>
+      </div>
+      <div>
+        <div class="gram-note">
+          <p>We can <strong>leave out</strong> who, which and that when the relative clause already has a subject.</p>
+          <p class="ex-phrase" style="margin-top:8px;">Rob Jenkins was a teacher <strong>(who) I knew</strong> at college.<br>
+          <span style="color:var(--muted);font-size:0.87rem;"><em>I</em> = subject; <em>who</em> = object → can leave out.</span></p>
+          <p class="ex-phrase">Rob Jenkins was a teacher <strong>who taught</strong> me maths.<br>
+          <span style="color:var(--muted);font-size:0.87rem;"><em>Who</em> = subject → must keep.</span></p>
+          <p style="margin-top:10px;">We can replace a defining relative clause with <strong>verb + -ing</strong>.</p>
+          <p class="ex-phrase">The winner is the person <strong>ending up</strong> with the most points.<br>= the person <strong>who ends up</strong> with the most points.</p>
+          <p style="margin-top:10px;">We can replace with <strong>to + infinitive</strong> — often with <em>the first, the last, the only</em> and superlatives.</p>
+          <p class="ex-phrase">Who was the last person <strong>to see John</strong>?<br>= the last person <strong>who saw John</strong>?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 1 -->
+    <div class="gram-sub" style="margin-top:22px;">Practice 1A — Join the sentences using relative pronouns from the box</div>
+    <div class="wordbox"><span class="chip">when</span><span class="chip">where</span><span class="chip">which (×2)</span><span class="chip">who (×2)</span><span class="chip">whose (×2)</span></div>
+    <div class="two-col">
+      <ol>
+        <li>That's the town. I grew up there.</li>
+        <li>Have you got the book? I lent it to you last month.</li>
+        <li>Is this the actor? You were talking about him yesterday.</li>
+        <li>Monday is the day. I start my new job then.</li>
+      </ol>
+      <ol start="5">
+        <li>Patrizia is the Italian girl. Her painting won a prize.</li>
+        <li>The film was fantastic. We saw it yesterday.</li>
+        <li>Students usually do well. They do lots of practice.</li>
+        <li>The man is a good friend of ours. His mother lives next door.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 That's the town <b>where</b> I grew up.<br>
+      2 Have you got the book <b>which</b> I lent you last month?<br>
+      3 Is this the actor <b>who</b> you were talking about yesterday?<br>
+      4 Monday is the day <b>when</b> I start my new job.<br>
+      5 Patrizia is the Italian girl <b>whose</b> painting won a prize.<br>
+      6 The film <b>which</b> we saw yesterday was fantastic.<br>
+      7 Students <b>who</b> do lots of practice usually do well.<br>
+      8 The man <b>whose</b> mother lives next door is a good friend of ours.
+    </div>
+
+    <div class="gram-sub" style="margin-top:18px;">Practice 1B — In which sentences can you use <em>that</em> instead?</div>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">Sentences <b>2, 3, 4, 6 and 7</b> (not with <em>whose</em> or <em>where</em>).</div>
+
+    <div class="gram-sub" style="margin-top:14px;">Practice 1C — In which sentences can you leave out the relative pronoun?</div>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">Sentences <b>2, 3 and 6</b> — the pronoun is the object of the verb (not the subject).</div>
+
+    <!-- PRACTICE 2 -->
+    <div class="gram-sub" style="margin-top:22px;">Practice 2 — Choose the correct words (some cases both options are possible)</div>
+    <div class="col-7-5" style="align-items:start;">
+      <div class="article-wrap">
+        <p style="font-weight:800;font-size:1.05rem;color:var(--navy);margin-bottom:12px;">Watch your behaviour</p>
+        <p>Some of the patterns of behaviour <sup>1</sup><strong>scientists / which</strong> have found over the last hundred years are interesting. In one famous experiment, scientists asked people to hold a warm cup of coffee <sup>2</sup><strong>which belonged / belonging</strong> to someone before they were introduced to that person. They found that people <sup>3</sup><strong>who / that</strong> had been holding a warm drink often had a more positive view of the people <sup>4</sup><strong>they / that</strong> met soon after. The reason is that the part of the brain <sup>5</sup><strong>judges / which judges</strong> the warmth of something is next to the part <sup>6</sup><strong>measures / that measures</strong> a person's personality – how friendly they are as a person.</p>
+        <p>One of the most interesting studies <sup>7</sup><strong>to show / that showed</strong> people's behaviour was a visual test. Students had to identify a line <sup>8</sup><strong>that / who</strong> was the same length as a target line. Students who worked alone were very accurate, but students <sup>9</sup><strong>who / that</strong> worked with other people often got the answer wrong. The students <sup>10</sup><strong>taking / took</strong> part didn't know that other people in the experiment were actors <sup>11</sup><strong>who's / whose</strong> answers were incorrect. It was an important experiment and it wasn't the last one <sup>12</sup><strong>to find / found</strong> how easy it is to get people to change their behaviour when they are in a group.</p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 scientists &nbsp;·&nbsp; 2 belonging (both) &nbsp;·&nbsp; 3 both &nbsp;·&nbsp; 4 they<br>
+          5 which judges &nbsp;·&nbsp; 6 that measures &nbsp;·&nbsp; 7 that showed<br>
+          8 that &nbsp;·&nbsp; 9 both &nbsp;·&nbsp; 10 taking &nbsp;·&nbsp; 11 whose &nbsp;·&nbsp; 12 to find
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  
+<!-- ═══ SPEAKING ═══════════════════════════════════════════ -->
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">4</div>
+    <div class="ph-title">
+      <h2>Speaking — People Pleaser No More!</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>8A. Change the sentences below so they are true for you.</h3>
+    <div class="box">
+      <ol>
+        <li>I try to avoid people who lie.</li>
+        <li>I prefer working with colleagues who are positive.</li>
+        <li>I don't like situations where I have to say no.</li>
+        <li>I'm usually the first person to give my opinion.</li>
+        <li>The thing I love most about my life is the people in it.</li>
+        <li>I think people living abroad should learn the local language.</li>
+      </ol>
+    </div>
+
+    <h3>8B. Ask one question for each sentence. Remember to say the nouns and relative clauses without pausing between them.</h3>
+    <div class="box box-teal">
+      <p><strong>A:</strong> I try to avoid people who have very strong opinions.</p>
+      <p><strong>B:</strong> Why do you do that?</p>
+    </div>
+
+    <div style="overflow:hidden;margin-top:20px;">
+      <div class="spk-img-wrap">
+        <img src="spb.png" alt="speech bubbles: Yes! No! OK Sure! Of course!" class="spk-img">
+      </div>
+
+      <h3>9A. Look at the list of ways to say no. Tick the ones that you think are good ideas.</h3>
+
+      <div class="tips-list">
+        <div class="tips-list-header">
+          <h4>People pleaser no more! Tips for saying NO!</h4>
+          <p>The party you want to avoid … The overtime work you don't want to do … The lunch invitation from an old friend you don't want to see … You <strong>can</strong> say no!</p>
+        </div>
+        <div class="tip-item"><div class="tip-num">1</div><div class="tip-text">Prepare in advance. Practise what you're going to say.</div><input type="checkbox" class="tip-check"></div>
+        <div class="tip-item"><div class="tip-num">2</div><div class="tip-text">Say something nice first. A positive comment first makes it easier to hear and accept the no.</div><input type="checkbox" class="tip-check"></div>
+        <div class="tip-item"><div class="tip-num">3</div><div class="tip-text">Don't delay. Don't be the one to say yes because you took too long to say no.</div><input type="checkbox" class="tip-check"></div>
+        <div class="tip-item"><div class="tip-num">4</div><div class="tip-text">Give a reason, but don't explain in detail.</div><input type="checkbox" class="tip-check"></div>
+        <div class="tip-item"><div class="tip-num">5</div><div class="tip-text">Suggest an alternative, e.g. think of another time to meet.</div><input type="checkbox" class="tip-check"></div>
+        <div class="tip-item"><div class="tip-num">6</div><div class="tip-text">Understand the tricks people use to turn your no into a yes.</div><input type="checkbox" class="tip-check"></div>
+        <div class="tip-item"><div class="tip-num">7</div><div class="tip-text">Be gentle but firm. A message making it clear how you feel is easier to understand.</div><input type="checkbox" class="tip-check"></div>
+        <div class="tip-item"><div class="tip-num">8</div><div class="tip-text">If the person doesn't take no for an answer, <strong>don't</strong> say yes. Say nothing.</div><input type="checkbox" class="tip-check"></div>
+      </div>
+    </div>
+
+    <h3>9B. Discuss the questions (1–3).</h3>
+    <div class="speak-q">1 Which of the things in Ex 9A do you normally do?</div>
+    <div class="speak-q">2 Which ones don't you do?</div>
+    <div class="speak-q">3 Which ideas would or wouldn't work for you? Why/Why not?</div>
+    <div class="box box-teal">
+      <p><strong>A:</strong> I think preparing in advance would work because it would give you time to think about what to say.</p>
+      <p><strong>B:</strong> I don't think it would work for me. I'd forget what I'd planned to say!</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ WRITING ════════════════════════════════════════════ -->
+<div class="phase c-write">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">5</div>
+    <div class="ph-title">
+      <h2>Writing — Emails to Decline Invitations</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">writing</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>10A. Look at the events in the box and answer the questions.</h3>
+    <div class="wordbox"><span class="chip">concert</span><span class="chip">conference</span><span class="chip">meal out</span><span class="chip">meeting</span><span class="chip">party</span><span class="chip">sports event</span><span class="chip">wedding</span><span class="chip">work trip</span><span class="chip">other</span></div>
+    <div class="speak-q">1 Do you often get invitations to these events?</div>
+    <div class="speak-q">2 Do you usually accept or decline them?</div>
+
+    <h3>10B. Read the email and answer the questions.</h3>
+    <div class="email-card">
+      <div class="email-header">
+        <p><strong>To:</strong> Sandy King</p>
+        <p><strong>CC:</strong> Greg Kaminski</p>
+        <p><strong>Subject:</strong> Guest speaker planning meeting</p>
+      </div>
+      <div class="email-body">
+        <p>Sandy, we need to meet to discuss arrangements for our guest speaker programme this year. We're planning to choose the speakers and to suggest topics for the lectures. We also want to decide on the dates. I'm attaching the provisional agenda. Could we meet on Thursday morning? Let me know if that works for you.</p>
+        <p>Regards,<br>Pat</p>
+      </div>
+    </div>
+    <div class="speak-q">1 What event is the invitation for?</div>
+    <div class="speak-q">2 What will happen there?</div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 A meeting (guest speaker planning meeting).<br>
+      2 They will make arrangements for a guest speaker programme — choosing speakers, suggesting topics and deciding dates.
+    </div>
+
+    <h3>10C. Read two answers from Sandy. Which one is more suitable for a work situation? How do you know?</h3>
+    <div class="two-col">
+      <div>
+        <p style="font-weight:700;margin-bottom:6px;color:var(--muted);">Email 1</p>
+        <div class="email-card email-alt">
+          <div class="email-header">
+            <p><strong>To:</strong> Pat Summers</p>
+            <p><strong>Subject:</strong> Re: Guest speaker planning meeting</p>
+          </div>
+          <div class="email-body">
+            <p>Dear Pat,</p>
+            <p>Thursday is no good for me. I'm very busy! 😩 Do we really need to meet? If we do, let's meet next week some time.</p>
+            <p>Sandy</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="font-weight:700;margin-bottom:6px;color:var(--green);">Email 2</p>
+        <div class="email-card email-good">
+          <div class="email-header">
+            <p><strong>To:</strong> Pat Summers</p>
+            <p><strong>CC:</strong> Greg Kaminski</p>
+            <p><strong>Subject:</strong> Re: Guest speaker planning meeting</p>
+          </div>
+          <div class="email-body">
+            <p>Pat, I'm sorry, but I can't make Thursday. There's another meeting which I have to go to. Would you mind if we put the meeting off until the following week? I'm free most mornings except Wednesday.</p>
+            <p>Best wishes,<br>Sandy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">Email 2 is more suitable. It has an apology, a formal phrase to make a request (<em>Would you mind if …?</em>), a standard sign off (<em>Best wishes</em>), and it's CC'd to the same person as the original email.</div>
+
+    <h3>10D. Number the items (a–d) in the correct order. Use the second email in Ex 10C to help you.</h3>
+    <div class="two-col">
+      <div class="box">
+        <p><strong>a</strong> Sign off politely. &nbsp;<input class="gap" style="width:40px;" placeholder="#"></p>
+        <p><strong>b</strong> Make a suggestion for an alternative. &nbsp;<input class="gap" style="width:40px;" placeholder="#"></p>
+        <p><strong>c</strong> Give a reason. &nbsp;<input class="gap" style="width:40px;" placeholder="#"></p>
+        <p><strong>d</strong> Use a subject line that is the same as the invitation. &nbsp;<input class="gap" style="width:40px;" placeholder="#"></p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answer</button>
+        <div class="answer">d → (say no) → c → b → a<br><b>a</b>=4 &nbsp;·&nbsp; <b>b</b>=3 &nbsp;·&nbsp; <b>c</b>=2 &nbsp;·&nbsp; <b>d</b>=1</div>
+      </div>
+    </div>
+
+    <h3>11A. Look at the sentences from emails (1–8). Are they saying no (N), giving a reason (R) or giving an alternative suggestion (A)?</h3>
+    <div class="two-col">
+      <ol>
+        <li>I'm out of the office all day. <span style="color:var(--green);font-weight:700;">R</span></li>
+        <li>I'm afraid that Thursday isn't convenient for me. <input class="gap" style="width:30px;" placeholder="?"></li>
+        <li>Afraid I can't. Will get back to you with another time. <input class="gap" style="width:30px;" placeholder="?"></li>
+        <li>I'm sorry, I can't make Wednesday evening. <input class="gap" style="width:30px;" placeholder="?"></li>
+      </ol>
+      <ol start="5">
+        <li>I'm in classes all afternoon. <input class="gap" style="width:30px;" placeholder="?"></li>
+        <li>Sorry, I'm doing something else then. <input class="gap" style="width:30px;" placeholder="?"></li>
+        <li>I wonder if we could arrange it for Monday instead? <input class="gap" style="width:30px;" placeholder="?"></li>
+        <li>I have something else on. <input class="gap" style="width:30px;" placeholder="?"></li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">2 N &nbsp;·&nbsp; 3 N, A &nbsp;·&nbsp; 4 N &nbsp;·&nbsp; 5 R &nbsp;·&nbsp; 6 R &nbsp;·&nbsp; 7 A &nbsp;·&nbsp; 8 R</div>
+
+    <h3>11B. Look at the sentences in Ex 11A. Find two which are very formal and two which are very informal.</h3>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      <b>Very formal:</b> 2 (I'm afraid that Thursday isn't convenient for me) · 7 (I wonder if we could arrange it for Monday instead?)<br>
+      <b>Very informal:</b> 3 (Afraid I can't.) · 6 (Sorry, I'm doing something else then.)
+    </div>
+
+    <h3>12A. Read the invitations. Write an email to decline each one. Follow the order in Ex 10D and use the sentences in Ex 11A for ideas. Think about whether each reply should be formal or informal.</h3>
+    <div class="two-col">
+      <div class="email-card">
+        <div class="email-header">
+          <p><strong>To:</strong> [Student]</p>
+          <p><strong>Subject:</strong> Invitation to post-talk session</p>
+        </div>
+        <div class="email-body">
+          <p>Dear Student,</p>
+          <p>We are pleased to announce that our guest speaker on Friday evening will be Professor Hendricks. His topic is prehistoric cave paintings. We would like to invite you to a post-talk coffee and question session. Please reply by Monday 7th.</p>
+          <p>Regards,<br>Cathy Shepherd, PA</p>
+        </div>
+      </div>
+      <div class="email-card">
+        <div class="email-header">
+          <p><strong>To:</strong> Ilsa</p>
+          <p><strong>Subject:</strong> Marketing campaign</p>
+        </div>
+        <div class="email-body">
+          <p>Hi Ilsa,</p>
+          <p>Are you free any time tomorrow? I'd like to have a quick chat with you about the new marketing campaign. I'm sorry it's such short notice, but we need to talk. Can you get back to me as soon as possible?</p>
+          <p>BW,<br>Mikael</p>
+        </div>
+      </div>
+    </div>
+    <div class="speak-q">Write your replies here or in your notebook. Remember: formal or informal? Which phrases from 11A will you use?</div>
+
+    <h3>12B. Read your emails and answer the questions.</h3>
+    <div class="speak-q">1 Do they follow the order in Ex 10D?</div>
+    <div class="speak-q">2 Decide if each email is formal or informal enough.</div>
+    <div class="speak-q">3 Which is the most polite?</div>
+    <div class="speak-q">4 Which is the least polite?</div>
+
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 2B · People Pleaser</footer>
+
+<script>
+function rate(container){
+  // handled via event delegation on each ann-stars div
+}
+document.querySelectorAll('.ann-stars').forEach(group=>{
+  group.addEventListener('click', e=>{
+    const span = e.target.closest('span');
+    if(!span) return;
+    const val = parseInt(span.dataset.v);
+    group.querySelectorAll('span').forEach((s,i)=>{
+      s.classList.toggle('active', i < val);
+    });
+  });
+});
+  
+function toggle(headEl){
+  headEl.parentElement.classList.toggle('collapsed');
+}
+function show(btn){
+  const ans=btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent=ans.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
+}
+function calcScore(){
+  let score=0;
+  for(let i=1;i<=8;i++){
+    const sel=document.querySelector(`input[name="q${i}"]:checked`);
+    if(sel) score+=parseInt(sel.value);
+  }
+  return score;
+}
+function showScore(){
+  const score=calcScore();
+  const r=document.getElementById('quizResult');
+  let msg='';
+  if(score>=12) msg=`Score: <strong>${score}</strong> — You're a true people pleaser! Maybe think more about yourself and less about others.`;
+  else if(score>=8) msg=`Score: <strong>${score}</strong> — Sometimes it's a bit too important what people think about you, but you take care of yourself.`;
+  else msg=`Score: <strong>${score}</strong> — You're not a people pleaser. You don't let other people's expectations and feelings direct your actions.`;
+  r.innerHTML=msg;
+  r.classList.add('show');
+  
+}
+</script>
+</body>
+</html>

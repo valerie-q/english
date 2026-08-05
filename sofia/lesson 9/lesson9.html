@@ -208,88 +208,55 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
 
 <div class="wrap">
 
-
-<div class="phase c-voc">
+ <div class="phase c-voc">
   <div class="phase-head" onclick="toggle(this)">
-    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-stripe"></div><div class="ph-num">+</div>
     <div class="ph-title">
-      <h2>Warm-up — How Annoying Is It?</h2>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span class="pbadge">speaking</span><span class="arrow">&#9660;</span>
-      </div>
+      <h2>Extra — What's Happening? What Would You Do?</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary · speaking</span><span class="arrow">&#9660;</span></div>
     </div>
   </div>
   <div class="phase-body">
+    <p>Read each situation. First name the phrase from the lesson that describes it, then say what you would do.</p>
 
-    <p style="margin-bottom:14px;">Rate each situation from 1 to 5.</p>
-
-    <div style="display:inline-flex;gap:6px;margin-bottom:16px;background:var(--pink-light);border:2px solid var(--pink-border);border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;">
-      <span>1 = barely notice</span>
-      <span style="color:var(--muted);">·</span>
-      <span>3 = quite annoying</span>
-      <span style="color:var(--muted);">·</span>
-      <span>5 = drives me crazy</span>
-    </div>
-
-    <div id="annoyance-list">
-      <div class="ann-item">
-        <span class="ann-text">People who talk loudly on the phone in public.</span>
-        <div class="ann-stars" onclick="rate(this)">
-          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
-        </div>
+    <div class="two-col" style="margin-top:14px;">
+      <div class="box box-pink">
+        <p style="font-weight:700;margin-bottom:6px;">1</p>
+        <p>Your colleague sends you a message at 10pm asking you to cover their shift tomorrow. You already have plans.</p>
+        <div class="speak-q" style="margin-top:8px;">Which phrase applies? What do you say to them?</div>
       </div>
-      <div class="ann-item">
-        <span class="ann-text">Someone who cancels plans at the last minute.</span>
-        <div class="ann-stars" onclick="rate(this)">
-          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
-        </div>
+      <div class="box box-pink">
+        <p style="font-weight:700;margin-bottom:6px;">2</p>
+        <p>You post a photo on Instagram. It gets three likes. One of your closest friends doesn't like it at all.</p>
+        <div class="speak-q" style="margin-top:8px;">How do you feel? Which phrase describes it?</div>
       </div>
-      <div class="ann-item">
-        <span class="ann-text">When someone doesn't reply to a message for days.</span>
-        <div class="ann-stars" onclick="rate(this)">
-          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
-        </div>
+      <div class="box box-pink">
+        <p style="font-weight:700;margin-bottom:6px;">3</p>
+        <p>Your friend is in a terrible mood all day. They won't say why. You keep thinking it must be something you did.</p>
+        <div class="speak-q" style="margin-top:8px;">Which TWO phrases apply here? Is this people pleasing?</div>
       </div>
-      <div class="ann-item">
-        <span class="ann-text">People who stand too close in a queue.</span>
-        <div class="ann-stars" onclick="rate(this)">
-          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
-        </div>
+      <div class="box box-pink">
+        <p style="font-weight:700;margin-bottom:6px;">4</p>
+        <p>Everyone in your group chat is planning to see a film you have zero interest in. Nobody has asked your opinion yet.</p>
+        <div class="speak-q" style="margin-top:8px;">What do you do? Are you a people pleaser in this situation?</div>
       </div>
-      <div class="ann-item">
-        <span class="ann-text">Noisy eating — chewing with an open mouth.</span>
-        <div class="ann-stars" onclick="rate(this)">
-          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
-        </div>
+      <div class="box box-pink">
+        <p style="font-weight:700;margin-bottom:6px;">5</p>
+        <p>Your manager asks you to stay late to fix a problem that someone else caused. It's Friday evening.</p>
+        <div class="speak-q" style="margin-top:8px;">Which phrase from the lesson fits? Use a tip from 9A to respond.</div>
       </div>
-      <div class="ann-item">
-        <span class="ann-text">When someone gives you unsolicited advice.</span>
-        <div class="ann-stars" onclick="rate(this)">
-          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
-        </div>
-      </div>
-      <div class="ann-item">
-        <span class="ann-text">Slow walkers in a busy street when you're in a hurry.</span>
-        <div class="ann-stars" onclick="rate(this)">
-          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
-        </div>
-      </div>
-      <div class="ann-item">
-        <span class="ann-text">People who don't say thank you when you hold the door.</span>
-        <div class="ann-stars" onclick="rate(this)">
-          <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
-        </div>
+      <div class="box box-pink">
+        <p style="font-weight:700;margin-bottom:6px;">6</p>
+        <p>You're at a dinner party. The host made something you really don't like eating. They ask "How is it?"</p>
+        <div class="speak-q" style="margin-top:8px;">What do you say? Are you being a people pleaser or just polite?</div>
       </div>
     </div>
 
-    <div style="margin-top:20px;">
-      <div class="speak-q">Which one got a 5 from you? Tell me about a specific time it happened.</div>
-      <div class="speak-q">Which one do you think other people rate higher than you? Why?</div>
-      <div class="speak-q">Add one pet peeve of your own that isn't on the list.</div>
-    </div>
+    <div class="speak-q" style="margin-top:16px;">Final question: Is there a difference between being a people pleaser and just being polite? Where's the line?</div>
 
   </div>
 </div>
+
   
 <!-- ═══ LISTENING ═════════════════════════════════════════ -->
 <div class="phase c-list">
@@ -702,54 +669,7 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
   </div>
 </div>
 
-  <div class="phase c-voc">
-  <div class="phase-head" onclick="toggle(this)">
-    <div class="ph-stripe"></div><div class="ph-num">+</div>
-    <div class="ph-title">
-      <h2>Extra — What's Happening? What Would You Do?</h2>
-      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary · speaking</span><span class="arrow">&#9660;</span></div>
-    </div>
-  </div>
-  <div class="phase-body">
-    <p>Read each situation. First name the phrase from the lesson that describes it, then say what you would do.</p>
-
-    <div class="two-col" style="margin-top:14px;">
-      <div class="box box-pink">
-        <p style="font-weight:700;margin-bottom:6px;">1</p>
-        <p>Your colleague sends you a message at 10pm asking you to cover their shift tomorrow. You already have plans.</p>
-        <div class="speak-q" style="margin-top:8px;">Which phrase applies? What do you say to them?</div>
-      </div>
-      <div class="box box-pink">
-        <p style="font-weight:700;margin-bottom:6px;">2</p>
-        <p>You post a photo on Instagram. It gets three likes. One of your closest friends doesn't like it at all.</p>
-        <div class="speak-q" style="margin-top:8px;">How do you feel? Which phrase describes it?</div>
-      </div>
-      <div class="box box-pink">
-        <p style="font-weight:700;margin-bottom:6px;">3</p>
-        <p>Your friend is in a terrible mood all day. They won't say why. You keep thinking it must be something you did.</p>
-        <div class="speak-q" style="margin-top:8px;">Which TWO phrases apply here? Is this people pleasing?</div>
-      </div>
-      <div class="box box-pink">
-        <p style="font-weight:700;margin-bottom:6px;">4</p>
-        <p>Everyone in your group chat is planning to see a film you have zero interest in. Nobody has asked your opinion yet.</p>
-        <div class="speak-q" style="margin-top:8px;">What do you do? Are you a people pleaser in this situation?</div>
-      </div>
-      <div class="box box-pink">
-        <p style="font-weight:700;margin-bottom:6px;">5</p>
-        <p>Your manager asks you to stay late to fix a problem that someone else caused. It's Friday evening.</p>
-        <div class="speak-q" style="margin-top:8px;">Which phrase from the lesson fits? Use a tip from 9A to respond.</div>
-      </div>
-      <div class="box box-pink">
-        <p style="font-weight:700;margin-bottom:6px;">6</p>
-        <p>You're at a dinner party. The host made something you really don't like eating. They ask "How is it?"</p>
-        <div class="speak-q" style="margin-top:8px;">What do you say? Are you being a people pleaser or just polite?</div>
-      </div>
-    </div>
-
-    <div class="speak-q" style="margin-top:16px;">Final question: Is there a difference between being a people pleaser and just being polite? Where's the line?</div>
-
-  </div>
-</div>
+ 
 
   <div class="phase c-gram">
   <div class="phase-head" onclick="toggle(this)">

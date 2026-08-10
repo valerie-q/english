@@ -581,8 +581,11 @@ function jump(id){
 
     // Завантажуємо збережене
     onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
-      if (snap.exists() && el.value === '') el.value = snap.val();
-    }, { onlyOnce: true });
+  if (snap.exists()) {
+    const val = snap.val();
+    if (document.activeElement !== el) el.value = val;
+  }
+});
 
     // Зберігаємо при зміні
     el.addEventListener('input', () => {

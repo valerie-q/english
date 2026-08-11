@@ -1087,14 +1087,16 @@ function reveal(id){
   const LESSON_ID = "svitlana_lesson19";
 
   // Зберігаємо при введенні
-  document.querySelectorAll('input[type=text], textarea').forEach((el, i) => {
-    const key = `field_${i}`;
+  document.querySelectorAll('input, textarea').forEach((el, i) => {
+    const key = field_${i};
 
     // Завантажуємо збережене
     onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
-      if (snap.exists() && el.value === '') el.value = snap.val();
-    }, { onlyOnce: true });
-
+  if (snap.exists()) {
+    const val = snap.val();
+    if (document.activeElement !== el) el.value = val;
+  }
+});
     // Зберігаємо при зміні
     el.addEventListener('input', () => {
       set(ref(db, `${LESSON_ID}/${key}`), el.value);

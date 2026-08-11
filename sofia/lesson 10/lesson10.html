@@ -1,1 +1,833 @@
-hh
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2C That's Annoying! — Sofia</title>
+<style>
+    .write-area{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px;
+  font-family:inherit;
+  font-size:0.93rem;
+  resize:vertical;
+  background:white;
+  color:var(--text);
+  min-height:120px;
+}
+.write-area:focus{
+  outline:none;
+  border-color:var(--purple);
+}
+:root{
+  --navy:#1d2d50;--navy-light:#2a3d6a;
+  --purple:#6b3fa0;--purple-dark:#4a2c7a;--purple-light:#f0eafa;--purple-border:#c4a0e0;
+  --teal:#0097b3;--teal-light:#e0f5f8;
+  --green:#2a8a5c;--green-light:#e8f5ee;--green-border:#80c8a0;
+  --amber:#c8700a;--amber-light:#fef3e8;
+  --text:#1a1f2e;--muted:#5a6070;--bg:#faf7fd;--card:#ffffff;--border:#e0d0ee;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;padding-bottom:60px;}
+
+/* HEADER */
+header{background:var(--navy);border-bottom:4px solid var(--purple);}
+.header-inner{max-width:1280px;margin:0 auto;padding:22px 40px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;}
+.header-unit{background:var(--purple);color:white;font-weight:800;font-size:1.9rem;padding:8px 18px;border-radius:6px;line-height:1;}
+.header-text h1{color:#fff;font-size:1.65rem;font-weight:700;margin-bottom:6px;}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.htag-g{background:rgba(0,151,179,0.2);color:#00c0df;border:1px solid rgba(0,151,179,0.35);}
+.htag-v{background:rgba(107,63,160,0.2);color:#c080ff;border:1px solid rgba(107,63,160,0.3);}
+.htag-s{background:rgba(42,138,92,0.2);color:#3aaa70;border:1px solid rgba(42,138,92,0.3);}
+.header-right{text-align:right;color:#90a8c8;font-size:0.8rem;line-height:1.6;}
+
+/* WRAP */
+.wrap{max-width:1280px;margin:0 auto;padding:24px 40px;}
+
+/* PHASE */
+.phase{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-top:20px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.ph-stripe{width:6px;flex-shrink:0;}
+.ph-num{color:white;font-weight:800;font-size:0.95rem;padding:14px 18px;display:flex;align-items:center;justify-content:center;min-width:52px;}
+.ph-title{flex:1;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ph-title h2{font-size:1rem;font-weight:700;color:var(--navy);margin:0;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+/* phase colours */
+.c-rev .ph-stripe,.c-rev .ph-num{background:var(--amber);}
+.c-warm .ph-stripe,.c-warm .ph-num{background:#e63946;}
+.c-voc .ph-stripe,.c-voc .ph-num{background:var(--purple);}
+.c-how .ph-stripe,.c-how .ph-num{background:#5b9bd5;}
+.c-gram .ph-stripe,.c-gram .ph-num{background:var(--teal-dark,#006f85);}
+.c-pron .ph-stripe,.c-pron .ph-num{background:var(--purple-dark);}
+.c-spk .ph-stripe,.c-spk .ph-num{background:var(--green);}
+.c-med .ph-stripe,.c-med .ph-num{background:#374785;}
+
+.c-rev .pbadge{background:var(--amber-light);color:var(--amber);}
+.c-warm .pbadge{background:#fdecea;color:#e63946;}
+.c-voc .pbadge{background:var(--purple-light);color:var(--purple);}
+.c-how .pbadge{background:#e8f0fc;color:#5b9bd5;}
+.c-gram .pbadge{background:var(--teal-light);color:#006f85;}
+.c-pron .pbadge{background:var(--purple-light);color:var(--purple-dark);}
+.c-spk .pbadge{background:var(--green-light);color:var(--green);}
+.c-med .pbadge{background:#eaecf5;color:#374785;}
+
+/* LAYOUTS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.col-5-7{display:grid;grid-template-columns:5fr 7fr;gap:20px;margin:14px 0;}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:20px;margin:14px 0;}
+@media(max-width:900px){.two-col,.col-5-7,.col-7-5{grid-template-columns:1fr;}.wrap,.header-inner{padding:16px 18px;}}
+
+/* ELEMENTS */
+.box{background:#f8f9fc;border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-purple{background:var(--purple-light);border-left-color:var(--purple);}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.box-teal{background:var(--teal-light);border-left-color:#0097b3;}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--purple-light);border:1px solid var(--purple-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:white;border:1px solid var(--purple);color:var(--purple-dark);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+input.gap{background:#f5eefa;border:none;border-bottom:2px dotted var(--purple);color:var(--text);font-size:1rem;width:180px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--purple);}
+.reveal-btn{background:var(--purple);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
+.reveal-btn:hover{background:var(--purple-dark);}
+.answer{display:none;background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+audio{width:100%;margin:8px 0;border-radius:6px;}
+h3{color:var(--navy);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+.sec-label{display:inline-block;background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+
+/* ARTICLE — styled like textbook */
+.pet-hate-article{
+  background:#1a1040;
+  border-radius:10px;
+  overflow:hidden;
+  margin:14px 0;
+}
+.article-title-block{
+  background:linear-gradient(135deg,#5b2d9a,#3d1a70);
+  padding:20px 24px;
+}
+.article-title-block h3{
+  color:#e8c0ff;font-size:0.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;
+}
+.article-title-block h2{
+  color:#ffffff;font-size:1.5rem;font-weight:800;line-height:1.2;margin-bottom:4px;
+}
+.article-title-block h2 span{color:#c080ff;}
+.article-body-block{padding:18px 24px 22px;}
+.article-body-block .intro{
+  color:#c8a8e8;font-size:0.92rem;font-weight:600;margin-bottom:14px;
+}
+.article-bullet{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);
+  color:#e0d0f8;font-size:0.91rem;
+}
+.article-bullet:last-of-type{border-bottom:none;}
+.bullet-mark{
+  color:#c080ff;font-size:1.2rem;flex-shrink:0;margin-top:-1px;
+}
+.article-footer{
+  color:#c080ff;font-size:0.95rem;font-weight:700;
+  margin-top:16px;
+}
+
+/* IMG PLACEHOLDER */
+.img-ph{
+  background:#e8ecf4;border:2px dashed var(--border);
+  border-radius:8px;display:flex;align-items:center;
+  justify-content:center;color:var(--muted);font-size:0.82rem;
+  text-align:center;min-height:220px;
+}
+
+/* DIALOGUE */
+.dialogue{background:#f8f9fc;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:0.93rem;margin:12px 0;}
+.dialogue p{margin:6px 0;}
+.spk-a{color:var(--purple);font-weight:700;}
+.spk-b{color:var(--navy);font-weight:700;}
+
+/* RESPONSE BUBBLES */
+.response-chips{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;}
+.resp-chip{background:var(--teal-light);border:2px solid var(--teal,#0097b3);color:#006f85;padding:7px 16px;border-radius:20px;font-size:0.9rem;font-weight:600;}
+
+/* HOW TO box */
+.howto-box{
+  background:#e8f0fc;border:2px solid #5b9bd5;border-radius:10px;
+  padding:16px 18px;margin:14px 0;
+}
+.howto-label{color:#2a5090;font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;}
+.howto-box h4{color:#1a3060;margin:0 0 12px;font-size:1rem;font-weight:700;}
+.phrase-row{display:flex;gap:10px;align-items:baseline;padding:6px 0;border-bottom:1px solid rgba(91,155,213,0.2);}
+.phrase-row:last-child{border-bottom:none;}
+.phrase-en{font-weight:700;color:#1a3060;min-width:250px;}
+.phrase-note{color:var(--muted);font-size:0.88rem;font-style:italic;}
+
+/* GRAMMAR NOTE */
+.gram-note{background:var(--teal-light);border:1px solid #80d0e0;border-radius:8px;padding:14px 18px;margin:10px 0;font-size:0.93rem;}
+.gram-sub{background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;display:inline-block;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.4px;}
+.ex-phrase{color:#006f85;font-weight:600;}
+
+/* MEDIATION */
+.mediation-box{background:#eef2fb;border:2px solid #5b7bbf;border-radius:10px;padding:16px 18px;margin:14px 0;}
+.med-label{color:#2a4080;font-weight:700;font-size:0.72rem;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:2px;}
+.mediation-box h4{color:#1a2f60;margin:2px 0 10px;font-size:1rem;font-weight:700;}
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
+
+.ann-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-bottom:1px solid var(--pink-border);
+  gap:16px;
+}
+.ann-item:last-child{border-bottom:none;}
+.ann-text{font-size:0.93rem;flex:1;}
+.ann-stars{display:flex;gap:6px;cursor:pointer;flex-shrink:0;}
+.ann-stars span{
+  font-size:1.4rem;opacity:0.35;transition:all 0.15s;user-select:none;
+}
+.ann-stars span.active{opacity:1;transform:scale(1.15);}
+#annoyance-list{
+  background:white;border:2px solid var(--pink-border);
+  border-radius:10px;overflow:hidden;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-unit">2C</div>
+    <div class="header-text">
+      <h1>That's Annoying!</h1>
+      <div class="header-tags">
+        <span class="htag htag-v">Vocabulary: pet hates</span>
+        <span class="htag htag-g">How to: talk about things that annoy you</span>
+        <span class="htag htag-s">Speaking: annoying situations</span>
+      </div>
+    </div>
+    <div class="header-right">Speakout B1+<br>Unit 2 · behaviour</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ═══ REVISION ══════════════════════════════════════════ -->
+<div class="phase c-rev">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R</div>
+    <div class="ph-title">
+      <h2>Revision</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">revision</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+        <div class="phase-body">
+      
+          <p>Complete each sentence so it's true for you. Use a relative clause.</p>
+          <p class="instr" style="margin-bottom:14px;">Example: <em>I'm the kind of person who always says yes even when I want to say no.</em></p>
+      
+          <div class="two-col">
+            <ol>
+              <li style="margin-bottom:14px;">I'm the kind of person <strong>who</strong> <input class="gap" style="width:80%;" placeholder="..."></li>
+              <li style="margin-bottom:14px;">I find it hard to be around people <strong>who</strong> <input class="gap" style="width:80%;" placeholder="..."></li>
+              <li style="margin-bottom:14px;">The situations <strong>where</strong> I feel most uncomfortable are <input class="gap" style="width:70%;" placeholder="..."></li>
+              <li style="margin-bottom:14px;">I'm good at saying no to things <strong>that</strong> <input class="gap" style="width:80%;" placeholder="..."></li>
+            </ol>
+            <ol start="5">
+              <li style="margin-bottom:14px;">The last person <strong>whose</strong> opinion really changed my mind was <input class="gap" style="width:70%;" placeholder="..."></li>
+              <li style="margin-bottom:14px;">I easily do favours for people <strong>who</strong> <input class="gap" style="width:80%;" placeholder="..."></li>
+              <li style="margin-bottom:14px;">I avoid situations <strong>where</strong> <input class="gap" style="width:80%;" placeholder="..."></li>
+              <li style="margin-bottom:14px;">A comment <strong>that</strong> <input class="gap" style="width:60%;" placeholder="..."> really bothers me.</li>
+            </ol>
+          </div>
+      
+        </div>
+      
+  </div>
+</div>
+
+<!-- ═══ WARM-UP ════════════════════════════════════════════ -->
+<div class="phase c-warm">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-title">
+      <h2>Warm-up</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">warm-up</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase c-voc">
+      
+          <p style="margin-bottom:14px;" class="pbadge">Rate each situation from 1 to 5.</p>
+      
+          <div style="display:inline-flex;gap:6px;margin-bottom:16px;background:var(--pink-light);border:2px solid var(--pink-border);border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;">
+            <span>1 = barely notice</span>
+            <span style="color:var(--muted);">·</span>
+            <span>3 = quite annoying</span>
+            <span style="color:var(--muted);">·</span>
+            <span>5 = drives me crazy</span>
+          </div>
+      
+          <div id="annoyance-list">
+            <div class="ann-item">
+              <span class="ann-text">People who talk loudly on the phone in public.</span>
+              <div class="ann-stars" onclick="rate(this)">
+                <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+              </div>
+            </div>
+            <div class="ann-item">
+              <span class="ann-text">Someone who cancels plans at the last minute.</span>
+              <div class="ann-stars" onclick="rate(this)">
+                <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+              </div>
+            </div>
+            <div class="ann-item">
+              <span class="ann-text">When someone doesn't reply to a message for days.</span>
+              <div class="ann-stars" onclick="rate(this)">
+                <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+              </div>
+            </div>
+            <div class="ann-item">
+              <span class="ann-text">People who stand too close in a queue.</span>
+              <div class="ann-stars" onclick="rate(this)">
+                <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+              </div>
+            </div>
+            <div class="ann-item">
+              <span class="ann-text">Noisy eating — chewing with an open mouth.</span>
+              <div class="ann-stars" onclick="rate(this)">
+                <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+              </div>
+            </div>
+            <div class="ann-item">
+              <span class="ann-text">When someone gives you unsolicited advice.</span>
+              <div class="ann-stars" onclick="rate(this)">
+                <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+              </div>
+            </div>
+            <div class="ann-item">
+              <span class="ann-text">Slow walkers in a busy street when you're in a hurry.</span>
+              <div class="ann-stars" onclick="rate(this)">
+                <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+              </div>
+            </div>
+            <div class="ann-item">
+              <span class="ann-text">People who don't say thank you when you hold the door.</span>
+              <div class="ann-stars" onclick="rate(this)">
+                <span data-v="1">😐</span><span data-v="2">😑</span><span data-v="3">😠</span><span data-v="4">😤</span><span data-v="5">🤯</span>
+              </div>
+            </div>
+          </div>
+      
+          <div style="margin-top:20px;">
+            <div class="speak-q">Which one got a 5 from you? Tell me about a specific time it happened.</div>
+            <div class="speak-q">Which one do you think other people rate higher than you? Why?</div>
+            <div class="speak-q">Add one pet peeve of your own that isn't on the list.</div>
+          </div>
+      
+        </div>
+      </div>
+  
+</div>
+
+<!-- ═══ VOCABULARY ════════════════════════════════════════ -->
+<div class="phase c-voc">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">1</div>
+    <div class="ph-title">
+      <h2>Vocabulary — Pet Hates</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>1A. Read the article. Discuss the questions.</h3>
+
+    <div class="pet-hate-article">
+      <div class="article-title-block">
+        <h3>What's your pet hate about behaviour in public?</h3>
+        <h2>Everybody has one or more things that really <span>annoy them in public.</span> Here are some classics:</h2>
+      </div>
+      <div class="article-body-block">
+        <p class="intro">Here are some classics:</p>
+        <div class="article-bullet"><span class="bullet-mark">❙</span><span>when I'm in a hurry and the people in front of me walk slowly and get in the way</span></div>
+        <div class="article-bullet"><span class="bullet-mark">❙</span><span>when public announcements in stations are impossible to hear</span></div>
+        <div class="article-bullet"><span class="bullet-mark">❙</span><span>when I'm in a shop and the customer ahead of me is on their phone and ignores the sales assistant</span></div>
+        <div class="article-bullet"><span class="bullet-mark">❙</span><span>when I'm waiting for a bus and people jump the queue</span></div>
+        <div class="article-bullet"><span class="bullet-mark">❙</span><span>when people throw litter out of car windows</span></div>
+        <div class="article-bullet"><span class="bullet-mark">❙</span><span>when children behave really badly in a public place and the parents don't react or do anything</span></div>
+        <div class="article-bullet"><span class="bullet-mark">❙</span><span>when I'm next to someone and they argue loudly with someone on their phone</span></div>
+        <p class="article-footer">So, those are our pet hates. What are yours?</p>
+      </div>
+    </div>
+
+    <div class="speak-q">1 How do you feel about each of the pet hates in the article? Do any of them bother you more than others?</div>
+    <div class="speak-q">2 What are your own pet hates? Think of at least two that aren't on the list.</div>
+
+    <h3>1B. Look at the word webs and find the collocation that does NOT belong. Use the article in Ex 1A to help.</h3>
+    <div class="img-ph"><img src="wordweb.png"></div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 <b>a problem</b> (you're <em>in</em> a hurry / a rush — but you <em>have</em> a problem)<br>
+      2 <b>give</b> (you get in / out of the way — but "give the way" isn't a collocation)<br>
+      3 <b>listen</b> (you hear, ignore public announcements — but "listen public announcements" needs a preposition: listen <em>to</em>)<br>
+      4 <b>slip</b> (you join / jump a queue — you don't slip a queue)<br>
+      5 <b>lift</b> (you drop / throw away litter — you don't lift litter)<br>
+      6 <b>rude</b> (you behave badly / well — rude is an adjective, not an adverb)<br>
+      7 <b>reply</b> (you react / respond to a situation — you reply <em>to</em> a message, not to a situation)<br>
+      8 <b>annoy</b> (you disagree / argue with someone — you annoy <em>someone</em>, not "annoy with someone")
+    </div>
+
+    <h3>1C. Think of something that annoys you on the street. Tell me about it. Use the collocations in Ex 1B.</h3>
+    <div class="dialogue">
+      <p><span class="spk-a">A:</span> I hate it when I can see someone who needs help and no one else reacts to the situation.</p>
+      <p><span class="spk-b">B:</span> Yes, I hate that, too. They just ignore the person and pretend they don't see or they're too busy.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ HOW TO ══════════════════════════════════════════════ -->
+<div class="phase c-how">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">2</div>
+    <div class="ph-title">
+      <h2>How to … Talk About Things That Annoy You</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">how to</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>2A. What things annoy you about people's behaviour on public transport? Make a list.</h3>
+    <div class="speak-q">Think of as many things as you can — no need to use formal language yet, just brainstorm.</div>
+    <textarea class="write-area" rows="6" placeholder="Write your list here..."></textarea>
+
+    <h3>2B. Listen to the conversation. What things do they talk about that are on your list?</h3>
+    <audio controls><source src="2_07.mp3" type="audio/mpeg"></audio>
+
+    <h3>3A. Complete the sentences with two or three words.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <div class="box">
+        <p><strong>1</strong> B: Were there a lot of people on the train?<br>
+        A: No, not many, but it's just the way some people behave. I <input class="gap" placeholder="..."> it.</p>
+
+        <p style="margin-top:10px;"><strong>2</strong> A: First I had to queue to buy a ticket because the ticket machines were broken.<br>
+        B: I hate <input class="gap" placeholder="..."> happens.</p>
+
+        <p style="margin-top:10px;"><strong>3</strong> B: People <input class="gap" placeholder="..."> doing that on trains! I expect it smelled bad.<br>
+        A: Yeah, the smell was terrible! It really <input class="gap" placeholder="..."> nerves.</p>
+
+        <p style="margin-top:10px;"><strong>4</strong> B: I know what you mean, without asking anyone?<br>
+        A: Yeah, it <input class="gap" placeholder="..."> me when they do that.</p>
+
+        <p style="margin-top:10px;"><strong>5</strong> B: You're <input class="gap" placeholder="..."> so upset about things. And you're here now.<br>
+        A: But that sort of behaviour <input class="gap" placeholder="..."> me.</p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 can't stand<br>
+          2 it when that<br>
+          3 are always - got on my<br>
+          4 really annoys<br>
+          5 always getting - really bugs
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ GRAMMAR BANK ════════════════════════════════════════ -->
+<div class="phase c-gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">3</div>
+    <div class="ph-title">
+      <h2>Grammar Bank 2C</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <!-- REFERENCE -->
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <div class="gram-note">
+          <p>We use these phrases to talk about things that annoy us:</p>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:4px;">
+            <span class="ex-phrase">I can't stand it.</span>
+            <span class="ex-phrase">I can't bear it.</span>
+            <span class="ex-phrase">It really annoys me.</span>
+            <span class="ex-phrase">It gets on my nerves.</span>
+            <span class="ex-phrase">It bugs me.</span>
+            <span class="ex-phrase">It drives me crazy / nuts / mad.</span>
+            <span class="ex-phrase">Don't get me started on <span style="font-weight:400;color:var(--muted);">(people who never say thank you).</span></span>
+          </div>
+          <p style="margin-top:10px;color:var(--muted);font-style:italic;font-size:0.88rem;">Notice: <em>It bugs me</em> and <em>It drives me nuts</em> are informal.</p>
+          <p style="margin-top:12px;">Continue with <strong>when</strong> + clause:</p>
+          <p class="ex-phrase">I can't bear it <strong>when</strong> that happens.<br>
+          It gets on my nerves <strong>when</strong> people drop litter.<br>
+          It drives me nuts <strong>when</strong> people don't answer my messages.</p>
+        </div>
+        <div class="gram-note" style="margin-top:10px;">
+          <p>Also use a relative clause or <em>-ing</em>:</p>
+          <p class="ex-phrase" style="margin-top:8px;">Children <strong>that misbehave in restaurants</strong> really bug me.<br>
+          I can't stand people <strong>shortening</strong> my name.</p>
+          <p style="margin-top:10px;">Short phrases to agree / disagree:</p>
+          <p class="ex-phrase">Yes, so annoying. &nbsp;·&nbsp; I don't mind that. &nbsp;·&nbsp; That doesn't bother me.</p>
+        </div>
+      </div>
+      <div>
+        <div class="gram-note">
+          <p><strong>Verbs in the continuous form</strong></p>
+          <p style="margin-top:8px;">Use present/past continuous with <em>always, constantly, continually, forever</em> to describe an annoying habit:</p>
+          <p class="ex-phrase" style="margin-top:8px;">You'<strong>re always losing</strong> your phone!<br>
+          My dad'<strong>s forever complaining</strong> about noise.<br>
+          Our car <strong>was continually breaking down</strong>.</p>
+          <p style="margin-top:10px;">Also used for positive emotions:</p>
+          <p class="ex-phrase">Children at this age are so cute. They'<strong>re constantly laughing</strong>!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 1 -->
+    <div class="gram-sub" style="margin-top:22px;">Practice 1 — Complete the conversations. Three extra words in each box.</div>
+
+    <div class="box" style="margin-bottom:14px;">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:10px;">Conversation 1: TV</p>
+      <div class="wordbox"><span class="chip">annoyed</span><span class="chip">annoying</span><span class="chip">bugs</span><span class="chip">constantly</span><span class="chip">drives</span><span class="chip">sometimes</span><span class="chip">when</span><span class="chip">why</span></div>
+      <p>A: I can't bear it <sup>1</sup><input class="gap" style="width:90px;" placeholder="..."> Karly's looking at her phone and keeps asking me what's happening.</p>
+      <p>B: Yes, Milo does that too. It <sup>2</sup><input class="gap" style="width:80px;" placeholder="..."> me nuts.</p>
+      <p>A: And she's <sup>3</sup><input class="gap" style="width:100px;" placeholder="..."> taking control of the remote and changing channels without asking.</p>
+      <p>B: You know what <sup>4</sup><input class="gap" style="width:80px;" placeholder="..."> me about TV? When you can hardly hear the TV show but then the adverts are really loud.</p>
+      <p>A: So <sup>5</sup><input class="gap" style="width:90px;" placeholder="...">! And you have to keep changing the volume on the remote.</p>
+    </div>
+
+    <div class="box" style="margin-bottom:14px;">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:10px;">Conversation 2: Work</p>
+      <div class="wordbox"><span class="chip">make</span><span class="chip">on</span><span class="chip">putting</span><span class="chip">reading</span><span class="chip">stand</span><span class="chip">started</span><span class="chip">talking</span><span class="chip">under</span></div>
+      <p>A: The job's OK, but there are some things about my workplace that I really can't <sup>6</sup><input class="gap" style="width:80px;" placeholder="...">.</p>
+      <p>B: For example?</p>
+      <p>A: Well, I'm in an open-plan office and it really gets <sup>7</sup><input class="gap" style="width:60px;" placeholder="..."> my nerves when people use their phone right next to me.</p>
+      <p>B: Yes, or people <sup>8</sup><input class="gap" style="width:90px;" placeholder="..."> their phone on speaker so you can hear the whole conversation.</p>
+      <p>A: And don't get me <sup>9</sup><input class="gap" style="width:85px;" placeholder="..."> on people <sup>10</sup><input class="gap" style="width:85px;" placeholder="..."> my phone or computer over my shoulder.</p>
+    </div>
+
+    <div class="box" style="margin-bottom:10px;">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:10px;">Conversation 3: Cars</p>
+      <div class="wordbox"><span class="chip">always</span><span class="chip">drive</span><span class="chip">is</span><span class="chip">it</span><span class="chip">so</span><span class="chip">who</span><span class="chip">they</span><span class="chip">travelling</span></div>
+      <p>A: That car just turned left without giving a signal. I can't stand <sup>11</sup><input class="gap" style="width:50px;" placeholder="..."> when people do that.</p>
+      <p>B: Yes, <sup>12</sup><input class="gap" style="width:50px;" placeholder="..."> annoying and dangerous! And then there are the people <sup>13</sup><input class="gap" style="width:60px;" placeholder="..."> never turn off their indicators.</p>
+      <p>A: Maybe they just forget. But you know what I can't stand? People <sup>14</sup><input class="gap" style="width:95px;" placeholder="..."> at half the speed limit in the fast lane.</p>
+      <p>B: I agree. I have a friend who <sup>15</sup><input class="gap" style="width:50px;" placeholder="..."> forever doing that.</p>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answers (Practice 1)</button>
+    <div class="answer">
+      1 when · 2 drives · 3 constantly · 4 bugs · 5 annoying<br>
+      6 stand · 7 on · 8 putting · 9 started · 10 reading<br>
+      11 it · 12 so · 13 who · 14 travelling · 15 is
+    </div>
+
+    <!-- PRACTICE 2 -->
+    <div class="gram-sub" style="margin-top:22px;">Practice 2 — Correct two mistakes in each conversation</div>
+    <div class="two-col">
+      <ol>
+        <li><strong>A:</strong> It gets on my nerves when people play loud music out of their apartment windows.<br>
+        <strong>B:</strong> Yes, and in my block the guy next door is continually sing along with his favourite songs.</li>
+        <li><strong>A:</strong> This light above my desk is drives me mad. It's constantly buzzing.<br>
+        <strong>B:</strong> It bother me. I guess I've stopped noticing.</li>
+        <li><strong>A:</strong> Oh no! I've lost one of my earrings. I'm usually doing that.<br>
+        <strong>B:</strong> Yes, so annoyed! I always buy two pairs of earrings so that I have a spare pair.</li>
+        <li><strong>A:</strong> I really hate this zip in my bag. It's for getting stuck.<br>
+        <strong>B:</strong> Yes I have a bag like that. And don't make me started on zips which come undone.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 B: <b>singing</b> (continually + -ing)<br>
+          2 A: <b>drives</b> me mad (not "is drives"); B: it <b>bothers</b> me<br>
+          3 A: <b>always / constantly / forever</b> doing that; B: so <b>annoying</b><br>
+          4 A: it's <b>forever</b> getting stuck; B: don't <b>get</b> me started
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRONUNCIATION ══════════════════════════════════════ -->
+<div class="phase c-pron">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">4</div>
+    <div class="ph-title">
+      <h2>Pronunciation — Stress and Intonation to Show Annoyance</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">pronunciation</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>4A. Read the sentences (1–6). What place are the people talking about?</h3>
+    <div class="box">
+      <ol>
+        <li>I can't stand it when people take a long time to pay.</li>
+        <li>It annoys me when they try to sell me something I don't want.</li>
+        <li>It drives me crazy when people eat food while shopping.</li>
+        <li>I hate it when I can't reach something on the top shelf.</li>
+        <li>I can't bear it when food is packaged in too much plastic.</li>
+        <li>People are always jumping the queue.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">A shop — most likely a supermarket.</div>
+
+    <h3>4B. Listen to the sentences in Ex 4A. Underline the word with the most stress in each sentence. Is the speaker's voice higher or lower on the key stressed word?</h3>
+    <audio controls><source src="2_09.mp3" type="audio/mpeg"></audio>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      Most stressed words: 1 <b>stand</b> · 2 <b>annoys</b> · 3 <b>drives + crazy</b> · 4 <b>hate</b> · 5 <b>bear</b> · 6 <b>always</b><br>
+      The speaker's voice is <b>higher</b> on the stressed word.
+    </div>
+
+    <h3>4C. Repeat the sentences from Ex 4A. Pay attention to stress. What do you think about those situations?.</h3>
+
+
+  </div>
+</div>
+
+<!-- ═══ SPEAKING ═══════════════════════════════════════════ -->
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">5</div>
+    <div class="ph-title">
+      <h2>Speaking — Annoying Situations</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>5A. Think of three or more things that annoy you in each situation. Say why they annoy you. Use the phrases from Ex 3A.</h3>
+    <div class="wordbox">
+      <span class="chip">on social media</span>
+      <span class="chip">in a cinema</span>
+      <span class="chip">with neighbours</span>
+      <span class="chip">with a flatmate or roommate</span>
+      <span class="chip">on an online video call</span>
+      <span class="chip">on a plane</span>
+      <span class="chip">in a restaurant</span>
+    </div>
+
+    <div class="howto-box" style="margin-top:14px;">
+      <div class="howto-label">Useful phrases — Ex 3A</div>
+      <div class="phrase-row"><span class="phrase-en">I can't stand it when…</span><span class="phrase-note">strong annoyance</span></div>
+      <div class="phrase-row"><span class="phrase-en">It really annoys me when…</span><span class="phrase-note">clear and direct</span></div>
+      <div class="phrase-row"><span class="phrase-en">It really gets on my nerves when…</span><span class="phrase-note">informal, strong</span></div>
+      <div class="phrase-row"><span class="phrase-en">It really bugs me when…</span><span class="phrase-note">very informal</span></div>
+      <div class="phrase-row"><span class="phrase-en">I hate it when that happens.</span><span class="phrase-note">reaction phrase</span></div>
+      <div class="phrase-row"><span class="phrase-en">People are always doing that!</span><span class="phrase-note">generalising</span></div>
+    </div>
+
+    <h3>5B. Which of your situations came up as most annoying?</h3>
+
+  </div>
+</div>
+
+<!-- ═══ MEDIATION SKILLS ═══════════════════════════════════ -->
+<div class="phase c-med">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">6</div>
+    <div class="ph-title">
+      <h2>Mediation Skills — Summarising</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">mediation</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="mediation-box">
+      <div class="med-label">Mediation Bank · Writing · page 146</div>
+      <h4>2C — Well-being Week</h4>
+      <p style="font-size:0.88rem;color:#2a4080;"><strong>WRITING OUTPUT</strong> | a written summary &nbsp;·&nbsp; <strong>GOAL</strong> | summarise an article &nbsp;·&nbsp; <strong>MEDIATION SKILL</strong> | summarising skills</p>
+    </div>
+
+    <h3>Warm-up</h3>
+    <div class="speak-q">1 What are some of the main reasons that people argue with their colleagues or classmates?</div>
+    <div class="speak-q">2 What's the best way of stopping an argument becoming a big problem?</div>
+
+    <h3>Prepare</h3>
+    <p><strong>2.</strong> Read the Scenario. What do you think 'Well-being Week' is?</p>
+    <div class="box" style="border-left-color:var(--purple);background:var(--purple-light);">
+      <p style="font-weight:700;margin-bottom:8px;">SCENARIO</p>
+      <p style="color:var(--muted);font-size:0.88rem;margin-bottom:8px;">You receive this message:</p>
+      <div style="background:white;border-radius:6px;padding:14px 16px;font-size:0.93rem;line-height:1.7;">
+        <p>As you all know, it's Well-being Week soon, and I'd like us all to do some research about how to look after our mental health in the team. I'll send you all some links to look at later today. Let's use them to make our 'Top four ways of dealing with anger in a team' blog.</p>
+      </div>
+    </div>
+
+    <p><strong>3.</strong> Read both texts. Which of the topics in the box are mentioned in each one?</p>
+    <div class="wordbox">
+      <span class="chip">knowing your own behaviour</span>
+      <span class="chip">pretending things are OK</span>
+      <span class="chip">taking a different point of view</span>
+      <span class="chip">writing something down</span>
+    </div>
+
+    <div class="two-col" style="align-items:start;">
+      <div style="background:#e0f5f0;border:1px solid #80c8b0;border-radius:10px;overflow:hidden;">
+        <div style="background:#1a7a60;color:white;padding:12px 18px;">
+          <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;color:#a0e8d0;">Text A</p>
+          <h3 style="color:white;font-size:1.1rem;margin:0;">How to deal with anger at work</h3>
+          <p style="color:#a0e8d0;font-size:0.87rem;margin:4px 0 0;">Because I work in a stressful job, I understand what it's like to feel angry at work. Here's some advice for dealing with it.</p>
+        </div>
+        <div style="padding:16px 18px;font-size:0.92rem;line-height:1.7;">
+          <p style="font-weight:700;color:#1a7a60;margin-bottom:6px;">❶ It's totally normal!</p>
+          <p>A lot of people want to calm down straight away when they're angry and just forget about what made them angry, but often this is not possible. Sometimes, you just have to accept it, and also remember that anger is a normal emotion – you're not a bad person just because you feel mad at someone or something. Pretending that you're calm when you're not can actually be pretty dangerous – you still have a lot of stress inside you, and it's very easy for you to get angry again, especially if the situation happens a lot. In my first job I often had coffee with colleagues who I was really angry with, pretending everything was OK, but in the end the bad feeling always came out and there were some really ugly situations that I could have avoided.</p>
+          <p style="font-weight:700;color:#1a7a60;margin:14px 0 6px;">❷ It's not the end of the world</p>
+          <p>Sometimes when we're really mad, it can feel like the end of the world, and our relationships with people on our team are permanently broken. When you feel like this, try to remember previous problems with people at work. Did you fix the situation? The answer is almost always 'yes', and if this was true before, it's also true now – it will be possible to find a way to make things better. I remember two of my colleagues who used to fight a lot, and they've been happily married for ten years now!</p>
+          <p style="font-weight:700;color:#1a7a60;margin:14px 0 6px;">❸ Space is good</p>
+          <p>Sometimes the best thing you can do when you're really angry with someone is walk away. Take a walk outside, take some deep breaths and let some of the stress go. It's better than staying in a bad situation because things can just get worse and worse. In my last job I always wanted to have the last word when I was mad at my colleague (and she did with me, too!), and it always made things worse when we kept arguing. If we spent a little time apart, we were usually just fine.</p>
+          <p style="font-weight:700;color:#1a7a60;margin:14px 0 6px;">❹ There are warning signs</p>
+          <p>You know yourself. You know when that feeling of anger is getting stronger and stronger. It's like traffic lights: when your feelings reach yellow, don't wait for them to get to red, do something before it gets really bad. In my last job, I knew my colleagues really well, and I could see the warning signs. That was the time to go for lunch and talk about things in a friendly way or take some time away from each other, before it got really bad.</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)" style="margin-top:14px;">Show answer (Ex 3 — Text A)</button>
+    <div class="answer">
+      Text A mentions: <b>pretending things are OK</b> (tip 1) · <b>taking a different point of view</b> (tip 2 — remember it can be fixed) · <b>knowing your own behaviour</b> (tip 4 — warning signs)
+    </div>
+
+    <!-- TEXT B -->
+<div style="background:#f0eafa;border:1px solid var(--purple-border);border-radius:10px;overflow:hidden;margin-top:0;">
+    <div style="background:var(--purple-dark);color:white;padding:12px 18px;">
+      <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;color:#c4a0e0;">Text B</p>
+      <h3 style="color:white;font-size:1.1rem;margin:0;">Tips for beating anger at work</h3>
+      <p style="color:#c4a0e0;font-size:0.87rem;margin:4px 0 0;">OK, guys, today's blog is my top four tips for dealing with stress with other people on your team.</p>
+    </div>
+    <div style="padding:16px 18px;font-size:0.92rem;line-height:1.7;">
+      <p style="font-weight:700;color:var(--purple-dark);margin-bottom:6px;">❶ See it both ways</p>
+      <p>So, you're getting angry with a colleague for some reason. Imagine a stranger coming in and looking at the situation. What would they think? Would they see a different way of looking at the issue than you? It's a real skill to look at a situation through another person's eyes, and a really good way to help you calm down. Sometimes, we feel that other people are trying to make us angry, but when you think more carefully about the reasons for their actions, you can start to understand why they are doing the things they are doing. Sometimes when I look at my own behaviour from a strangers' point of view, I feel quite embarrassed and I can't stay angry.</p>
+  
+      <p style="font-weight:700;color:var(--purple-dark);margin:14px 0 6px;">❷ Take out a pen and paper</p>
+      <p>If you're the same as me, I find it very hard to explain how I feel when I'm angry. I focus on the emotion and I find it really difficult to explain the details that will help people understand why I'm angry, well, because I'm just too angry! When I write down what the problem is, I start to understand myself better, and I can stop, think and edit what I've written so that I can explain things better. I can also edit the angry language that I write at the beginning and replace it with calmer words. For example, I remember writing: 'Carl is such an idiot. He never listens to anyone because he always thinks he's right.' Later on, I thought about the situation and wrote: 'Carl is very confident about his opinions, but maybe he needs to listen more.'</p>
+  
+      <p style="font-weight:700;color:var(--purple-dark);margin:14px 0 6px;">❸ Focus on the answer</p>
+      <p>Yes, you want to talk about how you're feeling, and that's important. However, you need to do more than that. You need to be part of solving the problem and you need to be open to suggestions from other people. If you only concentrate on why you're angry and you're not interested in talking about solving problems, then it's difficult for the situation to improve.</p>
+  
+      <p style="font-weight:700;color:var(--purple-dark);margin:14px 0 6px;">❹ Take care</p>
+      <p>There are some things you can do to make your general mood better, which makes an argument with a teammate less likely. Some of the key things are: getting enough sleep, doing regular exercise and controlling things like caffeine and alcohol. It's difficult to be in control of all of these things all the time, but you need to do your best for your sake and for your colleagues', too. A few years ago, I promised myself that I would get a minimum of eight hours sleep per night, and it changed my mood a lot. Give it a try!</p>
+    </div>
+  </div>
+  
+  <!-- EX 4 — MEDIATION SKILL BOX -->
+  <p style="margin-top:20px;"><strong>4.</strong> Read the Mediation Skill box. What kind of information can we sometimes remove when we write a summary?</p>
+  
+  <div style="background:white;border:2px solid var(--purple);border-radius:10px;padding:18px 20px;margin:14px 0;">
+    <p style="color:var(--purple);font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Mediation Skill</p>
+    <p style="font-weight:700;font-size:1.05rem;margin:0 0 12px;color:var(--navy);">summarising skills</p>
+    <p>When you write a summary of a text, there are a few useful steps:</p>
+    <p style="margin-top:10px;">First, decide what information you need. Read the text and for each paragraph decide what the most important point is.</p>
+    <p style="margin-top:10px;">Then think about what information you don't need, such as <strong>long introductions to the topic</strong> and <strong>examples</strong>.</p>
+    <p style="margin-top:10px;">Use bullet points to help keep your summary short.</p>
+    <p style="margin-top:10px;">When you finish writing, check your summary against the article.</p>
+    <p style="margin-top:12px;font-weight:700;">Helpful phrases:</p>
+    <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px;color:var(--purple-dark);font-weight:600;">
+      <span>The article / blog / writer says (that) …</span>
+      <span>One of the main points is …</span>
+      <span>The writer recommends + <em>-ing</em></span>
+      <span style="font-style:italic;font-weight:400;color:var(--muted);font-size:0.88rem;">e.g. The article says that it's very easy to get angry with other people if you don't sleep well.</span>
+    </div>
+  </div>
+  
+  <button class="reveal-btn" onclick="show(this)">Show answer (Ex 4)</button>
+  <div class="answer">We can remove: long introductions to the topic and examples (personal stories, specific details).</div>
+  
+  <!-- EX 5 -->
+  <p style="margin-top:18px;"><strong>5.</strong> Look at your article (Text A or Text B) again. Find the key information that you would include in a summary.</p>
+  <div class="speak-q">Go through each tip. For each one — what is the ONE most important sentence? Underline it or write it down.</div>
+  
+  <!-- MEDIATE -->
+  <div style="background:var(--navy);color:white;border-radius:6px;padding:8px 16px;display:inline-block;font-weight:700;font-size:0.9rem;margin:20px 0 10px;">Mediate</div>
+  
+  <p><strong>6A.</strong> Read the Scenario again. Write a short summary of your article, using the ideas from the Mediation Skill box to help you.</p>
+  <div style="margin-top:10px;">
+    <p style="font-weight:700;margin-bottom:6px;">Your summary:</p>
+    <textarea class="write-area" rows="7" placeholder="Write your summary here...&#10;&#10;Use bullet points. Don't copy sentences — use your own words.&#10;Start with: 'The article is about...' or 'The writer gives four tips for...'"></textarea>
+  </div>
+  
+  <p style="margin-top:16px;"><strong>6B.</strong> Read your summary again. Does it answer these questions about the article?</p>
+  <div class="speak-q">— What is the article about? (topic)</div>
+  <div class="speak-q">— What are the main tips? (key points)</div>
+  <div class="speak-q">— Are there any examples or personal stories you removed?</div>
+  
+  <p style="margin-top:16px;"><strong>6C.</strong> Choose the top five tips you would include in an article about avoiding anger in a team. Use tips from both Text A and Text B.</p>
+  <div class="speak-q">Tell me your top five and why you chose them.</div>
+
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 2C · That's Annoying!</footer>
+
+<script>
+    function rate(container){
+  // handled via event delegation on each ann-stars div
+}
+document.querySelectorAll('.ann-stars').forEach(group=>{
+  group.addEventListener('click', e=>{
+    const span = e.target.closest('span');
+    if(!span) return;
+    const val = parseInt(span.dataset.v);
+    group.querySelectorAll('span').forEach((s,i)=>{
+      s.classList.toggle('active', i < val);
+    });
+  });
+});
+function toggle(h){h.parentElement.classList.toggle('collapsed');}
+function show(btn){
+  const a=btn.nextElementSibling;
+  a.classList.toggle('show');
+  btn.textContent=a.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
+}
+
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  
+    const app = initializeApp({
+      databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+    });
+    const db = getDatabase(app);
+  
+    // ID уроку — міняй для кожного файлу
+    const LESSON_ID = "sofia_lesson10";
+  
+    // Зберігаємо при введенні
+    document.querySelectorAll('input, textarea').forEach((el, i) => {
+      const key = field_${i};
+  
+      // Завантажуємо збережене
+      onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+    if (snap.exists()) {
+      const val = snap.val();
+      if (document.activeElement !== el) el.value = val;
+    }
+  });
+      // Зберігаємо при зміні
+      el.addEventListener('input', () => {
+        set(ref(db, `${LESSON_ID}/${key}`), el.value);
+      });
+    });
+  </script>
+</body>
+</html>

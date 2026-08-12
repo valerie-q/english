@@ -813,8 +813,11 @@ function show(btn){
     const LESSON_ID = "sofia_lesson10";
   
     // Зберігаємо при введенні
-    document.querySelectorAll('input, textarea').forEach((el, i) => {
-      const key = field_${i};
+   // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+      const key = `field_${i}`;
   
       // Завантажуємо збережене
       onValue(ref(db, `${LESSON_ID}/${key}`), snap => {

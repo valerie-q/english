@@ -816,7 +816,7 @@ function jump(id){
 document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
 
 document.querySelectorAll('input, textarea').forEach((el, i) => {
-      const key = field_${i};
+      const key = `field_${i}`;
   
       // Завантажуємо збережене
       onValue(ref(db, `${LESSON_ID}/${key}`), snap => {

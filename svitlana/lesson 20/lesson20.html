@@ -1,1 +1,1869 @@
-oo
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 20</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red:#c8362d;--red-dk:#9e2820;--red-lt:#fdf1f0;
+      --dark:#2e2e2e;--mid:#5f5f5f;--grey:#f5f5f3;--border:#dedede;--white:#fff;
+      --green:#2a6e1a;--blue:#1a3a5c;--amber:#b06a00;--purple:#6a1a8c;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--dark);line-height:1.6;}
+
+    .hdr{background:var(--dark);color:#fff;padding:52px 48px 44px;position:relative;overflow:hidden;}
+    .hdr::before{content:'20';position:absolute;right:36px;top:50%;transform:translateY(-50%);
+      font-family:'Playfair Display',serif;font-size:200px;font-weight:900;
+      color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;}
+    .hdr-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+    .hdr-title{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,52px);font-weight:900;line-height:1.05;}
+    .hdr-sub{font-size:15px;color:rgba(255,255,255,0.45);margin-top:6px;}
+    .hdr-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);}
+    .hdr-chip{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);}
+    .hdr-chip strong{color:#fff;}
+
+    .wrap{max-width:940px;margin:0 auto;padding:0 44px 80px;}
+
+    /* SECTION */
+    .ed{border-top:2.5px solid var(--red);margin-top:44px;}
+    .ed-hdr{display:flex;align-items:center;gap:18px;padding:14px 0 0;cursor:pointer;user-select:none;}
+    .ed-tag{background:var(--dark);color:#fff;font-family:'DM Mono',monospace;font-size:9px;
+      letter-spacing:2.5px;text-transform:uppercase;padding:7px 14px;white-space:nowrap;flex-shrink:0;}
+    .ed-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;flex:1;}
+    .ed-toggle{color:var(--mid);font-size:16px;margin-left:8px;transition:transform .3s;}
+    .ed.closed .ed-toggle{transform:rotate(-90deg);}
+    .ed-body{padding:22px 0 8px;}
+    .ed.closed .ed-body{display:none;}
+
+    /* EXERCISE */
+    .ex{margin-bottom:26px;}
+    .ex-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+    .ex-num{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:10px;
+      font-weight:700;width:22px;height:22px;border-radius:50%;display:inline-flex;
+      align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-ltr{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--red);flex-shrink:0;width:18px;}
+    .ex-instr{font-size:14px;font-weight:500;color:var(--dark);flex:1;}
+    .ex-src{font-family:'DM Mono',monospace;font-size:9px;color:var(--mid);background:var(--grey);
+      padding:3px 9px;border-radius:2px;white-space:nowrap;margin-left:auto;}
+
+    /* INPUT */
+    input[type=text]{border:none;border-bottom:1.5px solid var(--border);background:transparent;
+      font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);padding:2px 5px;outline:none;transition:border-color .2s;}
+    input[type=text]:focus{border-bottom-color:var(--red);}
+    textarea.warea{width:100%;min-height:180px;border:1.5px solid var(--border);border-radius:3px;
+      padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);
+      background:#fff;resize:vertical;outline:none;line-height:1.85;}
+    textarea.warea:focus{border-color:var(--red);}
+
+    /* LISTS */
+    ol.nl{list-style:none;padding:0;margin:8px 0;counter-reset:c;}
+    ol.nl li{display:flex;align-items:baseline;gap:10px;padding:8px 0;
+      border-bottom:1px solid var(--border);font-size:14px;color:var(--mid);counter-increment:c;}
+    ol.nl li::before{content:counter(c);font-family:'DM Mono',monospace;font-size:10px;
+      color:var(--red);font-weight:700;flex-shrink:0;width:18px;}
+    ol.nl li:last-child{border-bottom:none;}
+    ol.alpha{list-style:lower-alpha;padding-left:20px;margin:8px 0;}
+    ol.alpha li{font-size:14px;color:var(--mid);padding:7px 0;border-bottom:1px solid var(--border);}
+    ol.alpha li:last-child{border-bottom:none;}
+
+    /* REVEAL */
+    .rev-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+      background:none;border:1px solid var(--border);color:var(--mid);padding:5px 14px;
+      border-radius:2px;cursor:pointer;margin-top:10px;transition:all .2s;display:inline-block;}
+    .rev-btn:hover{border-color:var(--red);color:var(--red);}
+    .rev-body{display:none;margin-top:10px;}
+    .rev-body.open{display:block;}
+    .ans-box{background:var(--grey);border-left:3px solid var(--red);padding:12px 16px;font-size:13px;}
+    .ans-box .ak{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+    .ans-box ol,.ans-box ul{padding-left:18px;}
+    .ans-box li{padding:3px 0;color:var(--mid);}
+    .ans-box li strong{color:var(--red-dk);}
+    .ans-box p{color:var(--mid);font-size:13px;line-height:1.7;}
+
+    /* NOTE */
+    .note{background:var(--grey);border-left:3px solid var(--border);padding:10px 14px;
+      font-size:13px;color:var(--mid);margin:10px 0;line-height:1.6;}
+    .note.red{border-left-color:var(--red);}
+    .note.blue{border-left-color:var(--blue);}
+    .note.amber{border-left-color:var(--amber);}
+
+    /* WORD BOX */
+    .wbox{border:1.5px solid var(--border);border-radius:3px;padding:10px 14px;margin:10px 0;
+      display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--grey);}
+    .wbox-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--mid);width:100%;margin-bottom:4px;}
+    .chip{background:var(--dark);color:#fff;font-size:12px;font-weight:500;padding:4px 11px;border-radius:2px;white-space:nowrap;}
+
+    /* GRAMMAR BOX */
+    .g-box{border:1px solid var(--border);border-top:2px solid var(--red);border-radius:0 0 3px 3px;overflow:hidden;margin:14px 0;}
+    .g-head{background:var(--dark);color:#fff;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;}
+    .g-head span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+    .g-head .g-ref{font-size:9px;opacity:.5;font-weight:400;}
+    .g-body{background:#fff;padding:16px;}
+    .g-row{display:flex;gap:10px;padding:5px 0;border-bottom:1px dotted var(--border);font-size:14px;align-items:baseline;}
+    .g-row:last-child{border-bottom:none;}
+    .g-plus{color:var(--green);font-weight:700;flex-shrink:0;width:14px;}
+    .g-minus{color:var(--red-dk);font-weight:700;flex-shrink:0;width:14px;}
+    .g-q{color:var(--blue);font-weight:700;flex-shrink:0;width:14px;}
+    .g-ex{font-style:italic;color:var(--blue);}
+    .g-ex strong{font-weight:700;}
+    .g-note{font-size:13px;color:var(--mid);line-height:1.65;margin:6px 0;}
+
+    /* GRAMMAR TABLES */
+    .gram-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0;}
+    .gram-tbl th{background:var(--dark);color:#fff;padding:7px 12px;text-align:left;font-size:11px;}
+    .gram-tbl td{padding:7px 12px;border:1px solid var(--border);color:var(--mid);}
+    .gram-tbl td.subj{font-weight:600;color:var(--dark);}
+    .gram-tbl td.aux{color:var(--red-dk);font-weight:700;}
+    .gram-tbl td.gt{color:var(--blue);font-weight:700;}
+    .gram-tbl td.verb{color:var(--green);font-style:italic;font-weight:600;}
+    .gram-tbl-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0;}
+
+    /* MATCH TABLE */
+    .match-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0;}
+    .match-tbl th{background:var(--dark);color:#fff;padding:8px 14px;text-align:left;font-size:11px;}
+    .match-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--mid);}
+    .match-tbl tr:last-child td{border-bottom:none;}
+    .match-tbl tr:hover td{background:var(--grey);}
+    .match-tbl .qn{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);font-weight:700;width:28px;}
+    .match-tbl .ans-col{width:70px;text-align:center;}
+
+    /* IMAGE PLACEHOLDER */
+    .img-ph{border:2px dashed var(--border);border-radius:3px;background:var(--grey);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      color:var(--mid);text-align:center;padding:20px;}
+    .img-ph .ph-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-top:6px;}
+
+    /* AUDIO PLACEHOLDER */
+    .audio-ph{background:var(--dark);padding:14px 18px;margin:12px 0;display:flex;align-items:center;gap:14px;}
+    .audio-ph .ap-icon{font-size:20px;}
+    .audio-ph .ap-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+    .audio-ph .ap-title{font-size:13px;color:#fff;font-weight:600;}
+
+    /* VIDEO PLACEHOLDER */
+    .vid-ph{position:relative;padding-bottom:56.25%;border-radius:3px;overflow:hidden;background:var(--dark);margin:14px 0;}
+    .vid-ph-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);}
+    .vid-ph-inner .vi-icon{font-size:36px;margin-bottom:8px;}
+    .vid-ph-inner .vi-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;}
+
+    /* TRAVEL CARD (yellow) */
+    .travel-card{background:#fff9e0;border:1px solid #d4bc3a;border-radius:3px;padding:16px;font-size:14px;color:var(--dark);line-height:1.9;}
+    .travel-card .tc-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:#a59837;margin-bottom:10px;}
+
+    /* EMAIL CARDS */
+    .email-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;font-size:14px;margin:10px 0;}
+    .ec-hdr{background:var(--grey);padding:8px 14px;border-bottom:1px solid var(--border);font-size:12px;color:var(--mid);}
+    .ec-body{padding:14px 16px;color:var(--mid);line-height:1.85;}
+    .ec-body p{margin-bottom:8px;}
+    .ec-body p:last-child{margin-bottom:0;}
+    .ec-body .gt{font-weight:700;color:var(--dark);}
+
+    /* REPLY (blue-grey card) */
+    .reply-card{background:#f0f4f8;border:1px solid #b0c4de;border-radius:10px;padding:14px 16px;font-size:14px;color:var(--dark);line-height:1.85;margin:10px 0;max-width:420px;margin-left:auto;}
+
+    /* CHAT BUBBLES */
+    .chat-pair{margin:10px 0;}
+    .chat-from{font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+    .chat-bubble{border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.7;max-width:480px;}
+    .chat-karl .chat-from{color:var(--blue);}
+    .chat-karl .chat-bubble{background:#e8f0f8;color:var(--dark);border-bottom-left-radius:3px;}
+    .chat-alex .chat-from{color:var(--green);text-align:right;}
+    .chat-alex .chat-bubble{background:#e8f5e3;color:var(--dark);margin-left:auto;border-bottom-right-radius:3px;}
+
+    /* TABS */
+    .tabs{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin:14px 0;}
+    .tab-bar{display:flex;background:var(--grey);border-bottom:1px solid var(--border);}
+    .t-btn{flex:1;padding:12px;border:none;background:transparent;cursor:pointer;
+      font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--mid);
+      border-bottom:2.5px solid transparent;transition:all .2s;}
+    .t-btn:hover{background:rgba(0,0,0,0.03);}
+    .t-btn.on{color:var(--dark);background:#fff;border-bottom-color:var(--red);}
+    .t-body{display:none;padding:20px;}
+    .t-body.on{display:block;}
+
+    /* CALENDAR TABLE */
+    .cal-tbl{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0;}
+    .cal-tbl th{background:var(--dark);color:#fff;padding:7px 10px;text-align:center;font-size:10px;letter-spacing:0.5px;}
+    .cal-tbl th:first-child{text-align:left;width:80px;}
+    .cal-tbl td{padding:8px 10px;border:1px solid var(--border);color:var(--mid);vertical-align:top;}
+    .cal-tbl td:first-child{font-weight:700;color:var(--dark);background:var(--grey);font-size:10px;text-transform:uppercase;letter-spacing:0.5px;}
+    .cal-tbl .cancelled{color:var(--red-dk);text-decoration:line-through;font-style:italic;}
+    .cal-tbl .highlight{color:var(--blue);font-weight:600;}
+    .cal-tbl .note-cell{font-size:11px;font-style:italic;color:var(--mid);}
+
+    /* CHECKBOX GRID */
+    .cbx-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 24px;margin:12px 0;}
+    .cbx-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);cursor:pointer;padding:4px 0;}
+    .cbx-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--red);flex-shrink:0;}
+
+    /* DIARY TABLE */
+    .diary-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0;}
+    .diary-tbl th{background:var(--dark);color:#fff;padding:8px 12px;text-align:center;font-size:11px;}
+    .diary-tbl th:first-child{text-align:left;width:90px;}
+    .diary-tbl td{padding:10px 12px;border:1px solid var(--border);color:var(--mid);vertical-align:top;min-height:48px;}
+    .diary-tbl td:first-child{font-weight:600;color:var(--dark);background:var(--grey);font-size:12px;}
+    .diary-tbl .given{color:var(--blue);font-style:italic;font-size:12px;}
+    .diary-tbl input[type=text]{width:100%;}
+
+    /* UNIT DIVIDER */
+    .unit-div{background:var(--dark);color:#fff;padding:24px 44px;margin:56px -44px 0;position:relative;overflow:hidden;}
+    .unit-div::before{content:'5.1';position:absolute;right:32px;top:50%;transform:translateY(-50%);
+      font-family:'Playfair Display',serif;font-size:120px;font-weight:900;color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;}
+    .ud-eye{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+    .ud-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;}
+    .ud-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;}
+
+    /* REVISION SCENARIOS */
+    .scenario-grid{display:grid;gap:10px;margin:14px 0;}
+    .scenario-card{border:1px solid var(--border);border-radius:3px;padding:12px 16px;font-size:14px;}
+    .sc-n{font-family:'DM Mono',monospace;font-size:10px;color:var(--red);font-weight:700;margin-bottom:5px;}
+    .sc-problem{color:var(--mid);margin-bottom:8px;}
+    .sc-input{display:flex;gap:12px;align-items:baseline;color:var(--mid);font-size:13px;}
+    .sc-lbl{font-weight:600;color:var(--dark);flex-shrink:0;width:120px;}
+
+    /* WARM-UP SCENARIOS */
+    .wu-scenarios{display:grid;gap:12px;margin:14px 0;}
+    .wu-s{border:1px solid var(--border);border-radius:3px;padding:14px 16px;}
+    .ws-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--red);font-weight:700;margin-bottom:6px;}
+    .ws-scene{font-size:14px;color:var(--dark);font-weight:500;margin-bottom:10px;line-height:1.5;}
+    .ws-row{display:flex;gap:10px;align-items:baseline;margin-top:6px;}
+    .ws-lbl{font-size:12px;color:var(--mid);font-weight:600;flex-shrink:0;width:180px;}
+
+    /* TWO COL */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;}
+
+    @media(max-width:700px){
+      .wrap{padding:0 16px 60px;}.hdr{padding:32px 20px;}.hdr::before{display:none;}
+      .gram-tbl-wrap,.two-col,.cbx-grid{grid-template-columns:1fr;}
+      .unit-div{margin:40px -16px 0;padding:20px 16px;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-eye">Business Workshop 4 · Unit 5.1</div>
+  <div class="hdr-title">Lesson 20<br><em style="font-style:italic;color:rgba(255,255,255,0.7);">A Business Trip · Trade Shows</em></div>
+  <div class="hdr-sub">BP A2 · Business Workshop 4 "A business trip" + Unit 4 Review</div>
+  <div class="hdr-meta">
+    <div class="hdr-chip"><strong>Revision:</strong>&nbsp; try + -ing · video call phrases</div>
+    <div class="hdr-chip"><strong>New grammar:</strong>&nbsp; be going to (intentions)</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══════════════════════════════════════════
+       REVISION — Lesson 19
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-rev">
+    <div class="ed-hdr" onclick="toggle('s-rev')">
+      <div class="ed-tag">Revision</div>
+      <div class="ed-title">Video Calls — try + -ing · Phrases</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- A: try + -ing suggestions -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">A colleague has a problem on a video call. Write a suggestion using <strong>Try + -ing</strong>.</span>
+        </div>
+        <div class="scenario-grid">
+          <div class="scenario-card">
+            <div class="sc-n">1</div>
+            <div class="sc-problem">"I can't hear you at all."</div>
+            <div class="sc-input"><span class="sc-lbl">Try …</span><input type="text" style="flex:1;"></div>
+          </div>
+          <div class="scenario-card">
+            <div class="sc-n">2</div>
+            <div class="sc-problem">"You're breaking up. The connection is very slow."</div>
+            <div class="sc-input"><span class="sc-lbl">Try …</span><input type="text" style="flex:1;"></div>
+          </div>
+          <div class="scenario-card">
+            <div class="sc-n">3</div>
+            <div class="sc-problem">"The screen is frozen. I can't see anything."</div>
+            <div class="sc-input"><span class="sc-lbl">Try …</span><input type="text" style="flex:1;"></div>
+          </div>
+          <div class="scenario-card">
+            <div class="sc-n">4</div>
+            <div class="sc-problem">"My colleague Petra isn't on the call yet."</div>
+            <div class="sc-input"><span class="sc-lbl">Try …</span><input type="text" style="flex:1;"></div>
+          </div>
+          <div class="scenario-card">
+            <div class="sc-n">5</div>
+            <div class="sc-problem">"I can't see you. Your camera isn't working."</div>
+            <div class="sc-input"><span class="sc-lbl">Try …</span><input type="text" style="flex:1;"></div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-rA')">show answers ▾</button>
+        <div class="rev-body" id="rv-rA">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li>Try <strong>unmuting</strong> your microphone.</li>
+              <li>Try <strong>turning off</strong> your video.</li>
+              <li>Try <strong>hanging</strong> up. / Try <strong>restarting</strong> the call.</li>
+              <li>Try <strong>adding</strong> her to the call.</li>
+              <li>Try <strong>turning on</strong> your video.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- B: fill in the video call dialogue -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Complete the video call dialogue with phrases from the box.</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Phrases</div>
+          <span class="chip">Are you there?</span><span class="chip">Can you hear me?</span>
+          <span class="chip">I can't hear you.</span><span class="chip">It's OK now.</span>
+          <span class="chip">Let's have an audio call.</span><span class="chip">You're breaking up.</span>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:3px;overflow:hidden;margin:14px 0;font-size:14px;">
+          <div style="background:var(--grey);padding:8px 14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--border);">Video call — William &amp; Max</div>
+          <div style="padding:14px 16px;display:grid;gap:10px;">
+            <div style="display:flex;gap:10px;align-items:baseline;"><span style="font-weight:700;color:var(--blue);width:80px;flex-shrink:0;">William:</span><span style="color:var(--mid);">Hi Max! ¹<input type="text" style="width:180px;"></span></div>
+            <div style="display:flex;gap:10px;align-items:baseline;"><span style="font-weight:700;color:var(--red-dk);width:80px;flex-shrink:0;">Max:</span><span style="color:var(--mid);">William! ²<input type="text" style="width:180px;"> Sorry, I was on mute.</span></div>
+            <div style="display:flex;gap:10px;align-items:baseline;"><span style="font-weight:700;color:var(--blue);width:80px;flex-shrink:0;">William:</span><span style="color:var(--mid);">OK. ³<input type="text" style="width:200px;"> The connection isn't very good.</span></div>
+            <div style="display:flex;gap:10px;align-items:baseline;"><span style="font-weight:700;color:var(--red-dk);width:80px;flex-shrink:0;">Max:</span><span style="color:var(--mid);">I know — ⁴<input type="text" style="width:180px;"> The screen is frozen.</span></div>
+            <div style="display:flex;gap:10px;align-items:baseline;"><span style="font-weight:700;color:var(--blue);width:80px;flex-shrink:0;">William:</span><span style="color:var(--mid);">OK, don't worry. ⁵<input type="text" style="width:210px;"></span></div>
+            <div style="display:flex;gap:10px;align-items:baseline;"><span style="font-weight:700;color:var(--red-dk);width:80px;flex-shrink:0;">Max:</span><span style="color:var(--mid);">Good idea. I'll call you back. … ⁶<input type="text" style="width:140px;"> I can hear you!</span></div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-rB')">show answers ▾</button>
+        <div class="rev-body" id="rv-rB">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>Can you hear me?</strong> · 2.<strong>I can't hear you.</strong> · 3.<strong>You're breaking up.</strong> · 4.<strong>Are you there?</strong> · 5.<strong>Let's have an audio call.</strong> · 6.<strong>It's OK now.</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       WARM-UP
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-wu">
+    <div class="ed-hdr" onclick="toggle('s-wu')">
+      <div class="ed-tag">Warm-up</div>
+      <div class="ed-title">Business Trip Chaos — What do you do?</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Read each situation. Answer three quick questions for each one: <em>What is the problem? / What will you do? / What do you say to your colleague?</em></p>
+      <div class="wu-scenarios">
+        <div class="wu-s">
+          <div class="ws-num">Situation 1</div>
+          <div class="ws-scene">You arrive at the airport. Your flight to Tokyo is delayed by 5 hours. You have an online meeting with your team at 10 a.m.</div>
+          <div class="ws-row"><span class="ws-lbl">Problem:</span><input type="text" style="flex:1;"></div>
+          <div class="ws-row"><span class="ws-lbl">I will…</span><input type="text" style="flex:1;"></div>
+          <div class="ws-row"><span class="ws-lbl">I say:</span><input type="text" style="flex:1;"></div>
+        </div>
+        <div class="wu-s">
+          <div class="ws-num">Situation 2</div>
+          <div class="ws-scene">You're at your hotel in Seoul. You start an online meeting with your colleague. Your microphone isn't working.</div>
+          <div class="ws-row"><span class="ws-lbl">Problem:</span><input type="text" style="flex:1;"></div>
+          <div class="ws-row"><span class="ws-lbl">I will…</span><input type="text" style="flex:1;"></div>
+          <div class="ws-row"><span class="ws-lbl">I say:</span><input type="text" style="flex:1;" ></div>
+        </div>
+        <div class="wu-s">
+          <div class="ws-num">Situation 3</div>
+          <div class="ws-scene">You're at the trade fair. You realize your presentation file is on your colleague's laptop in a different city.</div>
+          <div class="ws-row"><span class="ws-lbl">Problem:</span><input type="text" style="flex:1;"></div>
+          <div class="ws-row"><span class="ws-lbl">I will…</span><input type="text" style="flex:1;"></div>
+          <div class="ws-row"><span class="ws-lbl">I say:</span><input type="text" style="flex:1;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       BUSINESS WORKSHOP 4 — A Business Trip
+  ══════════════════════════════════════════ -->
+
+  <!-- Introduction -->
+  <div class="ed" id="s-bw-intro">
+    <div class="ed-hdr" onclick="toggle('s-bw-intro')">
+      <div class="ed-tag">Business Workshop 4</div>
+      <div class="ed-title">Introduction — A Business Trip</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-instr">Read the emails and answer the questions.</span>
+          <span class="ex-src">BP p.46</span>
+        </div>
+        <div class="two-col" style="margin:14px 0;">
+          <div class="email-card">
+            <div class="ec-hdr">To: Alex &nbsp;·&nbsp; From: Rob</div>
+            <div class="ec-body">
+              <p>Hi Alex,</p>
+              <p>There's an important trade fair in Tokyo next week, but I can't go – I'm too busy. Karl from the Seoul office is attending and we need you to help him with our presentation. We also want you to meet customers and make new contacts.</p>
+              <p>I hope you can make the trip.</p>
+              <p>Best regards,<br>Rob</p>
+            </div>
+          </div>
+          <div class="email-card" style="background:#f8fff8;">
+            <div class="ec-hdr" style="background:#e8f5e3;">To: Rob &nbsp;·&nbsp; From: Alex</div>
+            <div class="ec-body">
+              <p>Hi Rob,</p>
+              <p>Thanks. I'd love to go!</p>
+              <p>Best regards,<br>Alex</p>
+            </div>
+          </div>
+        </div>
+        <ol class="nl">
+          <li>Where is the trade fair? <input type="text" style="width:220px;margin-left:8px;"></li>
+          <li>When is it? <input type="text" style="width:220px;margin-left:8px;"></li>
+          <li>Why does someone need to go? <input type="text" style="width:340px;margin-left:8px;"></li>
+          <li>Who is going? <input type="text" style="width:220px;margin-left:8px;"></li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-bw1')">show answers ▾</button>
+        <div class="rev-body" id="rv-bw1">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>Tokyo</strong></li>
+              <li><strong>Next week</strong></li>
+              <li>To <strong>help Karl with the presentation</strong>, meet customers, and make new contacts.</li>
+              <li><strong>Alex</strong> (and Karl from the Seoul office)</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Arrangements -->
+  <div class="ed" id="s-bw-arr">
+    <div class="ed-hdr" onclick="toggle('s-bw-arr')">
+      <div class="ed-tag">Business Workshop 4</div>
+      <div class="ed-title">Arrangements</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">2</span>
+          <span class="ex-instr">Work in pairs. Student A asks the questions (1–5). Student B looks at the travel arrangements and answers.</span>
+          <span class="ex-src">BP p.46</span>
+        </div>
+        <div class="tabs">
+          <div class="tab-bar">
+            <button class="t-btn on" onclick="tab(this,'t-arr','A')">Student A — Questions</button>
+            <button class="t-btn" onclick="tab(this,'t-arr','B')">Student B — Arrangements</button>
+          </div>
+          <div class="t-body on" id="t-arr-A">
+            <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Ask Student B these questions. Write their answers.</p>
+            <ol class="nl">
+              <li>When are you arriving? <br><input type="text" style="width:280px;margin-top:5px;"></li>
+              <li>What are you doing Monday evening? <br><input type="text" style="width:280px;margin-top:5px;"></li>
+              <li>Where are you staying? <br><input type="text" style="width:280px;margin-top:5px;"></li>
+              <li>What are you doing on Tuesday? <br><input type="text" style="width:280px;margin-top:5px;"></li>
+              <li>When are you departing? <br><input type="text" style="width:280px;margin-top:5px;"></li>
+            </ol>
+          </div>
+          <div class="t-body" id="t-arr-B">
+            <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Look at the travel arrangements and answer Student A's questions.</p>
+            <div class="travel-card">
+              <div class="tc-title">Tokyo Technology Manufacturing Trade Fair</div>
+              <div style="display:grid;gap:4px;">
+                <div><strong>Arrive:</strong> Monday 4 April</div>
+                <div><strong>Monday evening:</strong> Have dinner with Ms Kimura</div>
+                <div><strong>Hotel:</strong> Hotel City Park (stay two nights)</div>
+                <div><strong>Tuesday (a.m.):</strong> Meet Karl and practise presentation</div>
+                <div><strong>Depart:</strong> Friday 8 April</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-bw2')">show answers ▾</button>
+        <div class="rev-body" id="rv-bw2">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li><strong>Monday 4 April</strong></li>
+              <li><strong>Having dinner with Ms Kimura</strong></li>
+              <li><strong>Hotel City Park (two nights)</strong></li>
+              <li><strong>Meeting Karl and practising the presentation (in the morning)</strong></li>
+              <li><strong>Friday 8 April</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- A change in plans -->
+  <div class="ed" id="s-bw-change">
+    <div class="ed-hdr" onclick="toggle('s-bw-change')">
+      <div class="ed-tag">Business Workshop 4</div>
+      <div class="ed-title">A Change in Plans</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr" style="width:auto;font-size:13px;font-weight:700;">3</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">🎧 4.06 &nbsp;Karl is now at the airport waiting to depart for Tokyo. Listen. What problem does he have?</span>
+          <span class="ex-src">BP p.46</span>
+        </div>
+        
+            <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004870&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_4_06-12" title="BP_A2_CB_Tk_4_06" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_4_06</a></div>
+        
+        <input type="text" style="width:100%;max-width:480px;margin-top:8px;" placeholder="Karl's problem…">
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">🎧 4.07 &nbsp;An airline employee is explaining the arrangement to Karl. Listen. When is he arriving in Tokyo?</span>
+        </div>
+        <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004873&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_4_07-13" title="BP_A2_CB_Tk_4_07" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_4_07</a></div>
+        <input type="text" style="width:100%;max-width:480px;margin-top:8px;" placeholder="Karl is arriving in Tokyo on…">
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Write a message from Karl to Alex to explain the situation.</span>
+        </div>
+        <textarea class="warea" style="min-height:140px;max-width:480px;" placeholder="Hi Alex,&#10;&#10;Bad news — my flight is…&#10;&#10;Best,&#10;Karl"></textarea>
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">D</span>
+          <span class="ex-instr">Read Alex's reply to Karl's message. What does Alex want to do?</span>
+        </div>
+        <div class="reply-card">
+          Hi. Thanks for the message about your flight. That's bad luck. Can we have a quick online meeting this evening, when you get to your hotel? There's some new information that I want to discuss with you. And we need to arrange a new time to practise our presentation. Thanks!
+        </div>
+        <div style="margin-top:10px;"><input type="text" style="width:100%;max-width:480px;" placeholder="Alex wants to…"></div>
+        <button class="rev-btn" onclick="reveal('rv-3d')">show answer ▾</button>
+        <div class="rev-body" id="rv-3d">
+          <div class="ans-box"><div class="ak">Answer</div>
+            <p>Alex wants to <strong>have a quick online meeting</strong> that evening and <strong>arrange a new time to practise the presentation</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- An update (4A, 4B, 4C + 5) -->
+  <div class="ed" id="s-bw-update">
+    <div class="ed-hdr" onclick="toggle('s-bw-update')">
+      <div class="ed-tag">Business Workshop 4</div>
+      <div class="ed-title">An Update — Online Meeting</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- 4A -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr" style="width:auto;font-size:13px;font-weight:700;">4</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">🎧 4.08 &nbsp;Listen to the beginning of Alex and Karl's online meeting. Answer the questions.</span>
+          <span class="ex-src">BP p.46</span>
+        </div>
+        <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2218004852&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/english-listenings" title="English Listenings" target="_blank" style="color: #cccccc; text-decoration: none;">English Listenings</a> · <a href="https://soundcloud.com/english-listenings/bp_a2_cb_tk_4_08-14" title="BP_A2_CB_Tk_4_08" target="_blank" style="color: #cccccc; text-decoration: none;">BP_A2_CB_Tk_4_08</a></div>
+        <ol class="nl" style="margin-top:10px;">
+          <li>What problem does Alex have? <input type="text" style="width:280px;margin-left:8px;"></li>
+          <li>What problem does Karl have? <input type="text" style="width:280px;margin-left:8px;"></li>
+        </ol>
+
+        <button class="rev-btn" onclick="reveal('rv-33d')">show answer ▾</button>
+        <div class="rev-body" id="rv-33d">
+          <div class="ans-box"><div class="ak">Answer</div>
+            <p>1. Alex cant hear Karl -> connection is not very good <br>
+            2. Karl can hear Alex but he cant see him because the screen is frozen and the internet connection is bad</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4B -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">What do you think Alex suggests for each problem? Complete the sentences with your ideas.</span>
+        </div>
+        <div style="display:grid;gap:8px;margin:10px 0;">
+          <div style="font-size:14px;color:var(--mid);">1. <strong style="color:var(--dark);">Karl, try …</strong> <input type="text" style="width:280px;"></div>
+          <div style="font-size:14px;color:var(--mid);">2. <strong style="color:var(--dark);">Try …</strong> <input type="text" style="width:280px;"> <strong style="color:var(--dark);">, Karl.</strong></div>
+        </div>
+      </div>
+
+      <!-- 4C — Student A/B with calendars -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Continue the call. Alex and Karl need to arrange a meeting to practise their presentation. Look at your calendar and find a free time.</span>
+          <span class="ex-src">BP p.46 · pp.121 &amp; 123</span>
+        </div>
+        <div class="note amber" style="margin-bottom:12px;font-size:13px;">
+          <strong>Remember:</strong> Your presentation is on <strong>Thursday evening at 6:00 p.m.</strong> — you need to practise together before then.
+        </div>
+        <div style="border:1px solid var(--border);border-radius:3px;padding:12px 16px;margin:10px 0;font-size:14px;color:var(--mid);background:var(--grey);">
+          <span style="font-weight:600;color:var(--dark);">Continue the conversation:</span><br>
+          <em>Alex: That's much better! I can hear you now. We need to arrange a meeting about our presentation.</em><br>
+          <em>Karl: Yes, we need to practise. I'm arriving on …</em>
+        </div>
+
+        <div class="tabs">
+          <div class="tab-bar">
+            <button class="t-btn on" onclick="tab(this,'t-4c','A')">Student A — Alex (p.123)</button>
+            <button class="t-btn" onclick="tab(this,'t-4c','B')">Student B — Karl (p.121)</button>
+          </div>
+
+          <div class="t-body on" id="t-4c-A">
+            <p style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px;">Student A: Alex — Look at your calendar. Find a time you can both meet.</p>
+            <table class="cal-tbl">
+              <thead>
+                <tr><th></th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>MORNING</td>
+                  <td>Flight AF212,<br>arrives 11:00 a.m.</td>
+                  <td><span class="cancelled">Meeting with Karl</span><br><span style="color:var(--red-dk);font-size:11px;font-weight:700;">CANCELLED</span></td>
+                  <td>Meet customers</td>
+                  <td></td>
+                  <td>Flight AF799,<br>departs 9:30 a.m.</td>
+                </tr>
+                <tr>
+                  <td>AFTERNOON</td>
+                  <td></td>
+                  <td>Meet customers</td>
+                  <td></td>
+                  <td>Lunch with customers</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>EVENING</td>
+                  <td>Dinner</td>
+                  <td></td>
+                  <td></td>
+                  <td><span class="highlight">Give company presentation with Karl 6:00 p.m.</span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td style="font-size:10px;">HOTEL<br>(4 nights)</td>
+                  <td colspan="4"><span style="color:var(--blue);">Hotel City Park</span></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="note blue" style="margin-top:8px;font-size:13px;">Based on both calendars, when can you meet to practise? Write the time you agree on: <input type="text" style="width:220px;margin-left:8px;"></div>
+            <button class="rev-btn" onclick="reveal('rv-4c')">show best option ▾</button>
+            <div class="rev-body" id="rv-4c">
+              <div class="ans-box"><div class="ak">Best option</div>
+                <p><strong>Wednesday evening</strong> — both Alex and Karl are free. (Alex is free all afternoon/evening Wednesday; Karl is free Wednesday evening after attending a talk in the afternoon.)</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-body" id="t-4c-B">
+            <p style="font-size:13px;font-weight:600;color:var(--red-dk);margin-bottom:12px;">Student B: Karl — Look at your calendar. Find a time you can both meet.</p>
+            <table class="cal-tbl">
+              <thead>
+                <tr><th></th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>MORNING</td>
+                  <td></td>
+                  <td>Flight EX499,<br>arrives midday</td>
+                  <td></td>
+                  <td>Meet customers</td>
+                  <td>Flight EX376,<br>departs 8:30 a.m.</td>
+                </tr>
+                <tr>
+                  <td>AFTERNOON</td>
+                  <td></td>
+                  <td></td>
+                  <td>Attend a talk</td>
+                  <td>Attend a talk</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>EVENING</td>
+                  <td><span class="cancelled">Flight EX499, arrives 9:00 p.m.</span><br><span style="color:var(--red-dk);font-size:11px;font-weight:700;">CANCELLED</span></td>
+                  <td>Attend a networking event</td>
+                  <td></td>
+                  <td><span class="highlight">Give company presentation with Alex 6:00 p.m.</span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td style="font-size:10px;">HOTEL<br>(4 nights)</td>
+                  <td colspan="4"></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex.5 — Text messages -->
+      <div style="border-top:2px dashed var(--border);margin:28px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">An update</p>
+      </div>
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">5</span>
+          <span class="ex-instr">It's Tuesday morning. Alex is at his hotel in Tokyo. Karl is at the airport in Seoul. Use the information to complete the text messages.</span>
+          <span class="ex-src">BP p.46</span>
+        </div>
+        <div class="two-col" style="margin:12px 0;">
+          <div class="note" style="line-height:1.9;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Karl — at the airport</div>
+            wait for flight · have breakfast · plan our presentation · arrange lunch meetings with customers
+          </div>
+          <div class="note" style="line-height:1.9;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Alex — at the hotel</div>
+            have breakfast · write emails · write some of our presentation
+          </div>
+        </div>
+        <div class="chat-pair">
+          <div class="chat-karl">
+            <div class="chat-from">Karl</div>
+            <div class="chat-bubble">I'm at the airport now. I'm waiting for <input type="text" style="width:150px;">. <input type="text" style="width:240px;margin-top:4px;display:block;"><br>What are you doing?</div>
+          </div>
+        </div>
+        <div class="chat-pair" style="margin-top:12px;">
+          <div class="chat-alex">
+            <div class="chat-from">Alex</div>
+            <div class="chat-bubble" style="text-align:left;">I'm <input type="text" style="width:100%;max-width:320px;margin-top:4px;display:block;"><br>Let me know when you arrive.</div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-5')">show answers ▾</button>
+        <div class="rev-body" id="rv-5">
+          <div class="ans-box"><div class="ak">Possible answers</div>
+            <p><strong>Karl:</strong> "I'm waiting for <strong>my flight</strong>. <strong>I'm having breakfast and planning our presentation.</strong>"</p>
+            <p style="margin-top:6px;"><strong>Alex:</strong> "I'm <strong>having breakfast and writing some emails. I'm also writing some of our presentation</strong>."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+<!-- ══════════════════════════════════════════
+     REVISION — Unit 4 "Travelling for work"
+══════════════════════════════════════════ -->
+<div class="ed" id="s-rev4">
+    <div class="ed-hdr" onclick="toggle('s-rev4')">
+      <div class="ed-tag">Revision</div>
+      <div class="ed-title">Unit 4 — Travelling for Work</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+  
+      <!-- 4.1 Vocabulary — match verbs with phrases -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-instr">Match the verbs (1–4) with the phrases (a–d).</span>
+          <span class="ex-src">p.19</span>
+        </div>
+        <div class="two-col">
+          <ol class="nl">
+            <li>book</li><li>go</li><li>rent</li><li>stay</li>
+          </ol>
+          <ol class="alpha">
+            <li>in an apartment</li><li>by coach</li><li>a car</li><li>a flight</li>
+          </ol>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:var(--mid);">
+          <span>1 <input type="text" style="width:36px;text-align:center;"></span>
+          <span>2 <input type="text" style="width:36px;text-align:center;"></span>
+          <span>3 <input type="text" style="width:36px;text-align:center;"></span>
+          <span>4 <input type="text" style="width:36px;text-align:center;"></span>
+        </div>
+        <button class="rev-btn" onclick="reveal('u4-1')">show answers ▾</button>
+        <div class="rev-body" id="u4-1">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1–<strong>d</strong> (book a flight) · 2–<strong>b</strong> (go by coach) · 3–<strong>c</strong> (rent a car) · 4–<strong>a</strong> (stay in an apartment)</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Choose the correct option -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">2</span>
+          <span class="ex-instr">Choose the correct option.</span>
+        </div>
+        <div class="note" style="line-height:1.9;">
+          When Lorna travels for work, she usually <sup>1</sup><em>goes / stays</em> at a hotel. When she goes to Paris, she never goes by <sup>2</sup><em>plane / flight</em>, she <sup>3</sup><em>books / rents</em> a train ticket from London to Paris. She sometimes <sup>4</sup><em>books / goes</em> by coach.<br><br>
+          Lorna isn't going to Madrid by <sup>5</sup><em>plane / train</em>. She's flying. When she goes to Madrid, Lorna sometimes <sup>6</sup><em>goes by / rents</em> a car. She goes to the airport <sup>7</sup><em>in / by</em> train. She's <sup>8</sup><em>renting / staying</em> an apartment in Madrid in July.
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;font-size:13px;color:var(--mid);">
+          <span>1 <input type="text" style="width:70px;"></span>
+          <span>2 <input type="text" style="width:70px;"></span>
+          <span>3 <input type="text" style="width:70px;"></span>
+          <span>4 <input type="text" style="width:70px;"></span>
+          <span>5 <input type="text" style="width:70px;"></span>
+          <span>6 <input type="text" style="width:70px;"></span>
+          <span>7 <input type="text" style="width:70px;"></span>
+          <span>8 <input type="text" style="width:70px;"></span>
+        </div>
+        <button class="rev-btn" onclick="reveal('u4-2')">show answers ▾</button>
+        <div class="rev-body" id="u4-2">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>stays</strong> · 2.<strong>plane</strong> · 3.<strong>books</strong> · 4.<strong>goes</strong> · 5.<strong>train</strong> · 6.<strong>rents</strong> · 7.<strong>by</strong> · 8.<strong>staying</strong></p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- 4.2 Airports and train stations -->
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">3</span>
+          <span class="ex-instr">Complete the sentences with the words in the box.</span>
+          <span class="ex-src">p.19</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Words</div>
+          <span class="chip">arrived</span><span class="chip">cancelled</span><span class="chip">change</span>
+          <span class="chip">left</span><span class="chip">platform</span><span class="chip">stops</span>
+        </div>
+        <ol class="nl" style="margin-top:10px;">
+          <li>Fiona <input type="text" style="width:160px;"> the hotel at 8 o'clock.</li>
+          <li>Karl <input type="text" style="width:160px;"> at the airport at 9.30 p.m.</li>
+          <li>Our flight to Berlin was <input type="text" style="width:160px;">.</li>
+          <li>The 6.45 train to Rome leaves from <input type="text" style="width:160px;"> 3.</li>
+          <li>Anya had to <input type="text" style="width:160px;"> trains at Edinburgh Waverley station.</li>
+          <li>The slow train <input type="text" style="width:160px;"> at every station.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('u4-3')">show answers ▾</button>
+        <div class="rev-body" id="u4-3">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol><li><strong>left</strong></li><li><strong>arrived</strong></li><li><strong>cancelled</strong></li>
+            <li><strong>platform</strong></li><li><strong>change</strong></li><li><strong>stops</strong></li></ol>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Grammar divider -->
+      <div style="border-top:2px dashed var(--border);margin:24px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Grammar — Talking About Arrangements</p>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">5</span>
+          <span class="ex-instr">Complete the questions with the correct form of <em>be</em>.</span>
+          <span class="ex-src">p.20</span>
+        </div>
+        <ol class="nl">
+          <li>Where <input type="text" style="width:90px;"> you working tomorrow?</li>
+          <li>When <input type="text" style="width:90px;"> Dan flying to Glasgow?</li>
+          <li>How <input type="text" style="width:90px;"> we getting to the airport?</li>
+          <li><input type="text" style="width:90px;"> Marek staying at an apartment?</li>
+          <li><input type="text" style="width:90px;"> Karl and Heidi visiting the office next week?</li>
+          <li><input type="text" style="width:90px;"> I meeting you next week?</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('u4-5')">show answers ▾</button>
+        <div class="rev-body" id="u4-5">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>are</strong> · 2.<strong>is</strong> · 3.<strong>are</strong> · 4.<strong>Is</strong> · 5.<strong>Are</strong> · 6.<strong>Am</strong></p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">6</span>
+          <span class="ex-instr">Match the questions in Exercise 5 (1–6) with the responses (a–f).</span>
+        </div>
+        <div class="two-col">
+          <ol class="alpha">
+            <li>Yes, he is.</li><li>Yes, you are.</li><li>In the office in Brussels.</li>
+          </ol>
+          <ol class="alpha" start="4">
+            <li>By train.</li><li>No, they aren't.</li><li>On Tuesday next week.</li>
+          </ol>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:var(--mid);">
+          <span>1 <input type="text" style="width:36px;text-align:center;"></span>
+          <span>2 <input type="text" style="width:36px;text-align:center;"></span>
+          <span>3 <input type="text" style="width:36px;text-align:center;"></span>
+          <span>4 <input type="text" style="width:36px;text-align:center;"></span>
+          <span>5 <input type="text" style="width:36px;text-align:center;"></span>
+          <span>6 <input type="text" style="width:36px;text-align:center;"></span>
+        </div>
+        <button class="rev-btn" onclick="reveal('u4-6')">show answers ▾</button>
+        <div class="rev-body" id="u4-6">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1–<strong>c</strong> · 2–<strong>f</strong> · 3–<strong>d</strong> · 4–<strong>a</strong> · 5–<strong>e</strong> · 6–<strong>b</strong></p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">7</span>
+          <span class="ex-instr">Write sentences about arrangements.</span>
+        </div>
+        <ol class="nl">
+          <li>we / hire / a car for a week <input type="text" style="width:100%;max-width:340px;margin-left:8px;"></li>
+          <li>Wendy and Robert / not fly / to Hamburg tomorrow <input type="text" style="width:100%;max-width:340px;margin-left:8px;"></li>
+          <li>I / not stay / in a hotel / next week <input type="text" style="width:100%;max-width:340px;margin-left:8px;"></li>
+          <li>Mauricio / not go / to the office on Monday <input type="text" style="width:100%;max-width:340px;margin-left:8px;"></li>
+          <li>you / visit / the factory next month <input type="text" style="width:100%;max-width:340px;margin-left:8px;"></li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('u4-7')">show answers ▾</button>
+        <div class="rev-body" id="u4-7">
+          <div class="ans-box"><div class="ak">Possible answers</div>
+            <ol>
+              <li>We're hiring a car for a week.</li>
+              <li>Wendy and Robert aren't flying to Hamburg tomorrow.</li>
+              <li>I'm not staying in a hotel next week.</li>
+              <li>Mauricio isn't going to the office on Monday.</li>
+              <li>Are you visiting the factory next month?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">8</span>
+          <span class="ex-instr">Choose the correct option.</span>
+        </div>
+        <div style="display:grid;gap:8px;font-size:14px;color:var(--mid);">
+          <div><strong style="color:var(--blue);">A:</strong> <em>Am / Is</em> Pavel preparing a new price list? <input type="text" style="width:90px;"><br><strong style="color:var(--green);">B:</strong> Yes, he <em>is / are</em>. <input type="text" style="width:90px;"></div>
+          <div><strong style="color:var(--blue);">A:</strong> <em>Am / Are</em> the team giving their presentation this morning? <input type="text" style="width:90px;"><br><strong style="color:var(--green);">B:</strong> No, they <em>isn't / aren't</em>. <input type="text" style="width:90px;"></div>
+          <div><strong style="color:var(--blue);">A:</strong> What <em>am / are</em> you having problems with? <input type="text" style="width:90px;"><br><strong style="color:var(--green);">B:</strong> We <em>'m / 're</em> having problems with our computers. <input type="text" style="width:90px;"></div>
+          <div><strong style="color:var(--blue);">A:</strong> <em>Are / Is</em> you planning your talk for the sales meeting? <input type="text" style="width:90px;"><br><strong style="color:var(--green);">B:</strong> Yes, I <em>'m / 're</em> planning it right now. <input type="text" style="width:90px;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('u4-8')">show answers ▾</button>
+        <div class="rev-body" id="u4-8">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1. Is / is · 2. Are / aren't · 3. are / 're · 4. Are / 'm</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">9</span>
+          <span class="ex-instr">Complete the sentences with the correct form of the verbs in brackets.</span>
+        </div>
+        <ol class="nl">
+          <li>Rita <input type="text" style="width:160px;"> (write) her report at the moment.</li>
+          <li>The team <input type="text" style="width:160px;"> (not deal) with the problem today.</li>
+          <li>Right now, Liz <input type="text" style="width:160px;"> (talk) to a new supplier.</li>
+          <li>Hans <input type="text" style="width:160px;"> (have) problems with the delivery at the moment.</li>
+          <li>The meeting <input type="text" style="width:160px;"> (go) very well.</li>
+          <li>Things <input type="text" style="width:160px;"> (not go) well right now.</li>
+          <li>The Sales Managers <input type="text" style="width:160px;"> (prepare) for the conference.</li>
+          <li>They <input type="text" style="width:160px;"> (not repair) the phones today.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('u4-9')">show answers ▾</button>
+        <div class="rev-body" id="u4-9">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol><li><strong>is writing</strong></li><li><strong>isn't dealing</strong></li><li><strong>is talking</strong></li>
+            <li><strong>is having</strong></li><li><strong>is going</strong></li><li><strong>aren't going</strong></li>
+            <li><strong>are preparing</strong></li><li><strong>aren't repairing</strong></li></ol>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Reading & Listening divider -->
+      <div style="border-top:2px dashed var(--border);margin:24px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Reading and Listening — Dealing with Delays</p>
+      </div>
+  
+      
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">12</span>
+          <span class="ex-instr">Complete the text messages with <em>will</em> and the correct verb in the box.</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Verbs</div>
+          <span class="chip">be (x2)</span><span class="chip">call</span><span class="chip">see</span><span class="chip">stay</span>
+        </div>
+        <div class="two-col" style="margin-top:12px;">
+          <div class="email-card">
+            <div class="ec-hdr">Rob</div>
+            <div class="ec-body">
+              <p>Hi Gina,<br>My train to Edinburgh is delayed because of a technical problem. Sorry, but I <input type="text" style="width:150px;"> about twenty minutes late.<br>Rob</p>
+            </div>
+          </div>
+          <div class="email-card">
+            <div class="ec-hdr">Alex</div>
+            <div class="ec-body">
+              <p>Hello Katya,<br>I'm in the airport. My flight to Geneva is delayed by half an hour. I'm sorry but I <input type="text" style="width:150px;"> late for the presentation. I <input type="text" style="width:150px;"> when I arrive.<br>Alex</p>
+            </div>
+          </div>
+          <div class="email-card">
+            <div class="ec-hdr">Val</div>
+            <div class="ec-body">
+              <p>Hi George,<br>I'm sorry, but my flight is cancelled. <input type="text" style="width:150px;"> at a hotel in London tonight and fly to Toronto tomorrow.<br>Val</p>
+            </div>
+          </div>
+          <div class="email-card">
+            <div class="ec-hdr">Mina</div>
+            <div class="ec-body">
+              <p>Kamal,<br>Did you hear the announcement? Our flight is now departing from gate 4, not from gate 6. <input type="text" style="width:150px;"> you there!<br>Mina</p>
+            </div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('u4-12')">show answers ▾</button>
+        <div class="rev-body" id="u4-12">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>'ll be</strong> · 2.<strong>'ll be</strong> · 3.<strong>'ll call</strong> · 4.<strong>'ll stay</strong> · 5.<strong>'ll see</strong></p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Writing divider -->
+      <div style="border-top:2px dashed var(--border);margin:24px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Writing — An Update Email</p>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">13</span>
+          <span class="ex-instr">Match the sentence halves.</span>
+          <span class="ex-src">p.22</span>
+        </div>
+        <div class="two-col">
+          <ol class="nl">
+            <li>How are</li><li>I'm writing to</li><li>Here's an update</li><li>Everything's going</li>
+            <li>I hope you're</li><li>All the</li><li>Speak</li><li>Best</li>
+          </ol>
+          <ol class="alpha">
+            <li>having a good week.</li><li>wishes.</li><li>update you.</li><li>on what we're doing today.</li>
+            <li>things going?</li><li>best.</li><li>well here.</li><li>soon.</li>
+          </ol>
+        </div>
+        <button class="rev-btn" onclick="reveal('u4-13')">show answers ▾</button>
+        <div class="rev-body" id="u4-13">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1–e · 2–c · 3–h · 4–g · 5–a · 6–f · 7–d · 8–b</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Choose the correct option.</span>
+        </div>
+        <div class="email-card">
+          <div class="ec-hdr">Luis → Susana</div>
+          <div class="ec-body">
+            <p>Hello Susana,<br>I hope you're having a good week in the office in Buenos Aires.<br>
+            I <sup>1</sup><em>write / 'm writing</em> to give you an update on my work and my team. At the moment, we are <sup>2</sup><em>having / planning</em> our talk for the sales meeting tomorrow.<br>
+            Marcos is writing a <sup>3</sup><em>figure / report</em> on our new products, and Silvia is <sup>4</sup><em>dealing / preparing</em> the new price list, but she <sup>5</sup><em>is / isn't</em> finalising it today because she needs more information from our suppliers.<br>
+            Our meeting with clients in Santiago last week <sup>6</sup><em>is / was</em> good, and we are expecting to <sup>7</sup><em>give / hit</em> our sales target this month.<br>
+            We're having problems with <sup>8</sup><em>a / some</em> missing data from some markets. I'm dealing <sup>9</sup><em>with / for</em> our supplier in Bolivia about that. We need some information on one of our new products, but we're <sup>10</sup><em>dealing / expecting</em> it this afternoon.<br>
+            Speak soon.<br>All the best,<br>Luis</p>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px;font-size:13px;color:var(--mid);">
+          <span>1 <input type="text" style="width:70px;"></span><span>2 <input type="text" style="width:70px;"></span>
+          <span>3 <input type="text" style="width:70px;"></span><span>4 <input type="text" style="width:70px;"></span>
+          <span>5 <input type="text" style="width:70px;"></span><span>6 <input type="text" style="width:70px;"></span>
+          <span>7 <input type="text" style="width:70px;"></span><span>8 <input type="text" style="width:70px;"></span>
+          <span>9 <input type="text" style="width:70px;"></span><span>10 <input type="text" style="width:70px;"></span>
+        </div>
+        <button class="rev-btn" onclick="reveal('u4-13b')">show answers ▾</button>
+        <div class="rev-body" id="u4-13b">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.'m writing · 2.planning · 3.report · 4.preparing · 5.isn't · 6.was · 7.hit · 8.some · 9.with · 10.expecting</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">C</span>
+          <span class="ex-instr">Use the information to write an update email to your boss, Maja, in Warsaw.</span>
+        </div>
+        <div class="note blue" style="line-height:1.9;">
+          • customer meetings in Lyon last week — good &nbsp;·&nbsp; • getting new orders but not hitting targets &nbsp;·&nbsp; • need more sales<br>
+          • Carl — writing a report on the Lyon meeting this afternoon &nbsp;·&nbsp; • Hilda — dealing with the paperwork for the job in Lille<br>
+          • You, Carl and Hilda — preparing for meetings in Toulouse and Montpellier next week
+        </div>
+        <textarea class="warea" style="min-height:220px;max-width:560px;margin-top:10px;" placeholder="Dear Maja,&#10;&#10;I'm writing…"></textarea>
+      </div>
+  
+      <!-- Functional language divider -->
+      <div style="border-top:2px dashed var(--border);margin:24px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Functional Language — Problems with Teleconferencing</p>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">14</span>
+          <span class="ex-instr">Put the conversation into the correct order.</span>
+          <span class="ex-src">p.23</span>
+        </div>
+        
+        <div style="display:grid;gap:8px;margin-top:10px;font-size:14px;color:var(--mid);">
+          <div style="display:flex;gap:10px;align-items:center;"><input type="text" style="width:36px;text-align:center;"><span><strong style="color:var(--red);">a</strong> Sorry, my camera isn't working.</span></div>
+          <div style="display:flex;gap:10px;align-items:center;"><input type="text" style="width:36px;text-align:center;"><span><strong style="color:var(--red);">b</strong> Hello Rafik! Are you there?</span></div>
+          <div style="display:flex;gap:10px;align-items:center;"><input type="text" style="width:36px;text-align:center;"><span><strong style="color:var(--red);">c</strong> Oh, OK. Let's have an audio call.</span></div>
+          <div style="display:flex;gap:10px;align-items:center;"><input type="text" style="width:36px;text-align:center;"><span><strong style="color:var(--red);">d</strong> Good morning, Rafik. I can't see you.</span></div>
+          <div style="display:flex;gap:10px;align-items:center;"><input type="text" style="width:36px;text-align:center;"><span><strong style="color:var(--red);">e</strong> Yes, I'm here. Good morning, Emma.</span></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('u4-14')">show answers ▾</button>
+        <div class="rev-body" id="u4-14">
+          <div class="ans-box"><div class="ak">Order</div>
+            <p><strong>b → e → d → a → c</strong></p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">15</span>
+          <span class="ex-instr">Put the words in the correct order to make sentences about teleconferencing.</span>
+        </div>
+        <ol class="nl">
+          <li><em style="color:var(--mid);">unmuting / try / microphone / your / .</em><br><input type="text" style="width:100%;max-width:380px;margin-top:5px;"></li>
+          <li><em style="color:var(--mid);">frozen / the / is / screen / .</em><br><input type="text" style="width:100%;max-width:380px;margin-top:5px;"></li>
+          <li><em style="color:var(--mid);">internet / sorry, / is / my / slow / connection / .</em><br><input type="text" style="width:100%;max-width:380px;margin-top:5px;"></li>
+          <li><em style="color:var(--mid);">off / try / your / turning / video / .</em><br><input type="text" style="width:100%;max-width:380px;margin-top:5px;"></li>
+          <li><em style="color:var(--mid);">screen / sharing / now / I'm / my / .</em><br><input type="text" style="width:100%;max-width:380px;margin-top:5px;"></li>
+          <li><em style="color:var(--mid);">adding / I'm / the / Fiona / call / to / .</em><br><input type="text" style="width:100%;max-width:380px;margin-top:5px;"></li>
+          <li><em style="color:var(--mid);">on / are / mute / you / ?</em><br><input type="text" style="width:100%;max-width:380px;margin-top:5px;"></li>
+          <li><em style="color:var(--mid);">me / try / back / calling / .</em><br><input type="text" style="width:100%;max-width:380px;margin-top:5px;"></li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('u4-15')">show answers ▾</button>
+        <div class="rev-body" id="u4-15">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol>
+              <li>Try unmuting your microphone.</li>
+              <li>The screen is frozen.</li>
+              <li>Sorry, my internet connection is slow.</li>
+              <li>Try turning off your video.</li>
+              <li>I'm sharing my screen now.</li>
+              <li>I'm adding Fiona to the call.</li>
+              <li>Are you on mute?</li>
+              <li>Try calling me back.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+  
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">16</span>
+          <span class="ex-instr">Complete the conversation with the phrases in the box. Then listen and check.</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Phrases</div>
+          <span class="chip">breaking up</span><span class="chip">can't hear</span><span class="chip">hang up</span><span class="chip">no problem</span>
+          <span class="chip">on mute</span><span class="chip">see me</span><span class="chip">the connection</span><span class="chip">you repeat that</span>
+        </div>
+        <div class="chat-pair" style="margin-top:12px;">
+          <div class="chat-karl"><div class="chat-from">Karl</div><div class="chat-bubble">Hello Gina, can you <sup>1</sup><input type="text" style="width:130px;">?</div></div>
+        </div>
+        <div class="chat-pair"><div class="chat-alex"><div class="chat-from">Gina</div><div class="chat-bubble">Hello? Hello, Karl? I can see you, but I <sup>2</sup><input type="text" style="width:130px;"> you.</div></div></div>
+        <div class="chat-pair"><div class="chat-karl"><div class="chat-from">Karl</div><div class="chat-bubble">Oh, sorry. I was <sup>3</sup><input type="text" style="width:130px;">. Can you hear me now?</div></div></div>
+        <div class="chat-pair"><div class="chat-alex"><div class="chat-from">Gina</div><div class="chat-bubble">Hello? Hello Karl. Are you there?</div></div></div>
+        <div class="chat-pair"><div class="chat-karl"><div class="chat-from">Karl</div><div class="chat-bubble">Sorry, Gina. <sup>4</sup><input type="text" style="width:130px;"> isn't very good.</div></div></div>
+        <div class="chat-pair"><div class="chat-alex"><div class="chat-from">Gina</div><div class="chat-bubble">Karl? Hello? Can you hear me now? We need to talk about the sales figures.</div></div></div>
+        <div class="chat-pair"><div class="chat-karl"><div class="chat-from">Karl</div><div class="chat-bubble">Gina, you're <sup>5</sup><input type="text" style="width:130px;">. Hang up and I'll call you back.</div></div></div>
+        <div class="chat-pair"><div class="chat-alex"><div class="chat-from">Gina</div><div class="chat-bubble">Sorry, can <sup>6</sup><input type="text" style="width:130px;">, please?</div></div></div>
+        <div class="chat-pair"><div class="chat-karl"><div class="chat-from">Karl</div><div class="chat-bubble">It's a very bad connection. Hang up and I'll call you back.</div></div></div>
+        <div class="chat-pair"><div class="chat-alex"><div class="chat-from">Gina</div><div class="chat-bubble">OK. I'll <sup>7</sup><input type="text" style="width:130px;"> now.</div></div></div>
+        <div class="chat-pair"><div class="chat-karl"><div class="chat-from">Karl</div><div class="chat-bubble">Gina, hello? Can you hear me?</div></div></div>
+        <div class="chat-pair"><div class="chat-alex"><div class="chat-from">Gina</div><div class="chat-bubble">Hi Karl. Yes, <sup>8</sup><input type="text" style="width:130px;">. It's OK now.</div></div></div>
+  
+        <button class="rev-btn" onclick="reveal('u4-16')">show answers ▾</button>
+        <div class="rev-body" id="u4-16">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.see me · 2.can't hear · 3.on mute · 4.the connection · 5.breaking up · 6.you repeat that · 7.hang up · 8.no problem</p>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+
+            
+
+
+
+  <!-- ══════════════════════════════════════════
+       UNIT DIVIDER
+  ══════════════════════════════════════════ -->
+  <div class="unit-div">
+    <div>
+      <div class="ud-eye">Unit 5 · Events</div>
+      <div class="ud-title">5.1 — Trade Shows and Exhibitions</div>
+      <div class="ud-sub">Lesson outcome: Learners can talk about intentions for future events · Grammar: be going to</div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       LEAD-IN
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-li">
+    <div class="ed-hdr" onclick="toggle('s-li')">
+      <div class="ed-tag">Lead-in</div>
+      <div class="ed-title">Trade Shows and Exhibitions</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">1</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">What type of events are these? Choose from the options in the box.</span>
+          <span class="ex-src">BP p.48</span>
+        </div>
+        <div class="wbox" style="margin-bottom:14px;">
+          <div class="wbox-lbl">Event types</div>
+          <span class="chip">business conference</span><span class="chip">motor show</span>
+          <span class="chip">technology exhibition</span><span class="chip">tourism fair</span>
+        </div>
+        <div class="two-col" style="margin:10px 0;">
+          <div>
+            <div class="img-ph" style="min-height:160px;padding:0;margin-bottom:6px;">
+              <img src="eventa.png" alt="Event photo A" style="width:100%;display:block;border-radius:2px;">
+
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);">
+              <strong style="color:var(--red);">A</strong>
+              <input type="text" style="flex:1;" placeholder="Type of event…">
+            </div>
+          </div>
+          <div>
+            <div class="img-ph" style="min-height:160px;padding:0;margin-bottom:6px;">
+              <img src="eventb.png" alt="Event photo B" style="width:100%;display:block;border-radius:2px;">
+
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);">
+              <strong style="color:var(--red);">B</strong>
+              <input type="text" style="flex:1;" placeholder="Type of event…">
+            </div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-li1')">show answers ▾</button>
+        <div class="rev-body" id="rv-li1">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>A — <strong>business conference</strong> &nbsp;·&nbsp; B — <strong>motor show</strong></p>
+          </div>
+        </div>
+      </div>
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Do you go to trade shows and exhibitions? What shows and exhibitions do you want to go to?</span>
+        </div>
+        <textarea class="warea" style="min-height:80px;" placeholder="Yes, I sometimes go to… / I'd love to go to…"></textarea>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       VOCABULARY
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-voc">
+    <div class="ed-hdr" onclick="toggle('s-voc')">
+      <div class="ed-tag">Vocabulary</div>
+      <div class="ed-title">Organising an Exhibition</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">2</span>
+          <span class="ex-instr">Use the spidergram to write the names of the objects and places (1–5).</span>
+          <span class="ex-src">BP p.48</span>
+        </div>
+
+        <!-- Word web placeholder -->
+        <div class="img-ph" style="min-height:140px;padding:0;margin-bottom:16px;">
+          <img src="" alt="Exhibition word web" style="width:100%;display:block;border-radius:2px;">
+          <div style="font-size:22px;margin:16px 0 4px;">🕸</div>
+          <div class="ph-lbl" style="margin-bottom:16px;">вставити скріншот word web<br><span style="font-size:11px;">(badge · stand · exhibition · hall · centre · brochures)</span></div>
+        </div>
+
+        <!-- 5 photo placeholders -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0;">
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="img-ph" style="min-height:80px;padding:6px;">
+              <img src="" alt="Exhibition badge" style="width:100%;display:block;border-radius:2px;">
+              <div style="font-size:16px;">🖼</div>
+            </div>
+            <div style="font-size:11px;color:var(--mid);text-align:center;font-style:italic;"><span style="color:var(--red-dk);">1</span> <em>exhibition badge</em> <span style="color:var(--grey);font-size:10px;">(given)</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="img-ph" style="min-height:80px;padding:6px;">
+              <img src="" alt="2" style="width:100%;display:block;border-radius:2px;">
+              <div style="font-size:16px;">🖼</div>
+            </div>
+            <div style="font-size:11px;color:var(--mid);text-align:center;"><span style="color:var(--red);">2</span> <input type="text" style="width:90%;font-size:12px;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="img-ph" style="min-height:80px;padding:6px;">
+              <img src="" alt="3" style="width:100%;display:block;border-radius:2px;">
+              <div style="font-size:16px;">🖼</div>
+            </div>
+            <div style="font-size:11px;color:var(--mid);text-align:center;"><span style="color:var(--red);">3</span> <input type="text" style="width:90%;font-size:12px;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="img-ph" style="min-height:80px;padding:6px;">
+              <img src="" alt="4" style="width:100%;display:block;border-radius:2px;">
+              <div style="font-size:16px;">🖼</div>
+            </div>
+            <div style="font-size:11px;color:var(--mid);text-align:center;"><span style="color:var(--red);">4</span> <input type="text" style="width:90%;font-size:12px;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="img-ph" style="min-height:80px;padding:6px;">
+              <img src="" alt="5" style="width:100%;display:block;border-radius:2px;">
+              <div style="font-size:16px;">🖼</div>
+            </div>
+            <div style="font-size:11px;color:var(--mid);text-align:center;"><span style="color:var(--red);">5</span> <input type="text" style="width:90%;font-size:12px;"></div>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-voc2')">show answers ▾</button>
+        <div class="rev-body" id="rv-voc2">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1. exhibition badge (given) · 2. <strong>brochures</strong> · 3. <strong>exhibition hall / centre</strong> · 4. <strong>stand</strong> · 5. <strong>exhibition centre / hall</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       READING
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-rd">
+    <div class="ed-hdr" onclick="toggle('s-rd')">
+      <div class="ed-tag">Reading</div>
+      <div class="ed-title">Trade Fair in Düsseldorf</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr" style="width:auto;font-size:13px;font-weight:700;">3</span>
+          <span class="ex-ltr">A</span>
+          <span class="ex-instr">Read the email about a trade fair. Are the sentences <strong>true</strong> (T) or <strong>false</strong> (F)?</span>
+          <span class="ex-src">BP p.48</span>
+        </div>
+        <div class="email-card">
+          <div class="ec-hdr"><strong>Subject:</strong> Trade fair in Düsseldorf</div>
+          <div class="ec-body">
+            <p>We're attending the trade fair in Düsseldorf again this year and there are some exciting changes to the event. Last week we decided that <span class="gt">we're going to set up</span> a bigger stand. We have a new space in the main exhibition hall so <span class="gt">we aren't going to be</span> in our usual location. We also decided that <span class="gt">we're going to launch</span> our new app for online shopping at the show and we're designing a new, attractive brochure to help us! <span class="gt">We're going to create</span> a really special experience at the stand with comfortable sofas and TV screens with videos of our new products. <span class="gt">We're also going to provide</span> visitors with free coffee, a special cake and lots of freebies. There are 1,100 exhibitors from forty-five countries this year and thousands of visitors. This will be a great opportunity to meet clients and colleagues from our industry.</p>
+          </div>
+        </div>
+        <table class="match-tbl" style="margin-top:12px;">
+          <tbody>
+            <tr><td class="qn">1</td><td>The company went to the trade show last year.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            <tr><td class="qn">2</td><td>They plan to have the same exhibition stand.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            <tr><td class="qn">3</td><td>They want visitors to relax at the stand.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            <tr><td class="qn">4</td><td>Exhibitors come from hundreds of countries.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+          </tbody>
+        </table>
+        <button class="rev-btn" onclick="reveal('rv-3a')">show answers ▾</button>
+        <div class="rev-body" id="rv-3a">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>T</strong> (attending again this year → went before) · 2.<strong>F</strong> (going to set up a bigger stand in a different location) · 3.<strong>T</strong> (comfortable sofas) · 4.<strong>F</strong> (forty-five countries, not hundreds)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-ltr">B</span>
+          <span class="ex-instr">Read the email again. Match the words from the box with the verbs (1–6).</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Words</div>
+          <span class="chip">an app</span><span class="chip">a brochure</span><span class="chip">clients</span>
+          <span class="chip">freebies</span><span class="chip">a stand</span><span class="chip">a trade fair</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 20px;margin:12px 0;font-size:14px;color:var(--mid);">
+          <div>1. attend <input type="text" style="width:110px;"></div>
+          <div>2. design <input type="text" style="width:110px;"></div>
+          <div>3. launch <input type="text" style="width:90px;"></div>
+          <div>4. meet <input type="text" style="width:90px;"></div>
+          <div>5. provide <input type="text" style="width:90px;"></div>
+          <div>6. set up <input type="text" style="width:90px;"></div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-3b')">show answers ▾</button>
+        <div class="rev-body" id="rv-3b">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1.<strong>a trade fair</strong> · 2.<strong>a brochure</strong> · 3.<strong>an app</strong> · 4.<strong>clients</strong> · 5.<strong>freebies</strong> · 6.<strong>a stand</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex">
+        <div class="ex-head">
+          <span class="ex-num">4</span>
+          <span class="ex-instr">Match the questions (1–6) with the replies (a–f).</span>
+          <span class="ex-src">BP p.48</span>
+        </div>
+        <div class="two-col">
+          <div>
+            <table class="match-tbl">
+              <tbody>
+                <tr><td class="qn">1</td><td><strong>Are</strong> we <strong>going to be</strong> in the same hotel this year?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+                <tr><td class="qn">2</td><td>How many people <strong>are going to be</strong> on the stand?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+                <tr><td class="qn">3</td><td>How big <strong>is</strong> the stand <strong>going to be</strong>?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+                <tr><td class="qn">4</td><td><strong>Are</strong> we <strong>going to have</strong> some rest breaks?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+                <tr><td class="qn">5</td><td><strong>Are there going to be</strong> any freebies for visitors?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+                <tr><td class="qn">6</td><td>When <strong>are</strong> we <strong>going to receive</strong> our badges?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <ol class="alpha">
+              <li>It's <strong>going to be</strong> 20 square metres.</li>
+              <li>There <strong>are going to be</strong> at least three people all the time.</li>
+              <li>Of course. Everyone <strong>is going to get</strong> coffee breaks and lunch breaks.</li>
+              <li>On the first day of the trade show. I'<strong>m going to send</strong> more details soon.</li>
+              <li>No, we <strong>aren't going to stay</strong> in the same hotel.</li>
+              <li>Yes, and we'<strong>re going to organise</strong> a competition this year.</li>
+            </ol>
+          </div>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-4')">show answers ▾</button>
+        <div class="rev-body" id="rv-4">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1–<strong>e</strong> · 2–<strong>b</strong> · 3–<strong>a</strong> · 4–<strong>c</strong> · 5–<strong>f</strong> · 6–<strong>d</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       COMMUNICATIVE GRAMMAR + REFERENCE
+  ══════════════════════════════════════════ -->
+  <div class="ed" id="s-gr">
+    <div class="ed-hdr" onclick="toggle('s-gr')">
+      <div class="ed-tag">Grammar</div>
+      <div class="ed-title">Talking about Intentions — be going to</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+
+      <!-- Grammar box -->
+      <div class="g-box">
+        <div class="g-head">
+          <span>Talking about Intentions</span>
+          <span class="g-ref">→ Grammar reference p.108</span>
+        </div>
+        <div class="g-body">
+          <div class="g-row"><span class="g-plus">+</span><span class="g-ex">I'<strong>m going to set up</strong> a bigger stand. &nbsp; He'<strong>s going to provide</strong> free coffee.</span></div>
+          <div class="g-row"><span class="g-plus">+</span><span class="g-ex">We'<strong>re going to launch</strong> our new app.</span></div>
+          <div class="g-row"><span class="g-minus">−</span><span class="g-ex">We <strong>aren't going to be</strong> in our usual location. &nbsp; I'<strong>m not going to stay</strong> in the same hotel.</span></div>
+          <div class="g-row"><span class="g-q">?</span><span class="g-ex"><strong>Are</strong> there <strong>going to be</strong> any freebies? &nbsp; When <strong>are</strong> we <strong>going to get</strong> our badges?</span></div>
+        </div>
+      </div>
+
+      <!-- Grammar Reference -->
+      <div style="border-top:2px dashed var(--border);margin:24px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Grammar Reference — p.108</p>
+      </div>
+
+      <div class="g-box">
+        <div class="g-head"><span>5.1 — Talking about Intentions: going to</span></div>
+        <div class="g-body">
+          <p class="g-note">We use <strong>going to</strong> to talk about <strong>future intentions</strong>. An intention is an aim — something you want to do or plan to do in the future, but the event is not definite at the time of speaking.</p>
+
+          <div class="gram-tbl-wrap" style="margin-top:12px;">
+            <div>
+              <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;">Positive / Negative</p>
+              <table class="gram-tbl">
+                <thead><tr><th></th><th>Subject + be</th><th>going to</th><th>verb</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:700;color:var(--green);">+</td>
+                    <td class="subj">I <strong style="color:var(--red-dk);">am</strong><br>He/She/It <strong style="color:var(--red-dk);">is</strong><br>You/We/They <strong style="color:var(--red-dk);">are</strong></td>
+                    <td class="gt" rowspan="2">going to</td>
+                    <td class="verb" rowspan="2"><strong>have</strong> a bigger stand.<br><strong>launch</strong> a new product.<br><strong>arrive</strong> at 10 o'clock.</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:700;color:var(--red-dk);">−</td>
+                    <td class="subj">I'<strong style="color:var(--red-dk);">m not</strong><br>He/She/It <strong style="color:var(--red-dk);">isn't</strong><br>You/We/They <strong style="color:var(--red-dk);">aren't</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;">Yes / No Questions</p>
+              <table class="gram-tbl">
+                <thead><tr><th>be + subject</th><th>going to</th><th>verb</th><th>Short answers</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td class="subj"><strong style="color:var(--red-dk);">Am</strong> I<br><strong style="color:var(--red-dk);">Is</strong> he/she/it<br><strong style="color:var(--red-dk);">Are</strong> you/we/they</td>
+                    <td class="gt">going to</td>
+                    <td class="verb"><strong>have</strong> a bigger stand?<br><strong>launch</strong> a product?<br><strong>arrive</strong> at 10?</td>
+                    <td style="color:var(--mid);font-size:12px;">Yes, I am.<br>Yes, he is.<br>Yes, they are.<br>No, I'm not.<br>No, he isn't.<br>No, they aren't.</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin:14px 0 8px;">Wh- Questions</p>
+              <table class="gram-tbl">
+                <thead><tr><th>Question word</th><th>be + subject</th><th>going to</th><th>verb</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:700;color:var(--dark);">When / Why</td>
+                    <td class="subj">am I / is he/she/it / are you/we/they</td>
+                    <td class="gt" rowspan="2">going to</td>
+                    <td class="verb"><strong>have</strong> a bigger stand?<br><strong>launch</strong> a new product?</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:700;color:var(--dark);">How many</td>
+                    <td class="subj">exhibitors <strong style="color:var(--red-dk);">are</strong></td>
+                    <td class="verb"><strong>be</strong> at the trade fair?</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex.5 -->
+      <div class="ex" style="margin-top:20px;">
+        <div class="ex-head">
+          <span class="ex-num">5</span>
+          <span class="ex-instr">Complete the sentences with <em>be going to</em> and the verbs in the box.</span>
+          <span class="ex-src">BP p.49</span>
+        </div>
+        <div class="wbox">
+          <div class="wbox-lbl">Verbs</div>
+          <span class="chip">have</span><span class="chip">not attend</span><span class="chip">not launch</span>
+          <span class="chip">not provide</span><span class="chip">phone</span><span class="chip">set</span>
+        </div>
+        <ol class="nl" style="margin-top:10px;">
+          <li>We <input type="text" style="width:200px;"> up a stand in the main hall this year.</li>
+          <li>She <input type="text" style="width:200px;"> the first day of the trade show. She's on holiday.</li>
+          <li>I <input type="text" style="width:200px;"> the exhibition organiser about the badges today.</li>
+          <li>We <input type="text" style="width:200px;"> new brochures at the next show.</li>
+          <li>They <input type="text" style="width:200px;"> the new product at the show. It isn't ready.</li>
+          <li>The conference centre <input type="text" style="width:220px;"> free parking this year.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-5gr')">show answers ▾</button>
+        <div class="rev-body" id="rv-5gr">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol><li><strong>are going to set</strong></li><li><strong>isn't going to attend</strong></li>
+            <li><strong>am going to phone</strong></li><li><strong>are going to have</strong></li>
+            <li><strong>aren't going to launch</strong></li><li><strong>isn't going to provide</strong></li></ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex.6A -->
+      <div class="ex">
+        <div class="ex-head"><span class="ex-num">6</span><span class="ex-ltr">A</span>
+          <span class="ex-instr">Put the words in the correct order. The first word is given.</span>
+          <span class="ex-src">BP p.49</span>
+        </div>
+        <ol class="nl">
+          <li><em style="color:var(--mid);">the exhibition hall / is / big / How / be / going / to / ?</em><br>How <input type="text" style="width:380px;margin-top:5px;"> ?</li>
+          <li><em style="color:var(--mid);">Are / freebies / we / to / provide / any / going / ?</em><br>Are <input type="text" style="width:380px;margin-top:5px;"> ?</li>
+          <li><em style="color:var(--mid);">we / are / the stand / going / to / When / set up / ?</em><br>When <input type="text" style="width:370px;margin-top:5px;"> ?</li>
+          <li><em style="color:var(--mid);">launch / going / we / to / any / products / Are / new / ?</em><br>Are <input type="text" style="width:380px;margin-top:5px;"> ?</li>
+          <li><em style="color:var(--mid);">are / to / Why / the brochures / they / going / change / ?</em><br>Why <input type="text" style="width:380px;margin-top:5px;"> ?</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-6a')">show answers ▾</button>
+        <div class="rev-body" id="rv-6a">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol><li><strong>big is the exhibition hall going to be</strong>?</li>
+            <li><strong>we going to provide any freebies</strong>?</li>
+            <li><strong>are we going to set up the stand</strong>?</li>
+            <li><strong>we going to launch any new products</strong>?</li>
+            <li><strong>are they going to change the brochures</strong>?</li></ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex.6B -->
+      <div class="ex">
+        <div class="ex-head"><span class="ex-ltr">B</span>
+          <span class="ex-instr">Match the questions (1–5) in 6A with the answers (a–e).</span>
+        </div>
+        <div class="two-col">
+          <table class="match-tbl">
+            <tbody>
+              <tr><td class="qn">1</td><td>How big is the exhibition hall going to be?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">2</td><td>Are we going to provide any freebies?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">3</td><td>When are we going to set up the stand?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">4</td><td>Are we going to launch any new products?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+              <tr><td class="qn">5</td><td>Why are they going to change the brochures?</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            </tbody>
+          </table>
+          <ol class="alpha">
+            <li>The day before the show.</li>
+            <li>Yes, we have some new office chairs.</li>
+            <li>Yes, we're going to give away bags.</li>
+            <li>Because they have new products.</li>
+            <li>1000 square metres.</li>
+          </ol>
+        </div>
+        <button class="rev-btn" onclick="reveal('rv-6b')">show answers ▾</button>
+        <div class="rev-body" id="rv-6b">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <p>1–<strong>e</strong> · 2–<strong>c</strong> · 3–<strong>a</strong> · 4–<strong>b</strong> · 5–<strong>d</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ref Ex.1 -->
+      <div style="border-top:2px dashed var(--border);margin:24px 0 16px;padding-top:4px;">
+        <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Grammar Reference Exercise — p.108</p>
+      </div>
+      <div class="ex">
+        <div class="ex-head"><span class="ex-num">1</span>
+          <span class="ex-instr">Complete with <em>going to</em> + verb in brackets.</span>
+        </div>
+        <ol class="nl">
+          <li>How many people <input type="text" style="width:200px;"> (attend) the presentation?</li>
+          <li>We <input type="text" style="width:200px;"> (not start) the meeting until 11 o'clock.</li>
+          <li>She <input type="text" style="width:190px;"> (set up) the stand in the morning.</li>
+          <li><input type="text" style="width:170px;"> (they / launch) any new products this year?</li>
+          <li>The exhibition centre <input type="text" style="width:210px;"> (not provide) free Wi-Fi.</li>
+          <li>When <input type="text" style="width:170px;"> (we / have) the next sales conference?</li>
+          <li>I <input type="text" style="width:190px;"> (send) you the details by email.</li>
+          <li>He <input type="text" style="width:210px;"> (not change) the brochures for this year's trade show.</li>
+        </ol>
+        <button class="rev-btn" onclick="reveal('rv-ref1')">show answers ▾</button>
+        <div class="rev-body" id="rv-ref1">
+          <div class="ans-box"><div class="ak">Answers</div>
+            <ol><li><strong>are going to attend</strong></li><li><strong>aren't going to start</strong></li>
+            <li><strong>is going to set up</strong></li><li><strong>Are they going to launch</strong></li>
+            <li><strong>isn't going to provide</strong></li><li><strong>are we going to have</strong></li>
+            <li><strong>am going to send</strong></li><li><strong>isn't going to change</strong></li></ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <div class="ed" id="s-vid">
+    <div class="ed-hdr" onclick="toggle('s-vid')">
+      <div class="ed-tag">Video</div>
+      <div class="ed-title">Graduate Fashion Week — 5.1.1</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <div style="position:relative;padding-bottom:56.25%;border-radius:3px;overflow:hidden;background:var(--dark);margin:0 0 20px;">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);">
+          <div style="font-size:36px;margin-bottom:8px;">▶</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;">Video 5.1.1 — вставити YouTube iframe</div>
+        </div>
+        <!-- замінити div вище на iframe:
+        <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+          src="https://www.youtube.com/embed/YOUR_ID" allowfullscreen></iframe> -->
+      </div>
+
+      <div class="ex">
+        <div class="ex-head"><span class="ex-num">7</span><span class="ex-ltr">A</span>
+          <span class="ex-instr">Watch the video introduction. What is Graduate Fashion Week? Where is it?</span>
+          <span class="ex-src">BP p.49</span>
+        </div>
+        <input type="text" style="width:100%;max-width:500px;" placeholder="Graduate Fashion Week is…">
+      </div>
+
+      <div class="ex">
+        <div class="ex-head"><span class="ex-ltr">B</span>
+          <span class="ex-instr">Watch the complete video. Which of the things in the box are mentioned? Tick (✓) the words you hear.</span>
+        </div>
+        <div class="wbox"><div class="wbox-lbl">Words</div>
+          <span class="chip">app</span><span class="chip">awards</span><span class="chip">badges</span>
+          <span class="chip">brochures</span><span class="chip">cafes</span><span class="chip">entry cost</span>
+          <span class="chip">exhibition hall</span><span class="chip">freebies</span><span class="chip">stands</span>
+          <span class="chip">sponsors</span><span class="chip">shops</span><span class="chip">TV</span>
+        </div>
+        <div style="margin-top:8px;font-size:13px;color:var(--mid);">Words I heard: <input type="text" style="width:100%;max-width:480px;margin-top:4px;"></div>
+      </div>
+
+      <div class="ex">
+        <div class="ex-head"><span class="ex-ltr">C</span>
+          <span class="ex-instr">Watch again. Are the sentences <strong>true</strong> (T) or <strong>false</strong> (F)?</span>
+        </div>
+        <table class="match-tbl">
+          <tbody>
+            <tr><td class="qn">1</td><td>The Graduate Fashion Week is going to open on 2 June.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            <tr><td class="qn">2</td><td>13,000 people are going to visit Graduate Fashion Week.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            <tr><td class="qn">3</td><td>There are going to be thirty-eight stands from international universities.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            <tr><td class="qn">4</td><td>Givenchy, Ralph Lauren and LVMH are going to give presentations.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            <tr><td class="qn">5</td><td>There is space for 400 people in the catwalk hall.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+            <tr><td class="qn">6</td><td>There are going to be twenty-four catwalk shows.</td><td class="ans-col"><input type="text" style="width:36px;text-align:center;"></td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="font-size:12px;">Перевір відповіді після перегляду відео.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPEAKING TASK -->
+  <div class="ed" id="s-sp">
+    <div class="ed-hdr" onclick="toggle('s-sp')">
+      <div class="ed-tag">Speaking Task</div>
+      <div class="ed-title">Your Trade Show — Intentions</div>
+      <span class="ed-toggle">▾</span>
+    </div>
+    <div class="ed-body">
+      <div class="ex">
+        <div class="ex-head"><span class="ex-num">8</span>
+          <span class="ex-instr">Work in pairs. You are going to talk about an exhibition.</span>
+          <span class="ex-src">BP p.49 · p.128</span>
+        </div>
+        <div class="note blue" style="margin-bottom:14px;font-size:13px;">
+          Each person fills in this card independently, then tells their partner about their intentions and answers questions. Swap roles.<br>
+          <em>A: "On Tuesday, I'm going to…" &nbsp; B: "Are you going to visit other stands?"</em>
+        </div>
+
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:10px;">Step 1 — Choose six things you intend to do</div>
+        <div class="cbx-grid">
+          <label class="cbx-item"><input type="checkbox"> check my work email</label>
+          <label class="cbx-item"><input type="checkbox"> get / provide some freebies</label>
+          <label class="cbx-item"><input type="checkbox"> do some exercise in the hotel gym</label>
+          <label class="cbx-item"><input type="checkbox"> have dinner with colleagues</label>
+          <label class="cbx-item"><input type="checkbox"> go to a networking event</label>
+          <label class="cbx-item"><input type="checkbox"> launch an app</label>
+          <label class="cbx-item"><input type="checkbox"> meet an important client for lunch</label>
+          <label class="cbx-item"><input type="checkbox"> set up your company's stand</label>
+          <label class="cbx-item"><input type="checkbox"> visit other stands</label>
+          <label class="cbx-item"><input type="checkbox"> watch presentations</label>
+          <label class="cbx-item"><input type="checkbox"> visit the town</label>
+          <label class="cbx-item"><input type="checkbox"> work on the stand</label>
+        </div>
+
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin:16px 0 10px;">Step 2 — Complete your diary</div>
+        <table class="diary-tbl">
+          <thead><tr><th>Session</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Morning</td>
+              <td><div class="given">set up the company stand</div></td>
+              <td><input type="text" style="width:100%;"></td>
+              <td><input type="text" style="width:100%;"></td>
+            </tr>
+            <tr>
+              <td>Afternoon</td>
+              <td><input type="text" style="width:100%;"></td>
+              <td><input type="text" style="width:100%;"></td>
+              <td><input type="text" style="width:100%;"></td>
+            </tr>
+            <tr>
+              <td>Evening</td>
+              <td><input type="text" style="width:100%;"></td>
+              <td><input type="text" style="width:100%;"></td>
+              <td><div class="given">final evening party</div></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="note red" style="margin-top:12px;font-size:13px;">
+          Use <strong>be going to</strong>: <em>"On Tuesday morning, I'm going to set up the company stand."</em><br>
+          Questions: <em>"Are you going to visit other stands?"</em> → <em>"Yes, I am. / No, I'm not."</em>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggle(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('closed');
+  el.querySelector('.ed-toggle').textContent=el.classList.contains('closed')?'▸':'▾';
+}
+function reveal(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  const btn=el.previousElementSibling;
+  const open=el.classList.contains('open');
+  btn.textContent=open
+    ?btn.textContent.replace('show','hide').replace('▾','▴')
+    :btn.textContent.replace('hide','show').replace('▴','▾');
+}
+function tab(btn,group,id){
+  const wrapper=btn.closest('.tabs');
+  wrapper.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('on'));
+  wrapper.querySelectorAll('.t-body').forEach(c=>c.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(group+'-'+id).classList.add('on');
+}
+</script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  
+    const app = initializeApp({
+      databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+    });
+    const db = getDatabase(app);
+  
+    // ID уроку — міняй для кожного файлу
+    const LESSON_ID = "svitlana_lesson20";
+  
+    // Зберігаємо при введенні
+   // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+    const key = `field_${i}`;
+  
+      // Завантажуємо збережене
+      onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+    if (snap.exists()) {
+      const val = snap.val();
+      if (document.activeElement !== el) el.value = val;
+    }
+  });
+      // Зберігаємо при зміні
+      el.addEventListener('input', () => {
+        set(ref(db, `${LESSON_ID}/${key}`), el.value);
+      });
+    });
+  </script>
+
+</body>
+</html>

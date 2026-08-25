@@ -1,0 +1,1217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 7 — The Office: Fire Drill</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --office-yellow:   #f5c518;
+      --office-yellow-d: #d4a800;
+      --office-grey:     #2e2e2e;
+      --office-grey-mid: #4a4a4a;
+      --office-grey-lt:  #6a6a6a;
+      --office-cream:    #f7f3e9;
+      --office-cream-d:  #ede8d8;
+      --office-paper:    #faf8f2;
+      --office-red:      #c0392b;
+      --office-blue:     #2980b9;
+      --border:          #d4cbb8;
+      --ink:             #1a1a1a;
+      --ink-soft:        #3a3a3a;
+      --white:           #ffffff;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--office-paper); color:var(--ink); line-height:1.6; }
+
+    /* ── HEADER — documentary style ── */
+    .office-header { background:var(--office-grey); position:relative; overflow:hidden; }
+    .office-header-stripe { height:8px; background:var(--office-yellow); }
+    .office-header-body { padding:40px 40px 36px; max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; }
+    .office-eyebrow { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--office-yellow); margin-bottom:10px; }
+    .office-h1 { font-family:'Special Elite',cursive; font-size:clamp(28px,4vw,52px); color:var(--white); line-height:1.1; margin-bottom:8px; }
+    .office-h1 span { color:var(--office-yellow); }
+    .office-deck { font-size:13.5px; color:rgba(255,255,255,0.6); max-width:500px; line-height:1.6; }
+    .office-meta { display:flex; flex-wrap:wrap; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1); }
+    .office-chip { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; color:rgba(255,255,255,0.5); display:flex; align-items:center; gap:6px; }
+    .office-chip::before { content:''; width:4px; height:4px; border-radius:50%; background:var(--office-yellow); flex-shrink:0; }
+    .office-chip strong { color:rgba(255,255,255,0.85); }
+    .office-logo-block { text-align:center; }
+    .office-logo-text { font-family:'Special Elite',cursive; font-size:36px; color:var(--office-yellow); line-height:1; }
+    .office-logo-sub { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-top:4px; }
+    .office-logo-ep { font-family:'DM Mono',monospace; font-size:10px; color:var(--office-yellow-d); margin-top:8px; }
+
+    /* ── OBJECTIVES STRIP ── */
+    .obj-strip { background:var(--office-yellow); border-bottom:3px solid var(--office-yellow-d); }
+    .obj-strip-inner { max-width:1200px; margin:0 auto; padding:16px 40px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .obj-item { display:flex; gap:8px; align-items:flex-start; }
+    .obj-num { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:800; color:rgba(0,0,0,0.2); line-height:1; flex-shrink:0; width:22px; }
+    .obj-text { font-size:11.5px; color:var(--office-grey); line-height:1.4; font-weight:500; }
+
+    /* ── MAIN ── */
+    .main { max-width:1200px; margin:0 auto; padding:0 40px 60px; }
+
+    /* ── SECTION RULE — documentary style ── */
+    .section-rule { display:flex; align-items:center; gap:12px; margin:36px 0 0; }
+    .section-rule-line { flex:1; height:2px; background:var(--office-grey); }
+    .section-rule-label { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--office-grey); white-space:nowrap; }
+    .section-rule-line-short { width:30px; height:2px; background:var(--office-yellow); }
+
+    /* ── PHASE ── */
+    .phase { margin-top:14px; border-radius:3px; overflow:hidden; border:1px solid var(--border); box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+    .phase-header { padding:15px 20px; display:flex; align-items:center; gap:12px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:16px; font-size:15px; color:rgba(255,255,255,0.5); transition:transform .3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:700; letter-spacing:2px; background:rgba(255,255,255,0.18); padding:3px 9px; border-radius:20px; color:rgba(255,255,255,0.85); white-space:nowrap; }
+    .phase-title { font-family:'Special Elite',cursive; font-size:17px; color:#fff; line-height:1.2; }
+    .phase-sub { font-size:11px; color:rgba(255,255,255,0.55); margin-top:1px; }
+    .phase-time { margin-left:auto; margin-right:26px; font-family:'DM Mono',monospace; font-size:10px; color:rgba(255,255,255,0.7); background:rgba(0,0,0,0.2); padding:3px 9px; border-radius:20px; white-space:nowrap; }
+    .phase-body { padding:0 20px 20px; background:var(--office-paper); }
+    .ph-dark .phase-header  { background:var(--office-grey); }
+    .ph-mid .phase-header   { background:var(--office-grey-mid); }
+    .ph-yellow .phase-header { background:var(--office-yellow-d); }
+    .ph-yellow .phase-header .phase-title { color:var(--office-grey); }
+    .ph-yellow .phase-header .phase-num { background:rgba(0,0,0,0.15); color:var(--office-grey); }
+    .ph-yellow .phase-header .phase-sub { color:rgba(0,0,0,0.5); }
+    .ph-yellow .phase-header .phase-time { color:var(--office-grey); }
+    .ph-yellow .phase-header::after { color:rgba(0,0,0,0.35); }
+    .ph-red .phase-header   { background:var(--office-red); }
+
+    /* ── ACTIVITY ── */
+    .activity { border:1px solid var(--border); border-radius:3px; margin-top:12px; overflow:hidden; background:var(--white); }
+    .activity-head { background:var(--office-cream-d); padding:9px 13px; display:flex; align-items:center; gap:9px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+    .activity-icon { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; background:var(--office-cream); }
+    .activity-title { font-weight:600; font-size:13px; color:var(--ink); }
+    .activity-src { margin-left:auto; font-family:'DM Mono',monospace; font-size:9px; color:var(--office-grey); background:var(--office-cream); border:1px solid var(--border); padding:2px 6px; border-radius:3px; white-space:nowrap; }
+    .activity-badge { font-family:'DM Mono',monospace; font-size:9px; background:var(--office-grey); color:#fff; padding:2px 6px; border-radius:3px; white-space:nowrap; }
+    .activity-badge.yellow { background:var(--office-yellow-d); color:var(--office-grey); }
+    .activity-body { padding:13px; }
+
+    /* ── TYPOGRAPHY ── */
+    p { font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:6px 0; }
+    p:first-child { margin-top:0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:13.5px; color:var(--ink-soft); padding:5px 0; border-bottom:1px dotted var(--border); line-height:1.6; }
+    ol.exercise li:last-child { border-bottom:none; }
+    input[type="text"] { border:none; border-bottom:1.5px solid var(--border); background:transparent; font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--ink); padding:2px 4px; outline:none; transition:border-color .2s; }
+    input[type="text"]:focus { border-bottom-color:var(--office-yellow-d); }
+    input[type="checkbox"] { accent-color:var(--office-yellow-d); width:15px; height:15px; cursor:pointer; }
+
+    /* ── COMPONENTS ── */
+    .word-box { background:var(--white); border:2px solid var(--office-grey); border-radius:4px; padding:10px 13px; margin:10px 0; display:flex; flex-wrap:wrap; gap:7px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--office-grey-lt); width:100%; margin-bottom:2px; }
+    .word-chip { background:var(--office-grey); color:#fff; font-size:12px; font-weight:600; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+    .word-chip.yellow { background:var(--office-yellow); color:var(--office-grey); }
+
+    .speaking-box { border:2px solid var(--office-grey); border-radius:4px; overflow:hidden; margin:10px 0; }
+    .speaking-box-header { background:var(--office-grey); padding:8px 13px; }
+    .speaking-box-header span { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#fff; font-weight:600; }
+    .speaking-box-body { background:var(--white); padding:13px; }
+    .speaking-row { display:flex; gap:10px; padding:5px 0; border-bottom:1px dotted var(--border); font-size:13.5px; color:var(--ink); }
+    .speaking-row:last-child { border-bottom:none; }
+
+    .answer-key { background:var(--office-cream-d); border:1px solid var(--border); border-radius:3px; padding:10px 13px; margin:10px 0; font-size:12.5px; }
+    .ak-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--office-grey-lt); margin-bottom:6px; }
+    .answer-key ol { padding-left:18px; }
+    .answer-key ol li { padding:2px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--office-grey); }
+    .answer-key p { font-size:12.5px; margin:3px 0; }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; background:none; border:1px solid var(--border); color:var(--office-grey-lt); padding:4px 11px; border-radius:20px; cursor:pointer; margin-top:8px; transition:all .2s; }
+    .reveal-btn:hover { border-color:var(--office-yellow-d); color:var(--office-yellow-d); }
+    .reveal-content { display:none; margin-top:8px; }
+    .reveal-content.open { display:block; }
+
+    .tip-box { background:var(--office-cream); border:1px solid var(--border); border-left:3px solid var(--office-yellow-d); border-radius:0 4px 4px 0; padding:10px 13px; margin:10px 0; font-size:13px; display:flex; gap:8px; }
+    .tip-icon { font-size:14px; flex-shrink:0; }
+    .tip-text { color:var(--ink-soft); line-height:1.5; }
+
+    .warn-box { background:#fdf0ee; border:1px solid var(--office-red); border-left:3px solid var(--office-red); border-radius:0 4px 4px 0; padding:10px 13px; margin:10px 0; font-size:13px; display:flex; gap:8px; color:#5a1a1a; }
+
+    /* ── TALKING HEAD (documentary interview style) ── */
+    .talking-head { background:var(--office-grey); border-radius:4px; padding:16px 18px; margin:10px 0; display:flex; gap:14px; align-items:flex-start; }
+    .th-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--office-yellow); margin-bottom:5px; }
+    .th-quote { font-size:13.5px; color:rgba(255,255,255,0.85); line-height:1.6; font-style:italic; }
+    .th-name { font-family:'Special Elite',cursive; font-size:13px; color:var(--office-yellow); margin-top:6px; }
+    .th-icon { font-size:28px; flex-shrink:0; }
+
+    /* ── CHARACTER CARDS ── */
+    .char-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:12px 0; }
+    .char-card { border:1px solid var(--border); border-radius:4px; overflow:hidden; text-align:center; background:var(--white); }
+    .char-photo { width:100%; aspect-ratio:1; background:var(--office-cream-d); display:flex; align-items:center; justify-content:center; font-size:11px; font-family:'DM Mono',monospace; color:var(--office-grey-lt); letter-spacing:0.5px; padding:8px; text-align:center; }
+    .char-photo img { width:100%; height:100%; object-fit:cover; }
+    .char-name { font-family:'Special Elite',cursive; font-size:12px; color:var(--office-grey); padding:5px 6px 2px; }
+    .char-role { font-family:'DM Mono',monospace; font-size:9px; color:var(--office-grey-lt); padding:0 6px 6px; letter-spacing:0.5px; }
+    .char-action { font-size:11px; color:var(--office-red); padding:0 6px 7px; font-weight:600; }
+
+    /* ── TWO COLUMN CONTRAST TABLE ── */
+    .contrast-table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13.5px; }
+    .contrast-table th { padding:8px 12px; text-align:left; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; font-family:'DM Mono',monospace; }
+    .contrast-table th:first-child { background:var(--office-grey); color:var(--white); width:50%; }
+    .contrast-table th:last-child { background:var(--office-red); color:var(--white); width:50%; }
+    .contrast-table td { padding:8px 12px; border-bottom:1px solid var(--border); color:var(--ink-soft); vertical-align:top; }
+    .contrast-table tr:nth-child(even) td:first-child { background:#f0f0f0; }
+    .contrast-table tr:nth-child(even) td:last-child { background:#fdf0ee; }
+    .contrast-table td:first-child { border-right:2px solid var(--border); }
+
+    /* ── RATING CARD ── */
+    .rating-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:12px 0; }
+    .rating-card { border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--white); }
+    .rating-card-header { background:var(--office-grey-mid); padding:7px 10px; }
+    .rating-char { font-family:'Special Elite',cursive; font-size:13px; color:var(--white); }
+    .rating-body { padding:10px; }
+    .rating-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--office-grey-lt); margin-bottom:3px; }
+    .rating-stars { display:flex; gap:3px; margin-bottom:8px; }
+    .star { width:18px; height:18px; border-radius:2px; border:1.5px solid var(--border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:10px; transition:all .15s; }
+    .star.filled { background:var(--office-yellow); border-color:var(--office-yellow-d); }
+    .rating-note { font-size:11px; color:var(--office-grey-lt); border:none; border-bottom:1px dotted var(--border); width:100%; background:transparent; font-family:'DM Sans',sans-serif; outline:none; padding:2px 0; }
+
+    /* ── VOCAB TABLE ── */
+    .vocab-table { width:100%; border-collapse:collapse; font-size:13px; margin:10px 0; }
+    .vocab-table th { background:var(--office-grey); color:#fff; padding:7px 11px; text-align:left; font-weight:500; font-size:11px; }
+    .vocab-table td { padding:7px 11px; border-bottom:1px solid var(--border); color:var(--ink-soft); vertical-align:top; }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--office-cream-d); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+
+    /* ── REWRITE CARD ── */
+    .rewrite-card { background:var(--office-cream-d); border:1px solid var(--border); border-radius:4px; padding:12px 14px; margin:8px 0; }
+    .rewrite-original { font-family:'Special Elite',cursive; font-size:14px; color:var(--office-red); margin-bottom:8px; }
+    .rewrite-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--office-grey-lt); margin-bottom:4px; }
+    .rewrite-input { width:100%; border:none; border-bottom:1.5px solid var(--border); background:transparent; font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--ink); padding:3px 0; outline:none; }
+    .rewrite-input:focus { border-bottom-color:var(--office-yellow-d); }
+
+    /* ── ROLEPLAY CARD ── */
+    .roleplay-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
+    .roleplay-card { border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+    .roleplay-card-header { padding:8px 12px; display:flex; align-items:center; gap:8px; }
+    .roleplay-card-header.a { background:var(--office-grey); }
+    .roleplay-card-header.b { background:var(--office-grey-mid); }
+    .roleplay-person { font-family:'Special Elite',cursive; font-size:13px; color:#fff; }
+    .roleplay-card-body { padding:10px 12px; background:var(--white); font-size:13px; color:var(--ink-soft); line-height:1.5; }
+
+    /* ── STEPS ── */
+    .steps { list-style:none; margin:10px 0; }
+    .steps li { display:flex; gap:12px; padding:8px 0; border-bottom:1px dotted var(--border); font-size:13.5px; align-items:flex-start; color:var(--ink-soft); }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:500; color:#fff; background:var(--office-grey); width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+
+    /* ── REVISION TAG ── */
+    .revision-tag { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; background:var(--office-yellow-d); color:var(--office-grey); padding:2px 8px; border-radius:2px; }
+
+    /* ── SCENARIO ── */
+    .scenario-card { background:var(--office-cream-d); border:2px dashed var(--border); border-radius:4px; padding:16px; margin:10px 0; }
+    .scenario-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--office-grey-lt); margin-bottom:7px; }
+    .scenario-text { font-size:14px; color:var(--ink); line-height:1.7; font-style:italic; }
+
+    /* ── HW BLOCK ── */
+    .hw-block { background:var(--office-grey); border-radius:4px; padding:20px 24px; margin-top:8px; border-top:4px solid var(--office-yellow); }
+
+    /* ── WRITING AREA ── */
+    .writing-area { width:100%; min-height:120px; border:1.5px solid var(--border); border-radius:4px; background:var(--white); font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--ink); padding:10px 12px; outline:none; resize:vertical; line-height:1.6; }
+    .writing-area:focus { border-color:var(--office-yellow-d); }
+    .writing-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--office-grey-lt); margin:10px 0 5px; }
+    .word-count-hint { font-family:'DM Mono',monospace; font-size:9px; color:var(--office-grey-lt); margin-top:4px; text-align:right; }
+
+    @media (max-width:700px) {
+      .office-header-body { grid-template-columns:1fr; }
+      .obj-strip-inner { grid-template-columns:1fr 1fr; }
+      .main { padding-left:20px; padding-right:20px; }
+      .char-grid { grid-template-columns:repeat(3,1fr); }
+      .rating-grid { grid-template-columns:1fr 1fr; }
+      .roleplay-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<div class="office-header">
+  <div class="office-header-stripe"></div>
+  <div class="office-header-body">
+    <div>
+      <h1 class="office-h1">The <span>Office</span><br>Fire Drill</h1>
+      <p class="office-deck">What happens when the fire drill goes completely wrong and what can we learn from it?</p>
+      <div class="office-meta">
+        <span class="office-chip"><strong>Level:</strong>&nbsp;B1+</span>
+      </div>
+    </div>
+    <div class="office-logo-block">
+      <div class="office-logo-text">the<br>office</div>
+      <div class="office-logo-sub">Dunder Mifflin Inc.</div>
+      <div class="office-logo-ep">S05 · E14 · Fire Drill</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OBJECTIVES ══ -->
+<div class="obj-strip">
+  <div class="obj-strip-inner">
+    <div class="obj-item"><div class="obj-num">2</div><div class="obj-text">Learn vocabulary for fire drills and emergency procedures</div></div>
+    <div class="obj-item"><div class="obj-num">3</div><div class="obj-text">Use modals to give instructions and make suggestions</div></div>
+    <div class="obj-item"><div class="obj-num">4</div><div class="obj-text">Compare correct procedures with what actually happened in the video</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══ REVISION ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Revision · Lesson 11</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-dark" id="ph0">
+    <div class="phase-header" onclick="togglePhase('ph0')">
+      <span class="phase-num">00</span>
+      <div>
+        <div class="phase-title">Revision — Compare Two Languages</div>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💻</div>
+          <span class="activity-title">Compare two programming languages</span>
+          <span class="revision-tag" style="margin-left:auto;">EFT p.80 · Ex 1</span>
+        </div>
+        <div class="activity-body">
+          <p>Pick any two programming languages you like. Consider their advantages and disadvantages, and answer the following questions.</p>
+          <ol class="exercise">
+            <li>Which language is more popular / more widely used? → <input type="text" size="30"></li>
+            <li>Which language is more versatile (meaning one is more multi-purpose)? → <input type="text" size="30"></li>
+            <li>Which language is older? → <input type="text" size="30"></li>
+            <li>Which one is easier to learn for a beginner? → <input type="text" size="30"></li>
+            <li>Which language is less complex? → <input type="text" size="30"></li>
+            <li>Which kinds of projects are these two languages more appropriate for? → <input type="text" size="30"></li>
+          </ol>
+          <div class="tip-box">
+            <span class="tip-icon">🗣️</span>
+            <div class="tip-text">Discuss your answers out loud with your teacher before moving on — try to use comparatives (more popular, older, easier, less complex).</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ WARM-UP ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Warm-up</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-mid" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div>
+        <div class="phase-title">Warm-up — Fire Drills & You</div>
+        <div class="phase-sub">Activating topic + pre-watching discussion</div>
+      </div>
+      <span class="phase-time">5 min</span>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔥</div>
+          <span class="activity-title">Discussion — Have you ever been in a fire drill?</span>
+          <span class="activity-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Think & talk</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Have you ever been in a fire drill at work or school? What happened?</div>
+              <div class="speaking-row">What do you think people are supposed to do in a fire drill? Can you name 3 correct procedures?</div>
+              <div class="speaking-row">What do you think actually happens when most people hear a fire alarm?</div>
+            </div>
+          </div>
+          <div class="tip-box">
+            <span class="tip-icon">🎯</span>
+            <div class="tip-text"><em>We're going to watch a clip from The Office where someone stages a surprise fire drill. Your job is to see how many things go wrong.</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VOCABULARY ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Pre-watching · Vocabulary</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-yellow" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div>
+        <div class="phase-title">Vocabulary — Emergency Procedures</div>
+        <div class="phase-sub">Key words before watching</div>
+      </div>
+      <span class="phase-time">5 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🔑</div>
+          <span class="activity-title">Pre-watching vocabulary — match & use</span>
+          <span class="activity-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Match each word with its meaning. Then use 3 of them in a sentence about a real fire drill.</p>
+
+          <table class="vocab-table">
+            <thead><tr><th>Word / Phrase</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">fire drill</td><td>a practice of what to do if there is a real fire</td></tr>
+              <tr><td class="eng">evacuation</td><td>the process of moving people out of a dangerous place</td></tr>
+              <tr><td class="eng">assembly point</td><td>the place where everyone meets after leaving the building</td></tr>
+              <tr><td class="eng">emergency exit</td><td>a door used only in dangerous situations</td></tr>
+              <tr><td class="eng">simulation</td><td>a fake/practice version of a real event</td></tr>
+              <tr><td class="eng">adrenaline</td><td>a hormone your body releases when you're scared or excited</td></tr>
+              <tr><td class="eng">air duct</td><td>a pipe or channel that carries air through a building</td></tr>
+              <tr><td class="eng">procedures</td><td>official steps you follow in a specific situation</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ CHARACTERS ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Meet the Characters</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-dark" id="ph3">
+    <div class="phase-header" onclick="togglePhase('ph3')">
+      <span class="phase-num">03</span>
+      <div>
+        <div class="phase-title">Dunder Mifflin — The Cast</div>
+        <div class="phase-sub">Who's who before we watch</div>
+      </div>
+      <span class="phase-time">3 min</span>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">👥</div>
+          <span class="activity-title">The people you need to know</span>
+        </div>
+        <div class="activity-body">
+          <p>These are the main characters from the clip. Remember their names and what they do during the fire drill.</p>
+
+          <div class="char-grid">
+            <div class="char-card">
+              <div class="char-photo"><img src="https://miro.medium.com/v2/resize:fit:1396/1*njwXqsShWvK81ANQCMBevw.jpeg"></div>
+              <div class="char-name">Michael Scott</div>
+              <div class="char-role">Regional Manager</div>
+              <div class="char-action">panics & screams</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://www.nme.com/wp-content/uploads/2022/11/Dwight-the-office.jpg"></div>
+              <div class="char-name">Dwight Schrute</div>
+              <div class="char-role">Assistant (to the) Regional Manager</div>
+              <div class="char-action">starts the "fire"</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://www.denofgeek.com/wp-content/uploads/2021/10/Jim-The-Office-John-Krasinski.jpg"></div>
+              <div class="char-name">Jim Halpert</div>
+              <div class="char-role">Sales Representative</div>
+              <div class="char-action">tries to stay calm</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://people.com/thmb/317bJv-P9_sNDm0-__aCnRQNMHw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(767x357:769x359)/pam-the-office-032125-af6e4f0e93df45d0bae7db5e5f279bbb.jpg"></div>
+              <div class="char-name">Pam Beesly</div>
+              <div class="char-role">Receptionist</div>
+              <div class="char-action">panics with everyone</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://www.nbc.com/sites/nbcblog/files/styles/scale_862/public/2023/07/the-office-stanley-recap4.jpg"></div>
+              <div class="char-name">Stanley Hudson</div>
+              <div class="char-role">Sales Representative</div>
+              <div class="char-action">collapses at the end</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://variety.com/wp-content/uploads/2026/03/nbc-the-office-kevin2.jpg"></div>
+              <div class="char-name">Kevin Malone</div>
+              <div class="char-role">Accountant</div>
+              <div class="char-action">smashes vending machine & steals snacks</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSf5XUBj_uL6agbDfp6mrx4jpZKZ8nFS4MuDsnPyrsewRjhb2JOBYZvygTF&s=10"></div>
+              <div class="char-name">Angela Martin</div>
+              <div class="char-role">Head of Accounting</div>
+              <div class="char-action">saves her cat</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6Y2hSV4q8xyT33d1SfTn1s5Lb9cCoUDBcYeNU4Afp2xImB_3kqYqoJro&s=10"></div>
+              <div class="char-name">Oscar Martinez</div>
+              <div class="char-role">Accountant</div>
+              <div class="char-action">escapes through ceiling</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://akns-images.eonline.com/eol_images/Entire_Site/2020023/rs_600x600-200123145928-office1.jpg?fit=around%7C1200:1200&output-quality=90&crop=1200:1200;center,top"></div>
+              <div class="char-name">Andy Bernard</div>
+              <div class="char-role">Sales Representative</div>
+              <div class="char-action">uses copier as battering ram</div>
+            </div>
+            <div class="char-card">
+              <div class="char-photo"><img src="https://theofficeanalytics.wordpress.com/wp-content/uploads/2017/10/31e7876d039c20872c65394bca137c1a_4410a99208ac7cde8b645383e2796784.jpg?w=1200"></div>
+              <div class="char-name">Phyllis Vance</div>
+              <div class="char-role">Sales Representative</div>
+              <div class="char-action">tries to grab her purse</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VIDEO + FIRST TASK ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Watch · First viewing</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-red" id="ph4">
+    <div class="phase-header" onclick="togglePhase('ph4')">
+      <span class="phase-num">04</span>
+      <div>
+        <div class="phase-title">Watch — Should vs. Actually Did</div>
+        <div class="phase-sub">First viewing · contrast task</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">▶️</div>
+          <span class="activity-title">The Office — Fire Drill (S05E14)</span>
+          <span class="activity-badge">4 min video</span>
+        </div>
+        <div class="activity-body">
+          <p>Watch the clip. While watching — fill in the right column of the table below. What do they actually do?</p>
+
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/gO8N3L_aERg?si=kvj-0BW6vnuulhGQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+          <table class="contrast-table" style="margin-top:12px;">
+            <thead>
+              <tr>
+                <th>✅ What SHOULD happen in a fire drill</th>
+                <th>❌ What ACTUALLY happens in the video</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Stay calm and follow instructions</td>
+                <td><input type="text" style="width:100%" placeholder="what do they do?"></td>
+              </tr>
+              <tr>
+                <td>Check the door handle before opening</td>
+                <td><input type="text" style="width:100%" placeholder="what do they do?"></td>
+              </tr>
+              <tr>
+                <td>Use the emergency exit in an orderly way</td>
+                <td><input type="text" style="width:100%" placeholder="what do they do?"></td>
+              </tr>
+              <tr>
+                <td>Leave personal belongings behind</td>
+                <td><input type="text" style="width:100%" placeholder="what do they do?"></td>
+              </tr>
+              <tr>
+                <td>Cover your mouth with a damp cloth</td>
+                <td><input type="text" style="width:100%" placeholder="what do they do?"></td>
+              </tr>
+              <tr>
+                <td>Call emergency services (911)</td>
+                <td><input type="text" style="width:100%" placeholder="what do they do?"></td>
+              </tr>
+              <tr>
+                <td>Assemble at the designated assembly point</td>
+                <td><input type="text" style="width:100%" placeholder="what do they do?"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_contrast')">show suggested answers ▾</button>
+          <div class="reveal-content" id="rev_contrast">
+            <div class="answer-key">
+              <div class="ak-label">What actually happens</div>
+              <ol>
+                <li>Everyone panics, screams and runs in all directions</li>
+                <li>Dwight mentions it but doors are already being rammed open</li>
+                <li>They push, shove and use a photocopier as a battering ram</li>
+                <li>Phyllis tries to grab her purse — Andy shouts "Leave it!"</li>
+                <li>Dwight mentions it but nobody listens</li>
+                <li>Dwight suggests it very late — nobody does it</li>
+                <li>They never get there — it's revealed to be a simulation first</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ COMPREHENSION ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Comprehension</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-mid" id="ph5">
+    <div class="phase-header" onclick="togglePhase('ph5')">
+      <span class="phase-num">05</span>
+      <div>
+        <div class="phase-title">Comprehension — What Just Happened?</div>
+        <div class="phase-sub">Character actions · plot · the twist</div>
+      </div>
+      <span class="phase-time">7 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">❓</div>
+          <span class="activity-title">Discussion questions</span>
+          <span class="activity-badge">7 min</span>
+        </div>
+        <div class="activity-body">
+          <div class="speaking-box">
+            <div class="speaking-box-header"><span>Answer from memory</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Who actually started the fire — and why did they do it?</div>
+              <div class="speaking-row">Who is the only person who tries to follow proper procedures? Is he successful?</div>
+              <div class="speaking-row">What does Kevin do? Why is it funny?</div>
+              <div class="speaking-row">What does Angela do with her cat — and what happens to it?</div>
+              <div class="speaking-row">How does Oscar escape — and what does Angela ask him to do?</div>
+              <div class="speaking-row">What is the twist at the end? How do people react?</div>
+              <div class="speaking-row">Why does Stanley collapse — and what does Michael do?</div>
+            </div>
+          </div>
+
+          <div class="talking-head" style="margin-top:12px;">
+            <span class="th-icon">🎙️</span>
+            <div>
+              <div class="th-label">Dwight — Talking Head Interview</div>
+              <div class="th-quote">"Last week I gave a fire safety talk and nobody paid any attention. It's my own fault for using PowerPoint. PowerPoint is boring. People learn in lots of different ways, but experience is the best teacher."</div>
+              <div class="th-name">— Dwight K. Schrute</div>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:10px;">
+            <div class="speaking-box-header"><span>React to Dwight's logic</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Do you agree that "experience is the best teacher"? Where does his logic go wrong?</div>
+              <div class="speaking-row">Is there any situation where Dwight's approach might actually work?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ VOCABULARY IN CONTEXT ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Vocabulary in Context</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-yellow" id="ph6">
+    <div class="phase-header" onclick="togglePhase('ph6')">
+      <span class="phase-num">06</span>
+      <div>
+        <div class="phase-title">Vocabulary — Good Advice or Bad Advice?</div>
+        <div class="phase-sub">Phrases from the script · register · meaning</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">💬</div>
+          <span class="activity-title">Rate each piece of "advice" from the video</span>
+          <span class="activity-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Each statement is from the script. Decide: <strong>✅ good advice / ⚠️ partly useful / ❌ terrible advice</strong> — and explain why.</p>
+
+          <ol class="exercise">
+            <li><em>"Use the surge of fear and adrenaline to sharpen your decision-making."</em> — Dwight<br>
+            Your verdict: <input type="text" size="8"> Because: <input type="text" size="30"></li>
+            <li><em>"Things can be replaced, Phyllis! People, human lives, however, cannot."</em> — Dwight<br>
+            Your verdict: <input type="text" size="8"> Because: <input type="text" size="30"></li>
+            <li><em>"Touch the handle — if it's hot, there could be a fire in the hallway."</em> — Dwight<br>
+            Your verdict: <input type="text" size="8"> Because: <input type="text" size="30"></li>
+            <li><em>"STAY F***ING CALM!"</em> — Michael<br>
+            Your verdict: <input type="text" size="8"> Because: <input type="text" size="30"></li>
+            <li><em>"Everyone for himself."</em> — Michael<br>
+            Your verdict: <input type="text" size="8"> Because: <input type="text" size="30"></li>
+            <li><em>"Use a damp rag to cover the mouth."</em> — Dwight<br>
+            Your verdict: <input type="text" size="8"> Because: <input type="text" size="30"></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📝</div>
+          <span class="activity-title">Phrases in context — formal vs informal register</span>
+          <span class="activity-badge">3 min</span>
+        </div>
+        <div class="activity-body">
+          <p>These phrases appear in the clip. Discuss: what do they mean, and how formal are they?</p>
+          <table class="vocab-table">
+            <thead><tr><th>Phrase from the script</th><th>Meaning</th><th>Formal / Informal?</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">"This was merely a simulation."</td><td><input type="text" size="18"></td><td><input type="text" size="12"></td></tr>
+              <tr><td class="eng">"I'm not dying here."</td><td><input type="text" size="18"></td><td><input type="text" size="12"></td></tr>
+              <tr><td class="eng">"Stay alive! I'm getting help!"</td><td><input type="text" size="18"></td><td><input type="text" size="12"></td></tr>
+              <tr><td class="eng">"No bunching!"</td><td><input type="text" size="18"></td><td><input type="text" size="12"></td></tr>
+              <tr><td class="eng">"Battering ram!"</td><td><input type="text" size="18"></td><td><input type="text" size="12"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ GRAMMAR ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Grammar · Modals for Instructions</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-dark" id="ph7">
+    <div class="phase-header" onclick="togglePhase('ph7')">
+      <span class="phase-num">07</span>
+      <div>
+        <div class="phase-title">Grammar — Modals for Giving Instructions</div>
+        <div class="phase-sub">must · should · ought to · don't · make sure you…</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📐</div>
+          <span class="activity-title">Grammar reference — modals for instructions & suggestions</span>
+        </div>
+        <div class="activity-body">
+          <div style="background:var(--office-cream-d); border:1px solid var(--border); border-radius:4px; padding:16px 18px;">
+            <table class="vocab-table">
+              <thead><tr><th>Modal</th><th>Use</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td class="eng">must / must not</td><td>strong obligation / prohibition</td><td>You <strong>must</strong> leave the building immediately.</td></tr>
+                <tr><td class="eng">should / shouldn't</td><td>recommendation / advice</td><td>You <strong>should</strong> remain calm.</td></tr>
+                <tr><td class="eng">ought to</td><td>recommendation (more formal)</td><td>Everyone <strong>ought to</strong> know the emergency exits.</td></tr>
+                <tr><td class="eng">don't / do not</td><td>instruction / prohibition</td><td><strong>Do not</strong> use the lift during a fire.</td></tr>
+                <tr><td class="eng">make sure (you)</td><td>instruction with emphasis</td><td><strong>Make sure you</strong> assemble at the designated point.</td></tr>
+                <tr><td class="eng">need to</td><td>necessity</td><td>You <strong>need to</strong> check the door handle first.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">✏️</div>
+          <span class="activity-title">Exercise — Rewrite the chaos as official instructions</span>
+          <span class="activity-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Take these actual lines from the video and rewrite them as calm, professional emergency instructions using modals.</p>
+
+          <div class="rewrite-card">
+            <div class="rewrite-label">Original</div>
+            <div class="rewrite-original">"EVERYBODY F***ING CALM DOWN!!"</div>
+            <div class="rewrite-label">Your professional version</div>
+            <input type="text" class="rewrite-input" placeholder="You should / must / need to…">
+          </div>
+
+          <div class="rewrite-card">
+            <div class="rewrite-label">Original</div>
+            <div class="rewrite-original">"Everyone for himself."</div>
+            <div class="rewrite-label">Your professional version</div>
+            <input type="text" class="rewrite-input" placeholder="You should / must not…">
+          </div>
+
+          <div class="rewrite-card">
+            <div class="rewrite-label">Original</div>
+            <div class="rewrite-original">"Leave it woman!" (to Phyllis trying to grab her purse)</div>
+            <div class="rewrite-label">Your professional version</div>
+            <input type="text" class="rewrite-input" placeholder="You should / do not…">
+          </div>
+
+          <div class="rewrite-card">
+            <div class="rewrite-label">Original</div>
+            <div class="rewrite-original">"Battering ram! Go go go!" (ramming door with the copier)</div>
+            <div class="rewrite-label">Your professional version</div>
+            <input type="text" class="rewrite-input" placeholder="You must not / make sure you…">
+          </div>
+
+          <div class="rewrite-card">
+            <div class="rewrite-label">Original</div>
+            <div class="rewrite-original">"Save Bandit!" (throwing a cat into the air duct)</div>
+            <div class="rewrite-label">Your professional version</div>
+            <input type="text" class="rewrite-input" placeholder="You should / do not…">
+          </div>
+
+          <div class="rewrite-card">
+            <div class="rewrite-label">Original</div>
+            <div class="rewrite-original">"HELP!! HELP!!" (Michael throwing projector out the window)</div>
+            <div class="rewrite-label">Your professional version</div>
+            <input type="text" class="rewrite-input" placeholder="You should / make sure…">
+          </div>
+
+          <button class="reveal-btn" onclick="toggleReveal('rev_rewrite')">show suggested answers ▾</button>
+          <div class="reveal-content" id="rev_rewrite">
+            <div class="answer-key">
+              <div class="ak-label">Suggested rewrites</div>
+              <ol>
+                <li><em>"You must remain calm and follow the evacuation procedure."</em></li>
+                <li><em>"You should not separate from the group — everyone must exit together."</em></li>
+                <li><em>"Do not take any personal belongings. You need to leave immediately."</em></li>
+                <li><em>"You must not force doors open. Make sure you check the handle for heat first."</em></li>
+                <li><em>"Do not attempt to rescue animals. You ought to exit the building immediately."</em></li>
+                <li><em>"You should call emergency services. Make sure you signal from a window safely."</em></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ FIRE SAFETY MEMO ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Writing · Dwight's Report</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-mid" id="ph8">
+    <div class="phase-header" onclick="togglePhase('ph8')">
+      <span class="phase-num">08</span>
+      <div>
+        <div class="phase-title">Rewrite Dwight's Incident Report</div>
+        <div class="phase-sub">Formal register · modals · email structure</div>
+      </div>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">📄</div>
+          <span class="activity-title">Dwight's version vs the official version</span>
+          <span class="activity-badge">8 min</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="talking-head" style="margin-bottom:12px;">
+            <span class="th-icon">📋</span>
+            <div>
+              <div class="th-label">Dwight's internal memo — as written</div>
+              <div class="th-quote">"To: All Dunder Mifflin Staff. <br>Re: Fire Drill Simulation. <br>Today I conduct emergency training. Nobody listen. Michael scream a lot. Kevin steal chips from machine he smash. Angela throw cat in ceiling. Oscar escape through roof like criminal. Stanley have heart attack. This is everyone fault except mine. Procedures was clear. Next time maybe I use real fire again. <br>Results: mixed. Recommend more drills."</div>
+              <div class="th-name">— D. Schrute, Assistant (to the) Regional Manager</div>
+            </div>
+          </div>
+
+          <div class="scenario-card">
+            <div class="scenario-label">Your task</div>
+            <p class="scenario-text">Rewrite Dwight's memo as a proper, professional incident report email to the Regional Manager. Use: correct grammar · Past Simple for what happened · modals for recommendations · formal email structure (Dear… / I'm writing to… / Firstly… / I recommend… / Kind regards)</p>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">Keep it to 80–100 words. Use at least 2 modals and at least 3 email structure phrases from lesson 6.</div>
+          </div>
+
+          <div class="writing-label">Your incident report</div>
+          <textarea class="writing-area" placeholder="Dear Mr Scott,
+
+I'm writing to inform you that…"></textarea>
+          <div class="word-count-hint">aim for 80–100 words</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ ROLEPLAY ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Roleplay</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-yellow" id="ph9">
+    <div class="phase-header" onclick="togglePhase('ph9')">
+      <span class="phase-num">09</span>
+      <div>
+        <div class="phase-title">Roleplay — In Character</div>
+        <div class="phase-sub">4 scenarios · pick one · go</div>
+      </div>
+      <span class="phase-time">10 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">🎭</div>
+          <span class="activity-title">Choose a scenario and roleplay</span>
+          <span class="activity-badge">10 min</span>
+        </div>
+        <div class="activity-body">
+
+          <div class="roleplay-grid">
+            <div class="roleplay-card">
+              <div class="roleplay-card-header a"><span class="roleplay-person">🎭 Scenario 1</span></div>
+              <div class="roleplay-card-body">
+                <strong>You are the office manager</strong> announcing a surprise fire drill. Give clear instructions to the employees.<br><br>
+                <strong>Teacher plays:</strong> a confused employee who asks lots of questions and doesn't want to leave their desk.
+              </div>
+            </div>
+            <div class="roleplay-card">
+              <div class="roleplay-card-header b"><span class="roleplay-person">🎭 Scenario 2</span></div>
+              <div class="roleplay-card-body">
+                <strong>You discovered a blocked emergency exit</strong> during the drill. Report the issue to the office manager and suggest what should be done.<br><br>
+                <strong>Teacher plays:</strong> the manager who is panicking about the situation.
+              </div>
+            </div>
+            <div class="roleplay-card">
+              <div class="roleplay-card-header a"><span class="roleplay-person">🎭 Scenario 3</span></div>
+              <div class="roleplay-card-body">
+                <strong>You are Dwight</strong> — the drill has just been revealed as a simulation. Explain your reasoning to HR why this was a good idea.<br><br>
+                <strong>Teacher plays:</strong> a very unhappy HR manager who is not convinced.
+              </div>
+            </div>
+            <div class="roleplay-card">
+              <div class="roleplay-card-header b"><span class="roleplay-person">🎭 Scenario 4</span></div>
+              <div class="roleplay-card-body">
+                <strong>You are an employee being interviewed</strong> after the drill by a journalist writing about office safety.<br><br>
+                <strong>Teacher plays:</strong> the journalist. Pick any character from the show to roleplay as.
+              </div>
+            </div>
+          </div>
+
+          <div class="tip-box" style="margin-top:10px;">
+            <span class="tip-icon">🎯</span>
+            <div class="tip-text">Must use: <strong>at least 2 modals</strong> (should / must / ought to / need to) + <strong>at least 3 vocabulary words</strong> from Phase 02.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ RATE THE EMPLOYEES ══ -->
+  <div class="section-rule">
+    <div class="section-rule-line"></div>
+    <div class="section-rule-label">Wrap-up · Rate the Employees</div>
+    <div class="section-rule-line-short"></div>
+  </div>
+
+  <div class="phase ph-dark" id="ph10">
+    <div class="phase-header" onclick="togglePhase('ph10')">
+      <span class="phase-num">10</span>
+      <div>
+        <div class="phase-title">Rate the Employees — Performance Review</div>
+        <div class="phase-sub">Who followed procedures? Who stayed calm?</div>
+      </div>
+      <span class="phase-time">5 min</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="activity-icon">⭐</div>
+          <span class="activity-title">Annual Performance Review — Emergency Preparedness</span>
+          <span class="activity-badge">5 min</span>
+        </div>
+        <div class="activity-body">
+          <p>Rate each employee 1–5 on two criteria. Click the stars to rate, then explain your scores out loud.</p>
+
+          <div class="rating-grid">
+            <div class="rating-card">
+              <div class="rating-card-header"><div class="rating-char">Michael Scott</div></div>
+              <div class="rating-body">
+                <div class="rating-label">Followed procedures</div>
+                <div class="rating-stars" id="ms-proc">
+                  <div class="star" onclick="rateStar('ms-proc',1)">★</div>
+                  <div class="star" onclick="rateStar('ms-proc',2)">★</div>
+                  <div class="star" onclick="rateStar('ms-proc',3)">★</div>
+                  <div class="star" onclick="rateStar('ms-proc',4)">★</div>
+                  <div class="star" onclick="rateStar('ms-proc',5)">★</div>
+                </div>
+                <div class="rating-label">Stayed calm</div>
+                <div class="rating-stars" id="ms-calm">
+                  <div class="star" onclick="rateStar('ms-calm',1)">★</div>
+                  <div class="star" onclick="rateStar('ms-calm',2)">★</div>
+                  <div class="star" onclick="rateStar('ms-calm',3)">★</div>
+                  <div class="star" onclick="rateStar('ms-calm',4)">★</div>
+                  <div class="star" onclick="rateStar('ms-calm',5)">★</div>
+                </div>
+                <input class="rating-note" type="text" placeholder="reason…">
+              </div>
+            </div>
+            <div class="rating-card">
+              <div class="rating-card-header"><div class="rating-char">Dwight Schrute</div></div>
+              <div class="rating-body">
+                <div class="rating-label">Followed procedures</div>
+                <div class="rating-stars" id="dw-proc">
+                  <div class="star" onclick="rateStar('dw-proc',1)">★</div>
+                  <div class="star" onclick="rateStar('dw-proc',2)">★</div>
+                  <div class="star" onclick="rateStar('dw-proc',3)">★</div>
+                  <div class="star" onclick="rateStar('dw-proc',4)">★</div>
+                  <div class="star" onclick="rateStar('dw-proc',5)">★</div>
+                </div>
+                <div class="rating-label">Stayed calm</div>
+                <div class="rating-stars" id="dw-calm">
+                  <div class="star" onclick="rateStar('dw-calm',1)">★</div>
+                  <div class="star" onclick="rateStar('dw-calm',2)">★</div>
+                  <div class="star" onclick="rateStar('dw-calm',3)">★</div>
+                  <div class="star" onclick="rateStar('dw-calm',4)">★</div>
+                  <div class="star" onclick="rateStar('dw-calm',5)">★</div>
+                </div>
+                <input class="rating-note" type="text" placeholder="reason…">
+              </div>
+            </div>
+            <div class="rating-card">
+              <div class="rating-card-header"><div class="rating-char">Kevin Malone</div></div>
+              <div class="rating-body">
+                <div class="rating-label">Followed procedures</div>
+                <div class="rating-stars" id="kv-proc">
+                  <div class="star" onclick="rateStar('kv-proc',1)">★</div>
+                  <div class="star" onclick="rateStar('kv-proc',2)">★</div>
+                  <div class="star" onclick="rateStar('kv-proc',3)">★</div>
+                  <div class="star" onclick="rateStar('kv-proc',4)">★</div>
+                  <div class="star" onclick="rateStar('kv-proc',5)">★</div>
+                </div>
+                <div class="rating-label">Stayed calm</div>
+                <div class="rating-stars" id="kv-calm">
+                  <div class="star" onclick="rateStar('kv-calm',1)">★</div>
+                  <div class="star" onclick="rateStar('kv-calm',2)">★</div>
+                  <div class="star" onclick="rateStar('kv-calm',3)">★</div>
+                  <div class="star" onclick="rateStar('kv-calm',4)">★</div>
+                  <div class="star" onclick="rateStar('kv-calm',5)">★</div>
+                </div>
+                <input class="rating-note" type="text" placeholder="reason…">
+              </div>
+            </div>
+            <div class="rating-card">
+              <div class="rating-card-header"><div class="rating-char">Angela Martin</div></div>
+              <div class="rating-body">
+                <div class="rating-label">Followed procedures</div>
+                <div class="rating-stars" id="an-proc">
+                  <div class="star" onclick="rateStar('an-proc',1)">★</div>
+                  <div class="star" onclick="rateStar('an-proc',2)">★</div>
+                  <div class="star" onclick="rateStar('an-proc',3)">★</div>
+                  <div class="star" onclick="rateStar('an-proc',4)">★</div>
+                  <div class="star" onclick="rateStar('an-proc',5)">★</div>
+                </div>
+                <div class="rating-label">Stayed calm</div>
+                <div class="rating-stars" id="an-calm">
+                  <div class="star" onclick="rateStar('an-calm',1)">★</div>
+                  <div class="star" onclick="rateStar('an-calm',2)">★</div>
+                  <div class="star" onclick="rateStar('an-calm',3)">★</div>
+                  <div class="star" onclick="rateStar('an-calm',4)">★</div>
+                  <div class="star" onclick="rateStar('an-calm',5)">★</div>
+                </div>
+                <input class="rating-note" type="text" placeholder="reason…">
+              </div>
+            </div>
+            <div class="rating-card">
+              <div class="rating-card-header"><div class="rating-char">Oscar Martinez</div></div>
+              <div class="rating-body">
+                <div class="rating-label">Followed procedures</div>
+                <div class="rating-stars" id="os-proc">
+                  <div class="star" onclick="rateStar('os-proc',1)">★</div>
+                  <div class="star" onclick="rateStar('os-proc',2)">★</div>
+                  <div class="star" onclick="rateStar('os-proc',3)">★</div>
+                  <div class="star" onclick="rateStar('os-proc',4)">★</div>
+                  <div class="star" onclick="rateStar('os-proc',5)">★</div>
+                </div>
+                <div class="rating-label">Stayed calm</div>
+                <div class="rating-stars" id="os-calm">
+                  <div class="star" onclick="rateStar('os-calm',1)">★</div>
+                  <div class="star" onclick="rateStar('os-calm',2)">★</div>
+                  <div class="star" onclick="rateStar('os-calm',3)">★</div>
+                  <div class="star" onclick="rateStar('os-calm',4)">★</div>
+                  <div class="star" onclick="rateStar('os-calm',5)">★</div>
+                </div>
+                <input class="rating-note" type="text" placeholder="reason…">
+              </div>
+            </div>
+            <div class="rating-card">
+              <div class="rating-card-header"><div class="rating-char">Jim Halpert</div></div>
+              <div class="rating-body">
+                <div class="rating-label">Followed procedures</div>
+                <div class="rating-stars" id="ji-proc">
+                  <div class="star" onclick="rateStar('ji-proc',1)">★</div>
+                  <div class="star" onclick="rateStar('ji-proc',2)">★</div>
+                  <div class="star" onclick="rateStar('ji-proc',3)">★</div>
+                  <div class="star" onclick="rateStar('ji-proc',4)">★</div>
+                  <div class="star" onclick="rateStar('ji-proc',5)">★</div>
+                </div>
+                <div class="rating-label">Stayed calm</div>
+                <div class="rating-stars" id="ji-calm">
+                  <div class="star" onclick="rateStar('ji-calm',1)">★</div>
+                  <div class="star" onclick="rateStar('ji-calm',2)">★</div>
+                  <div class="star" onclick="rateStar('ji-calm',3)">★</div>
+                  <div class="star" onclick="rateStar('ji-calm',4)">★</div>
+                  <div class="star" onclick="rateStar('ji-calm',5)">★</div>
+                </div>
+                <input class="rating-note" type="text" placeholder="reason…">
+              </div>
+            </div>
+            <div class="rating-card">
+              <div class="rating-card-header"><div class="rating-char">Stanley Hudson</div></div>
+              <div class="rating-body">
+                <div class="rating-label">Followed procedures</div>
+                <div class="rating-stars" id="st-proc">
+                  <div class="star" onclick="rateStar('st-proc',1)">★</div>
+                  <div class="star" onclick="rateStar('st-proc',2)">★</div>
+                  <div class="star" onclick="rateStar('st-proc',3)">★</div>
+                  <div class="star" onclick="rateStar('st-proc',4)">★</div>
+                  <div class="star" onclick="rateStar('st-proc',5)">★</div>
+                </div>
+                <div class="rating-label">Stayed calm</div>
+                <div class="rating-stars" id="st-calm">
+                  <div class="star" onclick="rateStar('st-calm',1)">★</div>
+                  <div class="star" onclick="rateStar('st-calm',2)">★</div>
+                  <div class="star" onclick="rateStar('st-calm',3)">★</div>
+                  <div class="star" onclick="rateStar('st-calm',4)">★</div>
+                  <div class="star" onclick="rateStar('st-calm',5)">★</div>
+                </div>
+                <input class="rating-note" type="text" placeholder="reason…">
+              </div>
+            </div>
+            <div class="rating-card">
+              <div class="rating-card-header"><div class="rating-char">Phyllis Vance</div></div>
+              <div class="rating-body">
+                <div class="rating-label">Followed procedures</div>
+                <div class="rating-stars" id="ph-proc">
+                  <div class="star" onclick="rateStar('ph-proc',1)">★</div>
+                  <div class="star" onclick="rateStar('ph-proc',2)">★</div>
+                  <div class="star" onclick="rateStar('ph-proc',3)">★</div>
+                  <div class="star" onclick="rateStar('ph-proc',4)">★</div>
+                  <div class="star" onclick="rateStar('ph-proc',5)">★</div>
+                </div>
+                <div class="rating-label">Stayed calm</div>
+                <div class="rating-stars" id="ph-calm">
+                  <div class="star" onclick="rateStar('ph-calm',1)">★</div>
+                  <div class="star" onclick="rateStar('ph-calm',2)">★</div>
+                  <div class="star" onclick="rateStar('ph-calm',3)">★</div>
+                  <div class="star" onclick="rateStar('ph-calm',4)">★</div>
+                  <div class="star" onclick="rateStar('ph-calm',5)">★</div>
+                </div>
+                <input class="rating-note" type="text" placeholder="reason…">
+              </div>
+            </div>
+          </div>
+
+          <div class="speaking-box" style="margin-top:12px;">
+            <div class="speaking-box-header"><span>Final discussion</span></div>
+            <div class="speaking-box-body">
+              <div class="speaking-row">Dwight's goal was to teach people through experience. Did it work?</div>
+              <div class="speaking-row">Does your company have emergency procedures? Do people actually follow them?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HOMEWORK -->
+  <div class="hw-block">
+    <p style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--office-yellow); margin:0 0 12px">📚 Homework</p>
+    <ul class="steps">
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">1</span><span><strong style="color:#fff">Write</strong> your company's fire drill procedure in English — 5 bullet points using modals: <em>must / should / do not / make sure / need to.</em></span></li>
+      <li style="color:rgba(255,255,255,0.85)"><span class="step-num" style="background:rgba(255,255,255,0.2);color:#fff">3</span><span><strong style="color:#fff">Watch</strong> the video again (no subtitles if possible). Note 3 phrases or expressions you'd like to understand better</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+function rateStar(groupId, n) {
+  const group = document.getElementById(groupId);
+  const stars = group.querySelectorAll('.star');
+  stars.forEach((s, i) => {
+    s.classList.toggle('filled', i < n);
+  });
+}
+</script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  
+    const app = initializeApp({
+      databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+    });
+    const db = getDatabase(app);
+  
+    // ID уроку — міняй для кожного файлу
+    const LESSON_ID = "volodymyr_lesson12";
+  
+    // Зберігаємо при введенні
+   // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+      const key = `field_${i}`;
+  
+      // Завантажуємо збережене
+      onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+    if (snap.exists()) {
+      const val = snap.val();
+      if (document.activeElement !== el) el.value = val;
+    }
+  });
+      // Зберігаємо при зміні
+      el.addEventListener('input', () => {
+        set(ref(db, `${LESSON_ID}/${key}`), el.value);
+      });
+    });
+  </script>
+</body>
+</html>

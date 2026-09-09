@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2D Planet Earth: Jungles</title>
+<style>
+:root{
+  --forest:#1e4020;--forest-mid:#2a5a2a;
+  --teal:#009980;--teal-dark:#006f60;--teal-light:#e0f5f0;--teal-border:#80d8c0;
+  --navy:#1d2d50;--navy-light:#2a3d6a;
+  --bbc-red:#bb1919;
+  --green:#2a8a5c;--green-light:#e8f5ee;--green-border:#80c8a0;
+  --amber:#c8700a;--amber-light:#fef3e8;
+  --text:#1a1f2e;--muted:#5a6070;--bg:#f4faf6;--card:#ffffff;--border:#c8e0d0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;padding-bottom:60px;}
+
+
+.letter-gap{
+  display:inline-block;border:none;
+  border-bottom:2px solid var(--teal);
+  background:#eaf5ef;width:18px;text-align:center;
+  font-size:0.93rem;font-family:inherit;
+  padding:0 1px;margin:0 1px;color:var(--text);
+}
+.letter-gap:focus{outline:none;border-bottom-color:var(--teal-dark);background:#d0ede5;}
+
+
+
+
+
+/* HEADER */
+header{background:var(--forest);border-bottom:4px solid var(--teal);}
+.header-inner{max-width:1280px;margin:0 auto;padding:24px 40px;display:grid;grid-template-columns:auto auto 1fr auto;align-items:center;gap:16px;}
+.header-unit{background:var(--teal-dark);color:white;font-weight:800;font-size:1.8rem;padding:8px 18px;border-radius:6px;line-height:1;}
+.bbc-badge{display:inline-flex;gap:3px;margin-right:4px;}
+.bbc-badge span{background:white;color:var(--bbc-red);font-weight:900;font-size:0.95rem;padding:3px 6px;border-radius:2px;}
+.bbc-doc-label{background:#2a7a40;color:white;font-weight:700;font-size:0.85rem;padding:4px 10px;border-radius:4px;}
+.header-text h1{color:#fff;font-size:1.65rem;font-weight:700;margin-bottom:6px;}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.htag-s{background:rgba(0,153,128,0.25);color:#00c8a8;border:1px solid rgba(0,153,128,0.4);}
+.htag-w{background:rgba(200,112,10,0.2);color:#f08030;border:1px solid rgba(200,112,10,0.3);}
+.header-right{text-align:right;color:#90c8a0;font-size:0.8rem;line-height:1.6;}
+
+/* WRAP */
+.wrap{max-width:1280px;margin:0 auto;padding:24px 40px;}
+
+/* SECTION LABEL (PREVIEW / VIEW / SPEAKING / WRITING style) */
+.section-header{
+  background:var(--forest);color:white;font-weight:800;font-size:1rem;
+  padding:8px 16px;display:inline-block;border-radius:4px;
+  letter-spacing:0.5px;margin:24px 0 12px;
+}
+.section-header.view{background:var(--teal-dark);}
+.section-header.speaking{background:#2a6040;}
+.section-header.writing{background:#3a5020;}
+.section-header.review{background:var(--navy);}
+
+/* PHASE */
+.phase{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-top:16px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.07);}
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.ph-stripe{width:6px;flex-shrink:0;}
+.ph-num{color:white;font-weight:800;font-size:0.95rem;padding:14px 18px;display:flex;align-items:center;justify-content:center;min-width:52px;}
+.ph-title{flex:1;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ph-title h2{font-size:1rem;font-weight:700;color:var(--navy);margin:0;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+/* phase colour sets */
+.c-pre .ph-stripe,.c-pre .ph-num{background:var(--forest);}
+.c-view .ph-stripe,.c-view .ph-num{background:var(--teal-dark);}
+.c-spk .ph-stripe,.c-spk .ph-num{background:#2a6040;}
+.c-write .ph-stripe,.c-write .ph-num{background:var(--amber);}
+.c-review .ph-stripe,.c-review .ph-num{background:var(--navy);}
+
+.c-pre .pbadge{background:var(--teal-light);color:var(--teal-dark);}
+.c-view .pbadge{background:var(--teal-light);color:var(--teal-dark);}
+.c-spk .pbadge{background:#e0f0e8;color:#2a6040;}
+.c-write .pbadge{background:var(--amber-light);color:var(--amber);}
+.c-review .pbadge{background:#eaecf5;color:var(--navy);}
+
+/* LAYOUTS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.col-5-7{display:grid;grid-template-columns:5fr 7fr;gap:20px;margin:14px 0;}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:20px;margin:14px 0;}
+@media(max-width:900px){.two-col,.col-5-7,.col-7-5{grid-template-columns:1fr;}.wrap,.header-inner{padding:16px 18px;}}
+
+/* ELEMENTS */
+.box{background:#f5faf7;border:1px solid var(--border);border-left:3px solid var(--forest);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-teal{background:var(--teal-light);border-left-color:var(--teal);}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.box-amber{background:var(--amber-light);border-left-color:var(--amber);}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:white;border:1px solid var(--teal);color:var(--teal-dark);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+input.gap{background:#eaf5ef;border:none;border-bottom:2px dotted var(--teal);color:var(--text);font-size:1rem;width:130px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--teal);}
+textarea.write-area{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:inherit;font-size:0.93rem;resize:vertical;background:white;color:var(--text);min-height:140px;}
+textarea.write-area:focus{outline:none;border-color:var(--teal);}
+.reveal-btn{background:var(--teal-dark);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
+.reveal-btn:hover{background:var(--forest);}
+.answer{display:none;background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+audio{width:100%;margin:8px 0;border-radius:6px;}
+h3{color:var(--forest);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+.sec-label{display:inline-block;background:var(--forest);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+
+/* VIDEO / IMG PLACEHOLDERS */
+.video-slot{background:#0d1a0d;border-radius:10px;overflow:hidden;margin:12px 0;position:relative;}
+.video-slot video{width:100%;display:block;max-height:340px;}
+.video-label{background:#0d1a0d;color:#80c890;font-size:0.82rem;padding:8px 14px;text-align:center;font-weight:600;}
+.img-ph{background:#c8dcc8;border:2px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.88rem;text-align:center;min-height:200px;}
+
+/* BBC VIDEO CARD */
+.bbc-card{
+  background:#0d1a0d;border-radius:10px;overflow:hidden;margin:14px 0;
+}
+.bbc-card-top{display:grid;grid-template-columns:220px 1fr;min-height:160px;}
+.bbc-card-img{position:relative;background:#1a3a1a;min-height:160px;display:flex;align-items:center;justify-content:center;}
+.bbc-card-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.bbc-play{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:rgba(0,0,0,0.7);border:3px solid white;border-radius:50%;
+  width:52px;height:52px;display:flex;align-items:center;justify-content:center;
+}
+.bbc-play::after{content:'▶';color:white;font-size:1.2rem;margin-left:4px;}
+.bbc-logo-abs{position:absolute;bottom:8px;right:8px;display:flex;gap:2px;}
+.bbc-logo-abs span{background:white;color:var(--bbc-red);font-weight:900;font-size:0.75rem;padding:2px 4px;border-radius:1px;}
+.bbc-card-text{padding:16px 20px;color:#c8e8c8;}
+.bbc-card-text h4{color:white;font-size:1rem;margin:0 0 8px;}
+.bbc-card-text p{font-size:0.88rem;line-height:1.6;color:#a0c8a8;}
+
+/* KEY PHRASES BOX */
+.key-phrases-box{
+  background:#f0f8f2;border:2px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:12px 0;
+}
+.key-phrases-box h4{color:var(--teal-dark);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.kp-list{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.kp-item{display:flex;gap:8px;align-items:center;padding:5px 0;font-size:0.9rem;border-bottom:1px dotted var(--teal-border);}
+.kp-item:last-child{border-bottom:none;}
+.kp-check input[type=checkbox]{accent-color:var(--teal);width:16px;height:16px;}
+
+/* STORY TEXT */
+.story-card{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.story-card-head{background:var(--forest);color:white;padding:12px 18px;}
+.story-card-head h4{font-size:1.1rem;margin:0;}
+.story-card-body{padding:16px 18px;font-size:0.93rem;line-height:1.75;}
+
+/* LIZARD PHOTO */
+.lizard-photo{width:100%;border-radius:8px;display:block;border:1px solid var(--border);background:#c8dcc8;min-height:200px;object-fit:cover;}
+
+/* REVIEW DIVIDER */
+.review-divider{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:10px;padding:16px 24px;margin:30px 0 0;display:flex;align-items:center;gap:14px;}
+.review-divider h3{color:white;margin:0;font-size:1.1rem;}
+.review-divider span{background:rgba(255,255,255,0.15);color:white;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-unit">2D</div>
+    <div>
+      <div class="bbc-badge"><span>B</span><span>B</span><span>C</span></div>
+      <span class="bbc-doc-label">Documentary</span>
+    </div>
+    <div class="header-text">
+      <h1>Planet Earth: Jungles</h1>
+      <div class="header-tags">
+        <span class="htag htag-s">Speaking: discuss difficult situations</span>
+        <span class="htag htag-w">Writing: a personal experience</span>
+      </div>
+    </div>
+    <div class="header-right">Speakout B1+<br>Unit 2 · behaviour</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+
+
+<!-- ═══ UNIT 2 REVIEW ════════════════════════════════════════ -->
+<div class="review-divider"><h3>Unit 2 Review</h3></div>
+
+<div class="phase c-review">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R1</div>
+    <div class="ph-title">
+      <h2>Review — Grammar: Present Perfect Continuous + Relative Clauses</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar review</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="sec-label">Present perfect continuous</div>
+    <p><strong>1A.</strong> Complete the sentences with the present perfect continuous form of the verbs in brackets.</p>
+    <div class="two-col">
+      <ol>
+        <li>I <input class="gap" placeholder="(try)"> some new ideas for recipes.</li>
+        <li>We <input class="gap" placeholder="(practise)"> the violin. We have a concert next week.</li>
+        <li>She <input class="gap" placeholder="(research)"> a story about how the government lost the election. She has a deadline tomorrow.</li>
+        <li>They <input class="gap" placeholder="(talk)"> with some new clients. They're interested in buying our products.</li>
+        <li>I <input class="gap" placeholder="(mark)"> exam papers, which I need to give back to my students this week.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 've been trying · 2 've been practising · 3 's been researching<br>
+          4 've been talking · 5 've been marking
+        </div>
+      </div>
+    </div>
+
+    <p><strong>1B.</strong> Think of a job to go with each sentence in Ex 1A. Write two or three sentences that this person could say at the end of a busy day. Use the present perfect continuous.</p>
+    <div class="box box-teal" style="font-style:italic;color:var(--teal-dark);">I've been interviewing politicians. I've been reading through reports.</div>
+    <button class="reveal-btn" onclick="show(this)">Possible jobs</button>
+    <div class="answer">1 chef / café owner · 2 musician · 3 (political) journalist · 4 business person / sales person · 5 teacher</div>
+
+    <div class="sec-label" style="margin-top:22px;">Relative clauses</div>
+    <p><strong>2A.</strong> Complete the phrases with the words in the box. Put <strong>–</strong> if it's possible to leave the gap blank. More than one answer might be possible.</p>
+    <div class="wordbox"><span class="chip">that</span><span class="chip">to</span><span class="chip">when</span><span class="chip">where</span><span class="chip">which</span><span class="chip">who</span><span class="chip">whose</span></div>
+    <div class="two-col">
+      <ol>
+        <li>the last book <input class="gap" style="width:100px;" placeholder="..."> you read</li>
+        <li>a time of day <input class="gap" style="width:100px;" placeholder="..."> you feel the most relaxed</li>
+        <li>someone <input class="gap" style="width:100px;" placeholder="..."> you'd like to meet</li>
+        <li>the best places <input class="gap" style="width:100px;" placeholder="..."> eat lunch near you</li>
+        <li>a person <input class="gap" style="width:100px;" placeholder="..."> songs you love</li>
+      </ol>
+      <ol start="6">
+        <li>a film <input class="gap" style="width:100px;" placeholder="..."> almost made you cry</li>
+        <li>the first person <input class="gap" style="width:100px;" placeholder="..."> teach you English</li>
+        <li>an ability <input class="gap" style="width:100px;" placeholder="..."> you wish you had</li>
+        <li>a nearby café <input class="gap" style="width:100px;" placeholder="..."> they make great coffee</li>
+        <li>a person <input class="gap" style="width:100px;" placeholder="..."> makes you laugh</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 –/that · 2 –/when/that · 3 –/who/that · 4 to · 5 whose<br>
+      6 which/that · 7 to · 8 –/that · 9 where · 10 who/that
+    </div>
+
+    <p><strong>2B.</strong> Choose one of the topics in Ex 2A. Talk about it for one minute.</p>
+
+  </div>
+</div>
+
+<div class="phase c-review">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R2</div>
+    <div class="ph-title">
+      <h2>Review — Vocabulary + Text: Taking the Pain Out of the Wait</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary review</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="sec-label">Vocabulary</div>
+    <p><strong>3A.</strong> Add vowels to complete the phrases (1–12).</p>
+    <div class="two-col">
+        <ol>
+          <li><input class="letter-gap" maxlength="1">ch<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"> goals</li>
+          <li><input class="letter-gap" maxlength="1">rg<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1"> with someone</li>
+          <li><input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">d arguments</li>
+          <li>be someone's f<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">lt</li>
+          <li>do someone a f<input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">r</li>
+          <li>feel g<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">lty</li>
+        </ol>
+        <ol start="7">
+          <li><input class="letter-gap" maxlength="1">gn<input class="letter-gap" maxlength="1">r<input class="letter-gap" maxlength="1"> someone</li>
+          <li>k<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">p on doing</li>
+          <li>make a c<input class="letter-gap" maxlength="1">mm<input class="letter-gap" maxlength="1">nt</li>
+          <li>m<input class="letter-gap" maxlength="1">n<input class="letter-gap" maxlength="1">g<input class="letter-gap" maxlength="1"> to do</li>
+          <li>set g<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">ls</li>
+          <li>t<input class="letter-gap" maxlength="1">k<input class="letter-gap" maxlength="1"> up something new</li>
+        </ol>
+      </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 achieve · 2 argue · 3 avoid · 4 fault · 5 favour · 6 guilty<br>
+      7 ignore · 8 keep · 9 comment · 10 manage · 11 goals · 12 take
+    </div>
+
+    <p><strong>3B.</strong> Choose one of the topics and talk about it. Use at least three phrases from Ex 3A.</p>
+    <ol>
+      <li>A change you've made in your life that was difficult to make.</li>
+      <li>Things that bother you when you're trying to sleep.</li>
+      <li>A time that someone was angry with you, or you were angry with them.</li>
+    </ol>
+
+    <div class="sec-label" style="margin-top:22px;">Reading + grammar</div>
+    <p><strong>4A.</strong> Choose the correct options (A–C) to complete the text.</p>
+
+    <div class="col-7-5" style="align-items:start;">
+      <div class="box" style="font-size:0.93rem;line-height:1.75;">
+        <p style="font-weight:700;font-size:1rem;color:var(--forest);margin-bottom:10px;">Taking the pain out of the wait</p>
+        <p>Waiting in a queue <sup>1</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> most people crazy, and that's bad for business. So businesses <sup>2</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> a lot of effort to solve this. When high-rise buildings became common, waiting for the lift was frustrating for anyone who was in a <sup>3</sup><input class="gap" style="width:75px;" placeholder="A/B/C">, and there were lots of complaints. So mirrors were put next to the lifts and complaints dropped because it gave people something to look at while waiting. An airport was <sup>4</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> getting complaints about the long wait for baggage. When they moved the arrival gates further away, complaints about waiting stopped, and no one got <sup>5</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> about the longer walk. When a new electronic product comes out, there can be long queues, and people <sup>6</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> outside a shop can be a real problem. Danish researchers found a solution: serve the last people <sup>7</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> first. That way there's no reason to show up early. As far as we know, no other countries are <sup>8</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> to try out the Danish solution – we can guess how people might <sup>9</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> to it. Most people would probably stick to their belief that first-come, first-served is fair, and anyone <sup>10</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> the queue is just behaving rudely.</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:0.83rem;color:var(--muted);display:grid;grid-template-columns:1fr 1fr;gap:3px;">
+          <span>1 A causes &nbsp; B gets &nbsp; C drives</span>
+          <span>2 A make &nbsp; B do &nbsp; C have</span>
+          <span>3 A way &nbsp; B hurry &nbsp; C speed</span>
+          <span>4 A constantly &nbsp; B ever &nbsp; C continual</span>
+          <span>5 A far &nbsp; B tired &nbsp; C upset</span>
+          <span>6 A camping &nbsp; B camp &nbsp; C who</span>
+          <span>7 A arrived &nbsp; B who &nbsp; C to arrive</span>
+          <span>8 A thinking &nbsp; B intends &nbsp; C planning</span>
+          <span>9 A answer &nbsp; B react &nbsp; C argue</span>
+          <span>10 A jump &nbsp; B jumping &nbsp; C jumps</span>
+        </div>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1C · 2A · 3B · 4A · 5C · 6A · 7C · 8C · 9B · 10B</div>
+        <div class="box" style="margin-top:14px;">
+          <p><strong>4B.</strong> Listen and check.</p>
+          <audio controls><source src="R2_01.mp3" type="audio/mpeg"></audio>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 2D · Planet Earth II: Jungles · Unit 2 Review</footer>
+
+<script>
+function toggle(h){h.parentElement.classList.toggle('collapsed');}
+function show(btn){
+  const a=btn.nextElementSibling;
+  a.classList.toggle('show');
+  btn.textContent=a.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
+}
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  
+    const app = initializeApp({
+      databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+    });
+    const db = getDatabase(app);
+  
+    // ID уроку — міняй для кожного файлу
+    const LESSON_ID = "sofia_lesson13";
+  
+    // Зберігаємо при введенні
+   // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+      const key = `field_${i}`;
+  
+      // Завантажуємо збережене
+      onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+    if (snap.exists()) {
+      const val = snap.val();
+      if (document.activeElement !== el) el.value = val;
+    }
+  });
+      // Зберігаємо при зміні
+      el.addEventListener('input', () => {
+        set(ref(db, `${LESSON_ID}/${key}`), el.value);
+      });
+    });
+  </script>
+
+</body>
+</html>

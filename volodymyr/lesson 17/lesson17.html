@@ -230,12 +230,100 @@ mark.hl { background:#fff3b0; padding:0 3px; border-radius:2px; color:var(--ink)
   <div class="header-stripe"></div>
   <div class="header-body">
     <div class="eyebrow">English for Tech</div>
-    <h1 class="h1">QA Testing</h1>
+    <h1 class="h1">QA Testing + Storytelling</h1>
   </div>
 </div>
 
 
 <div class="main">
+
+
+<!-- revision по пасивному-->
+
+<div class="rule"><div class="rule-line"></div><div class="rule-label">Revision · Passive Voice</div><div class="rule-line-short"></div></div>
+
+<div class="phase ph-gold" id="ph_pv">
+  <div class="phase-header" onclick="togglePhase('ph_pv')">
+    <span class="phase-num">R</span>
+    <div><div class="phase-title">Quick Revision</div></div>
+    
+  </div>
+  <div class="phase-body">
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">🔁</div><span class="activity-title">Exercise A — Active or passive? Rewrite</span></div>
+      <div class="activity-body">
+        <p>Rewrite each sentence in the opposite voice (active → passive, or passive → active).</p>
+        <ol class="exercise">
+          <li>The team deployed the new feature yesterday. → <input type="text" style="width:100%"></li>
+          <li>The bug has been fixed by the QA engineer. → <input type="text" style="width:100%"></li>
+          <li>Someone will review your pull request tomorrow. → <input type="text" style="width:100%"></li>
+          <li>The design was rejected by the client. → <input type="text" style="width:100%"></li>
+          <li>They are testing the new update right now. → <input type="text" style="width:100%"></li>
+          <li>The server crashed twice last week (no passive needed — why not?). → <input type="text" style="width:100%"></li>
+        </ol>
+        <button class="reveal-btn" onclick="toggleReveal('rev_pv_a')">show answers ▾</button>
+        <div class="reveal-content" id="rev_pv_a">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol>
+              <li><strong>The new feature was deployed (by the team) yesterday.</strong></li>
+              <li><strong>The QA engineer has fixed the bug.</strong></li>
+              <li><strong>Your pull request will be reviewed tomorrow.</strong></li>
+              <li><strong>The client rejected the design.</strong></li>
+              <li><strong>The new update is being tested right now.</strong></li>
+              <li><strong>No passive possible</strong> — "crash" is an intransitive verb (no direct object), so it can't take a passive form.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">✏️</div><span class="activity-title">Exercise B — Fill in the correct passive form</span></div>
+      <div class="activity-body">
+        <ol class="exercise">
+          <li>Our roadmap <input type="text" style="width:100%"> (update) every quarter.</li>
+          <li>The demo <input type="text" style="width:100%"> (show) to the client next Friday.</li>
+          <li>All feedback <input type="text" style="width:100%"> (already / collect) before the retro.</li>
+          <li>This ticket <input type="text" style="width:100%"> (should / assign) to someone senior.</li>
+          <li>The new API <input type="text" style="width:100%"> (build) right now.</li>
+        </ol>
+        <button class="reveal-btn" onclick="toggleReveal('rev_pv_b')">show answers ▾</button>
+        <div class="reveal-content" id="rev_pv_b">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol>
+              <li><strong>is updated</strong></li>
+              <li><strong>will be shown</strong></li>
+              <li><strong>has already been collected</strong></li>
+              <li><strong>should be assigned</strong></li>
+              <li><strong>is being built</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">🗣️</div><span class="activity-title">Exercise C — Talk about it</span></div>
+      <div class="activity-body">
+        <p>Describe your team's current sprint or project using at least 4 passive sentences (e.g. what's being built, what's been decided, what will be released).</p>
+        <div class="tip-box">
+          <span class="tip-icon">🎯</span>
+          <div class="tip-text">Try mixing tenses: one Present Simple passive, one Present Continuous passive, one Present Perfect passive, one Future passive.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
 
 
 
@@ -246,9 +334,9 @@ mark.hl { background:#fff3b0; padding:0 3px; border-radius:2px; color:var(--ink)
 
 <div class="rule"><div class="rule-line"></div><div class="rule-label">Vocabulary</div><div class="rule-line-short"></div></div>
 
-<div class="phase ph-blue" id="ph5">
-  <div class="phase-header" onclick="togglePhase('ph5')">
-    <span class="phase-num">05</span>
+<div class="phase ph-blue" id="ph3">
+  <div class="phase-header" onclick="togglePhase('ph3')">
+    <span class="phase-num">03</span>
     <div><div class="phase-title">Storytelling Phrasal Verbs</div><div class="phase-sub">6 phrases for telling stories at work</div></div>
 
   </div>
@@ -356,9 +444,9 @@ mark.hl { background:#fff3b0; padding:0 3px; border-radius:2px; color:var(--ink)
 
 <div class="rule"><div class="rule-line"></div><div class="rule-label">Writing &amp; Soft Skills</div><div class="rule-line-short"></div></div>
 
-<div class="phase ph-navy" id="ph6">
-  <div class="phase-header" onclick="togglePhase('ph6')">
-    <span class="phase-num">06</span>
+<div class="phase ph-navy" id="ph4">
+  <div class="phase-header" onclick="togglePhase('ph4')">
+    <span class="phase-num">04</span>
     <div><div class="phase-title">Writing a Bug Report</div><div class="phase-sub">Structure, sections, and your own bug report</div></div>
   </div>
   <div class="phase-body">
@@ -438,9 +526,9 @@ mark.hl { background:#fff3b0; padding:0 3px; border-radius:2px; color:var(--ink)
 
 <div class="rule"><div class="rule-line"></div><div class="rule-label">Reference</div><div class="rule-line-short"></div></div>
 
-<div class="phase ph-gold" id="ph7">
-  <div class="phase-header" onclick="togglePhase('ph7')">
-    <span class="phase-num">07</span>
+<div class="phase ph-gold" id="ph5">
+  <div class="phase-header" onclick="togglePhase('ph5')">
+    <span class="phase-num">05</span>
     <div><div class="phase-title">Glossary of Technical Terms</div><div class="phase-sub">QA &amp; Agile vocabulary</div></div>
   </div>
   <div class="phase-body">
@@ -484,6 +572,571 @@ mark.hl { background:#fff3b0; padding:0 3px; border-radius:2px; color:var(--ink)
 
 
 
+<!-- квіз по 6 уроці-->
+
+
+
+<div class="rule"><div class="rule-line"></div><div class="rule-label">Quiz</div><div class="rule-line-short"></div></div>
+
+<div class="phase ph-navy" id="ph6">
+  <div class="phase-header" onclick="togglePhase('ph6')">
+    <span class="phase-num">06</span>
+    <div><div class="phase-title">Test Your Knowledge — Lesson 6</div><div class="phase-sub">16 questions · vocabulary &amp; grammar</div></div>
+    
+  </div>
+  <div class="phase-body">
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">🧠</div><span class="activity-title">Quiz — vocabulary &amp; grammar</span></div>
+      <div class="activity-body">
+        <div class="quiz-grid">
+          <div>
+            <div class="quiz-item"><div class="quiz-q">1. I ___ a difficult choice.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q1">a) faced with</label><label class="quiz-opt"><input type="radio" name="q1">b) was faced</label><label class="quiz-opt"><input type="radio" name="q1">c) faced</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">2. The synonym for "very busy" is:</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q2">a) swamped</label><label class="quiz-opt"><input type="radio" name="q2">b) garbled</label><label class="quiz-opt"><input type="radio" name="q2">c) outlined</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">3. The synonym of "in advance" is:</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q3">a) constrained</label><label class="quiz-opt"><input type="radio" name="q3">b) upfront</label><label class="quiz-opt"><input type="radio" name="q3">c) downside</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">4. — Were there any troubles with the release? <br>— No, everything went ___?</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q4">a) upfront</label><label class="quiz-opt"><input type="radio" name="q4">b) smoothly</label><label class="quiz-opt"><input type="radio" name="q4">c) roughly</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">5. The opposite of "manage to" is:</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q5">a) outline</label><label class="quiz-opt"><input type="radio" name="q5">b) fail to</label><label class="quiz-opt"><input type="radio" name="q5">c) postpone</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">6. His tests covered everything, even the ___ cases.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q6">a) far</label><label class="quiz-opt"><input type="radio" name="q6">b) rare</label><label class="quiz-opt"><input type="radio" name="q6">c) edge</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">7. There's a good rule of ___ you can follow in this case.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q7">a) thumb</label><label class="quiz-opt"><input type="radio" name="q7">b) toe</label><label class="quiz-opt"><input type="radio" name="q7">c) finger</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">8. This is a complex problem but I'm going to try to explain it to you ___.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q8">a) in a nutshell</label><label class="quiz-opt"><input type="radio" name="q8">b) in an eggshell</label><label class="quiz-opt"><input type="radio" name="q8">c) in the upfront</label></div></div>
+          </div>
+          <div>
+            <div class="quiz-item"><div class="quiz-q">9. She ___ to complete this task.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q10">a) will asked</label><label class="quiz-opt"><input type="radio" name="q10">b) is be asked</label><label class="quiz-opt"><input type="radio" name="q10">c) will be asked</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">10. I ___ you could help me.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q11">a) told</label><label class="quiz-opt"><input type="radio" name="q11">b) was told</label><label class="quiz-opt"><input type="radio" name="q11">c) have be told</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">11. The patch ___.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q12">a) has been deployed</label><label class="quiz-opt"><input type="radio" name="q12">b) has deployed</label><label class="quiz-opt"><input type="radio" name="q12">c) has deploying</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">12. Rob ___ in the office.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q13">a) has needed</label><label class="quiz-opt"><input type="radio" name="q13">b) needed</label><label class="quiz-opt"><input type="radio" name="q13">c) is needed</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">13. An error ___.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q14">a) has been occurred</label><label class="quiz-opt"><input type="radio" name="q14">b) was occurred</label><label class="quiz-opt"><input type="radio" name="q14">c) has occurred</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">14. Finally, my teammates ___ to go with my idea.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q15">a) have been decided</label><label class="quiz-opt"><input type="radio" name="q15">b) are decided</label><label class="quiz-opt"><input type="radio" name="q15">c) decided</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">15. The rest of the updates ___ next month.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="q16">a) will finish</label><label class="quiz-opt"><input type="radio" name="q16">b) will be finished</label><label class="quiz-opt"><input type="radio" name="q16">c) is finishing</label></div></div>
+          </div>
+        </div>
+        <button class="reveal-btn" onclick="toggleReveal('rev_quiz6')">show answers ▾</button>
+        <div class="reveal-content" id="rev_quiz6">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol>
+              <li>c) faced</li><li>a) swamped</li><li>b) upfront</li><li>b) smoothly</li><li>b) fail to</li><li>c) edge</li><li>a) thumb</li><li>a) in a nutshell</li>
+              <li>c) will be asked</li><li>b) was told</li><li>a) has been deployed</li><li>c) is needed</li><li>c) has occurred</li><li>c) decided</li><li>b) will be finished</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- revision -->
+
+<div class="rule"><div class="rule-line"></div><div class="rule-label">Revision · Units 5–6 · Vocabulary</div><div class="rule-line-short"></div></div>
+
+<div class="phase ph-gold" id="ph6">
+  <div class="phase-header" onclick="togglePhase('ph6')">
+    <span class="phase-num">06</span>
+    <div><div class="phase-title">Vocabulary — Units 5–6</div><div class="phase-sub">Synonyms &amp; idioms</div></div>
+
+  </div>
+  <div class="phase-body">
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">1️⃣</div><span class="activity-title">Part 1 — Match the synonyms</span></div>
+      <div class="activity-body">
+        <div class="match-cols">
+          <div>
+            <ol class="exercise">
+              <li>Facilitate → <input type="text" size="4"></li>
+              <li>Optimize → <input type="text" size="4"></li>
+              <li>Break down → <input type="text" size="4"></li>
+              <li>Face → <input type="text" size="4"></li>
+              <li>Postpone → <input type="text" size="4"></li>
+              <li>Replicate → <input type="text" size="4"></li>
+              <li>Upfront → <input type="text" size="4"></li>
+              <li>Over → <input type="text" size="4"></li>
+              <li>Swamped → <input type="text" size="4"></li>
+              <li>Garbled → <input type="text" size="4"></li>
+            </ol>
+          </div>
+          <div>
+            <p style="font-size:13px;">a) Overwhelmed<br>b) Improve<br>c) Separate<br>d) Deal with<br>e) Reproduce<br>f) In advance<br>g) More than<br>h) Distorted<br>i) Simplify<br>j) Delay</p>
+          </div>
+        </div>
+        <button class="reveal-btn" onclick="toggleReveal('rev_r1')">show answers ▾</button>
+        <div class="reveal-content" id="rev_r1">
+          <div class="answer-key"><div class="ak-label">Answers</div><ol><li>1→i</li><li>2→b</li><li>3→c</li><li>4→d</li><li>5→j</li><li>6→e</li><li>7→f</li><li>8→g</li><li>9→a</li><li>10→h</li></ol></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">2️⃣</div><span class="activity-title">Part 2 — Complete with the right idiom</span></div>
+      <div class="activity-body">
+        <div class="word-box">
+          <div class="word-box-label">idioms</div>
+          <span class="word-chip">Keep track of</span>
+          <span class="word-chip">Goes smoothly</span>
+          <span class="word-chip">Slip through the cracks</span>
+          <span class="word-chip">Jump through hoops</span>
+          <span class="word-chip">Rule of thumb</span>
+        </div>
+        <ol class="exercise">
+          <li>You shouldn't allow any messages to <input type="text" size="20">. Failure to give a timely response may result in unhappy customers.</li>
+          <li>I love this app because it allows me to <input type="text" size="20"> my fitness goals.</li>
+          <li>The general <input type="text" size="20"> is to answer business emails within 24 hours.</li>
+          <li>The application process was very simple. I didn't have to <input type="text" size="20"> just to get an interview.</li>
+          <li>If everything <input type="text" size="20">, we'll be able to publish the app by September.</li>
+        </ol>
+        <button class="reveal-btn" onclick="toggleReveal('rev_r2')">show answers ▾</button>
+        <div class="reveal-content" id="rev_r2">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol><li>slip through the cracks</li><li>keep track of</li><li>rule of thumb</li><li>jump through hoops</li><li>goes smoothly</li></ol>
+          </div>
+        </div>
+        <button class="ua-btn" onclick="toggleUA('ua_idioms')">переклад ідіом ▾</button>
+        <div class="ua-box" id="ua_idioms">
+          <p><strong>Keep track of</strong> — стежити за, тримати на контролі</p>
+          <p><strong>Goes smoothly</strong> — проходить гладко, без проблем</p>
+          <p><strong>Slip through the cracks</strong> — випасти з уваги, бути пропущеним</p>
+          <p><strong>Jump through hoops</strong> — проходити через зайві складнощі/перепони</p>
+          <p><strong>Rule of thumb</strong> — практичне правило</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="rule"><div class="rule-line"></div><div class="rule-label">Revision · Units 5–6 · Grammar &amp; Soft Skills</div><div class="rule-line-short"></div></div>
+
+<div class="phase ph-blue" id="ph7">
+  <div class="phase-header" onclick="togglePhase('ph7')">
+    <span class="phase-num">07</span>
+    <div><div class="phase-title">Grammar &amp; Soft Skills</div><div class="phase-sub">Quantifiers, passive voice, useful phrases</div></div>
+
+  </div>
+  <div class="phase-body">
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">1️⃣</div><span class="activity-title">Part 1 — Correct or wrong? Fix the wrong ones</span></div>
+      <div class="activity-body">
+        <ol class="exercise">
+          <li>The car is needed to be repainted. → <input type="text" style="width:100%"></li>
+          <li>I have a few friends who work in marketing. → <input type="text" style="width:100%"></li>
+          <li>I remember very little from that trip. → <input type="text" style="width:100%"></li>
+          <li>I have many work to do. → <input type="text" style="width:100%"></li>
+          <li>The money already spent. → <input type="text" style="width:100%"></li>
+          <li>The app will updated soon. → <input type="text" style="width:100%"></li>
+          <li>Do you know any British person named Ryan? → <input type="text" style="width:100%"></li>
+          <li>All she needs is little help from you. → <input type="text" style="width:100%"></li>
+        </ol>
+        <button class="reveal-btn" onclick="toggleReveal('rev_g1')">show answers ▾</button>
+        <div class="reveal-content" id="rev_g1">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol>
+              <li><strong>Wrong</strong> → The car needs to be repainted.</li>
+              <li><strong>Correct</strong></li>
+              <li><strong>Correct</strong></li>
+              <li><strong>Wrong</strong> → I have a lot of work to do / much work to do.</li>
+              <li><strong>Wrong</strong> → The money has already been spent.</li>
+              <li><strong>Wrong</strong> → The app will be updated soon.</li>
+              <li><strong>Correct</strong></li>
+              <li><strong>Wrong</strong> → All she needs is a little help from you.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">2️⃣</div><span class="activity-title">Part 2 — Choose the right option</span></div>
+      <div class="activity-body">
+        <ol class="exercise">
+          <li>I have <input type="text" size="6"> question. <em>(a little/a quick)</em></li>
+          <li>I have <input type="text" size="6"> for you. <em>(some feedback/feedbacks)</em></li>
+          <li>The equipment <input type="text" size="10"> <em>(has been bought/were bought)</em></li>
+          <li>This <input type="text" size="10"> done! <em>(can't be/can't to be)</em></li>
+          <li>I don't have <input type="text" size="10"> <em>(much comment/many comments)</em></li>
+          <li>She <input type="text" size="10"> to participate again. <em>(will be asked/will asked)</em></li>
+          <li>We need to update our pricing information <input type="text" size="6"> <em>(little/a little)</em></li>
+          <li>I'm listening to <input type="text" size="6"> great podcasts on iTunes. <em>(few/a few)</em></li>
+        </ol>
+        <button class="reveal-btn" onclick="toggleReveal('rev_g2')">show answers ▾</button>
+        <div class="reveal-content" id="rev_g2">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol><li>a quick</li><li>some feedback</li><li>has been bought</li><li>can't be</li><li>much comment*</li><li>will be asked</li><li>a little</li><li>a few</li></ol>
+            <p style="margin-top:6px; font-size:11.5px;">*technically "much" pairs with the uncountable "comment" here — some versions of this exercise accept "many comments" too, discuss with your teacher.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">🤝</div><span class="activity-title">Soft Skills — Complete with the prompts</span></div>
+      <div class="activity-body">
+        <ol class="exercise">
+          <li>I will k <input type="text" size="6"> you p <input type="text" size="8"> on future updates.</li>
+          <li>There are a few more things we need to t <input type="text" size="6"> i <input type="text" size="6"> a <input type="text" size="8"> before we start.</li>
+          <li>I don't know if I can answer this question. Can I g <input type="text" size="6"> b <input type="text" size="6"> to you later?</li>
+          <li>We'll c <input type="text" size="8"> b <input type="text" size="8"> to that discussion next week.</li>
+          <li>It s <input type="text" size="10"> that we don't have all the necessary specifications for the project.</li>
+          <li>C <input type="text" size="8"> you e <input type="text" size="10"> on that idea you mentioned earlier?</li>
+          <li>W <input type="text" size="6"> you be o <input type="text" size="6"> with catching our new designer up to speed with the project?</li>
+        </ol>
+        <button class="reveal-btn" onclick="toggleReveal('rev_ss')">show answers ▾</button>
+        <div class="reveal-content" id="rev_ss">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol>
+              <li><strong>keep you posted</strong></li>
+              <li><strong>take into account</strong></li>
+              <li><strong>get back</strong></li>
+              <li><strong>circle back</strong></li>
+              <li><strong>seems</strong></li>
+              <li><strong>Could you elaborate</strong></li>
+              <li><strong>Would you be ok</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+</div>
+
+
+
+<div class="main">
+
+
+<!-- lesson 7 warm up-->
+
+<div class="header">
+  <div class="header-stripe"></div>
+  <div class="header-body">
+    <div class="eyebrow">English for Tech</div>
+    <h1 class="h1">Frameworks for Software Development</h1>
+  </div>
+</div>
+
+<div class="obj-strip">
+  <div class="obj-inner">
+    <div class="obj-item"><div class="obj-num">1</div><div class="obj-text">Vocabulary: software development frameworks</div></div>
+    <div class="obj-item"><div class="obj-num">2</div><div class="obj-text">Grammar: modal verbs of obligation</div></div>
+    <div class="obj-item"><div class="obj-num">3</div><div class="obj-text">Pronunciation: software terms</div></div>
+    <div class="obj-item"><div class="obj-num">4</div><div class="obj-text">Speaking: daily scrum meetings · Writing: follow-up email</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="rule"><div class="rule-line"></div><div class="rule-label">Warm-up</div><div class="rule-line-short"></div></div>
+
+  <div class="phase ph-navy" id="ph8">
+    <div class="phase-header" onclick="togglePhase('ph8')">
+      <span class="phase-num">00</span>
+      <div><div class="phase-title">Warm-up 1 — How Do You Work?</div><div class="phase-sub">Answer the questions</div></div>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">🗣️</div><span class="activity-title">Answer the questions</span></div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>How do you go about completing a project? What framework and methodologies do you use?</li>
+            <li>Is it Scrum, Agile, Kanban, or a combination of all?</li>
+          </ol>
+          <table class="vocab-table">
+            <thead><tr><th>Phrase</th><th>Meaning &amp; example</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">go about (something)</td><td> to start dealing with a problem, situation, or job in a particular way<br><em>"I think I'd go about it quite differently."</em><br><strong>go about doing something:</strong> <em>"How did you go about finding a job?"</em></td></tr>
+            </tbody>
+          </table>
+          <button class="ua-btn" onclick="toggleUA('ua_goabout')">translation ▾</button>
+          <div class="ua-box" id="ua_goabout"><p><strong>go about (something)</strong> — братися за щось (у певний спосіб), підступатися до вирішення</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase ph-blue" id="ph0b" style="margin-top:14px;">
+    <div class="phase-header" onclick="togglePhase('ph0b')">
+      <span class="phase-num">00</span>
+      <div><div class="phase-title">Warm-up 2 — The Tweet</div><div class="phase-sub">Scheduling time to think</div></div>
+
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">🐦</div><span class="activity-title">Read the tweet. Have you ever tried what Jack is suggesting?</span></div>
+        <div class="activity-body">
+          <img src="screen_les7.png">
+          <table class="vocab-table">
+            <thead><tr><th>Phrase</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="eng">A valuable use of time</td><td>a good way to use time</td></tr>
+              <tr><td class="eng">Ideation</td><td>formation of ideas</td></tr>
+              <tr><td class="eng">Schedule time</td><td>book time / set aside a time slot</td></tr>
+            </tbody>
+          </table>
+          <button class="ua-btn" onclick="toggleUA('ua_tweet2')">translation ▾</button>
+          <div class="ua-box" id="ua_tweet2">
+            <p><strong>A valuable use of time</strong> — цінне використання часу</p>
+            <p><strong>Ideation</strong> — генерація/формування ідей</p>
+            <p><strong>Schedule time</strong> — виділити/забронювати час</p>
+          </div>
+          <div class="ak-label" style="margin-top:12px;">Discussion</div>
+          <ol class="exercise">
+            <li>Do you ever block time on your calendar just to think, with no meetings or tasks?</li>
+            <li>Do you agree that unscheduled time is more valuable than most meetings?</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase ph-gold" id="ph0c" style="margin-top:14px;">
+    <div class="phase-header" onclick="togglePhase('ph0c')">
+      <span class="phase-num">00</span>
+      <div><div class="phase-title">Warm-up 3 — Your Calendar</div><div class="phase-sub">Managing your schedule</div></div>
+      
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">📅</div><span class="activity-title">Discuss</span></div>
+        <div class="activity-body">
+          <p>How do you manage your schedule? Do you have any tips for keeping a well-organized calendar?</p>
+          <img src="aoao44.png">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+<!-- reading -->
+
+<div class="rule"><div class="rule-line"></div><div class="rule-label">Reading</div><div class="rule-line-short"></div></div>
+
+<div class="phase ph-navy" id="ph9">
+  <div class="phase-header" onclick="togglePhase('ph9')">
+    <span class="phase-num">01</span>
+    <div><div class="phase-title">Software Development Frameworks</div><div class="phase-sub">Agile, Kanban, Scrum</div></div>
+  </div>
+  <div class="phase-body">
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">📊</div><span class="activity-title">Exercise 1A — Match the pictures to the paragraphs</span></div>
+      <div class="activity-body">
+        <p>Skim the notes from a lecture on software development frameworks and match the pictures to the paragraphs (a–c).</p>
+
+          <img src="kanban.png" alt="Scrum, Kanban, Agile diagrams">
+        
+
+        <p>Today we will focus on these three project management tools and also talk about some tips for effective communication which will help you <mark class="hl">ace</mark> your projects.</p>
+
+        <div style="columns:2; column-gap:28px; margin:14px 0;">
+          <p><strong>a)</strong> Let's start with Agile. The biggest advantage of Agile is its <mark class="hl">adaptability.</mark> Because Agile relies on iterations and <mark class="hl">simultaneous</mark> workflows, it allows developers to test the software and <mark class="hl">adjust</mark> the workflow as needed. It is particularly <mark class="hl">well-suited</mark> for smaller teams and smaller projects.</p>
+
+          <p><strong>b)</strong> Kanban originated as a type of Agile. The primary goal of this methodology is to improve the processes and remove any <mark class="hl">bottlenecks.</mark> It allows for visualizing the work process while keeping things clear and simple. By using Kanban boards you can also clearly see how much work is <mark class="hl">accomplished,</mark> how much work is left to do and whether or not you have any <mark class="hl">setbacks.</mark></p>
+
+          <p><strong>c)</strong> Scrum, which is another type of Agile, is aimed at doing more work faster. Scrum emphasizes the <mark class="hl">commitment</mark> and <mark class="hl">accountability</mark> of team members to work towards a common goal. Scrum is based around the idea of sprints which typically last under 30 days during which the team needs to produce a working demo. Everyone in the team is responsible for setting the goals, trying to prevent any potential <mark class="hl">roadblocks</mark> from <mark class="hl">interfering</mark> with the project, tracking the project's progress and planning for upcoming tasks and challenges.</p>
+        </div>
+
+        <button class="reveal-btn" onclick="toggleReveal('rev_1a_r')">show answers ▾</button>
+        <div class="reveal-content" id="rev_1a_r">
+          <div class="answer-key"><div class="ak-label">Answers</div><p>1 → c) Scrum &nbsp; 2 → b) Kanban &nbsp; 3 → a) Agile</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">🔤</div><span class="activity-title">Exercise 1B — Match phrases to definitions</span></div>
+      <div class="activity-body">
+        <div class="match-cols">
+          <div>
+            <ol class="exercise">
+              <li>Ace → <input type="text" size="4"></li>
+              <li>Adaptability → <input type="text" size="4"></li>
+              <li>Rely on → <input type="text" size="4"></li>
+              <li>Simultaneous → <input type="text" size="4"></li>
+              <li>Adjust → <input type="text" size="4"></li>
+              <li>Well-suited → <input type="text" size="4"></li>
+              <li>Bottleneck → <input type="text" size="4"></li>
+              <li>Accomplish → <input type="text" size="4"></li>
+              <li>Setback → <input type="text" size="4"></li>
+              <li>Commitment → <input type="text" size="4"></li>
+              <li>Accountability → <input type="text" size="4"></li>
+              <li>Roadblock → <input type="text" size="4"></li>
+              <li>Interfere → <input type="text" size="4"></li>
+              <li>Upcoming → <input type="text" size="4"></li>
+            </ol>
+          </div>
+          <div>
+            <p style="font-size:13px;">a) willingness to do your best to keep your promises<br>
+            b) do / complete<br>
+            c) a problem which stops your progress<br>
+            d) feeling of big responsibility<br>
+            e) get in the way / cause a problem<br>
+            f) a situation which can cause a delay<br>
+            g) an obstacle / something that doesn't let you follow your roadmap<br>
+            h) something that will soon happen in the future<br>
+            i) appropriate for some purpose<br>
+            j) do very well at something<br>
+            k) depend on something / need something for success<br>
+            l) flexibility<br>
+            m) happening at the same time<br>
+            n) adapt</p>
+          </div>
+        </div>
+        <button class="reveal-btn" onclick="toggleReveal('rev_1b_r')">show answers ▾</button>
+        <div class="reveal-content" id="rev_1b_r">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <p>1→j, 2→l, 3→k, 4→m, 5→n, 6→i, 7→c, 8→b, 9→f, 10→a, 11→d, 12→g, 13→e, 14→h</p>
+          </div>
+        </div>
+        <button class="ua-btn" onclick="toggleUA('ua_1b_r')">translation ▾</button>
+        <div class="ua-box" id="ua_1b_r">
+          <p><strong>Ace</strong> — блискуче впоратися</p>
+          <p><strong>Adaptability</strong> — гнучкість, адаптивність</p>
+          <p><strong>Rely on</strong> — покладатися на</p>
+          <p><strong>Simultaneous</strong> — одночасний</p>
+          <p><strong>Adjust</strong> — коригувати, налаштовувати</p>
+          <p><strong>Well-suited</strong> — добре підходить</p>
+          <p><strong>Bottleneck</strong> — вузьке місце, перешкода в процесі</p>
+          <p><strong>Accomplish</strong> — виконати, досягти</p>
+          <p><strong>Setback</strong> — невдача, затримка</p>
+          <p><strong>Commitment</strong> — відданість, зобов'язання</p>
+          <p><strong>Accountability</strong> — відповідальність (за результат)</p>
+          <p><strong>Roadblock</strong> — перешкода</p>
+          <p><strong>Interfere</strong> — заважати, втручатися</p>
+          <p><strong>Upcoming</strong> — майбутній, наближений</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">✅</div><span class="activity-title">Exercise 1C — True or false</span></div>
+      <div class="activity-body">
+        <ol class="exercise">
+          <li>Agile is very flexible. → <input type="text" size="8"></li>
+          <li>Kanban is complex and cumbersome. → <input type="text" size="8"></li>
+          <li>Kanban doesn't use any visual aids. → <input type="text" size="8"></li>
+          <li>Scrum prioritizes the importance of making all team members feel responsible for the results of their work. → <input type="text" size="8"></li>
+        </ol>
+        <button class="reveal-btn" onclick="toggleReveal('rev_1c_r')">show answers ▾</button>
+        <div class="reveal-content" id="rev_1c_r">
+          <div class="answer-key"><div class="ak-label">Answers</div><ol><li>True</li><li>False</li><li>False</li><li>True</li></ol></div>
+        </div>
+        <div class="ak-label" style="margin-top:12px;">Discussion</div>
+        <ol class="exercise">
+          <li>Which of these three (Agile/Kanban/Scrum) sounds closest to how your team actually works?</li>
+          <li>Have you ever worked somewhere with no framework at all? How did that go?</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<!-- ex 2b..-->
+
+
+<div class="phase ph-blue" id="ph1b2" style="margin-top:14px;">
+  <div class="phase-header" onclick="togglePhase('ph1b2')">
+    <span class="phase-num">02</span>
+    <div><div class="phase-title">Communication Tips</div><div class="phase-sub">Working with stakeholders</div></div>
+  </div>
+  <div class="phase-body">
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">📖</div><span class="activity-title">Exercise 2A — Fill in the blanks</span></div>
+      <div class="activity-body">
+        <p>Read the rest of the lecture and fill in the blanks with the words below. Explain the meaning of the words based on the context.</p>
+        <div class="word-box">
+          <div class="word-box-label">word bank</div>
+          <span class="word-chip">scope creep</span>
+          <span class="word-chip">rationale</span>
+          <span class="word-chip">redundant</span>
+          <span class="word-chip">in the loop</span>
+          <span class="word-chip">touch base</span>
+          <span class="word-chip">rollback</span>
+        </div>
+
+        <p>Whichever strategy you are using, clear and effective communication is key to the project's completion. Here are some tips on how you can communicate with your peers and stakeholders in the most productive manner.</p>
+        <ul style="padding-left:18px; font-size:13.5px; color:var(--ink-soft); line-height:1.8;">
+          <li>Make sure key stakeholders are <input type="text" size="14"> about development progress.</li>
+          <li>Negotiate, negotiate, negotiate. Do not say yes to everything, and avoid <input type="text" size="14">. Also be prepared to defend your <input type="text" size="14"> behind saying "No" to feature requests.</li>
+          <li>Try to keep in mind business needs, and understand that in most cases, technology is there to support the business, and not the other way around.</li>
+          <li>Make sure team communication is clear and that there are enough opportunities to <input type="text" size="14"> but try to avoid <input type="text" size="14"> meetings.</li>
+          <li>Have a well defined release and <input type="text" size="14"> process, and make sure that there are several members of the team who understand how to carry out a release and rollback.</li>
+        </ul>
+
+        <button class="reveal-btn" onclick="toggleReveal('rev_2a')">show answers ▾</button>
+        <div class="reveal-content" id="rev_2a">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol><li>in the loop</li><li>scope creep / rationale</li><li>touch base / redundant</li><li>rollback</li></ol>
+          </div>
+        </div>
+        <button class="ua-btn" onclick="toggleUA('ua_2a')">translation ▾</button>
+        <div class="ua-box" id="ua_2a">
+          <p><strong>scope creep</strong> — неконтрольоване розширення обсягу проєкту</p>
+          <p><strong>rationale</strong> — обґрунтування, причина рішення</p>
+          <p><strong>redundant</strong> — зайвий, надлишковий</p>
+          <p><strong>in the loop</strong> — в курсі справ</p>
+          <p><strong>touch base</strong> — коротко зв'язатись/звіритись</p>
+          <p><strong>rollback</strong> — відкат (повернення до попередньої версії)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">🗣️</div><span class="activity-title">Exercise 2B — Answer the questions</span></div>
+      <div class="activity-body">
+        <ol class="exercise">
+          <li>What other tips or observations regarding effective communication can you share?</li>
+          <li>Have you ever experienced any of the following? Give as many details as possible.
+            <ul style="padding-left:18px; margin-top:6px;">
+              <li>Redundant meetings.</li>
+              <li>Scope creep.</li>
+              <li>Feeling like you've been left out of the loop.</li>
+              <li>Your teammates failing to provide their rationale or touch base with you.</li>
+            </ul>
+          </li>
+        </ol>
+
+      
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

@@ -3,64 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2D Planet Earth: Jungles</title>
+<title>3A Working from Home</title>
 <style>
+
 :root{
-  --forest:#1e4020;--forest-mid:#2a5a2a;
-  --teal:#009980;--teal-dark:#006f60;--teal-light:#e0f5f0;--teal-border:#80d8c0;
   --navy:#1d2d50;--navy-light:#2a3d6a;
-  --bbc-red:#bb1919;
+  --blue:#1a5090;--blue-light:#e8f2fb;--blue-border:#90b8e0;
+  --coral:#d4561a;--coral-light:#fef0e8;--coral-border:#f0a880;
+  --teal:#0097b3;--teal-dark:#006f85;--teal-light:#e0f5f8;--teal-border:#80d0e0;
   --green:#2a8a5c;--green-light:#e8f5ee;--green-border:#80c8a0;
+  --purple:#6b3fa0;--purple-light:#f0eafa;--purple-border:#c4a0e0;
   --amber:#c8700a;--amber-light:#fef3e8;
-  --text:#1a1f2e;--muted:#5a6070;--bg:#f4faf6;--card:#ffffff;--border:#c8e0d0;
+  --text:#1a1f2e;--muted:#5a6070;--bg:#f4f8fc;--card:#ffffff;--border:#d0dce8;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;padding-bottom:60px;}
 
-
-.letter-gap{
-  display:inline-block;border:none;
-  border-bottom:2px solid var(--teal);
-  background:#eaf5ef;width:18px;text-align:center;
-  font-size:0.93rem;font-family:inherit;
-  padding:0 1px;margin:0 1px;color:var(--text);
-}
-.letter-gap:focus{outline:none;border-bottom-color:var(--teal-dark);background:#d0ede5;}
-
-
-
-
-
 /* HEADER */
-header{background:var(--forest);border-bottom:4px solid var(--teal);}
-.header-inner{max-width:1280px;margin:0 auto;padding:24px 40px;display:grid;grid-template-columns:auto auto 1fr auto;align-items:center;gap:16px;}
-.header-unit{background:var(--teal-dark);color:white;font-weight:800;font-size:1.8rem;padding:8px 18px;border-radius:6px;line-height:1;}
-.bbc-badge{display:inline-flex;gap:3px;margin-right:4px;}
-.bbc-badge span{background:white;color:var(--bbc-red);font-weight:900;font-size:0.95rem;padding:3px 6px;border-radius:2px;}
-.bbc-doc-label{background:#2a7a40;color:white;font-weight:700;font-size:0.85rem;padding:4px 10px;border-radius:4px;}
+header{background:var(--navy);border-bottom:4px solid var(--blue);}
+.header-inner{max-width:1280px;margin:0 auto;padding:22px 40px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;}
+.header-unit{background:var(--blue);color:white;font-weight:800;font-size:1.9rem;padding:8px 18px;border-radius:6px;line-height:1;}
 .header-text h1{color:#fff;font-size:1.65rem;font-weight:700;margin-bottom:6px;}
 .header-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
 .htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
-.htag-s{background:rgba(0,153,128,0.25);color:#00c8a8;border:1px solid rgba(0,153,128,0.4);}
-.htag-w{background:rgba(200,112,10,0.2);color:#f08030;border:1px solid rgba(200,112,10,0.3);}
-.header-right{text-align:right;color:#90c8a0;font-size:0.8rem;line-height:1.6;}
+.htag-g{background:rgba(0,151,179,0.2);color:#00c0df;border:1px solid rgba(0,151,179,0.35);}
+.htag-v{background:rgba(212,86,26,0.2);color:#f08050;border:1px solid rgba(212,86,26,0.3);}
+.htag-s{background:rgba(42,138,92,0.2);color:#3aaa70;border:1px solid rgba(42,138,92,0.3);}
+.header-right{text-align:right;color:#90a8c8;font-size:0.8rem;line-height:1.6;}
 
 /* WRAP */
 .wrap{max-width:1280px;margin:0 auto;padding:24px 40px;}
 
-/* SECTION LABEL (PREVIEW / VIEW / SPEAKING / WRITING style) */
-.section-header{
-  background:var(--forest);color:white;font-weight:800;font-size:1rem;
-  padding:8px 16px;display:inline-block;border-radius:4px;
-  letter-spacing:0.5px;margin:24px 0 12px;
-}
-.section-header.view{background:var(--teal-dark);}
-.section-header.speaking{background:#2a6040;}
-.section-header.writing{background:#3a5020;}
-.section-header.review{background:var(--navy);}
+/* SECTION DIVIDERS */
+.unit-divider{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:10px;padding:14px 22px;margin:26px 0 0;display:flex;align-items:center;gap:14px;}
+.unit-divider h3{color:white;margin:0;font-size:1rem;font-weight:700;}
+.unit-divider span{background:rgba(255,255,255,0.15);color:white;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
 
 /* PHASE */
-.phase{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-top:16px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.07);}
+.phase{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-top:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
 .phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
 .ph-stripe{width:6px;flex-shrink:0;}
 .ph-num{color:white;font-weight:800;font-size:0.95rem;padding:14px 18px;display:flex;align-items:center;justify-content:center;min-width:52px;}
@@ -72,18 +52,24 @@ header{background:var(--forest);border-bottom:4px solid var(--teal);}
 .phase-body{padding:26px 32px 30px;}
 .phase.collapsed .phase-body{display:none;}
 
-/* phase colour sets */
-.c-pre .ph-stripe,.c-pre .ph-num{background:var(--forest);}
-.c-view .ph-stripe,.c-view .ph-num{background:var(--teal-dark);}
-.c-spk .ph-stripe,.c-spk .ph-num{background:#2a6040;}
-.c-write .ph-stripe,.c-write .ph-num{background:var(--amber);}
+/* phase colours */
+.c-warm .ph-stripe,.c-warm .ph-num{background:var(--coral);}
 .c-review .ph-stripe,.c-review .ph-num{background:var(--navy);}
+.c-vlogs .ph-stripe,.c-vlogs .ph-num{background:#bb1919;}
+.c-read .ph-stripe,.c-read .ph-num{background:var(--blue);}
+.c-voc .ph-stripe,.c-voc .ph-num{background:var(--teal-dark);}
+.c-pron .ph-stripe,.c-pron .ph-num{background:var(--purple);}
+.c-gram .ph-stripe,.c-gram .ph-num{background:var(--blue);}
+.c-spk .ph-stripe,.c-spk .ph-num{background:var(--green);}
 
-.c-pre .pbadge{background:var(--teal-light);color:var(--teal-dark);}
-.c-view .pbadge{background:var(--teal-light);color:var(--teal-dark);}
-.c-spk .pbadge{background:#e0f0e8;color:#2a6040;}
-.c-write .pbadge{background:var(--amber-light);color:var(--amber);}
+.c-warm .pbadge{background:var(--coral-light);color:var(--coral);}
 .c-review .pbadge{background:#eaecf5;color:var(--navy);}
+.c-vlogs .pbadge{background:#fdecea;color:#bb1919;}
+.c-read .pbadge{background:var(--blue-light);color:var(--blue);}
+.c-voc .pbadge{background:var(--teal-light);color:var(--teal-dark);}
+.c-pron .pbadge{background:var(--purple-light);color:var(--purple);}
+.c-gram .pbadge{background:var(--blue-light);color:var(--blue);}
+.c-spk .pbadge{background:var(--green-light);color:var(--green);}
 
 /* LAYOUTS */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
@@ -92,76 +78,115 @@ header{background:var(--forest);border-bottom:4px solid var(--teal);}
 @media(max-width:900px){.two-col,.col-5-7,.col-7-5{grid-template-columns:1fr;}.wrap,.header-inner{padding:16px 18px;}}
 
 /* ELEMENTS */
-.box{background:#f5faf7;border:1px solid var(--border);border-left:3px solid var(--forest);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box{background:#f5f8fc;border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-blue{background:var(--blue-light);border-left-color:var(--blue);}
 .box-teal{background:var(--teal-light);border-left-color:var(--teal);}
 .box-green{background:var(--green-light);border-left-color:var(--green);}
-.box-amber{background:var(--amber-light);border-left-color:var(--amber);}
-.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;margin:10px 0 14px;}
-.chip{background:white;border:1px solid var(--teal);color:var(--teal-dark);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.box-coral{background:var(--coral-light);border-left-color:var(--coral);}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--blue-light);border:1px solid var(--blue-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:white;border:1px solid var(--blue);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
 .speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
-input.gap{background:#eaf5ef;border:none;border-bottom:2px dotted var(--teal);color:var(--text);font-size:1rem;width:130px;padding:2px 4px;font-family:inherit;}
-input.gap:focus{outline:none;border-bottom:2px solid var(--teal);}
-textarea.write-area{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:inherit;font-size:0.93rem;resize:vertical;background:white;color:var(--text);min-height:140px;}
-textarea.write-area:focus{outline:none;border-color:var(--teal);}
-.reveal-btn{background:var(--teal-dark);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
-.reveal-btn:hover{background:var(--forest);}
+input.gap{background:var(--blue-light);border:none;border-bottom:2px dotted var(--blue);color:var(--text);font-size:1rem;width:160px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--blue);}
+textarea.write-area{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:inherit;font-size:0.93rem;resize:vertical;background:white;color:var(--text);min-height:100px;}
+textarea.write-area:focus{outline:none;border-color:var(--blue);}
+.reveal-btn{background:var(--blue);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
+.reveal-btn:hover{background:var(--navy);}
 .answer{display:none;background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
 .answer.show{display:block;}
 ol,ul{padding-left:22px;}
 li{margin:7px 0;}
 p{margin:8px 0;}
 audio{width:100%;margin:8px 0;border-radius:6px;}
-h3{color:var(--forest);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
-.sec-label{display:inline-block;background:var(--forest);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+h3{color:var(--navy);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+.sec-label{display:inline-block;background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
 
-/* VIDEO / IMG PLACEHOLDERS */
-.video-slot{background:#0d1a0d;border-radius:10px;overflow:hidden;margin:12px 0;position:relative;}
-.video-slot video{width:100%;display:block;max-height:340px;}
-.video-label{background:#0d1a0d;color:#80c890;font-size:0.82rem;padding:8px 14px;text-align:center;font-weight:600;}
-.img-ph{background:#c8dcc8;border:2px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.88rem;text-align:center;min-height:200px;}
+/* ARTICLE CARD */
+.article-card{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.article-card-head{background:var(--blue-light);border-bottom:1px solid var(--blue-border);padding:16px 20px;}
+.article-card-head h3{color:var(--coral);font-size:1.2rem;font-weight:800;margin:0 0 2px;}
+.article-card-head h4{color:var(--navy);font-size:1rem;font-weight:700;margin:0;}
+.article-card-body{padding:16px 20px;font-size:0.93rem;line-height:1.75;}
+.article-card-body p{margin:10px 0;}
+.article-section-num{color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border);padding-bottom:4px;margin:14px 0 8px;}
+.article-card-body ul{margin:8px 0;}
+.article-card-body ul li{margin:5px 0;}
+.bold-phrase{font-weight:700;color:var(--navy);}
 
-/* BBC VIDEO CARD */
-.bbc-card{
-  background:#0d1a0d;border-radius:10px;overflow:hidden;margin:14px 0;
+/* GRAMMAR NOTE */
+.gram-note{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:10px 0;font-size:0.93rem;}
+.ex-phrase{color:var(--teal-dark);font-weight:600;}
+.gram-sub{background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;display:inline-block;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.4px;}
+
+/* LETTER GAP */
+.letter-gap{display:inline-block;border:none;border-bottom:2px solid var(--blue);background:var(--blue-light);width:18px;text-align:center;font-size:0.93rem;font-family:inherit;padding:0 1px;margin:0 1px;color:var(--text);}
+.letter-gap:focus{outline:none;border-bottom-color:var(--navy);background:#d4e4f8;}
+
+/* VIDEO SLOT */
+.video-slot{background:#0d1a2e;border-radius:8px;overflow:hidden;margin:10px 0;}
+.video-slot video{width:100%;display:block;max-height:300px;}
+.video-label{background:#0d1a2e;color:#90b8e0;font-size:0.8rem;padding:7px 14px;text-align:center;}
+
+/* BBC CARD */
+.bbc-badge{display:inline-flex;gap:2px;margin-right:6px;}
+.bbc-badge span{background:white;color:#bb1919;font-weight:900;font-size:0.85rem;padding:2px 5px;border-radius:2px;}
+
+/* SPEAKING 8A */
+.speaking-card{background:var(--blue-light);border:1px solid var(--blue-border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.spk-section-head{background:var(--navy);color:white;font-weight:700;font-size:0.82rem;padding:7px 14px;text-transform:uppercase;letter-spacing:0.5px;}
+.spk-section-body{padding:12px 14px;}
+.spk-starter{color:var(--muted);font-size:0.88rem;font-style:italic;margin-bottom:6px;}
+
+/* VOCAB matching */
+.match-row{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.match-row:last-child{border-bottom:none;}
+.match-num{color:var(--blue);font-weight:700;min-width:20px;}
+
+
+
+
+
+.wl-step{
+  display:flex;align-items:center;gap:16px;
+  background:var(--blue-light);border:1px solid var(--blue-border);
+  border-radius:10px;padding:12px 20px;width:100%;
 }
-.bbc-card-top{display:grid;grid-template-columns:220px 1fr;min-height:160px;}
-.bbc-card-img{position:relative;background:#1a3a1a;min-height:160px;display:flex;align-items:center;justify-content:center;}
-.bbc-card-img img{width:100%;height:100%;object-fit:cover;display:block;}
-.bbc-play{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  background:rgba(0,0,0,0.7);border:3px solid white;border-radius:50%;
-  width:52px;height:52px;display:flex;align-items:center;justify-content:center;
+.wl-step.wl-given{background:var(--navy);border-color:var(--navy);}
+.wl-step.wl-given .wl-box{background:white;color:var(--navy);border-color:white;}
+.wl-step.wl-given .wl-hint{color:#a0c0e8;}
+.wl-step.wl-last{background:var(--coral);border-color:var(--coral);}
+.wl-step.wl-last .wl-box{background:white;color:var(--coral);border-color:white;}
+.wl-step.wl-last .wl-hint{color:#fcd0b8;}
+
+.wl-word{display:flex;gap:5px;flex-shrink:0;}
+.wl-box{
+  width:44px;height:44px;border:2px solid var(--blue-border);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;font-weight:800;background:white;color:var(--navy);
 }
-.bbc-play::after{content:'▶';color:white;font-size:1.2rem;margin-left:4px;}
-.bbc-logo-abs{position:absolute;bottom:8px;right:8px;display:flex;gap:2px;}
-.bbc-logo-abs span{background:white;color:var(--bbc-red);font-weight:900;font-size:0.75rem;padding:2px 4px;border-radius:1px;}
-.bbc-card-text{padding:16px 20px;color:#c8e8c8;}
-.bbc-card-text h4{color:white;font-size:1rem;margin:0 0 8px;}
-.bbc-card-text p{font-size:0.88rem;line-height:1.6;color:#a0c8a8;}
-
-/* KEY PHRASES BOX */
-.key-phrases-box{
-  background:#f0f8f2;border:2px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:12px 0;
+.wl-input{
+  width:44px;height:44px;border:2px solid var(--blue);border-radius:6px;
+  font-size:1.4rem;font-weight:800;text-align:center;background:#fff8e0;
+  color:var(--blue);font-family:inherit;text-transform:uppercase;
+  transition:all 0.2s;
 }
-.key-phrases-box h4{color:var(--teal-dark);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
-.kp-list{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
-.kp-item{display:flex;gap:8px;align-items:center;padding:5px 0;font-size:0.9rem;border-bottom:1px dotted var(--teal-border);}
-.kp-item:last-child{border-bottom:none;}
-.kp-check input[type=checkbox]{accent-color:var(--teal);width:16px;height:16px;}
+.wl-input:focus{outline:none;border-color:var(--navy);background:#fffde0;}
+.wl-input.correct{background:#e8f5ee;border-color:var(--green);color:var(--green);}
+.wl-input.wrong{background:#fdecea;border-color:#e63946;color:#e63946;}
+.wl-hint{font-size:0.88rem;color:var(--muted);font-style:italic;flex:1;}
+.wl-arrow{
+  color:var(--blue);font-size:0.82rem;font-weight:600;
+  display:flex;align-items:center;gap:6px;padding:4px 20px;
+  width:100%;
+}
+.wl-arrow span{color:var(--muted);font-style:italic;font-weight:400;}
 
-/* STORY TEXT */
-.story-card{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:10px;overflow:hidden;margin:14px 0;}
-.story-card-head{background:var(--forest);color:white;padding:12px 18px;}
-.story-card-head h4{font-size:1.1rem;margin:0;}
-.story-card-body{padding:16px 18px;font-size:0.93rem;line-height:1.75;}
 
-/* LIZARD PHOTO */
-.lizard-photo{width:100%;border-radius:8px;display:block;border:1px solid var(--border);background:#c8dcc8;min-height:200px;object-fit:cover;}
 
-/* REVIEW DIVIDER */
-.review-divider{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:10px;padding:16px 24px;margin:30px 0 0;display:flex;align-items:center;gap:14px;}
-.review-divider h3{color:white;margin:0;font-size:1.1rem;}
-.review-divider span{background:rgba(255,255,255,0.15);color:white;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+
+
+
+
 
 footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
 </style>
@@ -170,28 +195,116 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
 
 <header>
   <div class="header-inner">
-    <div class="header-unit">2D</div>
-    <div>
-      <div class="bbc-badge"><span>B</span><span>B</span><span>C</span></div>
-      <span class="bbc-doc-label">Documentary</span>
-    </div>
+    <div class="header-unit">3A</div>
     <div class="header-text">
-      <h1>Planet Earth: Jungles</h1>
+      <h1>Working from Home</h1>
       <div class="header-tags">
-        <span class="htag htag-s">Speaking: discuss difficult situations</span>
-        <span class="htag htag-w">Writing: a personal experience</span>
+        <span class="htag htag-v">Vocabulary: work phrases</span>
+        <span class="htag htag-g">Grammar: unless · even if · in case (of)</span>
+        <span class="htag htag-s">Speaking: approach to work/study</span>
       </div>
     </div>
-    <div class="header-right">Speakout B1+<br>Unit 2 · behaviour</div>
+    <div class="header-right">Speakout B1+<br>Unit 3 · working life</div>
   </div>
 </header>
 
 <div class="wrap">
 
+<!-- ═══ WARM-UP ════════════════════════════════════════════ -->
+<div class="phase c-warm">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-title">
+      <h2>Warm-up — Word Ladder: HEAD → TAIL</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary · game</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <p style="margin-bottom:18px;">Change <strong>one letter at a time</strong> to get from <strong style="color:var(--blue);">HEAD</strong> to <strong style="color:var(--coral);">TAIL</strong>. Use the hints to help you.</p>
+
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0;max-width:400px;margin:0 auto;">
+
+      <!-- Step 1 — given -->
+      <div class="wl-step wl-given">
+        <div class="wl-word">
+          <span class="wl-box">H</span><span class="wl-box">E</span><span class="wl-box">A</span><span class="wl-box">D</span>
+        </div>
+        <span class="wl-hint">the part of your body above your neck</span>
+      </div>
+
+      <div class="wl-arrow">↓ <span>change 1 letter</span></div>
+
+      <!-- Step 2 -->
+      <div class="wl-step">
+        <div class="wl-word">
+          <span class="wl-box">H</span><span class="wl-box">E</span><span class="wl-box">A</span>
+          <input class="wl-input" maxlength="1" placeholder="?" oninput="this.value=this.value.toUpperCase();checkLetter(this,'L')">
+        </div>
+        <span class="wl-hint">to recover from injury or illness</span>
+      </div>
+
+      <div class="wl-arrow">↓ <span>change 1 letter</span></div>
+
+      <!-- Step 3 -->
+      <div class="wl-step">
+        <div class="wl-word">
+          <input class="wl-input" maxlength="1" placeholder="?" oninput="this.value=this.value.toUpperCase();checkLetter(this,'T')">
+          <span class="wl-box">E</span><span class="wl-box">A</span><span class="wl-box">L</span>
+        </div>
+        <span class="wl-hint">a dark blue-green colour</span>
+      </div>
+
+      <div class="wl-arrow">↓ <span>change 1 letter</span></div>
+
+      <!-- Step 4 -->
+      <div class="wl-step">
+        <div class="wl-word">
+          <span class="wl-box">T</span><span class="wl-box">E</span>
+          <input class="wl-input" maxlength="1" placeholder="?" oninput="this.value=this.value.toUpperCase();checkLetter(this,'L')">
+          <span class="wl-box">L</span>
+        </div>
+        <span class="wl-hint">to say or inform someone of something</span>
+      </div>
+
+      <div class="wl-arrow">↓ <span>change 1 letter</span></div>
+
+      <!-- Step 5 -->
+      <div class="wl-step">
+        <div class="wl-word">
+          <span class="wl-box">T</span>
+          <input class="wl-input" maxlength="1" placeholder="?" oninput="this.value=this.value.toUpperCase();checkLetter(this,'A')">
+          <span class="wl-box">L</span><span class="wl-box">L</span>
+        </div>
+        <span class="wl-hint">of great height</span>
+      </div>
+
+      <div class="wl-arrow">↓ <span>change 1 letter</span></div>
+
+      <!-- Step 6 — given -->
+      <div class="wl-step wl-given wl-last">
+        <div class="wl-word">
+          <span class="wl-box">T</span><span class="wl-box">A</span><span class="wl-box">I</span><span class="wl-box">L</span>
+        </div>
+        <span class="wl-hint">the end part of an animal's body</span>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:18px;">
+      <button class="reveal-btn" onclick="showLadder()">Show all answers</button>
+    </div>
+
+    <div class="speak-q" style="margin-top:16px;">Can you think of another word chain? Try to go from <strong>WET</strong> to <strong>DRY</strong> in 4 steps.</div>
+
+  </div>
+</div>
 
 
-<!-- ═══ UNIT 2 REVIEW ════════════════════════════════════════ -->
-<div class="review-divider"><h3>Unit 2 Review</h3></div>
+
+
+<!-- ═══ UNIT 2 REVIEW (залишок) ════════════════════════════ -->
+<div class="unit-divider"><h3>Unit 2 Review</h3></div>
 
 <div class="phase c-review">
   <div class="phase-head" onclick="toggle(this)">
@@ -215,20 +328,17 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
       </ol>
       <div>
         <button class="reveal-btn" onclick="show(this)">Show answers</button>
-        <div class="answer">
-          1 've been trying · 2 've been practising · 3 's been researching<br>
-          4 've been talking · 5 've been marking
-        </div>
+        <div class="answer">1 've been trying &nbsp;·&nbsp; 2 've been practising &nbsp;·&nbsp; 3 's been researching<br>4 've been talking &nbsp;·&nbsp; 5 've been marking</div>
       </div>
     </div>
 
-    <p><strong>1B.</strong> Think of a job to go with each sentence in Ex 1A. Write two or three sentences that this person could say at the end of a busy day. Use the present perfect continuous.</p>
+    <p><strong>1B.</strong> Think of a job to go with each sentence. Write two or three sentences that this person could say at the end of a busy day. Use the present perfect continuous.</p>
     <div class="box box-teal" style="font-style:italic;color:var(--teal-dark);">I've been interviewing politicians. I've been reading through reports.</div>
     <button class="reveal-btn" onclick="show(this)">Possible jobs</button>
-    <div class="answer">1 chef / café owner · 2 musician · 3 (political) journalist · 4 business person / sales person · 5 teacher</div>
+    <div class="answer">1 chef / café owner &nbsp;·&nbsp; 2 musician &nbsp;·&nbsp; 3 political journalist &nbsp;·&nbsp; 4 business person / sales person &nbsp;·&nbsp; 5 teacher</div>
 
     <div class="sec-label" style="margin-top:22px;">Relative clauses</div>
-    <p><strong>2A.</strong> Complete the phrases with the words in the box. Put <strong>–</strong> if it's possible to leave the gap blank. More than one answer might be possible.</p>
+    <p><strong>2A.</strong> Complete the phrases. Put <strong>–</strong> if it's possible to leave the gap blank.</p>
     <div class="wordbox"><span class="chip">that</span><span class="chip">to</span><span class="chip">when</span><span class="chip">where</span><span class="chip">which</span><span class="chip">who</span><span class="chip">whose</span></div>
     <div class="two-col">
       <ol>
@@ -247,11 +357,7 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
       </ol>
     </div>
     <button class="reveal-btn" onclick="show(this)">Show answers</button>
-    <div class="answer">
-      1 –/that · 2 –/when/that · 3 –/who/that · 4 to · 5 whose<br>
-      6 which/that · 7 to · 8 –/that · 9 where · 10 who/that
-    </div>
-
+    <div class="answer">1 –/that &nbsp;·&nbsp; 2 –/when/that &nbsp;·&nbsp; 3 –/who/that &nbsp;·&nbsp; 4 to &nbsp;·&nbsp; 5 whose<br>6 which/that &nbsp;·&nbsp; 7 to &nbsp;·&nbsp; 8 –/that &nbsp;·&nbsp; 9 where &nbsp;·&nbsp; 10 who/that</div>
     <p><strong>2B.</strong> Choose one of the topics in Ex 2A. Talk about it for one minute.</p>
 
   </div>
@@ -261,7 +367,7 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
   <div class="phase-head" onclick="toggle(this)">
     <div class="ph-stripe"></div><div class="ph-num">R2</div>
     <div class="ph-title">
-      <h2>Review — Vocabulary + Text: Taking the Pain Out of the Wait</h2>
+      <h2>Review — Vocabulary + Taking the Pain Out of the Wait</h2>
       <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary review</span><span class="arrow">▼</span></div>
     </div>
   </div>
@@ -270,30 +376,27 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
     <div class="sec-label">Vocabulary</div>
     <p><strong>3A.</strong> Add vowels to complete the phrases (1–12).</p>
     <div class="two-col">
-        <ol>
-          <li><input class="letter-gap" maxlength="1">ch<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"> goals</li>
-          <li><input class="letter-gap" maxlength="1">rg<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1"> with someone</li>
-          <li><input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">d arguments</li>
-          <li>be someone's f<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">lt</li>
-          <li>do someone a f<input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">r</li>
-          <li>feel g<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">lty</li>
-        </ol>
-        <ol start="7">
-          <li><input class="letter-gap" maxlength="1">gn<input class="letter-gap" maxlength="1">r<input class="letter-gap" maxlength="1"> someone</li>
-          <li>k<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">p on doing</li>
-          <li>make a c<input class="letter-gap" maxlength="1">mm<input class="letter-gap" maxlength="1">nt</li>
-          <li>m<input class="letter-gap" maxlength="1">n<input class="letter-gap" maxlength="1">g<input class="letter-gap" maxlength="1"> to do</li>
-          <li>set g<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">ls</li>
-          <li>t<input class="letter-gap" maxlength="1">k<input class="letter-gap" maxlength="1"> up something new</li>
-        </ol>
-      </div>
-    <button class="reveal-btn" onclick="show(this)">Show answers</button>
-    <div class="answer">
-      1 achieve · 2 argue · 3 avoid · 4 fault · 5 favour · 6 guilty<br>
-      7 ignore · 8 keep · 9 comment · 10 manage · 11 goals · 12 take
+      <ol>
+        <li><input class="letter-gap" maxlength="1">ch<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"> goals</li>
+        <li><input class="letter-gap" maxlength="1">rg<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1"> with someone</li>
+        <li><input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">d arguments</li>
+        <li>be someone's f<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">lt</li>
+        <li>do someone a f<input class="letter-gap" maxlength="1">v<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">r</li>
+        <li>feel g<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">lty</li>
+      </ol>
+      <ol start="7">
+        <li><input class="letter-gap" maxlength="1">gn<input class="letter-gap" maxlength="1">r<input class="letter-gap" maxlength="1"> someone</li>
+        <li>k<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">p on doing</li>
+        <li>make a c<input class="letter-gap" maxlength="1">mm<input class="letter-gap" maxlength="1">nt</li>
+        <li>m<input class="letter-gap" maxlength="1">n<input class="letter-gap" maxlength="1">g<input class="letter-gap" maxlength="1"> to do</li>
+        <li>set g<input class="letter-gap" maxlength="1"><input class="letter-gap" maxlength="1">ls</li>
+        <li>t<input class="letter-gap" maxlength="1">k<input class="letter-gap" maxlength="1"> up something new</li>
+      </ol>
     </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 <b>a</b>ch<b>ie</b>v<b>e</b> &nbsp;·&nbsp; 2 <b>a</b>rg<b>ue</b> &nbsp;·&nbsp; 3 <b>a</b>v<b>oi</b>d &nbsp;·&nbsp; 4 f<b>au</b>lt &nbsp;·&nbsp; 5 f<b>a</b>v<b>ou</b>r &nbsp;·&nbsp; 6 g<b>ui</b>lty<br>7 <b>i</b>gn<b>o</b>r<b>e</b> &nbsp;·&nbsp; 8 k<b>ee</b>p &nbsp;·&nbsp; 9 c<b>o</b>mm<b>e</b>nt &nbsp;·&nbsp; 10 m<b>a</b>n<b>a</b>g<b>e</b> &nbsp;·&nbsp; 11 g<b>oa</b>ls &nbsp;·&nbsp; 12 t<b>a</b>k<b>e</b></div>
 
-    <p><strong>3B.</strong> Choose one of the topics and talk about it. Use at least three phrases from Ex 3A.</p>
+    <p><strong>3B.</strong> Choose one of the topics. Talk about it using at least three phrases from Ex 3A.</p>
     <ol>
       <li>A change you've made in your life that was difficult to make.</li>
       <li>Things that bother you when you're trying to sleep.</li>
@@ -302,31 +405,529 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
 
     <div class="sec-label" style="margin-top:22px;">Reading + grammar</div>
     <p><strong>4A.</strong> Choose the correct options (A–C) to complete the text.</p>
-
     <div class="col-7-5" style="align-items:start;">
       <div class="box" style="font-size:0.93rem;line-height:1.75;">
-        <p style="font-weight:700;font-size:1rem;color:var(--forest);margin-bottom:10px;">Taking the pain out of the wait</p>
-        <p>Waiting in a queue <sup>1</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> most people crazy, and that's bad for business. So businesses <sup>2</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> a lot of effort to solve this. When high-rise buildings became common, waiting for the lift was frustrating for anyone who was in a <sup>3</sup><input class="gap" style="width:75px;" placeholder="A/B/C">, and there were lots of complaints. So mirrors were put next to the lifts and complaints dropped because it gave people something to look at while waiting. An airport was <sup>4</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> getting complaints about the long wait for baggage. When they moved the arrival gates further away, complaints about waiting stopped, and no one got <sup>5</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> about the longer walk. When a new electronic product comes out, there can be long queues, and people <sup>6</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> outside a shop can be a real problem. Danish researchers found a solution: serve the last people <sup>7</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> first. That way there's no reason to show up early. As far as we know, no other countries are <sup>8</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> to try out the Danish solution – we can guess how people might <sup>9</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> to it. Most people would probably stick to their belief that first-come, first-served is fair, and anyone <sup>10</sup><input class="gap" style="width:90px;" placeholder="A/B/C"> the queue is just behaving rudely.</p>
-        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:0.83rem;color:var(--muted);display:grid;grid-template-columns:1fr 1fr;gap:3px;">
-          <span>1 A causes &nbsp; B gets &nbsp; C drives</span>
-          <span>2 A make &nbsp; B do &nbsp; C have</span>
-          <span>3 A way &nbsp; B hurry &nbsp; C speed</span>
-          <span>4 A constantly &nbsp; B ever &nbsp; C continual</span>
-          <span>5 A far &nbsp; B tired &nbsp; C upset</span>
-          <span>6 A camping &nbsp; B camp &nbsp; C who</span>
-          <span>7 A arrived &nbsp; B who &nbsp; C to arrive</span>
-          <span>8 A thinking &nbsp; B intends &nbsp; C planning</span>
-          <span>9 A answer &nbsp; B react &nbsp; C argue</span>
-          <span>10 A jump &nbsp; B jumping &nbsp; C jumps</span>
+        <p style="font-weight:700;font-size:0.98rem;color:var(--navy);margin-bottom:10px;">Taking the pain out of the wait</p>
+        <p>Waiting in a queue <sup>1</sup><input class="gap" style="width:70px;" placeholder="A/B/C"> most people crazy, and that's bad for business. So businesses <sup>2</sup><input class="gap" style="width:70px;" placeholder="A/B/C"> a lot of effort to solve this. When high-rise buildings became common, waiting for the lift was frustrating for anyone who was in a <sup>3</sup><input class="gap" style="width:70px;" placeholder="A/B/C">, and there were lots of complaints. So mirrors were put next to the lifts and complaints dropped. An airport was <sup>4</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> getting complaints about the long wait for baggage. When they moved the arrival gates further away, complaints stopped and no one got <sup>5</sup><input class="gap" style="width:70px;" placeholder="A/B/C"> about the longer walk. When a new electronic product comes out, people <sup>6</sup><input class="gap" style="width:75px;" placeholder="A/B/C"> outside a shop can be a real problem. Danish researchers found a solution: serve the last people <sup>7</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> first. No other countries are <sup>8</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> to try out the Danish solution – we can guess how people might <sup>9</sup><input class="gap" style="width:70px;" placeholder="A/B/C"> to it. Most people believe that first-come, first-served is fair, and anyone <sup>10</sup><input class="gap" style="width:85px;" placeholder="A/B/C"> the queue is just behaving rudely.</p>
+        <div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border);font-size:0.82rem;color:var(--muted);display:grid;grid-template-columns:1fr 1fr;gap:3px;">
+          <span>1 A causes &nbsp;B gets &nbsp;C drives</span><span>2 A make &nbsp;B do &nbsp;C have</span>
+          <span>3 A way &nbsp;B hurry &nbsp;C speed</span><span>4 A constantly &nbsp;B ever &nbsp;C continual</span>
+          <span>5 A far &nbsp;B tired &nbsp;C upset</span><span>6 A camping &nbsp;B camp &nbsp;C who</span>
+          <span>7 A arrived &nbsp;B who &nbsp;C to arrive</span><span>8 A thinking &nbsp;B intends &nbsp;C planning</span>
+          <span>9 A answer &nbsp;B react &nbsp;C argue</span><span>10 A jump &nbsp;B jumping &nbsp;C jumps</span>
         </div>
       </div>
       <div>
         <button class="reveal-btn" onclick="show(this)">Show answers</button>
-        <div class="answer">1C · 2A · 3B · 4A · 5C · 6A · 7C · 8C · 9B · 10B</div>
-        <div class="box" style="margin-top:14px;">
+        <div class="answer">1C &nbsp;·&nbsp; 2A &nbsp;·&nbsp; 3B &nbsp;·&nbsp; 4A &nbsp;·&nbsp; 5C<br>6A &nbsp;·&nbsp; 7C &nbsp;·&nbsp; 8C &nbsp;·&nbsp; 9B &nbsp;·&nbsp; 10B</div>
+        <div class="box" style="margin-top:12px;">
           <p><strong>4B.</strong> Listen and check.</p>
-          <audio controls><source src="R2_01.mp3" type="audio/mpeg"></audio>
+          <audio controls><source src="audio/R2_01.mp3" type="audio/mpeg"></audio>
         </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- ═══ UNIT 3 OPENER ══════════════════════════════════════ -->
+<div class="unit-divider" style="background:linear-gradient(135deg,var(--blue),#2a70c0);margin-top:28px;">
+  <h3>Unit 3 · Working Life</h3><span>3A Working from Home</span>
+</div>
+
+
+
+
+
+
+
+<!-- ═══ VLOGS ════════════════════════════════════════════════ -->
+<div class="phase c-vlogs">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">V</div>
+    <div class="ph-title">
+      <h2>BBC Vlogs — Where do you prefer to work or study?</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">video · speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="col-5-7" style="align-items:start;">
+      <div>
+        <div class="video-slot">
+          <video controls><source src="whereworkorstudy.mp4" type="video/mp4"></video>
+          <div class="video-label"><span class="bbc-badge"><span>B</span><span>B</span><span>C</span></span> Vlogs — Unit 3</div>
+        </div>
+        <div class="box box-blue" style="margin-top:8px;"><p style="font-weight:700;color:var(--blue);font-size:0.9rem;">Q: Where do you prefer to work or study?</p></div>
+      </div>
+      <div>
+        <p><strong>1.</strong> Watch the video. Which places do people mention?</p>
+        <button class="reveal-btn" onclick="show(this)">Show answer</button>
+        <div class="answer">Libraries, cafés, home and the office.</div>
+        <p style="margin-top:14px;"><strong>2.</strong> Where do you like working and why? Think about: home, café, library, office, outside…</p>
+        <div class="speak-q">What are the advantages and disadvantages of each place for you personally?</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- ═══ READING ═══════════════════════════════════════════════ -->
+<div class="phase c-read">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">1</div>
+    <div class="ph-title">
+      <h2>Reading — Working from Home: How the Great Writers Do It</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">reading</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>1A. Discuss the questions.</h3>
+    <div class="speak-q">1 Do you work or study at home?</div>
+    <div class="speak-q">2 What's good about it?</div>
+    <div class="speak-q">3 What are the main challenges?</div>
+
+    <h3>1B. Read the article quickly and match the headings (a–d) with the sections (1–4).</h3>
+    <div class="wordbox">
+      <span class="chip">a &nbsp;Another way (or ways)</span>
+      <span class="chip">b &nbsp;Classic authors' routines</span>
+      <span class="chip">c &nbsp;Writers' tips</span>
+      <span class="chip">d &nbsp;Then came the internet</span>
+    </div>
+
+    <div class="article-card">
+      <div class="article-card-head">
+        <h3>Working from home:</h3>
+        <h4>How the great writers do it</h4>
+      </div>
+      <div class="article-card-body">
+        <p>Many of those who started working from home in the past few years have discovered that it can be incredibly difficult to work efficiently. Unless you're very focused, you'll find too many distractions and excuses NOT to work.</p>
+
+        <div class="article-section-num">Section 1 ___</div>
+        <p>If there's one group of people with extensive experience working from home, it's writers. Writers have long had to <span class="bold-phrase">deal with</span> the <span class="bold-phrase">challenge</span> of working from home, having to <span class="bold-phrase">meet a deadline</span> to finish a book and to <span class="bold-phrase">avoid distractions</span> that can make them <span class="bold-phrase">fall behind schedule</span>. And writers have been generous with their advice.</p>
+        <ul>
+          <li>Start early. If you <span class="bold-phrase">get</span> difficult tasks <span class="bold-phrase">out of the way</span>, you'll feel more relaxed later on.</li>
+          <li><span class="bold-phrase">Keep to a routine</span> and do the same things at the same time every day.</li>
+          <li>Set daily goals. For a writer it can be a number of words, for you it might just be hours of work.</li>
+          <li>Remove anything that takes your attention away from your work.</li>
+          <li>Exercise regularly. Even if you live in a tiny apartment in the middle of the city, you need to do some physical activity every day.</li>
+        </ul>
+
+        <div class="article-section-num">Section 2 ___</div>
+        <p>These tips could have been taken directly from the lives of great writers. Ernest Hemingway began writing at 6 a.m., because, he said, there was no one around to disturb him. Ursula K. Le Guin used to wake up at 5.30. She spent the first 45 minutes of the day lying in bed, thinking, and started writing by 7.15, finishing her day's work by lunchtime. James Bond author, Ian Fleming, started his day with a swim in the sea. Then he wrote from 9 till noon, had lunch and a nap and worked more from 5 p.m. He had a goal of 500 words per day.</p>
+
+        <div class="article-section-num">Section 3 ___</div>
+        <p>In the internet era, authors' routines aren't necessarily that different from previous times. Japanese novelist Haruki Murakami says he doesn't use social media at all, and describes his work day as going from 4 a.m. till about 10, followed by a run or a swim; after that he reads and listens to music, and goes to bed at 9 p.m. However, the digital world is a big factor for many authors. Novelist Zadie Smith doesn't have a smartphone and uses internet-blocking software on her laptop in case she feels like reacting to news or messages. Australian writer Benjamin Law recommends an app which turns off your social media and internet for certain lengths of time so you don't <span class="bold-phrase">lose concentration</span>.</p>
+
+        <div class="article-section-num">Section 4 ___</div>
+        <p>Not every author hides from the internet. Bernardine Evaristo starts her day with two cups of coffee, then goes online to catch up on the news and opinions about what's happening. She starts work after that and keeps at it till 9 p.m., but not without taking breaks to exercise and take a siesta.</p>
+        <p>And not every writer writes at home. Poet and novelist Maya Angelou couldn't. She used to check into a hotel room and put a 'Do not disturb' sign on the door before she started writing. But wherever you work, if you follow the advice of these writers and use your time wisely, you can <span class="bold-phrase">get a lot done</span>, or at least you can finish your work day faster and get away from your desk sooner!</p>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answers (1B)</button>
+    <div class="answer">1 → c (Writers' tips) &nbsp;·&nbsp; 2 → b (Classic authors' routines) &nbsp;·&nbsp; 3 → d (Then came the internet) &nbsp;·&nbsp; 4 → a (Another way (or ways))</div>
+
+    <h3>2A. Look at the tips in the first section. Which tips does each author follow?</h3>
+    <div class="box box-blue" style="font-style:italic;color:var(--blue);">Start early — Hemingway, Le Guin, Murakami <span style="color:var(--muted);font-size:0.85rem;">(given)</span></div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      Keep to a routine → Hemingway, Le Guin, Fleming, Murakami, Evaristo<br>
+      Set daily goals → Fleming (500 words/day)<br>
+      Remove things that take your attention → Murakami, Smith, Law, Angelou<br>
+      Exercise regularly → Fleming, Murakami, Evaristo
+    </div>
+
+    <h3>2B. According to the article, are the statements True (T), False (F) or Not Mentioned (NM)?</h3>
+    <div class="two-col">
+      <ol>
+        <li>Writers have more experience working from home than many other people.</li>
+        <li>Hemingway started early because he wanted to finish early.</li>
+        <li>Le Guin started writing at exactly 7.15.</li>
+        <li>Fleming tried to write at least 500 words a day.</li>
+        <li>Murakami doesn't use the internet.</li>
+        <li>Smith doesn't want to answer messages when she's writing.</li>
+        <li>Evaristo likes to find out what people think about the news.</li>
+        <li>Angelou lived in a hotel.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 T &nbsp;·&nbsp; 2 NM &nbsp;·&nbsp; 3 F &nbsp;·&nbsp; 4 T &nbsp;·&nbsp; 5 NM &nbsp;·&nbsp; 6 T &nbsp;·&nbsp; 7 T &nbsp;·&nbsp; 8 F</div>
+      </div>
+    </div>
+
+    <h3>2C. Discuss.</h3>
+    <div class="speak-q">1 Which ideas in the article are the most useful for you?</div>
+    <div class="speak-q">2 Which authors' routines and habits are the most balanced?</div>
+    <div class="speak-q">3 Which writer's routine is most like yours?</div>
+
+  </div>
+</div>
+
+
+
+
+
+
+<!-- ═══ VOCABULARY ════════════════════════════════════════════ -->
+<div class="phase c-voc">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">2</div>
+    <div class="ph-title">
+      <h2>Vocabulary — Work Phrases</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. Match the phrases in bold in the article with the meanings (1–8).</h3>
+    <div class="two-col">
+      <ol>
+        <li>keep away from things which take your attention</li>
+        <li>follow a plan or timetable, without changing it</li>
+        <li>do a task by a particular time</li>
+        <li>finish a large amount of work</li>
+        <li>stop giving attention to something</li>
+        <li>be late in doing work or a task</li>
+        <li>manage a difficult situation successfully</li>
+        <li>finish something so you're free to do something else</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 avoid distractions<br>2 keep to a routine<br>3 meet a deadline<br>4 get a lot done<br>
+          5 lose concentration<br>6 fall behind schedule<br>7 deal with the challenge<br>8 get (something) out of the way
+        </div>
+      </div>
+    </div>
+
+    <h3>3B. Complete the conversations with the correct form of phrases from Ex 3A.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <div class="box" style="font-size:0.93rem;line-height:1.9;">
+        <p><strong>1</strong> A: This homework is really difficult. I'll do it later.<br>
+        B: No, do it now. You should <input class="gap" placeholder="..."> it <input class="gap" style="width:70px;" placeholder="...">.</p>
+        <p><strong>2</strong> A: How was your day?<br>
+        B: Great, I <input class="gap" placeholder="...">. I finished my essay, had lunch with a friend, went to an online seminar and then played tennis.</p>
+        <p><strong>3</strong> A: What time will lunch be? I need to tell the people in the café.<br>
+        B: Sorry, we've <input class="gap" placeholder="..."> by about fifteen minutes. So I think it'll be at quarter past one.</p>
+        <p><strong>4</strong> A: Is your new job hard?<br>
+        B: Yes, but I enjoy <input class="gap" placeholder="..."> with a <input class="gap" style="width:100px;" placeholder="...">.</p>
+        <p><strong>5</strong> A: You look good. Where have you been?<br>
+        B: For a swim. I always <input class="gap" placeholder="...">: 6 o'clock get up, 6.30 go for a swim.</p>
+        <p><strong>6</strong> A: Is it OK if I turn the TV on?<br>
+        B: Well, not really. I'm trying to <input class="gap" placeholder="...">. The sound of the TV would bother me.</p>
+        <p><strong>7</strong> A: What's wrong?<br>
+        B: It's that music from next door. It's making me <input class="gap" placeholder="...">. I can't think!</p>
+        <p><strong>8</strong> A: We've only got two days to finish the report!<br>
+        B: Yes, do you think we'll <input class="gap" placeholder="...">?</p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 get / out of the way<br>2 got a lot done<br>3 fallen behind schedule<br>
+          4 dealing / challenge<br>5 keep to a routine<br>6 avoid distractions<br>
+          7 lose concentration<br>8 meet the deadline
+        </div>
+      </div>
+    </div>
+
+    <h3>3C. Listen and check your answers.</h3>
+    <audio controls><source src="3_01.mp3" type="audio/mpeg"></audio>
+
+    <h3>5. Discuss the questions. When you answer, give extra information.</h3>
+    <div class="two-col">
+      <ol>
+        <li>Do you usually get a lot done in the morning?</li>
+        <li>How do you feel when you fall behind schedule?</li>
+        <li>Do you try to get easier tasks out of the way before you start difficult tasks?</li>
+        <li>Do you easily lose concentration when you're working or studying?</li>
+      </ol>
+      <ol start="5">
+        <li>What steps do you take to avoid distractions when you're working or studying?</li>
+        <li>Is it important to keep to a routine?</li>
+        <li>Are you good at meeting deadlines?</li>
+        <li>Do you usually deal well with unexpected problems?</li>
+      </ol>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- ═══ GRAMMAR ════════════════════════════════════════════════ -->
+<div class="phase c-gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">4</div>
+    <div class="ph-title">
+      <h2>Grammar — unless · even if · in case (of)</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>6A. Choose the correct words to complete the sentences.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol>
+        <li><strong>If / In case</strong> you get difficult tasks out of the way, you'll feel more relaxed later on.</li>
+        <li><strong>Unless / If</strong> you are very focused, you'll find too many distractions and excuses NOT to work.</li>
+        <li><strong>Even if / In case</strong> you live in a tiny apartment in the middle of the city, you need to find a way to do some sort of movement every day.</li>
+        <li>She uses internet-blocking software on her laptop <strong>in case of / in case</strong> she feels like reacting to news or messages.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 If &nbsp;·&nbsp; 2 Unless &nbsp;·&nbsp; 3 Even if &nbsp;·&nbsp; 4 in case</div>
+      </div>
+    </div>
+
+    <h3>6B. Find words or phrases in Ex 6A which mean:</h3>
+    <div class="two-col">
+      <ol>
+        <li>despite the fact that</li>
+        <li>if not</li>
+        <li>because (you/he/she) might</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 even if &nbsp;·&nbsp; 2 unless &nbsp;·&nbsp; 3 in case (of)</div>
+      </div>
+    </div>
+
+   
+
+    <!-- GRAMMAR BANK 3A -->
+<div class="gram-sub" style="margin-top:20px;font-size:0.78rem;">Grammar Bank 3A — conditional structures: unless · even if · in case (of)</div>
+
+<div class="two-col" style="align-items:start;margin-top:10px;">
+
+  <!-- REFERENCE -->
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;font-style:italic;">unless</p>
+      <p>We use <em>unless</em> to mean <strong>if not</strong>.</p>
+      <p class="ex-phrase" style="margin-top:8px;"><b>Unless</b> you hurry up, we're going to leave without you.<br>
+      <span style="color:var(--muted);font-size:0.88rem;">(If you don't hurry up, we're going to leave.)</span></p>
+      <p class="ex-phrase">Please don't park here <b>unless</b> you're a member of staff.</p>
+      <p style="margin-top:8px;">When the <em>unless</em> clause is <strong>first</strong>, use a comma:</p>
+      <p class="ex-phrase"><b>Unless she speaks slowly,</b> I can't understand Liz.</p>
+      <p style="margin-top:6px;">When the <em>unless</em> clause is <strong>second</strong>, no comma:</p>
+      <p class="ex-phrase">I can't understand Liz <b>unless she speaks slowly.</b></p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;font-style:italic;">even if</p>
+      <p>We use <em>even if</em> for <strong>emphasis</strong> — to say something will not change a situation.</p>
+      <p class="ex-phrase" style="margin-top:8px;"><b>Even if</b> the company pays me twice as much, I'm going to leave.<br>
+      I'll never speak to her again <b>even if</b> she says sorry.</p>
+      <p style="margin-top:8px;">When both clauses are long, use a comma to divide them.</p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;font-style:italic;">in case</p>
+      <p>We use <em>in case</em> to talk about being prepared for the <strong>possibility</strong> that something might happen.</p>
+      <p class="ex-phrase" style="margin-top:8px;">Take your umbrella <b>in case</b> it rains.<br>
+      I'll make some sandwiches <b>just in case</b> we get hungry later.</p>
+      <p style="margin-top:8px;">The <em>in case</em> clause is usually <strong>second</strong>. No commas.</p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;font-style:italic;">in case of</p>
+      <p>We use <em>in case of</em> + <strong>noun</strong> in formal situations — 'if something happens'. Usually about bad or dangerous situations.</p>
+      <p class="ex-phrase" style="margin-top:8px;"><b>In case of</b> fire, break the glass.<br>
+      <b>In case of</b> bad weather, the ceremony will be held indoors.</p>
+      <p style="margin-top:8px;">The <em>in case of</em> clause usually comes <strong>first</strong>.</p>
+    </div>
+
+    <div class="gram-note">
+      <p>Use <em>unless / even if / in case</em> + <strong>present tense</strong> for present/future:</p>
+      <p class="ex-phrase" style="margin-top:6px;">I can't help you <b>unless</b> you <b>tell</b> me the problem.<br>
+      <span style="text-decoration:line-through;color:var(--muted);">unless you'll tell me</span></p>
+      <p style="margin-top:8px;">Use <strong>past tenses</strong> for hypothetical situations:</p>
+      <p class="ex-phrase"><b>Even if</b> I <b>won</b> a million euros, I wouldn't change my job.</p>
+    </div>
+
+  </div>
+
+  <!-- PRACTICE -->
+  <div>
+    <div class="gram-sub">Practice 1A — Choose the correct words. In two cases both are possible.</div>
+    <div class="box" style="font-size:0.92rem;line-height:1.9;">
+      <ol>
+        <li>You'll be in trouble <strong>unless / if</strong> you don't stop making all that noise.</li>
+        <li>I'm not going to the party <strong>in case / even if</strong> Denise asks me.</li>
+        <li>Careful! You'll hurt yourself <strong>unless / in case</strong> you get down from there.</li>
+        <li><strong>In case of / In case</strong> a heart attack, follow these instructions.</li>
+        <li><strong>Even if / Unless</strong> it's really cold, I'm not going to wear a coat.</li>
+        <li>Shall I bring some spare socks <strong>in case / if</strong> we get wet?</li>
+        <li>I can't help you <strong>in case / unless</strong> you tell me what is wrong.</li>
+        <li>I wouldn't lend Kirk any money <strong>even if / in case</strong> he promised to give it back.</li>
+        <li><strong>In case of / In case</strong> I forget later, here's my phone number.</li>
+        <li>Nothing will change <strong>unless / even if</strong> the government changes its mind.</li>
+        <li>We won't get a seat <strong>even if / if</strong> we get to the festival late.</li>
+        <li><strong>In case of / If</strong> a power cut, use the stairs.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (1A)</button>
+    <div class="answer">
+      1 if &nbsp;·&nbsp; 2 even if &nbsp;·&nbsp; 3 unless &nbsp;·&nbsp; 4 In case of &nbsp;·&nbsp; 5 <b>both</b> &nbsp;·&nbsp; 6 in case<br>
+      7 unless &nbsp;·&nbsp; 8 even if &nbsp;·&nbsp; 9 In case &nbsp;·&nbsp; 10 <b>both</b> &nbsp;·&nbsp; 11 if &nbsp;·&nbsp; 12 In case of
+    </div>
+
+    <div class="gram-sub" style="margin-top:16px;">Practice 1B — Where both are possible, how is the meaning different?</div>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">
+      <b>5:</b> <em>Even if it's cold</em> = I won't wear a coat regardless of the temperature. <em>Unless it's really cold</em> = I'll only wear a coat if the temperature is very low — different condition.<br>
+      <b>10:</b> <em>Unless the government changes its mind</em> = things will only change if it does. <em>Even if the government changes its mind</em> = things won't change, regardless.
+    </div>
+
+    <div class="gram-sub" style="margin-top:16px;">Practice 2 — Rewrite using the word in brackets.</div>
+    <div class="box" style="font-size:0.92rem;line-height:1.9;">
+      <ol>
+        <li>Max won't go to sleep <input class="gap" placeholder="(unless)"> a story.</li>
+        <li><input class="gap" style="width:100%;" placeholder="(Even if)"> have a picnic.</li>
+        <li>Always check <input class="gap" style="width:100%;" placeholder="(in case)"> damaged.</li>
+        <li>I always try <input class="gap" style="width:100%;" placeholder="(even if)"> mood.</li>
+        <li><input class="gap" style="width:100%;" placeholder="(Unless)"> she'll probably fail.</li>
+        <li><input class="gap" style="width:100%;" placeholder="(In case of)"> button.</li>
+        <li>I need to leave now <input class="gap" placeholder="(in case)"> train.</li>
+        <li>I really don't want <input class="gap" placeholder="(unless)"> have to.</li>
+        <li>I'll bring my laptop <input class="gap" placeholder="(in case of)"> phone.</li>
+        <li>Don't <input class="gap" placeholder="(in case)"> fall.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (2)</button>
+    <div class="answer">
+      1 unless you read him<br>
+      2 Even if it rains, we're definitely going to<br>
+      3 things you've bought online in case they're / they might be<br>
+      4 to smile even if I'm in a really bad<br>
+      5 Unless Carol sticks to her plan,<br>
+      6 In case of (an) emergency, push the red<br>
+      7 in case I miss the last<br>
+      8 to tell Sigrid unless I<br>
+      9 in case of problems with my<br>
+      10 stand near the edge in case you
+    </div>
+  </div>
+
+</div>
+
+    <h3>7A. Complete the sentences with <em>unless</em>, <em>even if</em>, <em>in case (of)</em> or <em>if</em>.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol>
+        <li>I can't work <input class="gap" placeholder="..."> I have people around me. I like being able to share ideas with others and I get lonely when I'm working by myself.</li>
+        <li><input class="gap" placeholder="..."> I turn off my phone, I still find a way to check my messages.</li>
+        <li>I always keep food at my desk <input class="gap" placeholder="..."> I get hungry.</li>
+        <li><input class="gap" placeholder="..."> I have music on in the background when I'm working, I lose concentration. I don't like working in silence.</li>
+        <li><input class="gap" placeholder="..."> I could choose, I'd like to have a mixture of studying online and face to face.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 unless &nbsp;·&nbsp; 2 Even if &nbsp;·&nbsp; 3 in case &nbsp;·&nbsp; 4 Even if &nbsp;·&nbsp; 5 If</div>
+      </div>
+    </div>
+
+    <h3>7B. Change the sentences in Ex 7A so that they are true for you.</h3>
+    <div class="box box-blue" style="font-style:italic;color:var(--blue);">I always keep a bar of chocolate in my bag in case I get hungry.</div>
+    <div style="margin-top:8px;">
+      <textarea class="write-area" rows="5" placeholder="Write your own sentences here — change each one so it's true for your own working/studying habits..."></textarea>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- ═══ SPEAKING ═══════════════════════════════════════════════ -->
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">5</div>
+    <div class="ph-title">
+      <h2>Speaking — My Approach to Working / Studying from Home</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>8A. What is your approach to working or studying from home? Complete or change the sentences with your own ideas.</h3>
+
+    <img src="copp.png" style="width: 100%;">
+    <div class="speaking-card">
+      <div class="spk-section-head">⏰ Starting the work / study day</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">The first three things I do are …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">📅 Daily schedule</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">I keep to a routine and work/study from _______ to _______, unless …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">💻 Equipment (computer, paper, pen, phone)</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">The most important things I have around me are …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">🌐 Internet and phone access</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">I (would) only cut off the internet if …<br>I never switch off my phone in case …</p>
+        <textarea class="write-area" rows="3" placeholder="Complete or change these..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">☕ Taking breaks</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">I think you should take regular breaks even if …<br>I take a _______-minute break every _______ hours.</p>
+        <textarea class="write-area" rows="3" placeholder="Complete or change these..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">👥 Socialising</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">If I don't talk to someone every _______ I …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">🌙 Ending the day</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">I stop working _______ (when?) even if …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
       </div>
     </div>
 
@@ -335,7 +936,7 @@ footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;b
 
 </div><!-- .wrap -->
 
-<footer>Speakout B1+ · Unit 2D · Planet Earth II: Jungles · Unit 2 Review</footer>
+<footer>Speakout B1+ · Unit 3A · Working from Home</footer>
 
 <script>
 function toggle(h){h.parentElement.classList.toggle('collapsed');}
@@ -344,40 +945,52 @@ function show(btn){
   a.classList.toggle('show');
   btn.textContent=a.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
 }
+
+function checkLetter(el, correct){
+  if(el.value === ''){el.classList.remove('correct','wrong');return;}
+  if(el.value === correct){el.classList.add('correct');el.classList.remove('wrong');}
+  else{el.classList.add('wrong');el.classList.remove('correct');}
+}
+function showLadder(){
+  const answers = ['L','T','L','A'];
+  document.querySelectorAll('.wl-input').forEach((el,i)=>{
+    el.value = answers[i];
+    el.classList.add('correct');el.classList.remove('wrong');
+  });
+}
 </script>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-  
-    const app = initializeApp({
-      databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
-    });
-    const db = getDatabase(app);
-  
-    // ID уроку — міняй для кожного файлу
-    const LESSON_ID = "sofia_lesson13";
-  
-    // Зберігаємо при введенні
-   // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const app = initializeApp({
+    databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+  });
+  const db = getDatabase(app);
+
+  // ID уроку — міняй для кожного файлу
+  const LESSON_ID = "sofia_lesson13";
+
+  // Зберігаємо при введенні
+ // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
 document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
 
 document.querySelectorAll('input, textarea').forEach((el, i) => {
-      const key = `field_${i}`;
-  
-      // Завантажуємо збережене
-      onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
-    if (snap.exists()) {
-      const val = snap.val();
-      if (document.activeElement !== el) el.value = val;
-    }
-  });
-      // Зберігаємо при зміні
-      el.addEventListener('input', () => {
-        set(ref(db, `${LESSON_ID}/${key}`), el.value);
-      });
-    });
-  </script>
+    const key = `field_${i}`;
 
+    // Завантажуємо збережене
+    onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+  if (snap.exists()) {
+    const val = snap.val();
+    if (document.activeElement !== el) el.value = val;
+  }
+});
+    // Зберігаємо при зміні
+    el.addEventListener('input', () => {
+      set(ref(db, `${LESSON_ID}/${key}`), el.value);
+    });
+  });
+</script>
 </body>
 </html>

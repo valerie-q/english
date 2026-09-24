@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3A Working from Home</title>
+<style>
+
+:root{
+  --navy:#1d2d50;--navy-light:#2a3d6a;
+  --blue:#1a5090;--blue-light:#e8f2fb;--blue-border:#90b8e0;
+  --coral:#d4561a;--coral-light:#fef0e8;--coral-border:#f0a880;
+  --teal:#0097b3;--teal-dark:#006f85;--teal-light:#e0f5f8;--teal-border:#80d0e0;
+  --green:#2a8a5c;--green-light:#e8f5ee;--green-border:#80c8a0;
+  --purple:#6b3fa0;--purple-light:#f0eafa;--purple-border:#c4a0e0;
+  --amber:#c8700a;--amber-light:#fef3e8;
+  --text:#1a1f2e;--muted:#5a6070;--bg:#f4f8fc;--card:#ffffff;--border:#d0dce8;
+}
+.freebut-item{
+  background:white;border:1px solid var(--blue-border);
+  border-radius:8px;padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.freebut-text{font-size:0.93rem;flex:1;}
+.freebut-opts{display:flex;gap:8px;flex-shrink:0;}
+.fb-opt{
+  padding:5px 16px;border-radius:20px;cursor:pointer;
+  font-size:0.85rem;font-weight:700;user-select:none;
+  border:2px solid var(--blue-border);background:var(--blue-light);
+  color:var(--muted);transition:all 0.15s;
+}
+.fb-opt:hover{border-color:var(--blue);color:var(--blue);}
+.fb-opt.yes{background:var(--green-light);border-color:var(--green);color:var(--green);}
+.fb-opt.no{background:#fdecea;border-color:#e63946;color:#e63946;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;padding-bottom:60px;}
+
+/* HEADER */
+header{background:var(--navy);border-bottom:4px solid var(--blue);}
+.header-inner{max-width:1280px;margin:0 auto;padding:22px 40px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;}
+.header-unit{background:var(--blue);color:white;font-weight:800;font-size:1.9rem;padding:8px 18px;border-radius:6px;line-height:1;}
+.header-text h1{color:#fff;font-size:1.65rem;font-weight:700;margin-bottom:6px;}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.htag-g{background:rgba(0,151,179,0.2);color:#00c0df;border:1px solid rgba(0,151,179,0.35);}
+.htag-v{background:rgba(212,86,26,0.2);color:#f08050;border:1px solid rgba(212,86,26,0.3);}
+.htag-s{background:rgba(42,138,92,0.2);color:#3aaa70;border:1px solid rgba(42,138,92,0.3);}
+.header-right{text-align:right;color:#90a8c8;font-size:0.8rem;line-height:1.6;}
+
+/* WRAP */
+.wrap{max-width:1280px;margin:0 auto;padding:24px 40px;}
+
+/* SECTION DIVIDERS */
+.unit-divider{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:10px;padding:14px 22px;margin:26px 0 0;display:flex;align-items:center;gap:14px;}
+.unit-divider h3{color:white;margin:0;font-size:1rem;font-weight:700;}
+.unit-divider span{background:rgba(255,255,255,0.15);color:white;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+
+/* PHASE */
+.phase{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-top:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.ph-stripe{width:6px;flex-shrink:0;}
+.ph-num{color:white;font-weight:800;font-size:0.95rem;padding:14px 18px;display:flex;align-items:center;justify-content:center;min-width:52px;}
+.ph-title{flex:1;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ph-title h2{font-size:1rem;font-weight:700;color:var(--navy);margin:0;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+/* phase colours */
+.c-warm .ph-stripe,.c-warm .ph-num{background:var(--coral);}
+.c-review .ph-stripe,.c-review .ph-num{background:var(--navy);}
+.c-vlogs .ph-stripe,.c-vlogs .ph-num{background:#bb1919;}
+.c-read .ph-stripe,.c-read .ph-num{background:var(--blue);}
+.c-voc .ph-stripe,.c-voc .ph-num{background:var(--teal-dark);}
+.c-pron .ph-stripe,.c-pron .ph-num{background:var(--purple);}
+.c-gram .ph-stripe,.c-gram .ph-num{background:var(--blue);}
+.c-spk .ph-stripe,.c-spk .ph-num{background:var(--green);}
+
+.c-warm .pbadge{background:var(--coral-light);color:var(--coral);}
+.c-review .pbadge{background:#eaecf5;color:var(--navy);}
+.c-vlogs .pbadge{background:#fdecea;color:#bb1919;}
+.c-read .pbadge{background:var(--blue-light);color:var(--blue);}
+.c-voc .pbadge{background:var(--teal-light);color:var(--teal-dark);}
+.c-pron .pbadge{background:var(--purple-light);color:var(--purple);}
+.c-gram .pbadge{background:var(--blue-light);color:var(--blue);}
+.c-spk .pbadge{background:var(--green-light);color:var(--green);}
+
+/* LAYOUTS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.col-5-7{display:grid;grid-template-columns:5fr 7fr;gap:20px;margin:14px 0;}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:20px;margin:14px 0;}
+@media(max-width:900px){.two-col,.col-5-7,.col-7-5{grid-template-columns:1fr;}.wrap,.header-inner{padding:16px 18px;}}
+
+/* ELEMENTS */
+.box{background:#f5f8fc;border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-blue{background:var(--blue-light);border-left-color:var(--blue);}
+.box-teal{background:var(--teal-light);border-left-color:var(--teal);}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.box-coral{background:var(--coral-light);border-left-color:var(--coral);}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--blue-light);border:1px solid var(--blue-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:white;border:1px solid var(--blue);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+input.gap{background:var(--blue-light);border:none;border-bottom:2px dotted var(--blue);color:var(--text);font-size:1rem;width:160px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--blue);}
+textarea.write-area{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:inherit;font-size:0.93rem;resize:vertical;background:white;color:var(--text);min-height:100px;}
+textarea.write-area:focus{outline:none;border-color:var(--blue);}
+.reveal-btn{background:var(--blue);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
+.reveal-btn:hover{background:var(--navy);}
+.answer{display:none;background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+audio{width:100%;margin:8px 0;border-radius:6px;}
+h3{color:var(--navy);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+.sec-label{display:inline-block;background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+
+/* ARTICLE CARD */
+.article-card{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.article-card-head{background:var(--blue-light);border-bottom:1px solid var(--blue-border);padding:16px 20px;}
+.article-card-head h3{color:var(--coral);font-size:1.2rem;font-weight:800;margin:0 0 2px;}
+.article-card-head h4{color:var(--navy);font-size:1rem;font-weight:700;margin:0;}
+.article-card-body{padding:16px 20px;font-size:0.93rem;line-height:1.75;}
+.article-card-body p{margin:10px 0;}
+.article-section-num{color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border);padding-bottom:4px;margin:14px 0 8px;}
+.article-card-body ul{margin:8px 0;}
+.article-card-body ul li{margin:5px 0;}
+.bold-phrase{font-weight:700;color:var(--navy);}
+
+/* GRAMMAR NOTE */
+.gram-note{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:10px 0;font-size:0.93rem;}
+.ex-phrase{color:var(--teal-dark);font-weight:600;}
+.gram-sub{background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;display:inline-block;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.4px;}
+
+/* LETTER GAP */
+.letter-gap{display:inline-block;border:none;border-bottom:2px solid var(--blue);background:var(--blue-light);width:18px;text-align:center;font-size:0.93rem;font-family:inherit;padding:0 1px;margin:0 1px;color:var(--text);}
+.letter-gap:focus{outline:none;border-bottom-color:var(--navy);background:#d4e4f8;}
+
+/* VIDEO SLOT */
+.video-slot{background:#0d1a2e;border-radius:8px;overflow:hidden;margin:10px 0;}
+.video-slot video{width:100%;display:block;max-height:300px;}
+.video-label{background:#0d1a2e;color:#90b8e0;font-size:0.8rem;padding:7px 14px;text-align:center;}
+
+/* BBC CARD */
+.bbc-badge{display:inline-flex;gap:2px;margin-right:6px;}
+.bbc-badge span{background:white;color:#bb1919;font-weight:900;font-size:0.85rem;padding:2px 5px;border-radius:2px;}
+
+/* SPEAKING 8A */
+.speaking-card{background:var(--blue-light);border:1px solid var(--blue-border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.spk-section-head{background:var(--navy);color:white;font-weight:700;font-size:0.82rem;padding:7px 14px;text-transform:uppercase;letter-spacing:0.5px;}
+.spk-section-body{padding:12px 14px;}
+.spk-starter{color:var(--muted);font-size:0.88rem;font-style:italic;margin-bottom:6px;}
+
+/* VOCAB matching */
+.match-row{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.match-row:last-child{border-bottom:none;}
+.match-num{color:var(--blue);font-weight:700;min-width:20px;}
+
+
+
+
+
+.wl-step{
+  display:flex;align-items:center;gap:16px;
+  background:var(--blue-light);border:1px solid var(--blue-border);
+  border-radius:10px;padding:12px 20px;width:100%;
+}
+.wl-step.wl-given{background:var(--navy);border-color:var(--navy);}
+.wl-step.wl-given .wl-box{background:white;color:var(--navy);border-color:white;}
+.wl-step.wl-given .wl-hint{color:#a0c0e8;}
+.wl-step.wl-last{background:var(--coral);border-color:var(--coral);}
+.wl-step.wl-last .wl-box{background:white;color:var(--coral);border-color:white;}
+.wl-step.wl-last .wl-hint{color:#fcd0b8;}
+
+.wl-word{display:flex;gap:5px;flex-shrink:0;}
+.wl-box{
+  width:44px;height:44px;border:2px solid var(--blue-border);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;font-weight:800;background:white;color:var(--navy);
+}
+.wl-input{
+  width:44px;height:44px;border:2px solid var(--blue);border-radius:6px;
+  font-size:1.4rem;font-weight:800;text-align:center;background:#fff8e0;
+  color:var(--blue);font-family:inherit;text-transform:uppercase;
+  transition:all 0.2s;
+}
+.wl-input:focus{outline:none;border-color:var(--navy);background:#fffde0;}
+.wl-input.correct{background:#e8f5ee;border-color:var(--green);color:var(--green);}
+.wl-input.wrong{background:#fdecea;border-color:#e63946;color:#e63946;}
+.wl-hint{font-size:0.88rem;color:var(--muted);font-style:italic;flex:1;}
+.wl-arrow{
+  color:var(--blue);font-size:0.82rem;font-weight:600;
+  display:flex;align-items:center;gap:6px;padding:4px 20px;
+  width:100%;
+}
+.wl-arrow span{color:var(--muted);font-style:italic;font-weight:400;}
+
+
+
+
+
+
+
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-unit">3A</div>
+    <div class="header-text">
+      <h1>Working from Home</h1>
+      <div class="header-tags">
+        <span class="htag htag-v">Vocabulary: work phrases</span>
+        <span class="htag htag-g">Grammar: unless · even if · in case (of)</span>
+        <span class="htag htag-s">Speaking: approach to work/study</span>
+      </div>
+    </div>
+    <div class="header-right">Speakout B1+<br>Unit 3 · working life</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ═══ WARM-UP ════════════════════════════════════════════ -->
+
+<div class="phase c-warm">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-title">
+      <h2>Warm-up — Defend Your Take</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking · opinions</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <p style="margin-bottom:16px;">Pick a side — then <strong>defend it for 30 seconds</strong> without stopping. No "it depends"!</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;" id="takes-list">
+
+      <div class="freebut-item">
+        <span class="freebut-text">🌙 It's better to be a night owl than an early bird.</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Agree</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Disagree</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">🎬 Books are always better than their film adaptations.</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Agree</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Disagree</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">🌍 Travelling alone is better than travelling with other people.</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Agree</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Disagree</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">🐱 You can tell a lot about a person from whether they prefer cats or dogs.</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Agree</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Disagree</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">📱 Social media has done more harm than good to society.</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Agree</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Disagree</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">☕ Coffee is overrated. Tea is objectively better.</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Agree</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Disagree</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">🏙️ Living in a big city is better than living in a small town.</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Agree</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Disagree</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">🎵 The music you listened to as a teenager is always your favourite, no matter what.</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Agree</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Disagree</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="speak-q" style="margin-top:16px;">Which one was hardest to defend? Which would you actually argue about in real life?</div>
+
+  </div>
+</div>
+
+
+
+
+<!-- ═══ READING ═══════════════════════════════════════════════ -->
+<div class="phase c-read">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">1</div>
+    <div class="ph-title">
+      <h2>Reading — Working from Home: How the Great Writers Do It</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">reading</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>1A. Discuss the questions.</h3>
+    <div class="speak-q">1 Do you work or study at home?</div>
+    <div class="speak-q">2 What's good about it?</div>
+    <div class="speak-q">3 What are the main challenges?</div>
+
+    <h3>1B. Read the article quickly and match the headings (a–d) with the sections (1–4).</h3>
+    <div class="wordbox">
+      <span class="chip">a &nbsp;Another way (or ways)</span>
+      <span class="chip">b &nbsp;Classic authors' routines</span>
+      <span class="chip">c &nbsp;Writers' tips</span>
+      <span class="chip">d &nbsp;Then came the internet</span>
+    </div>
+
+    <div class="article-card">
+      <div class="article-card-head">
+        <h3>Working from home:</h3>
+        <h4>How the great writers do it</h4>
+      </div>
+      <div class="article-card-body">
+        <p>Many of those who started working from home in the past few years have discovered that it can be incredibly difficult to work efficiently. Unless you're very focused, you'll find too many distractions and excuses NOT to work.</p>
+
+        <div class="article-section-num">Section 1 ___</div>
+        <p>If there's one group of people with extensive experience working from home, it's writers. Writers have long had to <span class="bold-phrase">deal with</span> the <span class="bold-phrase">challenge</span> of working from home, having to <span class="bold-phrase">meet a deadline</span> to finish a book and to <span class="bold-phrase">avoid distractions</span> that can make them <span class="bold-phrase">fall behind schedule</span>. And writers have been generous with their advice.</p>
+        <ul>
+          <li>Start early. If you <span class="bold-phrase">get</span> difficult tasks <span class="bold-phrase">out of the way</span>, you'll feel more relaxed later on.</li>
+          <li><span class="bold-phrase">Keep to a routine</span> and do the same things at the same time every day.</li>
+          <li>Set daily goals. For a writer it can be a number of words, for you it might just be hours of work.</li>
+          <li>Remove anything that takes your attention away from your work.</li>
+          <li>Exercise regularly. Even if you live in a tiny apartment in the middle of the city, you need to do some physical activity every day.</li>
+        </ul>
+
+        <div class="article-section-num">Section 2 ___</div>
+        <p>These tips could have been taken directly from the lives of great writers. Ernest Hemingway began writing at 6 a.m., because, he said, there was no one around to disturb him. Ursula K. Le Guin used to wake up at 5.30. She spent the first 45 minutes of the day lying in bed, thinking, and started writing by 7.15, finishing her day's work by lunchtime. James Bond author, Ian Fleming, started his day with a swim in the sea. Then he wrote from 9 till noon, had lunch and a nap and worked more from 5 p.m. He had a goal of 500 words per day.</p>
+
+        <div class="article-section-num">Section 3 ___</div>
+        <p>In the internet era, authors' routines aren't necessarily that different from previous times. Japanese novelist Haruki Murakami says he doesn't use social media at all, and describes his work day as going from 4 a.m. till about 10, followed by a run or a swim; after that he reads and listens to music, and goes to bed at 9 p.m. However, the digital world is a big factor for many authors. Novelist Zadie Smith doesn't have a smartphone and uses internet-blocking software on her laptop in case she feels like reacting to news or messages. Australian writer Benjamin Law recommends an app which turns off your social media and internet for certain lengths of time so you don't <span class="bold-phrase">lose concentration</span>.</p>
+
+        <div class="article-section-num">Section 4 ___</div>
+        <p>Not every author hides from the internet. Bernardine Evaristo starts her day with two cups of coffee, then goes online to catch up on the news and opinions about what's happening. She starts work after that and keeps at it till 9 p.m., but not without taking breaks to exercise and take a siesta.</p>
+        <p>And not every writer writes at home. Poet and novelist Maya Angelou couldn't. She used to check into a hotel room and put a 'Do not disturb' sign on the door before she started writing. But wherever you work, if you follow the advice of these writers and use your time wisely, you can <span class="bold-phrase">get a lot done</span>, or at least you can finish your work day faster and get away from your desk sooner!</p>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answers (1B)</button>
+    <div class="answer">1 → c (Writers' tips) &nbsp;·&nbsp; 2 → b (Classic authors' routines) &nbsp;·&nbsp; 3 → d (Then came the internet) &nbsp;·&nbsp; 4 → a (Another way (or ways))</div>
+
+    <h3>2A. Look at the tips in the first section. Which tips does each author follow?</h3>
+    <div class="box box-blue" style="font-style:italic;color:var(--blue);">Start early — Hemingway, Le Guin, Murakami <span style="color:var(--muted);font-size:0.85rem;">(given)</span></div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      Keep to a routine → Hemingway, Le Guin, Fleming, Murakami, Evaristo<br>
+      Set daily goals → Fleming (500 words/day)<br>
+      Remove things that take your attention → Murakami, Smith, Law, Angelou<br>
+      Exercise regularly → Fleming, Murakami, Evaristo
+    </div>
+
+    <h3>2B. According to the article, are the statements True (T), False (F) or Not Mentioned (NM)?</h3>
+    <div class="two-col">
+      <ol>
+        <li>Writers have more experience working from home than many other people.</li>
+        <li>Hemingway started early because he wanted to finish early.</li>
+        <li>Le Guin started writing at exactly 7.15.</li>
+        <li>Fleming tried to write at least 500 words a day.</li>
+        <li>Murakami doesn't use the internet.</li>
+        <li>Smith doesn't want to answer messages when she's writing.</li>
+        <li>Evaristo likes to find out what people think about the news.</li>
+        <li>Angelou lived in a hotel.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 T &nbsp;·&nbsp; 2 NM &nbsp;·&nbsp; 3 F &nbsp;·&nbsp; 4 T &nbsp;·&nbsp; 5 NM &nbsp;·&nbsp; 6 T &nbsp;·&nbsp; 7 T &nbsp;·&nbsp; 8 F</div>
+      </div>
+    </div>
+
+    <h3>2C. Discuss.</h3>
+    <div class="speak-q">1 Which ideas in the article are the most useful for you?</div>
+    <div class="speak-q">2 Which authors' routines and habits are the most balanced?</div>
+    <div class="speak-q">3 Which writer's routine is most like yours?</div>
+
+  </div>
+</div>
+
+
+<!-- ═══ VOCABULARY ════════════════════════════════════════════ -->
+<div class="phase c-voc">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">2</div>
+    <div class="ph-title">
+      <h2>Vocabulary — Work Phrases</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. Match the phrases in bold in the article with the meanings (1–8).</h3>
+    <div class="two-col">
+      <ol>
+        <li>keep away from things which take your attention</li>
+        <li>follow a plan or timetable, without changing it</li>
+        <li>do a task by a particular time</li>
+        <li>finish a large amount of work</li>
+        <li>stop giving attention to something</li>
+        <li>be late in doing work or a task</li>
+        <li>manage a difficult situation successfully</li>
+        <li>finish something so you're free to do something else</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 avoid distractions<br>2 keep to a routine<br>3 meet a deadline<br>4 get a lot done<br>
+          5 lose concentration<br>6 fall behind schedule<br>7 deal with the challenge<br>8 get (something) out of the way
+        </div>
+      </div>
+    </div>
+
+    <h3>3B. Complete the conversations with the correct form of phrases from Ex 3A.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <div class="box" style="font-size:0.93rem;line-height:1.9;">
+        <p><strong>1</strong> A: This homework is really difficult. I'll do it later.<br>
+        B: No, do it now. You should <input class="gap" placeholder="..."> it <input class="gap" style="width:70px;" placeholder="...">.</p>
+        <p><strong>2</strong> A: How was your day?<br>
+        B: Great, I <input class="gap" placeholder="...">. I finished my essay, had lunch with a friend, went to an online seminar and then played tennis.</p>
+        <p><strong>3</strong> A: What time will lunch be? I need to tell the people in the café.<br>
+        B: Sorry, we've <input class="gap" placeholder="..."> by about fifteen minutes. So I think it'll be at quarter past one.</p>
+        <p><strong>4</strong> A: Is your new job hard?<br>
+        B: Yes, but I enjoy <input class="gap" placeholder="..."> with a <input class="gap" style="width:100px;" placeholder="...">.</p>
+        <p><strong>5</strong> A: You look good. Where have you been?<br>
+        B: For a swim. I always <input class="gap" placeholder="...">: 6 o'clock get up, 6.30 go for a swim.</p>
+        <p><strong>6</strong> A: Is it OK if I turn the TV on?<br>
+        B: Well, not really. I'm trying to <input class="gap" placeholder="...">. The sound of the TV would bother me.</p>
+        <p><strong>7</strong> A: What's wrong?<br>
+        B: It's that music from next door. It's making me <input class="gap" placeholder="...">. I can't think!</p>
+        <p><strong>8</strong> A: We've only got two days to finish the report!<br>
+        B: Yes, do you think we'll <input class="gap" placeholder="...">?</p>
+      </div>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 get / out of the way<br>2 got a lot done<br>3 fallen behind schedule<br>
+          4 dealing / challenge<br>5 keep to a routine<br>6 avoid distractions<br>
+          7 lose concentration<br>8 meet the deadline
+        </div>
+      </div>
+    </div>
+
+    <h3>3C. Listen and check your answers.</h3>
+    <audio controls><source src="3_01.mp3" type="audio/mpeg"></audio>
+
+    <h3>5. Discuss the questions. When you answer, give extra information.</h3>
+    <div class="two-col">
+      <ol>
+        <li>Do you usually get a lot done in the morning?</li>
+        <li>How do you feel when you fall behind schedule?</li>
+        <li>Do you try to get easier tasks out of the way before you start difficult tasks?</li>
+        <li>Do you easily lose concentration when you're working or studying?</li>
+      </ol>
+      <ol start="5">
+        <li>What steps do you take to avoid distractions when you're working or studying?</li>
+        <li>Is it important to keep to a routine?</li>
+        <li>Are you good at meeting deadlines?</li>
+        <li>Do you usually deal well with unexpected problems?</li>
+      </ol>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- ═══ GRAMMAR ════════════════════════════════════════════════ -->
+<div class="phase c-gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">4</div>
+    <div class="ph-title">
+      <h2>Grammar — unless · even if · in case (of)</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>6A. Choose the correct words to complete the sentences.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol>
+        <li><strong>If / In case</strong> you get difficult tasks out of the way, you'll feel more relaxed later on.</li>
+        <li><strong>Unless / If</strong> you are very focused, you'll find too many distractions and excuses NOT to work.</li>
+        <li><strong>Even if / In case</strong> you live in a tiny apartment in the middle of the city, you need to find a way to do some sort of movement every day.</li>
+        <li>She uses internet-blocking software on her laptop <strong>in case of / in case</strong> she feels like reacting to news or messages.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 If &nbsp;·&nbsp; 2 Unless &nbsp;·&nbsp; 3 Even if &nbsp;·&nbsp; 4 in case</div>
+      </div>
+    </div>
+
+    <h3>6B. Find words or phrases in Ex 6A which mean:</h3>
+    <div class="two-col">
+      <ol>
+        <li>despite the fact that</li>
+        <li>if not</li>
+        <li>because (you/he/she) might</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 even if &nbsp;·&nbsp; 2 unless &nbsp;·&nbsp; 3 in case (of)</div>
+      </div>
+    </div>
+
+   
+
+    <!-- GRAMMAR BANK 3A -->
+<div class="gram-sub" style="margin-top:20px;font-size:0.78rem;">Grammar Bank 3A — conditional structures: unless · even if · in case (of)</div>
+
+<div class="two-col" style="align-items:start;margin-top:10px;">
+
+  <!-- REFERENCE -->
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;font-style:italic;">unless</p>
+      <p>We use <em>unless</em> to mean <strong>if not</strong>.</p>
+      <p class="ex-phrase" style="margin-top:8px;"><b>Unless</b> you hurry up, we're going to leave without you.<br>
+      <span style="color:var(--muted);font-size:0.88rem;">(If you don't hurry up, we're going to leave.)</span></p>
+      <p class="ex-phrase">Please don't park here <b>unless</b> you're a member of staff.</p>
+      <p style="margin-top:8px;">When the <em>unless</em> clause is <strong>first</strong>, use a comma:</p>
+      <p class="ex-phrase"><b>Unless she speaks slowly,</b> I can't understand Liz.</p>
+      <p style="margin-top:6px;">When the <em>unless</em> clause is <strong>second</strong>, no comma:</p>
+      <p class="ex-phrase">I can't understand Liz <b>unless she speaks slowly.</b></p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;font-style:italic;">even if</p>
+      <p>We use <em>even if</em> for <strong>emphasis</strong> — to say something will not change a situation.</p>
+      <p class="ex-phrase" style="margin-top:8px;"><b>Even if</b> the company pays me twice as much, I'm going to leave.<br>
+      I'll never speak to her again <b>even if</b> she says sorry.</p>
+      <p style="margin-top:8px;">When both clauses are long, use a comma to divide them.</p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;font-style:italic;">in case</p>
+      <p>We use <em>in case</em> to talk about being prepared for the <strong>possibility</strong> that something might happen.</p>
+      <p class="ex-phrase" style="margin-top:8px;">Take your umbrella <b>in case</b> it rains.<br>
+      I'll make some sandwiches <b>just in case</b> we get hungry later.</p>
+      <p style="margin-top:8px;">The <em>in case</em> clause is usually <strong>second</strong>. No commas.</p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;font-style:italic;">in case of</p>
+      <p>We use <em>in case of</em> + <strong>noun</strong> in formal situations — 'if something happens'. Usually about bad or dangerous situations.</p>
+      <p class="ex-phrase" style="margin-top:8px;"><b>In case of</b> fire, break the glass.<br>
+      <b>In case of</b> bad weather, the ceremony will be held indoors.</p>
+      <p style="margin-top:8px;">The <em>in case of</em> clause usually comes <strong>first</strong>.</p>
+    </div>
+
+    <div class="gram-note">
+      <p>Use <em>unless / even if / in case</em> + <strong>present tense</strong> for present/future:</p>
+      <p class="ex-phrase" style="margin-top:6px;">I can't help you <b>unless</b> you <b>tell</b> me the problem.<br>
+      <span style="text-decoration:line-through;color:var(--muted);">unless you'll tell me</span></p>
+      <p style="margin-top:8px;">Use <strong>past tenses</strong> for hypothetical situations:</p>
+      <p class="ex-phrase"><b>Even if</b> I <b>won</b> a million euros, I wouldn't change my job.</p>
+    </div>
+
+  </div>
+
+  <!-- PRACTICE -->
+  <div>
+    <div class="gram-sub">Practice 1A — Choose the correct words. In two cases both are possible.</div>
+    <div class="box" style="font-size:0.92rem;line-height:1.9;">
+      <ol>
+        <li>You'll be in trouble <strong>unless / if</strong> you don't stop making all that noise.</li>
+        <li>I'm not going to the party <strong>in case / even if</strong> Denise asks me.</li>
+        <li>Careful! You'll hurt yourself <strong>unless / in case</strong> you get down from there.</li>
+        <li><strong>In case of / In case</strong> a heart attack, follow these instructions.</li>
+        <li><strong>Even if / Unless</strong> it's really cold, I'm not going to wear a coat.</li>
+        <li>Shall I bring some spare socks <strong>in case / if</strong> we get wet?</li>
+        <li>I can't help you <strong>in case / unless</strong> you tell me what is wrong.</li>
+        <li>I wouldn't lend Kirk any money <strong>even if / in case</strong> he promised to give it back.</li>
+        <li><strong>In case of / In case</strong> I forget later, here's my phone number.</li>
+        <li>Nothing will change <strong>unless / even if</strong> the government changes its mind.</li>
+        <li>We won't get a seat <strong>even if / if</strong> we get to the festival late.</li>
+        <li><strong>In case of / If</strong> a power cut, use the stairs.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (1A)</button>
+    <div class="answer">
+      1 if &nbsp;·&nbsp; 2 even if &nbsp;·&nbsp; 3 unless &nbsp;·&nbsp; 4 In case of &nbsp;·&nbsp; 5 <b>both</b> &nbsp;·&nbsp; 6 in case<br>
+      7 unless &nbsp;·&nbsp; 8 even if &nbsp;·&nbsp; 9 In case &nbsp;·&nbsp; 10 <b>both</b> &nbsp;·&nbsp; 11 if &nbsp;·&nbsp; 12 In case of
+    </div>
+
+    <div class="gram-sub" style="margin-top:16px;">Practice 1B — Where both are possible, how is the meaning different?</div>
+    <button class="reveal-btn" onclick="show(this)">Show answer</button>
+    <div class="answer">
+      <b>5:</b> <em>Even if it's cold</em> = I won't wear a coat regardless of the temperature. <em>Unless it's really cold</em> = I'll only wear a coat if the temperature is very low — different condition.<br>
+      <b>10:</b> <em>Unless the government changes its mind</em> = things will only change if it does. <em>Even if the government changes its mind</em> = things won't change, regardless.
+    </div>
+
+    <div class="gram-sub" style="margin-top:16px;">Practice 2 — Rewrite using the word in brackets.</div>
+    <div class="box" style="font-size:0.92rem;line-height:1.9;">
+      <ol>
+        <li>Max won't go to sleep <input class="gap" placeholder="(unless)"> a story.</li>
+        <li><input class="gap" style="width:100%;" placeholder="(Even if)"> have a picnic.</li>
+        <li>Always check <input class="gap" style="width:100%;" placeholder="(in case)"> damaged.</li>
+        <li>I always try <input class="gap" style="width:100%;" placeholder="(even if)"> mood.</li>
+        <li><input class="gap" style="width:100%;" placeholder="(Unless)"> she'll probably fail.</li>
+        <li><input class="gap" style="width:100%;" placeholder="(In case of)"> button.</li>
+        <li>I need to leave now <input class="gap" placeholder="(in case)"> train.</li>
+        <li>I really don't want <input class="gap" placeholder="(unless)"> have to.</li>
+        <li>I'll bring my laptop <input class="gap" placeholder="(in case of)"> phone.</li>
+        <li>Don't <input class="gap" placeholder="(in case)"> fall.</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (2)</button>
+    <div class="answer">
+      1 unless you read him<br>
+      2 Even if it rains, we're definitely going to<br>
+      3 things you've bought online in case they're / they might be<br>
+      4 to smile even if I'm in a really bad<br>
+      5 Unless Carol sticks to her plan,<br>
+      6 In case of (an) emergency, push the red<br>
+      7 in case I miss the last<br>
+      8 to tell Sigrid unless I<br>
+      9 in case of problems with my<br>
+      10 stand near the edge in case you
+    </div>
+  </div>
+
+</div>
+
+    <h3>7A. Complete the sentences with <em>unless</em>, <em>even if</em>, <em>in case (of)</em> or <em>if</em>.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol>
+        <li>I can't work <input class="gap" placeholder="..."> I have people around me. I like being able to share ideas with others and I get lonely when I'm working by myself.</li>
+        <li><input class="gap" placeholder="..."> I turn off my phone, I still find a way to check my messages.</li>
+        <li>I always keep food at my desk <input class="gap" placeholder="..."> I get hungry.</li>
+        <li><input class="gap" placeholder="..."> I have music on in the background when I'm working, I lose concentration. I don't like working in silence.</li>
+        <li><input class="gap" placeholder="..."> I could choose, I'd like to have a mixture of studying online and face to face.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 unless &nbsp;·&nbsp; 2 Even if &nbsp;·&nbsp; 3 in case &nbsp;·&nbsp; 4 Even if &nbsp;·&nbsp; 5 If</div>
+      </div>
+    </div>
+
+    <h3>7B. Change the sentences in Ex 7A so that they are true for you.</h3>
+    <div class="box box-blue" style="font-style:italic;color:var(--blue);">I always keep a bar of chocolate in my bag in case I get hungry.</div>
+    <div style="margin-top:8px;">
+      <textarea class="write-area" rows="5" placeholder="Write your own sentences here — change each one so it's true for your own working/studying habits..."></textarea>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══ SPEAKING ═══════════════════════════════════════════════ -->
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">5</div>
+    <div class="ph-title">
+      <h2>Speaking — My Approach to Working / Studying from Home</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>8A. What is your approach to working or studying from home? Complete or change the sentences with your own ideas.</h3>
+
+    <img src="copp.png" style="width: 100%;">
+    <div class="speaking-card">
+      <div class="spk-section-head">⏰ Starting the work / study day</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">The first three things I do are …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">📅 Daily schedule</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">I keep to a routine and work/study from _______ to _______, unless …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">💻 Equipment (computer, paper, pen, phone)</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">The most important things I have around me are …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">🌐 Internet and phone access</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">I (would) only cut off the internet if …<br>I never switch off my phone in case …</p>
+        <textarea class="write-area" rows="3" placeholder="Complete or change these..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">☕ Taking breaks</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">I think you should take regular breaks even if …<br>I take a _______-minute break every _______ hours.</p>
+        <textarea class="write-area" rows="3" placeholder="Complete or change these..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">👥 Socialising</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">If I don't talk to someone every _______ I …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+    <div class="speaking-card">
+      <div class="spk-section-head">🌙 Ending the day</div>
+      <div class="spk-section-body">
+        <p class="spk-starter">I stop working _______ (when?) even if …</p>
+        <textarea class="write-area" rows="2" placeholder="Complete or change this..."></textarea>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════ 3B GIG WORK — VOCABULARY ══════════════ -->
+<div class="unit-divider" style="background:linear-gradient(135deg,#b84010,#e05a20);">
+  <h3>3B · Gig Work</h3>
+  <span>Grammar: necessity · obligation · permission</span>
+</div>
+
+<div class="phase c-voc">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">6</div>
+    <div class="ph-title">
+      <h2>Vocabulary — Work</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary · reading</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>1A. Look at five people's statements about work. Which do you agree with? Which don't you agree with? Why/Why not?</h3>
+    <div class="box" style="font-size:0.93rem;">
+      <ol>
+        <li>I'd like to be my own boss.</li>
+        <li>I want to work at one company all my life.</li>
+        <li>It's important to me to choose when I work and when I don't.</li>
+        <li>For me it's good to have a steady job. I like knowing what to expect day to day.</li>
+        <li>I don't want someone telling me what to do all the time.</li>
+      </ol>
+    </div>
+
+    <h3>1B. Read the definition of 'gig work'. Which people in Ex 1A would prefer this way of working?</h3>
+    <div style="background:#f0f8f5;border:2px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:10px 0;font-size:0.93rem;">
+      <p><strong>gig work</strong> = a job that usually lasts a short time; a gig worker is paid for doing that job only and is otherwise not employed by the company</p>
+    </div>
+
+    <h3>2A. Read the text about a webinar on gig work and choose the best summary (1–3).</h3>
+    <ol>
+      <li>There are positive and negative sides to gig work.</li>
+      <li>Find out if gig work suits you first before you choose it as a way of working.</li>
+      <li>Gig work is a better way for young people to enter the working world.</li>
+    </ol>
+
+    <!-- INTRODUCTION TO GIG WORK — styled block -->
+    <div style="display:grid;grid-template-columns:200px 1fr;border:1px solid #ddd;border-radius:10px;overflow:hidden;margin:18px 0;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+      <div style="background:#e05a20;padding:24px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;">
+        <p style="color:white;font-style:italic;font-size:0.88rem;margin:0;">Introduction to</p>
+        <p style="color:#ffffff;font-size:1.6rem;font-weight:900;line-height:1.1;margin:0;">GIG<br>WORK</p>
+        <img src="https://media.istockphoto.com/id/1134003578/uk/фото/усміхнена-жінка-в-окулярах-на-відкритому-повітрі.jpg?s=1024x1024&w=is&k=20&c=Eby_hMbKsqvxBxjoVYKsQm9ROtOQf8mJUxLcjvb2Sok=" alt="Webinar host" style="width:90px;height:90px;border-radius:50%;border:3px solid white;object-fit:cover;display:block;background:#c84a10;">
+      </div>
+      <div style="background:white;padding:20px 24px;font-size:0.91rem;line-height:1.7;">
+        <p style="font-size:1.05rem;margin-bottom:12px;">Webinar: <strong>Introduction to Gig Work</strong></p>
+        <p>Whether you're looking for your first job or looking for a new one, you'll find that many <strong>opportunities</strong> are actually gig work rather than <strong>permanent</strong> contracts. More and more people are working as <strong>temporary</strong> workers, choosing what they do and when they do it, often doing multiple gig jobs at the same time.</p>
+        <p>The idea of choosing when you work and when you don't can be exciting, but you may well wonder: Is gig work for me? How do I get started, and how do I <strong>organise</strong> my life? What do I have to be careful of, and will I earn enough to survive? Can I <strong>take responsibility for</strong> finding myself work from week to week? Can I <strong>handle</strong> the ups and downs of gig work? How do I avoid being <strong>exploited</strong> by an employer?</p>
+        <p>Join our webinar this Saturday at 3 p.m. EST to find out answers to these and many other questions. Our guest host is Andrea Butcher, an employment advisor, and two special guests who will share their years of <strong>experience</strong> as gig workers.</p>
+        <p>Click <a href="#" style="color:var(--blue);">here</a> to sign up.</p>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="show(this)">Show answer (2A)</button>
+    <div class="answer">Summary <b>2</b> — Find out if gig work suits you first before you choose it as a way of working.</div>
+
+    <h3>2B. Read the text again. Which three questions in the text would you be most interested in hearing answers to?</h3>
+    <div class="speak-q">Choose three questions from the webinar text and explain why they interest you most.</div>
+
+    <h3>2C. Replace the words in bold in the questions (1–8) with the correct form of words in bold in the text in Ex 2A.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol style="font-size:0.93rem;line-height:1.8;">
+        <li>Did you have any <strong>chances</strong> to visit a workplace when you were younger? Where was it?</li>
+        <li>How much <strong>background</strong> do you have in working in a team? What is the most challenging thing about it?</li>
+        <li>Have you ever <strong>planned and arranged</strong> an event like a party or a conference? How did it go?</li>
+        <li>Would you be OK <strong>being in charge of</strong> organising a friend's wedding?</li>
+        <li>Are you good at <strong>dealing with</strong> the conflicts in a work or school situation? Can you give an example?</li>
+        <li>What sort of <strong>short-term</strong> jobs are available in your country in the summer?</li>
+        <li>Would you like to make a <strong>long-term</strong> move to another country? Where to?</li>
+        <li>Do you think a company is <strong>treating</strong> workers <strong>unfairly</strong> if it makes them work overtime?</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 opportunities · 2 experience · 3 organised<br>
+          4 handling / taking responsibility for<br>
+          5 handling · 6 temporary · 7 permanent · 8 exploiting
+        </div>
+      </div>
+    </div>
+
+    <h3>2D. Answer the questions (1–8) in Ex 2C.</h3>
+
+  </div>
+</div>
+
+
+
+<div class="phase" style="border:1px solid var(--border);border-radius:12px;margin-top:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe" style="background:var(--navy-light);"></div>
+    <div class="ph-num" style="background:var(--navy-light);">7</div>
+    <div class="ph-title">
+      <h2>Listening — Gig Work Webinar</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge" style="background:#eaecf5;color:var(--navy);">listening</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. What are the advantages and disadvantages of gig work? Make a list.</h3>
+    <div class="two-col">
+      <div>
+        <p style="font-weight:700;color:var(--green);margin-bottom:6px;">✓ Advantages</p>
+        <textarea class="write-area" rows="4" placeholder="List advantages here..."></textarea>
+      </div>
+      <div>
+        <p style="font-weight:700;color:#e63946;margin-bottom:6px;">✗ Disadvantages</p>
+        <textarea class="write-area" rows="4" placeholder="List disadvantages here..."></textarea>
+      </div>
+    </div>
+
+    <h3>3B. Listen to part of the webinar on gig work from Ex 2A. How many of your ideas do the speakers mention?</h3>
+    <audio controls><source src="3_03.mp3" type="audio/mpeg"></audio>
+    <button class="reveal-btn" onclick="show(this)">Show advantages & disadvantages from audio</button>
+<div class="answer">
+  <div class="two-col" style="margin-top:4px;">
+    <div>
+      <p style="font-weight:700;color:var(--green);margin-bottom:8px;">✓ Advantages mentioned</p>
+      <ul style="font-size:0.92rem;line-height:1.8;">
+        <li>You choose <strong>when</strong> you work</li>
+        <li>You meet many different people</li>
+        <li>You handle different problems — variety every day</li>
+        <li>Can be enjoyable / fun</li>
+        <li>Lifestyle choice — work that fits around your passions</li>
+        <li>Time left for things outside of work (e.g. painting)</li>
+        <li>Weeks with nothing = free time</li>
+      </ul>
+    </div>
+    <div>
+      <p style="font-weight:700;color:#e63946;margin-bottom:8px;">✗ Disadvantages mentioned</p>
+      <ul style="font-size:0.92rem;line-height:1.8;">
+        <li>Risk of <strong>exploitation</strong> — extra hours, low pay</li>
+        <li>Gig workers are <strong>not well protected</strong></li>
+        <li>Money often not enough to cover basics</li>
+        <li>Have to work <strong>long hours</strong> to earn enough</li>
+        <li>Pressure to say <strong>yes to every offer</strong></li>
+        <li>No <strong>sick pay</strong> — if you don't work, you don't earn</li>
+        <li>No <strong>paid holidays</strong></li>
+        <li>Income is <strong>unpredictable</strong></li>
+        <li>Stressful when work isn't coming through</li>
+        <li>Need to have <strong>savings</strong> as a safety net</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+    <h3>3C. Listen again. Write P (Paul), C (Cybil) or B (Both) next to the phrases. Then listen again and check.</h3>
+    <audio controls><source src="3_03.mp3" type="audio/mpeg"></audio>
+    <div class="two-col">
+      <ol style="font-size:0.93rem;line-height:1.9;">
+        <li>does gig work by choice <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>does gig work by necessity <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>isn't happy with the money <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>finds it difficult to say no to a job <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+      </ol>
+      <ol start="5" style="font-size:0.93rem;line-height:1.9;">
+        <li>sometimes enjoys the work <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>works long hours sometimes <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>would say 'There's more to life than work'. <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>would say 'I don't have time for anything but work'. <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (3C)</button>
+<div class="answer">
+  1 C &nbsp;·&nbsp; 2 P &nbsp;·&nbsp; 3 P &nbsp;·&nbsp; 4 P &nbsp;·&nbsp;
+  5 B &nbsp;·&nbsp; 6 B &nbsp;·&nbsp; 7 C &nbsp;·&nbsp; 8 P
+</div>
+
+    <h3>4. Discuss.</h3>
+    <div class="speak-q">1 Is gig work common where you live? What sort?</div>
+    <div class="speak-q">2 If you chose to become a gig worker, what sort of gig work would you choose?</div>
+
+  </div>
+</div>
+
+
+<div class="phase c-gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">8</div>
+    <div class="ph-title">
+      <h2>Grammar — Necessity, Obligation and Permission</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>5A. Complete the sentences using the prompts in brackets.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol style="font-size:0.93rem;line-height:2;">
+        <li>Something <input class="gap" placeholder="(need / do)"> about the rights of gig workers.</li>
+        <li>I like it because you <input class="gap" placeholder="(allow / choose)"> when you work.</li>
+        <li>I feel as if I <input class="gap" placeholder="(have got / say)"> yes to every offer that comes along.</li>
+        <li>It <input class="gap" placeholder="(necessary / find)"> a balance, to do enough work that you actually enjoy doing.</li>
+        <li>It <input class="gap" placeholder="(essential / have)"> savings for times like this, for going on holiday or if I get ill.</li>
+        <li>People act like you <input class="gap" placeholder="(suppose / have)"> a big goal in life.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 needs to be done<br>2 are allowed to choose<br>
+          3 have got to say<br>4 is necessary to find<br>
+          5 is essential to have<br>6 are supposed to have
+        </div>
+      </div>
+    </div>
+
+    <h3>5B. Listen and check your answers.</h3>
+    <audio controls><source src="3_04.mp3" type="audio/mpeg"></audio>
+
+    <h3>5C. Answer the questions (1–4) about the sentences in Ex 5A.</h3>
+    <div class="two-col">
+      <ol style="font-size:0.93rem;line-height:1.8;">
+        <li>Which phrases are about <strong>necessity</strong>, about something that is very important to do?</li>
+        <li>Which phrases are about <strong>obligation</strong>, about something you are expected to do?</li>
+        <li>Which phrase is about something you should do, but <strong>maybe you don't</strong>?</li>
+        <li>Which phrase is about <strong>permission</strong>?</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 needs to be done, is necessary to find, is essential to have<br>
+          2 have got to say, are supposed to have<br>
+          3 are supposed to have<br>
+          4 are allowed to choose
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAMMAR BANK 3B -->
+<div class="gram-sub" style="margin-top:20px;font-size:0.78rem;">Grammar Bank 3B — necessity, obligation and permission</div>
+
+<div class="two-col" style="align-items:start;margin-top:10px;">
+
+  <!-- REFERENCE -->
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;">Necessity and obligation</p>
+      <p>Many phrases can express both necessity and obligation, depending on the context.</p>
+      <p class="ex-phrase" style="margin-top:8px;"><b>I need to take</b> some time off. <span style="color:var(--muted);font-size:0.88rem;">(It's important — necessity.)</span><br>
+      <b>I need to finish</b> this report by tomorrow. <span style="color:var(--muted);font-size:0.88rem;">(Expected of me — obligation.)</span></p>
+      <p style="margin-top:10px;">Use <em>be necessary to, be essential to, needs to be done</em> when the focus is on the <strong>action</strong>:</p>
+      <p class="ex-phrase">It's <b>necessary to</b> have a driving licence.<br>
+      It's <b>essential to</b> take her to hospital immediately.<br>
+      This job <b>needs to be done</b> by tomorrow morning.</p>
+      <p style="margin-top:10px;">Use <em>have got to</em> and <em>be supposed to</em> when the focus is on the <strong>person</strong>:</p>
+      <p class="ex-phrase"><b>I've got to</b> get home by ten. <span style="color:var(--muted);font-size:0.88rem;">(informal: <em>I'm gotta</em>)</span><br>
+      <b>I'm supposed to</b> wear a hat when I deliver food, but I don't.<br>
+      Robbie's <b>not supposed to</b> call customers by their first names, but he often does.</p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;">Permission</p>
+      <p>Use <em>be (not) allowed to</em> + infinitive:</p>
+      <p class="ex-phrase" style="margin-top:6px;">Our children <b>are allowed to play</b> computer games for two hours at weekends.<br>
+      I<b>'m not allowed to</b> go to bed after midnight.</p>
+      <p style="margin-top:8px;">Use <em>be (not) permitted to</em> — more formal:</p>
+      <p class="ex-phrase">Office workers <b>are permitted to</b> wear casual clothes on Fridays.<br>
+      Drivers <b>are not permitted to</b> drive more than eight hours without a break.</p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;">Other forms</p>
+      <p>Most phrases can be used in the <strong>future and past</strong> with modal verbs:</p>
+      <p class="ex-phrase" style="margin-top:6px;"><b>It will be necessary to</b> take your passport with you.<br>
+      In my first job it <b>wasn't essential</b> to speak English.<br>
+      The apartment <b>might need to be</b> painted.</p>
+      <p style="margin-top:8px;"><em>Be supposed to</em> in the past:</p>
+      <p class="ex-phrase">We <b>were supposed to</b> go straight home, but we didn't.</p>
+      <p style="margin-top:8px;"><em>Had to</em> for past of <em>have got to</em>:</p>
+      <p class="ex-phrase">This morning I <b>had to</b> get up at 4.30 to catch the early train.</p>
+      <p style="margin-top:10px;">Use <em>unless, even if, in case</em> + <strong>present tense</strong> for present/future; <strong>past tenses</strong> for hypothetical:</p>
+      <p class="ex-phrase">I can't help you <b>unless</b> you <b>tell</b> me the problem.<br>
+      <b>Even if</b> I <b>won</b> a million euros, I wouldn't change my job.</p>
+    </div>
+
+  </div>
+
+  <!-- PRACTICE -->
+  <div>
+    <div class="gram-sub">Practice 1 — Correct the mistakes. One sentence is correct.</div>
+    <div class="box" style="font-size:0.92rem;line-height:1.9;">
+      <ol>
+        <li><u>Is essential</u> to print your name after your signature.</li>
+        <li>The video doesn't need to be <u>finish</u> until next Wednesday.</li>
+        <li>Don't do that! You aren't supposed <u>jumping</u> the queue!</li>
+        <li>I <u>got to</u> make a real effort to stop eating chocolate.</li>
+        <li>Is it necessary <u>wear</u> a uniform in your job?</li>
+        <li>Are we allowed to take photos here?</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 <b>It is essential</b> to print…<br>
+      2 doesn't need to be <b>finished</b><br>
+      3 You aren't supposed <b>to jump</b> the queue<br>
+      4 I'<b>ve got to</b> make a real effort…<br>
+      5 Is it necessary <b>to wear</b> a uniform…<br>
+      6 ✓ Correct
+    </div>
+
+    <div class="gram-sub" style="margin-top:16px;">Practice 2 — Complete the text with the words and phrases in the box.</div>
+    <div class="wordbox" style="background:var(--teal-light);border-color:var(--teal-border);">
+      <span class="chip">are not</span><span class="chip">don't need</span><span class="chip">essential</span><span class="chip">got to</span>
+      <span class="chip">is necessary</span><span class="chip">is supposed</span><span class="chip">not to</span><span class="chip">permitted</span>
+    </div>
+    <div style="background:var(--teal-light);border:2px solid var(--teal-border);border-radius:10px;overflow:hidden;margin:10px 0;">
+      <div style="background:var(--teal-dark);color:white;padding:10px 16px;font-weight:700;font-size:0.95rem;">Proposed rules for our new neighbourhood social media group</div>
+      <div style="padding:14px 16px;font-size:0.92rem;line-height:2;">
+        <p>• It is <sup>1</sup><input class="gap" style="width:100px;" placeholder="..."> to introduce yourself when you join this group.</p>
+        <p>• People <sup>2</sup><input class="gap" style="width:80px;" placeholder="..."> permitted to add other people to the group without contacting the administrator.</p>
+        <p>• You are not <sup>3</sup><input class="gap" style="width:100px;" placeholder="..."> to change the group photo unless you are an administrator.</p>
+        <p>• This <sup>4</sup><input class="gap" style="width:120px;" placeholder="..."> to be a friendly group, so always be polite to each other.</p>
+        <p>• Even if you are in a bad mood, it's essential <sup>5</sup><input class="gap" style="width:80px;" placeholder="..."> lose your temper.</p>
+        <p>• Take responsibility! If you see a message which could upset people, you've <sup>6</sup><input class="gap" style="width:80px;" placeholder="..."> say something.</p>
+        <p>• Don't feel it <sup>7</sup><input class="gap" style="width:120px;" placeholder="..."> to reply to each message. It isn't!</p>
+        <p>• Emojis are fine, but they <sup>8</sup><input class="gap" style="width:100px;" placeholder="..."> to be sent with every message!</p>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (2)</button>
+    <div class="answer">1 essential · 2 are not · 3 permitted · 4 is supposed · 5 not to · 6 got to · 7 is necessary · 8 don't need</div>
+
+    <div class="gram-sub" style="margin-top:16px;">Practice 3 — Use the prompts to make sentences and questions.</div>
+    <div class="box" style="font-size:0.92rem;line-height:1.8;">
+      <ol>
+        <li>At your first school, / you / allowed / wear / own clothes / or / have / wear / a uniform?</li>
+        <li>If you / selling / something / on our site, / essential / be / honest about / its condition.</li>
+        <li>What time / we / supposed / arrive / at the party / this evening / and / we / got / wear / anything special?</li>
+        <li>When / this report / need / be / finish / by?</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (3)</button>
+    <div class="answer">
+      1 At your first school, were you allowed to wear your own clothes, or did you have to wear a uniform?<br>
+      2 If you're selling something on our site, it's essential to be honest about its condition.<br>
+      3 What time are we supposed to arrive at the party this evening and have we got to wear anything special?<br>
+      4 When does this report need to be finished by?
+    </div>
+  </div>
+
+</div>
+    
+  </div>
+</div>
+
+
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">10</div>
+    <div class="ph-title">
+      <h2>Speaking — Work Statements</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>7A. Read the statements about work and put ✓✓ if you strongly agree, ✓ if you agree and ✗ if you disagree.</h3>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0;">
+
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:10px;padding:0;overflow:hidden;">
+        <div style="background:var(--teal-dark);padding:8px;display:flex;justify-content:center;">
+          <img src="https://breakdownservices.s3.amazonaws.com/media/photos/20261/879107/0DA7B102-2E4E-41E4-AFB349E440892956.jpg" alt="person 1" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#80d0e0;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">When you're young, it's not necessary to have job security, but later in life it's essential.</div>
+        <div style="padding:0 12px 10px;display:flex;gap:8px;">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">✓✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">✗</span>
+        </div>
+      </div>
+
+      <div style="background:#f5f5f5;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--muted);padding:8px;display:flex;justify-content:center;">
+          <img src="data:image/jpeg;base64,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" alt="person 2" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#a8a8a8;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">People should be permitted to choose how much holiday they take each year.</div>
+        <div style="padding:0 12px 10px;display:flex;gap:8px;">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">✓✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">✗</span>
+        </div>
+      </div>
+
+      <div style="background:var(--blue-light);border:1px solid var(--blue-border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--blue);padding:8px;display:flex;justify-content:center;">
+          <img src="https://media.licdn.com/dms/image/v2/D4E03AQGmTBKHL2uVYQ/profile-displayphoto-scale_200_200/B4EZ263rLPIwAY-/0/1776956653782?e=2147483647&v=beta&t=COeSpiOG5RGWiEjVV_X2kBWD-KU0huca_PjjrWhNoo4" alt="person 3" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#90b8e0;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">People should be allowed to work flexibly (choosing their own hours, location, etc.) when possible.</div>
+        <div style="padding:0 12px 10px;display:flex;gap:8px;">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">✓✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">✗</span>
+        </div>
+      </div>
+
+      <div style="background:#f5f5f5;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--muted);padding:8px;display:flex;justify-content:center;">
+          <img src="https://media.licdn.com/dms/image/v2/D5603AQGTB1B9ZZI93A/profile-displayphoto-scale_200_200/B56Zv7LQlhKwAY-/0/1769445592469?e=2147483647&v=beta&t=Bf6Pwq-hfSiu5QUO2rBB0Md27iQmkXjf29ME5UCj1VI" alt="person 4" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#a8a8a8;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">People work better if they are paid more.</div>
+        <div style="padding:0 12px 10px;display:flex;gap:8px;">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">✓✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">✗</span>
+        </div>
+      </div>
+
+      <div style="background:#f5f5f5;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--muted);padding:8px;display:flex;justify-content:center;">
+          <img src="https://bandhan.bank.in/sites/default/files/2021-01/Personal_Suvidha%20Images_Banner_250X260_1.png" alt="person 5" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#a8a8a8;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">Everyone needs to be paid the same no matter what work they do.</div>
+        <div style="padding:0 12px 10px;display:flex;gap:8px;">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">✓✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">✗</span>
+        </div>
+      </div>
+
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--teal-dark);padding:8px;display:flex;justify-content:center;">
+          <img src="https://media.licdn.com/dms/image/v2/D4E03AQEGsHuA3XWk5A/profile-displayphoto-shrink_200_200/B4EZZt78YuHoAs-/0/1745601154158?e=2147483647&v=beta&t=sD8JIFQpIIV98tC8cg2OlvZMcCTYj84gk8juUf-duMI" alt="person 6" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#80d0e0;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">It's good that computers and machines are replacing workers because people will have more free time.</div>
+        <div style="padding:0 12px 10px;display:flex;gap:8px;">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">✓✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">✓</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">✗</span>
+        </div>
+      </div>
+
+    </div>
+
+    <h3>7B. Choose two statements to discuss in detail. Say what you think and why.</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin:12px 0 16px;">
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:9px 14px;font-size:0.9rem;font-weight:600;color:var(--teal-dark);">I'm not sure about that.</div>
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:9px 14px;font-size:0.9rem;font-weight:600;color:var(--teal-dark);">I agree up to a point, but don't you think that …</div>
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:9px 14px;font-size:0.9rem;font-weight:600;color:var(--teal-dark);">I'm completely with you there.</div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 3A · Working from Home</footer>
+
+<script>
+function toggle(h){h.parentElement.classList.toggle('collapsed');}
+function show(btn){
+  const a=btn.nextElementSibling;
+  a.classList.toggle('show');
+  btn.textContent=a.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
+}
+
+function checkLetter(el, correct){
+  if(el.value === ''){el.classList.remove('correct','wrong');return;}
+  if(el.value === correct){el.classList.add('correct');el.classList.remove('wrong');}
+  else{el.classList.add('wrong');el.classList.remove('correct');}
+}
+function showLadder(){
+  const answers = ['L','T','L','A'];
+  document.querySelectorAll('.wl-input').forEach((el,i)=>{
+    el.value = answers[i];
+    el.classList.add('correct');el.classList.remove('wrong');
+  });
+}
+
+function fbPick(el,val){
+  el.closest('.freebut-opts').querySelectorAll('.fb-opt').forEach(o=>{
+    o.classList.remove('yes','no');
+  });
+  el.classList.add(val);
+}
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const app = initializeApp({
+    databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+  });
+  const db = getDatabase(app);
+
+  // ID уроку — міняй для кожного файлу
+  const LESSON_ID = "sofia_lesson14";
+
+  // Зберігаємо при введенні
+ // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+    const key = `field_${i}`;
+
+    // Завантажуємо збережене
+    onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+  if (snap.exists()) {
+    const val = snap.val();
+    if (document.activeElement !== el) el.value = val;
+  }
+});
+    // Зберігаємо при зміні
+    el.addEventListener('input', () => {
+      set(ref(db, `${LESSON_ID}/${key}`), el.value);
+    });
+  });
+</script>
+</body>
+</html>

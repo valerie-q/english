@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 21</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:      #14304d;
+      --navy-mid:  #1e4770;
+      --blue:      #2b72b8;
+      --blue-lt:   #eaf3fb;
+      --gold:      #eab308;
+      --gold-d:    #b8860b;
+      --border:    #d9e2ec;
+      --cream:     #f8fafc;
+      --white:     #ffffff;
+      --ink:       #14212e;
+      --ink-soft:  #3c4a58;
+      --ink-mute:  #6b7a89;
+      --red:       #c0392b;
+      --red-bg:    #fdf0ee;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--ink); line-height:1.6; }
+    .article-card { background:var(--white); border:1px solid var(--border); border-radius:8px; padding:24px 28px; margin:10px 0; }
+.article-meta { display:flex; gap:10px; align-items:center; margin-bottom:6px; }
+.article-author { font-weight:600; font-size:13px; color:var(--navy); }
+.article-date { font-family:'DM Mono',monospace; font-size:10px; color:var(--ink-mute); }
+.article-title { font-family:'Sora',sans-serif; font-size:20px; color:var(--ink); margin-bottom:20px; line-height:1.3; padding-bottom:14px; border-bottom:2px solid var(--blue-lt); }
+
+.tip-block { display:flex; gap:16px; padding:18px 0; border-bottom:1px dotted var(--border); }
+.tip-block:last-child { border-bottom:none; }
+.tip-num { font-family:'Sora',sans-serif; font-weight:800; font-size:22px; color:var(--gold-d); background:var(--blue-lt); width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.tip-heading { font-family:'Sora',sans-serif; font-weight:700; font-size:15px; color:var(--navy); margin-bottom:8px; }
+.tip-content p { font-size:13.5px; color:var(--ink-soft); line-height:1.75; margin:0 0 10px; }
+.tip-quote { background:var(--blue-lt); border-left:3px solid var(--blue); padding:8px 14px; margin:10px 0; font-style:italic; font-size:13px; color:var(--ink); border-radius:0 6px 6px 0; }
+   
+mark.hl { background:#fff3b0; padding:0 3px; border-radius:2px; color:var(--ink); font-weight:600; }
+
+.example-box { background:var(--blue-lt); border:1px solid var(--border); border-radius:8px; padding:14px 18px; margin:12px 0; }
+.example-box p { font-style:italic; color:var(--ink-soft); margin:0 0 8px; }
+.example-box p:last-child { margin-bottom:0; }
+
+
+
+
+.cond-example { color: var(--blue); font-weight: 600; }
+.chat-bubble-grid { display:flex; flex-direction:column; gap:10px; margin:12px 0; }
+.chat-bubble { max-width:80%; padding:10px 14px; border-radius:14px; font-size:13px; line-height:1.5; }
+.chat-bubble.left { background:var(--blue-lt); color:var(--ink); align-self:flex-start; border-bottom-left-radius:4px; }
+.chat-bubble.right { background:var(--gold-d); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+
+.activity-body p, .activity-body ul { break-inside: avoid; -webkit-column-break-inside: avoid; }
+
+.ua-btn { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; background:var(--blue-lt); border:1px solid var(--blue); color:var(--blue); padding:3px 9px; border-radius:20px; cursor:pointer; margin-top:8px; white-space:nowrap; }
+.ua-btn:hover { background:var(--blue); color:#fff; }
+.ua-box { display:none; }
+.ua-box.open { display:block; }
+
+.img-placeholder { border:2px dashed var(--border); border-radius:8px; padding:34px; text-align:center; color:var(--ink-mute); font-size:12px; background:var(--blue-lt); margin:10px 0; }
+.img-placeholder img { max-width:100%; border-radius:6px; display:block; margin:0 auto; }
+
+.text-placeholder { border:2px dashed var(--border); border-radius:8px; padding:18px 20px; background:var(--blue-lt); color:var(--ink-mute); font-size:12.5px; font-style:italic; margin:10px 0; }
+
+
+
+
+.dialogue-card { border:1px solid var(--border); border-radius:8px; overflow:hidden; margin:12px 0; }
+.dialogue-head { background:var(--navy); color:#fff; padding:9px 14px; }
+.dialogue-num { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
+.dialogue-topic { font-family:'Sora',sans-serif; font-weight:700; font-size:13.5px; margin-top:2px; }
+.dialogue-body { padding:12px 14px; background:var(--white); }
+.dialogue-turn { display:flex; gap:10px; padding:7px 0; border-bottom:1px dotted var(--border); font-size:13px; color:var(--ink-soft); align-items:flex-start; }
+.dialogue-turn:last-child { border-bottom:none; }
+.dialogue-dash { color:var(--ink-mute); flex-shrink:0; }
+
+.phrase-box { background:var(--blue-lt); border:1px solid var(--border); border-radius:6px; padding:12px 16px; margin:10px 0; }
+.phrase-box ul { padding-left:18px; }
+.phrase-box li { font-size:13px; color:var(--ink-soft); padding:4px 0; }
+
+.ua-box { background:#eef6ff; border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:0 6px 6px 0; padding:12px 16px; margin:8px 0; }
+.ua-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--blue); margin-bottom:6px; }
+.ua-box p { font-size:13px; color:var(--ink-soft); margin:0 0 8px; }
+.ua-box p:last-child { margin-bottom:0; }
+
+
+
+/* HEADER */
+    .header { background:var(--navy); position:relative; }
+    .header-stripe { height:6px; background:linear-gradient(90deg,var(--gold),var(--blue)); }
+    .header-body { max-width:1150px; margin:0 auto; padding:34px 36px 30px; }
+    .eyebrow { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+    .h1 { font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(24px,3.6vw,38px); color:#fff; line-height:1.15; margin-bottom:8px; }
+    .deck { font-size:13.5px; color:rgba(255,255,255,0.65); max-width:640px; }
+    .meta { display:flex; flex-wrap:wrap; gap:16px; margin-top:18px; padding-top:18px; border-top:1px solid rgba(255,255,255,0.12); }
+    .chip { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; color:rgba(255,255,255,0.55); display:flex; align-items:center; gap:6px; }
+    .chip::before { content:''; width:4px; height:4px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+    .chip strong { color:rgba(255,255,255,0.9); }
+
+    /* OBJECTIVES */
+    .obj-strip { background:var(--blue-lt); border-bottom:3px solid var(--blue); }
+    .obj-inner { max-width:1150px; margin:0 auto; padding:14px 36px; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    .obj-item { display:flex; gap:8px; align-items:flex-start; }
+    .obj-num { font-family:'Sora',sans-serif; font-size:20px; font-weight:800; color:rgba(43,114,184,0.3); line-height:1; width:20px; flex-shrink:0; }
+    .obj-text { font-size:11.5px; color:var(--navy); line-height:1.4; font-weight:500; }
+
+    .main { max-width:1150px; margin:0 auto; padding:0 36px 60px; }
+
+    .rule { display:flex; align-items:center; gap:12px; margin:34px 0 0; }
+    .rule-line { flex:1; height:2px; background:var(--navy); }
+    .rule-label { font-family:'Sora',sans-serif; font-size:12.5px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--navy); white-space:nowrap; }
+    .rule-line-short { width:26px; height:2px; background:var(--gold); }
+
+    /* PHASE */
+    .phase { margin-top:14px; border-radius:8px; overflow:hidden; border:1px solid var(--border); box-shadow:0 1px 4px rgba(20,48,77,0.06); }
+    .phase-header { padding:14px 18px; display:flex; align-items:center; gap:12px; cursor:pointer; user-select:none; position:relative; }
+    .phase-header::after { content:'▾'; position:absolute; right:16px; font-size:14px; color:rgba(255,255,255,0.5); transition:transform .3s; }
+    .phase.collapsed .phase-header::after { transform:rotate(-90deg); }
+    .phase.collapsed .phase-body { display:none; }
+    .phase-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:700; letter-spacing:1.5px; background:rgba(255,255,255,0.18); padding:3px 9px; border-radius:20px; color:rgba(255,255,255,0.9); white-space:nowrap; }
+    .phase-title { font-family:'Sora',sans-serif; font-weight:700; font-size:15.5px; color:#fff; line-height:1.2; }
+    .phase-sub { font-size:11px; color:rgba(255,255,255,0.6); margin-top:1px; }
+    .phase-time { margin-left:auto; margin-right:26px; font-family:'DM Mono',monospace; font-size:10px; color:rgba(255,255,255,0.75); background:rgba(0,0,0,0.18); padding:3px 9px; border-radius:20px; white-space:nowrap; }
+    .phase-body { padding:0 18px 18px; background:var(--white); }
+    .ph-navy .phase-header { background:var(--navy); }
+    .ph-blue .phase-header  { background:var(--blue); }
+    .ph-gold .phase-header  { background:var(--gold-d); }
+    .ph-gold .phase-header .phase-title,
+    .ph-gold .phase-header .phase-sub { color:var(--navy); }
+    .ph-gold .phase-header .phase-num { background:rgba(20,48,77,0.15); color:var(--navy); }
+    .ph-gold .phase-header .phase-time { color:var(--navy); background:rgba(20,48,77,0.12); }
+    .ph-gold .phase-header::after { color:rgba(20,48,77,0.4); }
+
+    /* ACTIVITY */
+    .activity { border:1px solid var(--border); border-radius:6px; margin-top:12px; overflow:hidden; background:var(--white); }
+    .activity-head { background:var(--blue-lt); padding:9px 13px; display:flex; align-items:center; gap:9px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+    .activity-icon { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; background:#fff; }
+    .activity-title { font-weight:600; font-size:13px; color:var(--navy); }
+    .activity-badge { font-family:'DM Mono',monospace; font-size:9px; background:var(--navy); color:#fff; padding:2px 6px; border-radius:3px; white-space:nowrap; margin-left:auto; }
+    .activity-badge.gold { background:var(--gold-d); color:#fff; }
+    .activity-body { padding:14px; }
+
+    p { font-size:13.5px; color:var(--ink-soft); line-height:1.65; margin:6px 0; }
+    p:first-child { margin-top:0; }
+    strong { color:var(--ink); }
+    ol.exercise { padding-left:20px; }
+    ol.exercise li { font-size:13.5px; color:var(--ink-soft); padding:6px 0; border-bottom:1px dotted var(--border); line-height:1.65; }
+    ol.exercise li:last-child { border-bottom:none; }
+    input[type="text"] { border:none; border-bottom:1.5px solid var(--border); background:transparent; font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--ink); padding:2px 4px; outline:none; transition:border-color .2s; }
+    input[type="text"]:focus { border-bottom-color:var(--blue); }
+    input[type="radio"] { accent-color:var(--blue); margin-right:5px; }
+
+    .word-box { background:var(--blue-lt); border:2px solid var(--navy); border-radius:6px; padding:10px 13px; margin:10px 0; display:flex; flex-wrap:wrap; gap:7px; align-items:center; }
+    .word-box-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-mute); width:100%; margin-bottom:2px; }
+    .word-chip { background:var(--navy); color:#fff; font-size:12px; font-weight:600; padding:3px 11px; border-radius:20px; white-space:nowrap; }
+    .word-chip.gold { background:var(--gold-d); color:#fff; }
+
+    .tip-box { background:#fffbea; border:1px solid var(--border); border-left:3px solid var(--gold-d); border-radius:0 6px 6px 0; padding:10px 13px; margin:10px 0; font-size:13px; display:flex; gap:8px; }
+    .tip-icon { font-size:14px; flex-shrink:0; }
+    .tip-text { color:var(--ink-soft); line-height:1.5; }
+
+    .answer-key { background:var(--blue-lt); border:1px solid var(--border); border-radius:6px; padding:10px 13px; margin:10px 0; font-size:12.5px; }
+    .ak-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-mute); margin-bottom:6px; }
+    .answer-key ol { padding-left:18px; }
+    .answer-key ol li { padding:2px 0; color:var(--ink-soft); }
+    .answer-key ol li strong { color:var(--navy); }
+
+    .reveal-btn { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; background:none; border:1px solid var(--border); color:var(--ink-mute); padding:4px 11px; border-radius:20px; cursor:pointer; margin-top:8px; transition:all .2s; }
+    .reveal-btn:hover { border-color:var(--gold-d); color:var(--gold-d); }
+    .reveal-content { display:none; margin-top:8px; }
+    .reveal-content.open { display:block; }
+
+    .quote-card { background:var(--navy); border-radius:6px; padding:14px 16px; margin:10px 0; display:flex; gap:12px; align-items:flex-start; }
+    .qc-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+    .qc-text { font-size:13.5px; color:rgba(255,255,255,0.88); line-height:1.6; }
+    .qc-icon { font-size:24px; flex-shrink:0; }
+
+    .vocab-table { width:100%; border-collapse:collapse; font-size:13px; margin:10px 0; }
+    .vocab-table th { background:var(--navy); color:#fff; padding:7px 11px; text-align:left; font-weight:500; font-size:11px; }
+    .vocab-table td { padding:7px 11px; border-bottom:1px solid var(--border); color:var(--ink-soft); vertical-align:top; }
+    .vocab-table tr:last-child td { border-bottom:none; }
+    .vocab-table tr:nth-child(even) td { background:var(--blue-lt); }
+    .vocab-table .eng { font-weight:600; color:var(--ink); }
+
+    .writing-area { width:100%; min-height:100px; border:1.5px solid var(--border); border-radius:6px; background:var(--white); font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--ink); padding:10px 12px; outline:none; resize:vertical; line-height:1.6; }
+    .writing-area:focus { border-color:var(--blue); }
+    .writing-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-mute); margin:10px 0 5px; }
+
+    .scenario-card { background:var(--blue-lt); border:2px dashed var(--border); border-radius:6px; padding:14px; margin:8px 0; }
+    .scenario-num { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-mute); margin-bottom:5px; }
+    .scenario-text { font-size:13.5px; color:var(--ink); line-height:1.6; }
+
+    /* WARM-UP CRAP-BUT-FREE CARDS */
+    .crap-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:12px 0; }
+    .crap-card { border:1px solid var(--border); border-radius:6px; overflow:hidden; background:var(--white); }
+    .crap-card.work { border-color:var(--gold-d); }
+    .crap-head { padding:8px 12px; background:var(--navy); display:flex; align-items:center; gap:8px; }
+    .crap-card.work .crap-head { background:var(--gold-d); }
+    .crap-icon { font-size:16px; }
+    .crap-tag { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#fff; }
+    .crap-body { padding:11px 12px; }
+    .crap-offer { font-size:13.5px; color:var(--ink); font-weight:600; margin-bottom:4px; }
+    .crap-catch { font-size:12.5px; color:var(--ink-mute); font-style:italic; }
+
+    /* MATCH-HALVES PREP */
+    .match-cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:10px 0 14px; }
+    .match-col-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-mute); margin-bottom:6px; }
+    .match-chip-list { display:flex; flex-wrap:wrap; gap:7px; }
+
+    /* QUIZ */
+    .quiz-item { border-bottom:1px dotted var(--border); padding:11px 0; }
+    .quiz-item:last-child { border-bottom:none; }
+    .quiz-q { font-size:13.5px; color:var(--ink); font-weight:600; margin-bottom:6px; }
+    .quiz-opts { display:flex; flex-direction:column; gap:4px; padding-left:4px; }
+    .quiz-opt { font-size:13px; color:var(--ink-soft); display:flex; align-items:center; }
+    .quiz-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 28px; }
+
+    .hw-block { background:var(--navy); border-radius:8px; padding:20px 24px; margin-top:8px; border-top:4px solid var(--gold); }
+    .steps { list-style:none; margin:10px 0; }
+    .steps li { display:flex; gap:12px; padding:8px 0; border-bottom:1px dotted rgba(255,255,255,0.15); font-size:13.5px; align-items:flex-start; color:rgba(255,255,255,0.85); }
+    .steps li:last-child { border-bottom:none; }
+    .step-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:500; color:#fff; background:rgba(255,255,255,0.2); width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+
+    .link-btn { display:inline-block; background:var(--navy); color:#fff !important; font-family:'Sora',sans-serif; font-weight:700; font-size:12.5px; letter-spacing:0.5px; text-decoration:none; padding:10px 18px; border-radius:6px; margin-top:8px; }
+    .link-btn:hover { background:var(--blue); }
+    .note-box { background:var(--red-bg); border:1px solid var(--red); border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:10px 13px; margin:10px 0; font-size:12.5px; color:#5a1a1a; }
+
+    @media (max-width:700px) {
+      .obj-inner { grid-template-columns:1fr 1fr; }
+      .main { padding-left:18px; padding-right:18px; }
+      .crap-grid { grid-template-columns:1fr; }
+      .match-cols { grid-template-columns:1fr; }
+      .quiz-grid { grid-template-columns:1fr; }
+    }
+
+    .img-frame { border:2px solid var(--border); border-radius:8px; overflow:hidden; margin:10px 0; }
+.img-frame img { width:100%; display:block; }
+  </style>
+</head>
+<body>
+
+
+    <div class="header">
+        <div class="header-stripe"></div>
+        <div class="header-body">
+          <div class="eyebrow">English for Tech</div>
+          <h1 class="h1">Chatting in Tech</h1>
+        </div>
+      </div>
+
+
+<div class="main">
+
+
+
+
+  
+  <div class="obj-strip">
+    <div class="obj-inner">
+      <div class="obj-item"><div class="obj-num">1</div><div class="obj-text">Vocabulary: chatting in tech</div></div>
+      <div class="obj-item"><div class="obj-num">2</div><div class="obj-text">Grammar: 1st and 2nd Conditionals</div></div>
+      <div class="obj-item"><div class="obj-num">3</div><div class="obj-text">Writing: chat messages · Speaking: small talk and building rapport</div></div>
+    </div>
+  </div>
+  
+
+  <div class="rule"><div class="rule-line"></div><div class="rule-label">Warm-up</div><div class="rule-line-short"></div></div>
+
+  <div class="phase ph-navy" id="ph0b">
+    <div class="phase-header" onclick="togglePhase('ph0b')">
+      <span class="phase-num">00</span>
+      <div><div class="phase-title">Decode the Chat</div><div class="phase-sub">Guess what these abbreviations mean</div></div>
+    </div>
+    <div class="phase-body">
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">🔤</div><span class="activity-title">What do these mean in a work chat?</span></div>
+        <div class="activity-body">
+          <p>Guess the meaning of each abbreviation before checking the answer. How many did you already know?</p>
+  
+          <div class="word-box">
+            <span class="word-chip">LGTM</span>
+            <span class="word-chip">WDYT</span>
+            <span class="word-chip">ETA</span>
+            <span class="word-chip">NGL</span>
+            <span class="word-chip">ASAP</span>
+            <span class="word-chip">IMO</span>
+            <span class="word-chip">OOO</span>
+            <span class="word-chip">TBH</span>
+          </div>
+  
+          <button class="reveal-btn" onclick="toggleReveal('rev_warmup')">show answers ▾</button>
+          <div class="reveal-content" id="rev_warmup">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li><strong>LGTM</strong> — Looks good to me (is frequently used during code review)</li>
+                <li><strong>WDYT</strong> — What do you think?</li>
+                <li><strong>ETA</strong> — Estimated time of arrival (or when smth will be ready)</li>
+                <li><strong>NGL</strong> — Not gonna lie</li>
+                <li><strong>ASAP</strong> — As soon as possible</li>
+                <li><strong>IMO</strong> — In my opinion</li>
+                <li><strong>OOO</strong> — Out of office</li>
+                <li><strong>TBH</strong> — To be honest</li>
+              </ol>
+            </div>
+          </div>
+  
+          <div class="ak-label" style="margin-top:12px;">Discussion</div>
+          <ol class="exercise">
+            <li>Which of these do you think you'd use the most?</li>
+            <li>Is there a Ukrainian equivalent abbreviation culture in work chats — do you shorten words the same way?</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="rule"><div class="rule-line"></div><div class="rule-label">Reading</div><div class="rule-line-short"></div></div>
+
+  <div class="phase ph-blue" id="ph1">
+    <div class="phase-header" onclick="togglePhase('ph1')">
+      <span class="phase-num">01</span>
+      <div><div class="phase-title">Chat Message Etiquette</div><div class="phase-sub">Tone, politeness, and common mistakes</div></div>
+
+    </div>
+    <div class="phase-body">
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">📖</div><span class="activity-title">Exercise 1B — Read the text, mark the topics mentioned</span></div>
+        <div class="activity-body">
+            
+               
+              
+                  <div style="columns:2; column-gap:28px; margin:14px 0;">
+              
+                    <p>Whether you're using Slack, Skype or even just text messages, chatting is something we all do. Chat clients are <mark class="hl">essential</mark> tools in the modern tech professional's arsenal. Today we will go over some general rules and suggestions for writing chat messages and common mistakes you should avoid.</p>
+              
+                    <p>Chatting is a much less formal form of communication than, for example, email, so using <mark class="hl">casual</mark> tone and language is ok as long as it's friendly</p>
+              
+                    <p>For example, skipping subjects is a common practice:</p>
+              
+                    <p style="border-left:3px solid var(--blue); padding-left:14px; margin:10px 0; break-inside:avoid;">(I) Was trying to fix it yesterday but wasn't successful.<br><br>(I've) Already informed the dev team though, they say they will get the platform <strong>up and running</strong> by this afternoon.</p>
+              
+                    <p>Because you cannot <mark class="hl">perceive</mark> tone over text, politeness becomes even more crucial when chatting. Be mindful of how your message sounds over text, without tone.</p>
+              
+                    <p>When problems <mark class="hl">arise,</mark> try to shift focus from the person to the problem instead of:</p>
+              
+                    <p style="border-left:3px solid var(--blue); padding-left:14px; margin:10px 0; break-inside:avoid;">"You forgot to update the link".<br>Say: <strong style="color:var(--blue);">"The link needs to be updated / Looks like it's the wrong link"</strong>.</p>
+              
+                    <p>For the purposes of business communication, you might want to use certain constructions that would help you sound more polite when making requests.</p>
+              
+                    <p style="border-left:3px solid var(--blue); padding-left:14px; margin:10px 0; break-inside:avoid;">
+                      <strong style="color:var(--blue);">I would appreciate it if</strong> you arranged for immediate payment.<br><br>
+                      <strong style="color:var(--blue);">I would be grateful if</strong> you signed and returned the document by the end of the week.<br><br>
+                      <strong style="color:var(--blue);">It would be more secure</strong> if you changed the password more frequently.<br><br>
+                      Due to the complexity of the matter, <strong style="color:var(--blue);">it would be best if</strong> you asked a tax advisor to take a look at it.
+                    </p>
+              
+                    <p>Try not to use imperative tone in written business communication.</p>
+              
+                    <p>Instead of saying "Please don't (do this)", you can use the following phrases:</p>
+              
+                    <p style="border-left:3px solid var(--blue); padding-left:14px; margin:10px 0; break-inside:avoid;">
+                      Please <strong style="color:var(--blue);">refrain</strong> from merging PRs without approval.<br><br>
+                      Please avoid running deployments until we <strong style="color:var(--blue);">give the all-clear.</strong><br><br>
+                      Please try not to cause customer escalations when you are <strong style="color:var(--blue);">on call.</strong><br><br>
+                      Please abstain from deploying on Friday evenings.
+                    </p>
+
+                </div>     
+            
+          <p style="margin-top:10px;">Mark the topics that are mentioned:</p>
+          <ol class="exercise">
+            <li><label><input type="checkbox"> The peculiar characteristics of communication via chat as opposed to other forms of communication.</label></li>
+            <li><label><input type="checkbox"> Differences between formal and informal chatting.</label></li>
+            <li><label><input type="checkbox"> Better alternatives to phrases that may come off as rude or unfriendly.</label></li>
+            <li><label><input type="checkbox"> Phrases that you should not use.</label></li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_1b')">show answers ▾</button>
+          <div class="reveal-content" id="rev_1b">
+            <div class="answer-key"><div class="ak-label">Answer</div><p>All four topics are mentioned.</p></div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">✏️</div><span class="activity-title">Exercise 1C — Complete with the highlighted phrases</span></div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>She has a very poor work-life balance. She has to stay <input type="text" size="12"> even during the weekends.</li>
+            <li>I work at a big company where communication is very formal. We never use any <input type="text" size="12"> phrases in our messages to other colleagues.</li>
+            <li>He told me about the problem as soon as it <input type="text" size="12">.</li>
+            <li>Being professional depends on how you <input type="text" size="12"> professionalism.</li>
+            <li>We haven't started on that project yet. We're waiting for the customer to <input type="text" size="16">.</li>
+            <li>He <input type="text" size="14"> from making any comments at the meeting yesterday.</li>
+            <li>These skills are absolutely <input type="text" size="12"> for any designer.</li>
+            <li>It took us a week to get the app <input type="text" size="14"> but at least it's finally working now!</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_1c')">show answers ▾</button>
+          <div class="reveal-content" id="rev_1c">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li>on call</li><li>casual</li><li>arose</li><li>perceive</li><li>give the all-clear</li><li>refrained</li><li>essential</li><li>up and running</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">📖</div><span class="activity-title">Exercise 2A — More tips on chatting</span></div>
+        <div class="activity-body">
+          <p style="font-weight:700; color:var(--navy);">Let's talk about a few other big "don'ts" of work messaging.</p>
+          <p><strong>Don't ask permission to ask a question — Just ask the question.</strong></p>
+  
+          <div style="background:#1e1f26; border-radius:8px; padding:18px 20px; margin:14px 0; font-family:'DM Sans',sans-serif;">
+
+            <div style="text-align:center; color:rgba(255,255,255,0.4); font-size:11px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">Thursday, February 13th</div>
+          
+            <div style="display:flex; gap:10px; margin-bottom:14px;">
+              <div style="width:34px; height:34px; border-radius:50%; background:#c9d6e8; flex-shrink:0;"></div>
+              <div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <div style="width:130px; height:14px; background:#c9d6e8; border-radius:3px;"></div>
+                  <span style="color:rgba(255,255,255,0.35); font-size:11px;">7:12 PM</span>
+                </div>
+                <div style="color:#dcdfe4; font-size:13.5px; margin-top:4px;">Hello!!</div>
+                <div style="color:#dcdfe4; font-size:13.5px;">how are you doing?</div>
+              </div>
+            </div>
+          
+            <div style="display:flex; gap:10px; margin-bottom:14px;">
+              <div style="width:34px; height:34px; border-radius:50%; background:#c9d6e8; flex-shrink:0;"></div>
+              <div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <div style="width:190px; height:14px; background:#c9d6e8; border-radius:3px;"></div>
+                  <span style="color:rgba(255,255,255,0.35); font-size:11px;">8:18 PM</span>
+                </div>
+                <div style="color:#dcdfe4; font-size:13.5px; margin-top:4px;">Hey <span style="display:inline-block; width:50px; height:12px; background:#c9d6e8; border-radius:2px; vertical-align:middle;"></span> all good. What's up</div>
+              </div>
+            </div>
+          
+            <div style="text-align:center; color:rgba(255,255,255,0.4); font-size:11px; margin:18px 0 14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">Saturday, February 15th</div>
+          
+            <div style="display:flex; gap:10px; margin-bottom:14px;">
+              <div style="width:34px; height:34px; border-radius:50%; background:#c9d6e8; flex-shrink:0;"></div>
+              <div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <div style="width:130px; height:14px; background:#c9d6e8; border-radius:3px;"></div>
+                  <span style="color:rgba(255,255,255,0.35); font-size:11px;">12:06 AM</span>
+                </div>
+                <div style="color:#dcdfe4; font-size:13.5px; margin-top:4px;">How are you doing at this time ?</div>
+              </div>
+            </div>
+          
+            <div style="text-align:center; color:rgba(255,255,255,0.4); font-size:11px; margin:18px 0 14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">Tuesday, February 25th</div>
+          
+            <div style="display:flex; gap:10px;">
+              <div style="width:34px; height:34px; border-radius:50%; background:#c9d6e8; flex-shrink:0;"></div>
+              <div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <div style="width:130px; height:14px; background:#c9d6e8; border-radius:3px;"></div>
+                  <span style="color:rgba(255,255,255,0.35); font-size:11px;">5:25 PM</span>
+                </div>
+                <div style="color:#dcdfe4; font-size:13.5px; margin-top:4px;">Hello Bro !!</div>
+                <div style="color:#dcdfe4; font-size:13.5px;">how are you doing ?</div>
+              </div>
+            </div>
+          
+          </div>
+  
+          <p>This is a <mark class="hl">pet peeve</mark> of every developer. If you have a question, and you already have an established working relationship with the recipient of the question, you don't really need to "ask permission" to ask the question — simply ask the question.</p>
+          <p>Refrain from using phrases that serve no actual purpose such as "How are you doing?", "How is it going?" etc.</p>
+  
+          <p>For example:</p>
+          <div class="text-placeholder">"Hi! Could you please tell me where I can find credentials for the staging cluster?"</div>
+          <p>This message is: polite / <mark class="hl">to the point</mark> / doesn't waste the other person's time</p>
+  
+          <p>If you don't have an established relationship with the person you're writing to (i.e. you've never met them), a good rule of thumb is to quickly introduce yourself and then get on with the rest of your message.</p>
+          <div class="text-placeholder">"Hi Nick, I'm Bob, I work with the platform team, and I was told that you could help me out with getting QA server access. I am currently working on ticket PLTF-3311: &lt;link to ticket&gt;. Would appreciate any assistance"<br><br>"Hi John, I'm Steve, the new DevOps engineer on the platform team — do you happen to know how I can get a copy of the anonymized production database? Should I write a ticket for this? Appreciate the help!"</div>
+  
+          <div style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:24px; margin:14px 0;">
+
+            <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+              <div style="background:#e8e9ec; color:#1a1a1a; font-size:13.5px; line-height:1.5; padding:12px 16px; border-radius:16px 16px 4px 16px; max-width:75%;">
+                Thanks for letting me know. I'll reach out to the team to see who can help out with the issue
+              </div>
+            </div>
+          
+            <div style="display:flex; justify-content:flex-start; margin-bottom:14px;">
+              <div style="background:#f5cf4d; color:#1a1a1a; font-size:13.5px; line-height:1.5; padding:12px 16px; border-radius:16px 16px 16px 4px; max-width:80%;">
+                I hope you won't take this the wrong way but I have some concern that lack of <strong>visibility</strong> will cause this to become a game of telephone. I'll move this discussion to #backend and <strong>pick it up</strong> from there
+              </div>
+            </div>
+          
+            <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+              <div style="background:#e8e9ec; color:#1a1a1a; font-size:13.5px; line-height:1.5; padding:12px 16px; border-radius:16px 16px 4px 16px;">
+                Sure thing
+              </div>
+            </div>
+          
+            <div style="display:flex; justify-content:flex-start;">
+              <div style="background:#f5cf4d; color:#1a1a1a; font-size:13.5px; line-height:1.5; padding:12px 16px; border-radius:16px 16px 16px 4px; max-width:80%;">
+                It's just that sometimes the team can be ambivalent or even hostile to work that seems to appear <strong>"out of the blue"</strong> from remote devs. So by explaining why the situation matters you hope to get <strong>buy-in</strong> that we should move forward with <strong>chasing</strong> these issues <strong>down</strong>.
+              </div>
+            </div>
+          
+          </div>
+  
+          <p style="font-weight:700; color:var(--navy); margin-top:14px;">Make use of common rooms.</p>
+          <p>This will largely depend on your company policy, but generally speaking, you want to make sure everyone on your team is informed and up-to-date on what you're doing. Conducting most of your discussions in common chat rooms is a good way of <mark class="hl">eliminating</mark> miscommunication and confusion. Above is an example of how you can go about transferring a one-to-one discussion over to a common chat room.</p>
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">🔤</div><span class="activity-title">Exercise 2B — Match highlighted words to definitions</span></div>
+        <div class="activity-body">
+          <div class="match-cols">
+            <div>
+              <ol class="exercise">
+                <li>Pet peeve → <input type="text" size="4"></li>
+                <li>To the point → <input type="text" size="4"></li>
+                <li>Eliminate → <input type="text" size="4"></li>
+                <li>Visibility → <input type="text" size="4"></li>
+                <li>Pick (something) up → <input type="text" size="4"></li>
+                <li>Out of the blue → <input type="text" size="4"></li>
+                <li>Buy-in → <input type="text" size="4"></li>
+                <li>Chase (something) down → <input type="text" size="4"></li>
+              </ol>
+            </div>
+            <div>
+              <p style="font-size:13px;">a) remove<br>b) resume<br>c) something that annoys or angers you<br>d) relevant to the subject that you are discussing<br>e) agreement with, or acceptance of, a policy or suggestion<br>f) unexpectedly<br>g) to search for and find<br>h) ability to be easily seen or noticed</p>
+            </div>
+          </div>
+          <button class="reveal-btn" onclick="toggleReveal('rev_2b')">show answers ▾</button>
+          <div class="reveal-content" id="rev_2b">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <p>1→c, 2→d, 3→a, 4→h, 5→b, 6→f, 7→e, 8→g</p>
+            </div>
+          </div>
+          <button class="ua-btn" onclick="toggleUA('ua_2b')">translation ▾</button>
+          <div class="ua-box" id="ua_2b">
+            <p><strong>Pet peeve</strong> — те, що особливо дратує</p>
+            <p><strong>To the point</strong> — по суті, стисло</p>
+            <p><strong>Eliminate</strong> — усунути, прибрати</p>
+            <p><strong>Visibility</strong> — прозорість, видимість (інформації)</p>
+            <p><strong>Pick (something) up</strong> — відновити, продовжити</p>
+            <p><strong>Out of the blue</strong> — несподівано, як сніг на голову</p>
+            <p><strong>Buy-in</strong> — згода, підтримка (рішення)</p>
+            <p><strong>Chase (something) down</strong> — розшукати, довести до кінця</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">🗣️</div><span class="activity-title">Exercise 3 — Share your thoughts</span></div>
+        <div class="activity-body">
+          <ol class="exercise">
+            <li>What is your biggest pet peeve when it comes to work communication?</li>
+            <li>Have you ever had to deal with issues that occurred due to miscommunication? What were they?</li>
+          </ol>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+  <div class="rule"><div class="rule-line"></div><div class="rule-label">Grammar</div><div class="rule-line-short"></div></div>
+
+  <div class="phase ph-navy" id="ph2">
+    <div class="phase-header" onclick="togglePhase('ph2')">
+      <span class="phase-num">02</span>
+      <div><div class="phase-title">1st &amp; 2nd Conditionals</div><div class="phase-sub">Likely vs. unlikely situations</div></div>
+    </div>
+    <div class="phase-body">
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">📖</div><span class="activity-title">Exercise 2A — Find the conditionals</span></div>
+        <div class="activity-body">
+          <p>Read the text. Can you see examples of the 1st and 2nd Conditionals?</p>
+  
+          <p><span class="cond-example">Would you be where you are today if you didn't have higher education?</span> And do you actually have it?</p>
+  
+          <p>For years now, the software industry has been a field where no formal or informal education is necessary to succeed. <span class="cond-example">If you want to be a professional, surely, you will learn the necessary skills,</span> but does it matter where and with whose help? Does a person have more chances to become an expert if he has four years of accredited university behind? This is what I as an employer would really like to know. Most people tend to evaluate those with higher education as more desirable candidates, and I can also be biased. Probably, <span class="cond-example">if I didn't have a degree, I would be more objective.</span> I try my hardest to treat people fairly anyway.</p>
+  
+          <p>When I am conducting an interview I am focused on understanding whether this person is more or less likely to succeed or make a mess that I will have to clean up. <span class="cond-example">If I had a superpower, I would choose to be a mind-reader.</span> I sometimes catch myself thinking: <span class="cond-example">if only I was able to look inside their heads, I would know what they are capable of.</span></p>
+          <div class="ak-label" style="margin-top:14px;">Discussion</div>
+          <ol class="exercise">
+            <li>Do you think a university degree actually matters in tech, or is it mostly about proven skills? Where do you stand personally?</li>
+            <li>The author admits they might be biased toward candidates with higher education. Have you noticed this kind of bias in your own hiring experience — for or against something?</li>
+            <li>If you didn't have a degree, do you think you'd be more objective as an employer, like the author suggests? Why or why not?</li>
+            <li>The author jokes about wanting a "mind-reading" superpower during interviews. What's the one thing you wish you could actually know about a candidate before hiring them?</li>
+            <li>What's a red flag (or green flag) you've learned to notice in interviews that you didn't pay attention to earlier in your career?</li>
+          </ol>
+        
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">📋</div><span class="activity-title">Exercise 2B — Rules</span></div>
+        <div class="activity-body">
+          <table class="vocab-table">
+            <thead><tr><th>1st Conditional</th><th>2nd Conditional</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Likely</strong>: there is a good chance that it will happen.<br><em>Future</em></td><td><strong>Unlikely</strong>: there is little or no chance that it can happen.<br><em>Future/Present</em></td></tr>
+              <tr><td>If you want to be a professional, surely, you will learn the necessary skills.</td><td>If I had a superpower, I would choose to be a mind-reader.</td></tr>
+            </tbody>
+          </table>
+  
+          <p style="margin-top:12px;">Sometimes, it is possible to use both 1st or 2nd conditional with a slight difference in meaning:</p>
+          <ul style="padding-left:18px; font-size:13.5px; color:var(--ink-soft); line-height:1.8;">
+            <li><em>If we bought a car, we would go on a road trip across the country.</em> — Unlikely future.</li>
+            <li><em>If we buy a car, we will go on a road trip across the country.</em> — Possible future.</li>
+          </ul>
+  
+          <p>2nd Conditionals is often used for polite suggestions and requests:</p>
+          <ul style="padding-left:18px; font-size:13.5px; color:var(--ink-soft); line-height:1.8;">
+            <li><em>I would be grateful if you signed and returned the document by the end of the week.</em></li>
+            <li><em>It would be more secure if you changed the password more frequently.</em></li>
+          </ul>
+  <br><hr>
+          <table class="vocab-table" style="margin-top:16px;">
+            <thead><tr><th>1st Conditional</th><th>2nd Conditional</th></tr></thead>
+            <tbody>
+              <tr><td><strong>If + Present Simple → will + verb</strong><br>If we leave right now, we will catch his performance.<br>She will show you around if you need an office tour.</td><td><strong>If + Past Simple → would + verb</strong><br>If we bought this car, we could go on a cross-country trip.<br>I would tell him about that if he were able to help.</td></tr>
+            </tbody>
+          </table>
+  
+          <div class="tip-box" style="margin-top:12px;">
+            <span class="tip-icon">📌</span>
+            <div class="tip-text">Words that denote conditions are never followed by Future Tenses. These include words like <strong>if, when</strong> and a few others.</div>
+          </div>
+  
+          <ul style="padding-left:18px; font-size:13.5px; color:var(--ink-soft); line-height:1.8; margin-top:10px;">
+            <li>In Formal English we use <strong>'were'</strong> instead of 'was' for all persons in the Second Conditional. In Informal English, this rule is rarely observed and "was" is used instead.<br><em>If I were you, I would talk to your boss.</em></li>
+            <li>If we start the sentence with an "if" clause, we need to separate it with a comma. Sentences that start with a main clause don't need a comma before "if".</li>
+          </ul>
+  
+          <button class="ua-btn" onclick="toggleUA('ua_cond')">details ▾</button>
+          <div class="ua-box" id="ua_cond">
+            <p><strong>1st Conditional</strong> (If + Present Simple, will + дієслово) — вживається для реальних/імовірних ситуацій у майбутньому: <em>Якщо ти захочеш бути професіоналом, ти вивчиш необхідні навички.</em></p>
+            <p><strong>2nd Conditional</strong> (If + Past Simple, would + дієслово) — вживається для нереальних/малоймовірних ситуацій у теперішньому чи майбутньому: <em>Якби я мав суперсилу, я б обрав читання думок.</em> Past Simple тут НЕ означає минулий час — це умовний спосіб.</p>
+            <p>2nd Conditional також часто використовують для ввічливих прохань: <em>Я був би вдячний, якби ви підписали документ.</em></p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">✏️</div><span class="activity-title">Exercise 2C — 2nd Conditional</span></div>
+        <div class="activity-body">
+          <p>Put the verbs in the brackets in the correct form to complete the 2nd Conditional sentences.</p>
+          <ol class="exercise">
+            <li>If I <input type="text" size="10"> (be) rich, I <input type="text" size="14"> (not/need) to work so much.</li>
+            <li>If you <input type="text" size="10"> (work) harder, you <input type="text" size="10"> (get) a promotion.</li>
+            <li>He <input type="text" size="14"> (log into) the system, if he <input type="text" size="10"> (have) a password.</li>
+            <li>If helicopters <input type="text" size="14"> (not/cost) so much, we <input type="text" size="10"> (buy) one.</li>
+            <li>If I <input type="text" size="10"> (be) you, I <input type="text" size="10"> (ask) an expert about it.</li>
+            <li>He <input type="text" size="10"> (be) a better manager, if he <input type="text" size="10"> (pay) more attention to the ideas of others.</li>
+            <li>If we <input type="text" size="14"> (not/have) the internet, communication <input type="text" size="10"> (be) much more difficult.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_2c')">show answers ▾</button>
+          <div class="reveal-content" id="rev_2c">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li>were / wouldn't need</li>
+                <li>worked / would get</li>
+                <li>would log into / had</li>
+                <li>didn't cost / would buy</li>
+                <li>were / would ask</li>
+                <li>would be / paid</li>
+                <li>didn't have / would be</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">3️⃣</div><span class="activity-title">Exercise 3 — 1st or 2nd Conditional?</span></div>
+        <div class="activity-body">
+          <p>Complete the sentences using 1st or 2nd conditional. Think about whether the condition is likely or unlikely.</p>
+          <ol class="exercise">
+            <li>If you <input type="text" size="10"> (learn) the new language, you <input type="text" size="14"> (be able to) work in the project. You have 2 months.</li>
+            <li>If I <input type="text" size="10"> (be) a boss, I <input type="text" size="14"> (introduce) flexible hours for everyone.</li>
+            <li>If I <input type="text" size="10"> (manage) to meet the deadline, I <input type="text" size="10"> (be) more responsible next time.</li>
+            <li>If I <input type="text" size="14"> (not like) my colleagues, I <input type="text" size="14"> (not/work) here.</li>
+            <li>If Sara <input type="text" size="10"> (be) a little more organized, she <input type="text" size="10"> (be) our team lead now.</li>
+            <li>I <input type="text" size="14"> (not/accept) this job, if I <input type="text" size="10"> (be) you. It sounds terribly boring.</li>
+            <li>If we <input type="text" size="10"> (get) the approval by the end of the day, we <input type="text" size="14"> (be able to) finish the update.</li>
+            <li>If this meeting <input type="text" size="10"> (last) one more hour, I <input type="text" size="14"> (not/have) time for lunch.</li>
+          </ol>
+          <button class="reveal-btn" onclick="toggleReveal('rev_3_g')">show answers ▾</button>
+          <div class="reveal-content" id="rev_3_g">
+            <div class="answer-key">
+              <div class="ak-label">Answers</div>
+              <ol>
+                <li>learn / will be able to <em>(likely — 1st)</em></li>
+                <li>were / would introduce <em>(unlikely — 2nd)</em></li>
+                <li>manage / will be <em>(likely — 1st)</em></li>
+                <li>didn't like / wouldn't work <em>(unlikely — 2nd)</em></li>
+                <li>were / would be <em>(unlikely — 2nd)</em></li>
+                <li>wouldn't accept / were <em>(unlikely — 2nd)</em></li>
+                <li>get / will be able to <em>(likely — 1st)</em></li>
+                <li>lasts / won't have <em>(likely — 1st)</em></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">🗣️</div><span class="activity-title">Exercise 4 — Continue the sentences</span></div>
+        <div class="activity-body">
+          <p>Continue the sentences so that they are true for you.</p>
+          <ol class="exercise">
+            <li>If I took a year off work, <input type="text" style="width:60%">.</li>
+            <li>If my salary was twice as high as it is now, <input type="text" style="width:60%">.</li>
+            <li>If I could move to any country that I like, <input type="text" style="width:60%">.</li>
+            <li>If my native language was English, <input type="text" style="width:60%">.</li>
+          </ol>
+          <p>Do the same with the sentences below:</p>
+          <ol class="exercise">
+            <li><input type="text" style="width:60%">, I would be more productive.</li>
+            <li><input type="text" style="width:60%">, my job would be more interesting.</li>
+            <li><input type="text" style="width:60%">, my company would be more successful.</li>
+            <li><input type="text" style="width:60%">, my office would be more comfortable.</li>
+          </ol>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+
+
+  <div class="rule"><div class="rule-line"></div><div class="rule-label">Speaking &amp; Soft Skills</div><div class="rule-line-short"></div></div>
+
+  <div class="phase ph-blue" id="ph_speaking2">
+    <div class="phase-header" onclick="togglePhase('ph_speaking2')">
+      <span class="phase-num">04</span>
+      <div><div class="phase-title">Small Talk and Building Rapport</div><div class="phase-sub">5 ways to connect with people at work</div></div>
+    </div>
+    <div class="phase-body">
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">🤝</div><span class="activity-title">Exercise 1A — Read and react</span></div>
+        <div class="activity-body">
+          <div class="quote-card">
+            <span class="qc-icon">💡</span>
+            <div>
+              <div class="qc-label">Teacher Tip</div>
+              <div class="qc-text">Business relationships in today's world are all about <b>building rapport</b> with people, be they coworkers, clients, prospective employers, investors etc.</div>
+            </div>
+          </div>
+  
+          <p>You build rapport when you develop mutual trust, friendship and affinity with someone. Building rapport can be incredibly beneficial to your career — it helps you to establish good interpersonal relationships, and this can open many doors for you.</p>
+  
+          <p style="font-weight:700; color:var(--navy); margin-top:12px;">One way to start building rapport is by using small talk.</p>
+          <p>The point of small talk is not to discuss any serious issues but to establish a connection with someone which will make your communication easier in the future. Here are 5 small talk ideas which you can use with clients or colleagues.</p>
+  
+          <div style="columns:2; column-gap:28px; margin:14px 0;">
+  
+            <p style="font-weight:700; color:var(--blue);">1. Pick up on their interest</p>
+            <p>Try to deduce what a person is interested in just by being observant. Do they have a basketball poster on a wall behind them? Are they sitting in a gaming chair? You can then ask questions about that person's interests, for instance:</p>
+            <p style="border-left:3px solid var(--blue); padding-left:14px; margin:10px 0; break-inside:avoid;">Are you a basketball fan? Do you like other sports as well?<br><br>Do you play a lot of video games? What's your favorite game?</p>
+  
+            <p style="font-weight:700; color:var(--blue);">2. Ask about them</p>
+            <p>Being generally curious about the person can also be a good way to build rapport with them. While you don't want to be too nosy or obnoxious, there are still plenty of "safe" questions you can ask such as:</p>
+            <p style="border-left:3px solid var(--blue); padding-left:14px; margin:10px 0; break-inside:avoid;">Have you ever had anything funny happen to you at work?<br><br>Do you enjoy working in the office or do you prefer to work at home?<br><br>Do you like reading books? Are you currently reading anything interesting?<br><br>What would be an ideal present for you?<br><br>If you could magically make one problem go away forever, what would it be?</p>
+  
+            <p style="font-weight:700; color:var(--blue);">3. Share something about yourself</p>
+            <p>Just talk about your day or your upcoming plans (make it short and sweet, you don't want anyone to be bored) and see if that takes you anywhere. It might turn out that you have something in common together.</p>
+  
+            <p style="font-weight:700; color:var(--blue);">4. Pay them a compliment</p>
+            <p>Genuine compliments do wonders in terms of uplifting and inspiring the other person. If someone on your team has done a great job, let them know about it! If you can see that someone has put a lot of effort into something, give them a shoutout. They will appreciate it.</p>
+  
+            <p style="font-weight:700; color:var(--blue);">5. Offer a piece of advice or a recommendation</p>
+            <p>Many people make a mistake of undervaluing how useful they can be to others. If there is a useful resource you love, a handy shortcut that saves you time, a great service you use, an awesome place you love visiting etc, share it with people! Don't assume those things are common knowledge.</p>
+  
+          </div>
+  
+          <div class="ak-label" style="margin-top:12px;">Discussion</div>
+          <ol class="exercise">
+            <li>Which of these 5 tips do you already do naturally, and which feels the most awkward for you?</li>
+            <li>Can you add your own small talk tip that isn't on this list?</li>
+          </ol>
+        </div>
+      </div>
+  
+      <div class="activity">
+        <div class="activity-head"><div class="activity-icon">🗣️</div><span class="activity-title">Exercise 1B — Three scenarios</span></div>
+        <div class="activity-body">
+          <p>Consider the following 3 scenarios below and come up with an answer for each of them.</p>
+          <ol class="exercise">
+            <li>You are asked to share 3 interesting things about yourself at a meeting with a new client.</li>
+            <li>Your teammate Sally has been very helpful in the last couple of weeks. Give her a shoutout in the team chat.</li>
+            <li>Someone asks you: "Do you have any podcasts / TV shows / books you could recommend? I'm looking for something interesting and thought-provoking."</li>
+          </ol>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+  <div class="rule"><div class="rule-line"></div><div class="rule-label">Writing &amp; Soft Skills</div><div class="rule-line-short"></div></div>
+
+<div class="phase ph-navy" id="ph_writing2">
+  <div class="phase-header" onclick="togglePhase('ph_writing2')">
+    <span class="phase-num">05</span>
+    <div><div class="phase-title">Business Chatting Phrases</div><div class="phase-sub">Practice and apply</div></div>
+  </div>
+  <div class="phase-body">
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">✏️</div><span class="activity-title">Exercise 1 — Complete the sentences</span></div>
+      <div class="activity-body">
+        <p>Complete the sentences with frequently used phrases in business chatting.</p>
+        <div class="word-box">
+          <span class="word-chip">up</span>
+          <span class="word-chip">through</span>
+          <span class="word-chip">into</span>
+          <span class="word-chip">to</span>
+        </div>
+        <ol class="exercise">
+          <li>I will look <input type="text" size="8"> the issue and get back <input type="text" size="8"> you as soon as I can.</li>
+          <li>I'll try to go <input type="text" size="8"> the project specification this evening and give you my feedback by tomorrow afternoon.</li>
+          <li>We have set <input type="text" size="8"> a meeting for Thursday at 6pm. Can you make it?</li>
+        </ol>
+        <button class="reveal-btn" onclick="toggleReveal('rev_w1')">show answers ▾</button>
+        <div class="reveal-content" id="rev_w1">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol><li>into / to</li><li>through</li><li>up</li></ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">💬</div><span class="activity-title">Exercise 2 — Write a chat message</span></div>
+      <div class="activity-body">
+        <p>Choose one scenario and write a chat message using the tips and phrases from the reading section.</p>
+        <ol class="exercise">
+          <li>You want to schedule a meeting to discuss migrating your production database.</li>
+          <li>A server is not responding, and you need help troubleshooting it (use made up details).</li>
+          <li>I made a mistake when setting up the firewall rules — inform me of this mistake.</li>
+          <li>You need somebody to cover your on-call rotation. Ask for help in a common channel.</li>
+          <li>You need to ask somebody for credentials to a production server. You have never met before.</li>
+        </ol>
+        <div class="writing-label">Your message</div>
+        <textarea class="writing-area" style="min-height:140px;"></textarea>
+
+        <button class="reveal-btn" onclick="toggleReveal('rev_w2')">show example answers ▾</button>
+<div class="reveal-content" id="rev_w2">
+  <div class="answer-key">
+    <div class="ak-label">Example answers (yours can be different)</div>
+    <ol>
+      <li><strong>Scheduling a meeting:</strong> "Hi! Could we set up 30 minutes this week to discuss migrating the production database? I'd like to go through the timeline and risks before we start."</li>
+      <li><strong>Troubleshooting a server:</strong> "Hey, the staging server isn't responding — getting a 504 timeout on every request since around 10am. Could you take a look when you have a sec?"</li>
+      <li><strong>Informing about a mistake:</strong> "Heads up — I made a mistake setting up the firewall rules earlier, port 8080 was left open by accident. I'm fixing it now, will confirm once it's resolved."</li>
+      <li><strong>Asking for coverage in a common channel:</strong> "Hi team, I need someone to cover my on-call rotation this Friday night — I have a family thing come up. Would really appreciate it if anyone could swap!"</li>
+      <li><strong>Asking a stranger for credentials:</strong> "Hi, I'm Alex, the new backend engineer on the platform team. I was told you could help me get access to the production server credentials. I'm currently working on ticket DEV-214. Would appreciate any help!"</li>
+    </ol>
+  </div>
+</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+<div class="activity">
+    <div class="activity-head"><span class="activity-title">5 Phrases for Tech Communication</span></div>
+    <div class="activity-body">
+      <table class="vocab-table">
+        <thead><tr><th>Phrase</th></tr></thead>
+        <tbody>
+          <tr><td class="eng">Keep an eye out (for something)</td></tr>
+          <tr><td class="eng">Stick on the call</td></tr>
+          <tr><td class="eng">Let me know if you spot anything</td></tr>
+          <tr><td class="eng">Get somebody to do something</td></tr>
+          <tr><td class="eng">Long story short</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
+  <div class="rule"><div class="rule-line"></div><div class="rule-label">Reference</div><div class="rule-line-short"></div></div>
+
+<div class="phase ph-gold" id="ph_glossary2">
+  <div class="phase-header" onclick="togglePhase('ph_glossary2')">
+    <span class="phase-num">06</span>
+    <div><div class="phase-title">Glossary of Technical Terms</div><div class="phase-sub">Chat &amp; dev-team vocabulary</div></div>
+  </div>
+  <div class="phase-body">
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">📖</div><span class="activity-title">Quick reference</span></div>
+      <div class="activity-body">
+        <table class="vocab-table">
+          <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td class="eng">Dev</td><td>short for "developers"</td></tr>
+            <tr><td class="eng">Production database</td><td>a database that contains the data used to drive your live, production site or app used by your customers</td></tr>
+            <tr><td class="eng">PRs (pull requests)</td><td>a method of submitting contributions to an open development project</td></tr>
+            <tr><td class="eng">Customer escalation</td><td>a scenario where a customer is not pleased with an employee interaction and wants someone at a higher level within the company to resolve the complaint</td></tr>
+            <tr><td class="eng">(Chat) client</td><td>a program or computer that connects to and requests information from a server</td></tr>
+            <tr><td class="eng">Kubernetes</td><td>a portable, extensible, open-source platform for managing containerized workloads and services, which facilitates both declarative configuration and automation</td></tr>
+          </tbody>
+        </table>
+        <button class="ua-btn" onclick="toggleUA('ua_gloss8')">translation ▾</button>
+        <div class="ua-box" id="ua_gloss8">
+          <p><strong>Dev</strong> — скорочено "розробник"</p>
+          <p><strong>Production database</strong> — продакшн-база даних (та, що працює з реальними користувачами)</p>
+          <p><strong>PRs (pull requests)</strong> — пул-реквести, запити на злиття коду</p>
+          <p><strong>Customer escalation</strong> — ескалація звернення клієнта на вищий рівень</p>
+          <p><strong>(Chat) client</strong> — клієнт (програма, що підключається до сервера)</p>
+          <p><strong>Kubernetes</strong> — платформа для керування контейнеризованими застосунками</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="rule"><div class="rule-line"></div><div class="rule-label">Quiz</div><div class="rule-line-short"></div></div>
+
+<div class="phase ph-navy" id="ph_quiz8">
+  <div class="phase-header" onclick="togglePhase('ph_quiz8')">
+    <span class="phase-num">07</span>
+    <div><div class="phase-title">Test Your Knowledge</div><div class="phase-sub">9 questions · vocabulary &amp; grammar</div></div>
+
+  </div>
+  <div class="phase-body">
+    <div class="activity">
+      <div class="activity-head"><div class="activity-icon">🧠</div><span class="activity-title">Quiz — vocabulary &amp; grammar</span></div>
+      <div class="activity-body">
+        <div class="quiz-grid">
+          <div>
+            <div class="quiz-item"><div class="quiz-q">1. — Can you wear ___ clothes to the office? — Yes. I often come dressed in jeans and a T-shirt.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_1">a) casual</label><label class="quiz-opt"><input type="radio" name="qL8_1">b) usual</label><label class="quiz-opt"><input type="radio" name="qL8_1">c) fun</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">2. The stakeholders gave us ___ on this initiative so we can get down to working on it starting next week.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_2">a) an ok</label><label class="quiz-opt"><input type="radio" name="qL8_2">b) the clarity</label><label class="quiz-opt"><input type="radio" name="qL8_2">c) the all-clear</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">3. If there's anything urgent that happens, you can message Brian. He's ___.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_3">a) on a call</label><label class="quiz-opt"><input type="radio" name="qL8_3">b) on call</label><label class="quiz-opt"><input type="radio" name="qL8_3">c) on the duty</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">4. — Is the website still down? — No, it's been ___ for weeks.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_4">a) arisen</label><label class="quiz-opt"><input type="radio" name="qL8_4">b) on</label><label class="quiz-opt"><input type="radio" name="qL8_4">c) up and running</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">5. People calling me out of the blue is one of my biggest ___.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_5">a) terrors</label><label class="quiz-opt"><input type="radio" name="qL8_5">b) phobias</label><label class="quiz-opt"><input type="radio" name="qL8_5">c) pet peeves</label></div></div>
+          </div>
+          <div>
+            <div class="quiz-item"><div class="quiz-q">6. I'll try to ___ these details ___ and put together a more detailed report next time.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_6">a) follow, up</label><label class="quiz-opt"><input type="radio" name="qL8_6">b) chase, down</label><label class="quiz-opt"><input type="radio" name="qL8_6">c) put, up and running</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">7. Keep your comments ___ to avoid wasting everyone's time.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_7">a) focused</label><label class="quiz-opt"><input type="radio" name="qL8_7">b) to the point</label><label class="quiz-opt"><input type="radio" name="qL8_7">c) perceptive</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">8. We need to get their ___ if we want this project to be successful.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_8">a) buy-in</label><label class="quiz-opt"><input type="radio" name="qL8_8">b) buy-out</label><label class="quiz-opt"><input type="radio" name="qL8_8">c) purchasing</label></div></div>
+            <div class="quiz-item"><div class="quiz-q">9. It's hard for me to tell you what's going on with that feature because I have very little ___ into its development.</div>
+              <div class="quiz-opts"><label class="quiz-opt"><input type="radio" name="qL8_9">a) priority</label><label class="quiz-opt"><input type="radio" name="qL8_9">b) concern</label><label class="quiz-opt"><input type="radio" name="qL8_9">c) visibility</label></div></div>
+          </div>
+        </div>
+        <button class="reveal-btn" onclick="toggleReveal('rev_quiz8')">show answers ▾</button>
+        <div class="reveal-content" id="rev_quiz8">
+          <div class="answer-key">
+            <div class="ak-label">Answers</div>
+            <ol>
+              <li>a) casual</li><li>c) the all-clear</li><li>b) on call</li><li>c) up and running</li><li>c) pet peeves</li>
+              <li>b) chase, down</li><li>b) to the point</li><li>a) buy-in</li><li>c) visibility</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- не трож, фінальний дів-->
+</div>
+
+<script>
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('open') ? 'hide answers ▴' : 'show answers ▾';
+}
+function toggleUA(id) { 
+    document.getElementById(id).classList.toggle('open'); }
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  
+    const app = initializeApp({
+      databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+    });
+    const db = getDatabase(app);
+  
+    // ID уроку — міняй для кожного файлу
+    const LESSON_ID = "volodymyr_lesson21";
+  
+    // Зберігаємо при введенні
+   // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+      const key = `field_${i}`;
+  
+      // Завантажуємо збережене
+      onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+    if (snap.exists()) {
+      const val = snap.val();
+      if (document.activeElement !== el) el.value = val;
+    }
+  });
+      // Зберігаємо при зміні
+      el.addEventListener('input', () => {
+        set(ref(db, `${LESSON_ID}/${key}`), el.value);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,1 +1,1177 @@
-k
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Good Question</title>
+<style>
+
+:root{
+  --navy:#1d2d50;--navy-light:#2a3d6a;
+  --blue:#1a5090;--blue-light:#e8f2fb;--blue-border:#90b8e0;
+  --coral:#d4561a;--coral-light:#fef0e8;--coral-border:#f0a880;
+  --teal:#0097b3;--teal-dark:#006f85;--teal-light:#e0f5f8;--teal-border:#80d0e0;
+  --green:#2a8a5c;--green-light:#e8f5ee;--green-border:#80c8a0;
+  --purple:#6b3fa0;--purple-light:#f0eafa;--purple-border:#c4a0e0;
+  --amber:#c8700a;--amber-light:#fef3e8;
+  --text:#1a1f2e;--muted:#5a6070;--bg:#f4f8fc;--card:#ffffff;--border:#d0dce8;
+}
+.freebut-item{
+  background:white;border:1px solid var(--blue-border);
+  border-radius:8px;padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.freebut-text{font-size:0.93rem;flex:1;}
+.freebut-opts{display:flex;gap:8px;flex-shrink:0;}
+.fb-opt{
+  padding:5px 16px;border-radius:20px;cursor:pointer;
+  font-size:0.85rem;font-weight:700;user-select:none;
+  border:2px solid var(--blue-border);background:var(--blue-light);
+  color:var(--muted);transition:all 0.15s;
+}
+.fb-opt:hover{border-color:var(--blue);color:var(--blue);}
+.fb-opt.yes{background:var(--green-light);border-color:var(--green);color:var(--green);}
+.fb-opt.no{background:#fdecea;border-color:#e63946;color:#e63946;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;padding-bottom:60px;}
+
+/* HEADER */
+header{background:var(--navy);border-bottom:4px solid var(--blue);}
+.header-inner{max-width:1280px;margin:0 auto;padding:22px 40px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;}
+.header-unit{background:var(--blue);color:white;font-weight:800;font-size:1.9rem;padding:8px 18px;border-radius:6px;line-height:1;}
+.header-text h1{color:#fff;font-size:1.65rem;font-weight:700;margin-bottom:6px;}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.htag{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.htag-g{background:rgba(0,151,179,0.2);color:#00c0df;border:1px solid rgba(0,151,179,0.35);}
+.htag-v{background:rgba(212,86,26,0.2);color:#f08050;border:1px solid rgba(212,86,26,0.3);}
+.htag-s{background:rgba(42,138,92,0.2);color:#3aaa70;border:1px solid rgba(42,138,92,0.3);}
+.header-right{text-align:right;color:#90a8c8;font-size:0.8rem;line-height:1.6;}
+
+/* WRAP */
+.wrap{max-width:1280px;margin:0 auto;padding:24px 40px;}
+
+/* SECTION DIVIDERS */
+.unit-divider{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:10px;padding:14px 22px;margin:26px 0 0;display:flex;align-items:center;gap:14px;}
+.unit-divider h3{color:white;margin:0;font-size:1rem;font-weight:700;}
+.unit-divider span{background:rgba(255,255,255,0.15);color:white;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+
+/* PHASE */
+.phase{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-top:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.ph-stripe{width:6px;flex-shrink:0;}
+.ph-num{color:white;font-weight:800;font-size:0.95rem;padding:14px 18px;display:flex;align-items:center;justify-content:center;min-width:52px;}
+.ph-title{flex:1;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ph-title h2{font-size:1rem;font-weight:700;color:var(--navy);margin:0;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+/* phase colours */
+.c-warm .ph-stripe,.c-warm .ph-num{background:var(--coral);}
+.c-review .ph-stripe,.c-review .ph-num{background:var(--navy);}
+.c-vlogs .ph-stripe,.c-vlogs .ph-num{background:#bb1919;}
+.c-read .ph-stripe,.c-read .ph-num{background:var(--blue);}
+.c-voc .ph-stripe,.c-voc .ph-num{background:var(--teal-dark);}
+.c-pron .ph-stripe,.c-pron .ph-num{background:var(--purple);}
+.c-gram .ph-stripe,.c-gram .ph-num{background:var(--blue);}
+.c-spk .ph-stripe,.c-spk .ph-num{background:var(--green);}
+
+.c-warm .pbadge{background:var(--coral-light);color:var(--coral);}
+.c-review .pbadge{background:#eaecf5;color:var(--navy);}
+.c-vlogs .pbadge{background:#fdecea;color:#bb1919;}
+.c-read .pbadge{background:var(--blue-light);color:var(--blue);}
+.c-voc .pbadge{background:var(--teal-light);color:var(--teal-dark);}
+.c-pron .pbadge{background:var(--purple-light);color:var(--purple);}
+.c-gram .pbadge{background:var(--blue-light);color:var(--blue);}
+.c-spk .pbadge{background:var(--green-light);color:var(--green);}
+
+/* LAYOUTS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.col-5-7{display:grid;grid-template-columns:5fr 7fr;gap:20px;margin:14px 0;}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:20px;margin:14px 0;}
+@media(max-width:900px){.two-col,.col-5-7,.col-7-5{grid-template-columns:1fr;}.wrap,.header-inner{padding:16px 18px;}}
+
+/* ELEMENTS */
+.box{background:#f5f8fc;border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-blue{background:var(--blue-light);border-left-color:var(--blue);}
+.box-teal{background:var(--teal-light);border-left-color:var(--teal);}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.box-coral{background:var(--coral-light);border-left-color:var(--coral);}
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--blue-light);border:1px solid var(--blue-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:white;border:1px solid var(--blue);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+input.gap{background:var(--blue-light);border:none;border-bottom:2px dotted var(--blue);color:var(--text);font-size:1rem;width:160px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--blue);}
+textarea.write-area{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:inherit;font-size:0.93rem;resize:vertical;background:white;color:var(--text);min-height:100px;}
+textarea.write-area:focus{outline:none;border-color:var(--blue);}
+.reveal-btn{background:var(--blue);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;}
+.reveal-btn:hover{background:var(--navy);}
+.answer{display:none;background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+audio{width:100%;margin:8px 0;border-radius:6px;}
+h3{color:var(--navy);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+.sec-label{display:inline-block;background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+
+/* ARTICLE CARD */
+.article-card{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.article-card-head{background:var(--blue-light);border-bottom:1px solid var(--blue-border);padding:16px 20px;}
+.article-card-head h3{color:var(--coral);font-size:1.2rem;font-weight:800;margin:0 0 2px;}
+.article-card-head h4{color:var(--navy);font-size:1rem;font-weight:700;margin:0;}
+.article-card-body{padding:16px 20px;font-size:0.93rem;line-height:1.75;}
+.article-card-body p{margin:10px 0;}
+.article-section-num{color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border);padding-bottom:4px;margin:14px 0 8px;}
+.article-card-body ul{margin:8px 0;}
+.article-card-body ul li{margin:5px 0;}
+.bold-phrase{font-weight:700;color:var(--navy);}
+
+/* GRAMMAR NOTE */
+.gram-note{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:14px 18px;margin:10px 0;font-size:0.93rem;}
+.ex-phrase{color:var(--teal-dark);font-weight:600;}
+.gram-sub{background:var(--navy);color:white;font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:4px;display:inline-block;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.4px;}
+
+/* LETTER GAP */
+.letter-gap{display:inline-block;border:none;border-bottom:2px solid var(--blue);background:var(--blue-light);width:18px;text-align:center;font-size:0.93rem;font-family:inherit;padding:0 1px;margin:0 1px;color:var(--text);}
+.letter-gap:focus{outline:none;border-bottom-color:var(--navy);background:#d4e4f8;}
+
+/* VIDEO SLOT */
+.video-slot{background:#0d1a2e;border-radius:8px;overflow:hidden;margin:10px 0;}
+.video-slot video{width:100%;display:block;max-height:300px;}
+.video-label{background:#0d1a2e;color:#90b8e0;font-size:0.8rem;padding:7px 14px;text-align:center;}
+
+/* BBC CARD */
+.bbc-badge{display:inline-flex;gap:2px;margin-right:6px;}
+.bbc-badge span{background:white;color:#bb1919;font-weight:900;font-size:0.85rem;padding:2px 5px;border-radius:2px;}
+
+/* SPEAKING 8A */
+.speaking-card{background:var(--blue-light);border:1px solid var(--blue-border);border-radius:10px;overflow:hidden;margin:14px 0;}
+.spk-section-head{background:var(--navy);color:white;font-weight:700;font-size:0.82rem;padding:7px 14px;text-transform:uppercase;letter-spacing:0.5px;}
+.spk-section-body{padding:12px 14px;}
+.spk-starter{color:var(--muted);font-size:0.88rem;font-style:italic;margin-bottom:6px;}
+
+/* VOCAB matching */
+.match-row{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.match-row:last-child{border-bottom:none;}
+.match-num{color:var(--blue);font-weight:700;min-width:20px;}
+
+
+
+
+
+.wl-step{
+  display:flex;align-items:center;gap:16px;
+  background:var(--blue-light);border:1px solid var(--blue-border);
+  border-radius:10px;padding:12px 20px;width:100%;
+}
+.wl-step.wl-given{background:var(--navy);border-color:var(--navy);}
+.wl-step.wl-given .wl-box{background:white;color:var(--navy);border-color:white;}
+.wl-step.wl-given .wl-hint{color:#a0c0e8;}
+.wl-step.wl-last{background:var(--coral);border-color:var(--coral);}
+.wl-step.wl-last .wl-box{background:white;color:var(--coral);border-color:white;}
+.wl-step.wl-last .wl-hint{color:#fcd0b8;}
+
+.wl-word{display:flex;gap:5px;flex-shrink:0;}
+.wl-box{
+  width:44px;height:44px;border:2px solid var(--blue-border);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;font-weight:800;background:white;color:var(--navy);
+}
+.wl-input{
+  width:44px;height:44px;border:2px solid var(--blue);border-radius:6px;
+  font-size:1.4rem;font-weight:800;text-align:center;background:#fff8e0;
+  color:var(--blue);font-family:inherit;text-transform:uppercase;
+  transition:all 0.2s;
+}
+.wl-input:focus{outline:none;border-color:var(--navy);background:#fffde0;}
+.wl-input.correct{background:#e8f5ee;border-color:var(--green);color:var(--green);}
+.wl-input.wrong{background:#fdecea;border-color:#e63946;color:#e63946;}
+.wl-hint{font-size:0.88rem;color:var(--muted);font-style:italic;flex:1;}
+.wl-arrow{
+  color:var(--blue);font-size:0.82rem;font-weight:600;
+  display:flex;align-items:center;gap:6px;padding:4px 20px;
+  width:100%;
+}
+.wl-arrow span{color:var(--muted);font-style:italic;font-weight:400;}
+
+
+
+
+
+
+
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-unit">3B</div>
+    <div class="header-text">
+      <h1>Gig work</h1>
+     
+    </div>
+    <div class="header-right">Speakout B1+<br>Unit 3</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ═══ WARM-UP ════════════════════════════════════════════ -->
+
+<div class="phase c-warm">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-title">
+      <h2>Warm-up — First Reaction</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <p style="margin-bottom:16px;">Answer each question with your <strong>first instinct</strong> — no overthinking. Then explain.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <div class="freebut-item">
+        <span class="freebut-text">You find a wallet with a lot of cash and no ID inside. What do you do?</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Hand it in</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">Keep looking</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Keep it</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">A friend asks your honest opinion about their terrible new haircut. You…</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Tell the truth</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">Be diplomatic</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Say it's great</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">You witness a small argument between two strangers on the street. You…</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Step in</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">Watch nearby</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Walk away</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">You're offered a free trip to a place you know nothing about. Leave tomorrow. You…</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Go immediately</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">Research first</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Pass</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">You can only pick ONE — which superpower?</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Read minds</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">Be invisible</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Stop time</span>
+        </div>
+      </div>
+
+      <div class="freebut-item">
+        <span class="freebut-text">Someone cuts in front of you in a long queue. You…</span>
+        <div class="freebut-opts">
+          <span class="fb-opt" onclick="fbPick(this,'yes')">Say something</span>
+          <span class="fb-opt" onclick="fbPick(this,'maybe')">Give a look</span>
+          <span class="fb-opt" onclick="fbPick(this,'no')">Let it go</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="speak-q" style="margin-top:16px;">Which answer surprised you most about yourself? Did any question feel impossible to answer quickly?</div>
+  </div>
+</div>
+
+
+
+
+<div class="phase" style="border:1px solid var(--border);border-radius:12px;margin-top:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe" style="background:var(--navy-light);"></div>
+    <div class="ph-num" style="background:var(--navy-light);">7</div>
+    <div class="ph-title">
+      <h2>Listening — Gig Work Webinar</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge" style="background:#eaecf5;color:var(--navy);">listening</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>3A. What are the advantages and disadvantages of gig work? Make a list.</h3>
+    <div class="two-col">
+      <div>
+        <p style="font-weight:700;color:var(--green);margin-bottom:6px;">✓ Advantages</p>
+        <textarea class="write-area" rows="4" placeholder="List advantages here..."></textarea>
+      </div>
+      <div>
+        <p style="font-weight:700;color:#e63946;margin-bottom:6px;">✗ Disadvantages</p>
+        <textarea class="write-area" rows="4" placeholder="List disadvantages here..."></textarea>
+      </div>
+    </div>
+
+    <h3>3B. Listen to part of the webinar on gig work from Ex 2A. How many of your ideas do the speakers mention?</h3>
+    <audio controls><source src="3_03.mp3" type="audio/mpeg"></audio>
+    <button class="reveal-btn" onclick="show(this)">Show advantages & disadvantages from audio</button>
+<div class="answer">
+  <div class="two-col" style="margin-top:4px;">
+    <div>
+      <p style="font-weight:700;color:var(--green);margin-bottom:8px;">✓ Advantages mentioned</p>
+      <ul style="font-size:0.92rem;line-height:1.8;">
+        <li>You choose <strong>when</strong> you work</li>
+        <li>You meet many different people</li>
+        <li>You handle different problems — variety every day</li>
+        <li>Can be enjoyable / fun</li>
+        <li>Lifestyle choice — work that fits around your passions</li>
+        <li>Time left for things outside of work (e.g. painting)</li>
+        <li>Weeks with nothing = free time</li>
+      </ul>
+    </div>
+    <div>
+      <p style="font-weight:700;color:#e63946;margin-bottom:8px;">✗ Disadvantages mentioned</p>
+      <ul style="font-size:0.92rem;line-height:1.8;">
+        <li>Risk of <strong>exploitation</strong> — extra hours, low pay</li>
+        <li>Gig workers are <strong>not well protected</strong></li>
+        <li>Money often not enough to cover basics</li>
+        <li>Have to work <strong>long hours</strong> to earn enough</li>
+        <li>Pressure to say <strong>yes to every offer</strong></li>
+        <li>No <strong>sick pay</strong> — if you don't work, you don't earn</li>
+        <li>No <strong>paid holidays</strong></li>
+        <li>Income is <strong>unpredictable</strong></li>
+        <li>Stressful when work isn't coming through</li>
+        <li>Need to have <strong>savings</strong> as a safety net</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+    <h3>3C. Listen again. Write P (Paul), C (Cybil) or B (Both) next to the phrases. Then listen again and check.</h3>
+    <audio controls><source src="3_03.mp3" type="audio/mpeg"></audio>
+    <div class="two-col">
+      <ol style="font-size:0.93rem;line-height:1.9;">
+        <li>does gig work by choice <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>does gig work by necessity <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>isn't happy with the money <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>finds it difficult to say no to a job <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+      </ol>
+      <ol start="5" style="font-size:0.93rem;line-height:1.9;">
+        <li>sometimes enjoys the work <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>works long hours sometimes <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>would say 'There's more to life than work'. <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+        <li>would say 'I don't have time for anything but work'. <input class="gap" style="width:50px;" placeholder="P/C/B"></li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (3C)</button>
+<div class="answer">
+  1 C &nbsp;·&nbsp; 2 P &nbsp;·&nbsp; 3 P &nbsp;·&nbsp; 4 P &nbsp;·&nbsp;
+  5 B &nbsp;·&nbsp; 6 B &nbsp;·&nbsp; 7 C &nbsp;·&nbsp; 8 P
+</div>
+
+    <h3>4. Discuss.</h3>
+    <div class="speak-q">1 Is gig work common where you live? What sort?</div>
+    <div class="speak-q">2 If you chose to become a gig worker, what sort of gig work would you choose?</div>
+
+  </div>
+</div>
+
+
+
+
+
+<div class="phase c-gram">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">8</div>
+    <div class="ph-title">
+      <h2>Grammar — Necessity, Obligation and Permission</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>5A. Complete the sentences using the prompts in brackets.</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol style="font-size:0.93rem;line-height:2;">
+        <li>Something <input class="gap" placeholder="(need / do)"> about the rights of gig workers.</li>
+        <li>I like it because you <input class="gap" placeholder="(allow / choose)"> when you work.</li>
+        <li>I feel as if I <input class="gap" placeholder="(have got / say)"> yes to every offer that comes along.</li>
+        <li>It <input class="gap" placeholder="(necessary / find)"> a balance, to do enough work that you actually enjoy doing.</li>
+        <li>It <input class="gap" placeholder="(essential / have)"> savings for times like this, for going on holiday or if I get ill.</li>
+        <li>People act like you <input class="gap" placeholder="(suppose / have)"> a big goal in life.</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 needs to be done<br>2 are allowed to choose<br>
+          3 have got to say<br>4 is necessary to find<br>
+          5 is essential to have<br>6 are supposed to have
+        </div>
+      </div>
+    </div>
+
+    <h3>5B. Listen and check your answers.</h3>
+    <audio controls><source src="3_04.mp3" type="audio/mpeg"></audio>
+
+    <h3>5C. Answer the questions (1–4) about the sentences in Ex 5A.</h3>
+    <div class="two-col">
+      <ol style="font-size:0.93rem;line-height:1.8;">
+        <li>Which phrases are about <strong>necessity</strong>, about something that is very important to do?</li>
+        <li>Which phrases are about <strong>obligation</strong>, about something you are expected to do?</li>
+        <li>Which phrase is about something you should do, but <strong>maybe you don't</strong>?</li>
+        <li>Which phrase is about <strong>permission</strong>?</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">
+          1 needs to be done, is necessary to find, is essential to have<br>
+          2 have got to say, are supposed to have<br>
+          3 are supposed to have<br>
+          4 are allowed to choose
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAMMAR BANK 3B -->
+<div class="gram-sub" style="margin-top:20px;font-size:0.78rem;">Grammar Bank 3B — necessity, obligation and permission</div>
+
+<div class="two-col" style="align-items:start;margin-top:10px;">
+
+  <!-- REFERENCE -->
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;">Necessity and obligation</p>
+      <p>Many phrases can express both necessity and obligation, depending on the context.</p>
+      <p class="ex-phrase" style="margin-top:8px;"><b>I need to take</b> some time off. <span style="color:var(--muted);font-size:0.88rem;">(It's important — necessity.)</span><br>
+      <b>I need to finish</b> this report by tomorrow. <span style="color:var(--muted);font-size:0.88rem;">(Expected of me — obligation.)</span></p>
+      <p style="margin-top:10px;">Use <em>be necessary to, be essential to, needs to be done</em> when the focus is on the <strong>action</strong>:</p>
+      <p class="ex-phrase">It's <b>necessary to</b> have a driving licence.<br>
+      It's <b>essential to</b> take her to hospital immediately.<br>
+      This job <b>needs to be done</b> by tomorrow morning.</p>
+      <p style="margin-top:10px;">Use <em>have got to</em> and <em>be supposed to</em> when the focus is on the <strong>person</strong>:</p>
+      <p class="ex-phrase"><b>I've got to</b> get home by ten. <span style="color:var(--muted);font-size:0.88rem;">(informal: <em>I'm gotta</em>)</span><br>
+      <b>I'm supposed to</b> wear a hat when I deliver food, but I don't.<br>
+      Robbie's <b>not supposed to</b> call customers by their first names, but he often does.</p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;">Permission</p>
+      <p>Use <em>be (not) allowed to</em> + infinitive:</p>
+      <p class="ex-phrase" style="margin-top:6px;">Our children <b>are allowed to play</b> computer games for two hours at weekends.<br>
+      I<b>'m not allowed to</b> go to bed after midnight.</p>
+      <p style="margin-top:8px;">Use <em>be (not) permitted to</em> — more formal:</p>
+      <p class="ex-phrase">Office workers <b>are permitted to</b> wear casual clothes on Fridays.<br>
+      Drivers <b>are not permitted to</b> drive more than eight hours without a break.</p>
+    </div>
+
+    <div class="gram-note">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:8px;">Other forms</p>
+      <p>Most phrases can be used in the <strong>future and past</strong> with modal verbs:</p>
+      <p class="ex-phrase" style="margin-top:6px;"><b>It will be necessary to</b> take your passport with you.<br>
+      In my first job it <b>wasn't essential</b> to speak English.<br>
+      The apartment <b>might need to be</b> painted.</p>
+      <p style="margin-top:8px;"><em>Be supposed to</em> in the past:</p>
+      <p class="ex-phrase">We <b>were supposed to</b> go straight home, but we didn't.</p>
+      <p style="margin-top:8px;"><em>Had to</em> for past of <em>have got to</em>:</p>
+      <p class="ex-phrase">This morning I <b>had to</b> get up at 4.30 to catch the early train.</p>
+      <p style="margin-top:10px;">Use <em>unless, even if, in case</em> + <strong>present tense</strong> for present/future; <strong>past tenses</strong> for hypothetical:</p>
+      <p class="ex-phrase">I can't help you <b>unless</b> you <b>tell</b> me the problem.<br>
+      <b>Even if</b> I <b>won</b> a million euros, I wouldn't change my job.</p>
+    </div>
+
+  </div>
+
+  <!-- PRACTICE -->
+  <div>
+    <div class="gram-sub">Practice 1 — Correct the mistakes. One sentence is correct.</div>
+    <div class="box" style="font-size:0.92rem;line-height:1.9;">
+      <ol>
+        <li><u>Is essential</u> to print your name after your signature.</li>
+        <li>The video doesn't need to be <u>finish</u> until next Wednesday.</li>
+        <li>Don't do that! You aren't supposed <u>jumping</u> the queue!</li>
+        <li>I <u>got to</u> make a real effort to stop eating chocolate.</li>
+        <li>Is it necessary <u>wear</u> a uniform in your job?</li>
+        <li>Are we allowed to take photos here?</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 <b>It is essential</b> to print…<br>
+      2 doesn't need to be <b>finished</b><br>
+      3 You aren't supposed <b>to jump</b> the queue<br>
+      4 I'<b>ve got to</b> make a real effort…<br>
+      5 Is it necessary <b>to wear</b> a uniform…<br>
+      6 ✓ Correct
+    </div>
+
+    <div class="gram-sub" style="margin-top:16px;">Practice 2 — Complete the text with the words and phrases in the box.</div>
+    <div class="wordbox" style="background:var(--teal-light);border-color:var(--teal-border);">
+      <span class="chip">are not</span><span class="chip">don't need</span><span class="chip">essential</span><span class="chip">got to</span>
+      <span class="chip">is necessary</span><span class="chip">is supposed</span><span class="chip">not to</span><span class="chip">permitted</span>
+    </div>
+    <div style="background:var(--teal-light);border:2px solid var(--teal-border);border-radius:10px;overflow:hidden;margin:10px 0;">
+      <div style="background:var(--teal-dark);color:white;padding:10px 16px;font-weight:700;font-size:0.95rem;">Proposed rules for our new neighbourhood social media group</div>
+      <div style="padding:14px 16px;font-size:0.92rem;line-height:2;">
+        <p>• It is <sup>1</sup><input class="gap" style="width:100px;" placeholder="..."> to introduce yourself when you join this group.</p>
+        <p>• People <sup>2</sup><input class="gap" style="width:80px;" placeholder="..."> permitted to add other people to the group without contacting the administrator.</p>
+        <p>• You are not <sup>3</sup><input class="gap" style="width:100px;" placeholder="..."> to change the group photo unless you are an administrator.</p>
+        <p>• This <sup>4</sup><input class="gap" style="width:120px;" placeholder="..."> to be a friendly group, so always be polite to each other.</p>
+        <p>• Even if you are in a bad mood, it's essential <sup>5</sup><input class="gap" style="width:80px;" placeholder="..."> lose your temper.</p>
+        <p>• Take responsibility! If you see a message which could upset people, you've <sup>6</sup><input class="gap" style="width:80px;" placeholder="..."> say something.</p>
+        <p>• Don't feel it <sup>7</sup><input class="gap" style="width:120px;" placeholder="..."> to reply to each message. It isn't!</p>
+        <p>• Emojis are fine, but they <sup>8</sup><input class="gap" style="width:100px;" placeholder="..."> to be sent with every message!</p>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (2)</button>
+    <div class="answer">1 essential · 2 are not · 3 permitted · 4 is supposed · 5 not to · 6 got to · 7 is necessary · 8 don't need</div>
+
+    <div class="gram-sub" style="margin-top:16px;">Practice 3 — Use the prompts to make sentences and questions.</div>
+    <div class="box" style="font-size:0.92rem;line-height:1.8;">
+      <ol>
+        <li>At your first school, / you / allowed / wear / own clothes / or / have / wear / a uniform?</li>
+        <li>If you / selling / something / on our site, / essential / be / honest about / its condition.</li>
+        <li>What time / we / supposed / arrive / at the party / this evening / and / we / got / wear / anything special?</li>
+        <li>When / this report / need / be / finish / by?</li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers (3)</button>
+    <div class="answer">
+      1 At your first school, were you allowed to wear your own clothes, or did you have to wear a uniform?<br>
+      2 If you're selling something on our site, it's essential to be honest about its condition.<br>
+      3 What time are we supposed to arrive at the party this evening and have we got to wear anything special?<br>
+      4 When does this report need to be finished by?
+    </div>
+  </div>
+
+</div>
+    
+  </div>
+</div>
+
+
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">10</div>
+    <div class="ph-title">
+      <h2>Speaking — Work Statements</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3>7A. Read the statements about work and say if you strongly agree, or disagree.</h3>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0;">
+
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:10px;padding:0;overflow:hidden;">
+        <div style="background:var(--teal-dark);padding:8px;display:flex;justify-content:center;">
+          <img src="https://breakdownservices.s3.amazonaws.com/media/photos/20261/879107/0DA7B102-2E4E-41E4-AFB349E440892956.jpg" alt="person 1" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#80d0e0;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">When you're young, it's not necessary to have job security, but later in life it's essential.</div>
+      </div>
+
+      <div style="background:#f5f5f5;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--muted);padding:8px;display:flex;justify-content:center;">
+          <img src="data:image/jpeg;base64,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" alt="person 2" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#a8a8a8;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">People should be permitted to choose how much holiday they take each year.</div>
+        
+      </div>
+
+      <div style="background:var(--blue-light);border:1px solid var(--blue-border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--blue);padding:8px;display:flex;justify-content:center;">
+          <img src="https://media.licdn.com/dms/image/v2/D4E03AQGmTBKHL2uVYQ/profile-displayphoto-scale_200_200/B4EZ263rLPIwAY-/0/1776956653782?e=2147483647&v=beta&t=COeSpiOG5RGWiEjVV_X2kBWD-KU0huca_PjjrWhNoo4" alt="person 3" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#90b8e0;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">People should be allowed to work flexibly (choosing their own hours, location, etc.) when possible.</div>
+       
+      </div>
+
+      <div style="background:#f5f5f5;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--muted);padding:8px;display:flex;justify-content:center;">
+          <img src="https://media.licdn.com/dms/image/v2/D5603AQGTB1B9ZZI93A/profile-displayphoto-scale_200_200/B56Zv7LQlhKwAY-/0/1769445592469?e=2147483647&v=beta&t=Bf6Pwq-hfSiu5QUO2rBB0Md27iQmkXjf29ME5UCj1VI" alt="person 4" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#a8a8a8;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">People work better if they are paid more.</div>
+        
+      </div>
+
+      <div style="background:#f5f5f5;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--muted);padding:8px;display:flex;justify-content:center;">
+          <img src="https://bandhan.bank.in/sites/default/files/2021-01/Personal_Suvidha%20Images_Banner_250X260_1.png" alt="person 5" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#a8a8a8;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">Everyone needs to be paid the same no matter what work they do.</div>
+        
+      </div>
+
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:10px;overflow:hidden;">
+        <div style="background:var(--teal-dark);padding:8px;display:flex;justify-content:center;">
+          <img src="https://media.licdn.com/dms/image/v2/D4E03AQEGsHuA3XWk5A/profile-displayphoto-shrink_200_200/B4EZZt78YuHoAs-/0/1745601154158?e=2147483647&v=beta&t=sD8JIFQpIIV98tC8cg2OlvZMcCTYj84gk8juUf-duMI" alt="person 6" style="width:70px;height:70px;border-radius:50%;border:3px solid white;object-fit:cover;background:#80d0e0;">
+        </div>
+        <div style="padding:12px;font-size:0.88rem;">It's good that computers and machines are replacing workers because people will have more free time.</div>
+        
+      </div>
+
+    </div>
+
+    <h3>7B. Choose two statements to discuss in detail. Say what you think and why.</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin:12px 0 16px;">
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:9px 14px;font-size:0.9rem;font-weight:600;color:var(--teal-dark);">I'm not sure about that.</div>
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:9px 14px;font-size:0.9rem;font-weight:600;color:var(--teal-dark);">I agree up to a point, but don't you think that …</div>
+      <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:9px 14px;font-size:0.9rem;font-weight:600;color:var(--teal-dark);">I'm completely with you there.</div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+<div class="phase" style="border:1px solid var(--border);border-radius:12px;margin-top:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    <div class="phase-head" onclick="toggle(this)">
+      <div class="ph-stripe" style="background:var(--amber);"></div>
+      <div class="ph-num" style="background:var(--amber);">11</div>
+      <div class="ph-title">
+        <h2>Writing — A Cover Email for a Job Application</h2>
+        <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge" style="background:var(--amber-light);color:var(--amber);">writing</span><span class="arrow">▼</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+  
+      <h3>8. Read the job adverts. Which job would be better for you?</h3>
+  
+      <div class="two-col" style="margin:14px 0;">
+  
+        
+  
+        <div class="two-col" style="margin:14px 0;">
+            <img src="job1.png" alt="Elaine Events Ltd — Events Assistant" style="width:100%;border-radius:10px;border:1px solid var(--border);display:block;">
+            <img src="job2.png" alt="KwikClickFood — Delivery Rider" style="width:100%;border-radius:10px;border:1px solid var(--border);display:block;">
+          </div>
+  
+      </div>
+  
+      <div class="speak-q">Which job would suit you better and why? Would you consider either of these as a gig job?</div>
+  
+      <h3>9A. Read the cover email for an application to one of the jobs in Ex 8. Which job is the person applying for?</h3>
+  
+      <!-- COVER EMAIL -->
+      <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:14px 0;max-width:700px;">
+        <div style="background:#f0f3f8;border-bottom:1px solid var(--border);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.82rem;color:var(--muted);">New message</span>
+          <span style="font-size:1.1rem;color:var(--muted);">⊙</span>
+        </div>
+        <div style="padding:18px 20px;font-size:0.92rem;line-height:1.8;background:white;">
+          <p>Dear Ms Patel,</p>
+          <p style="margin-top:10px;">I am applying for the job as a … with your company.</p>
+          <p style="margin-top:10px;">I am very interested in this job. Your company looks like a good place to work and it has excellent feedback on your website. I am a student at college and am looking for a part-time job to fit in with my studies.</p>
+          <p style="margin-top:10px;">I beleive I am a good candidate because.</p>
+          <ul style="margin:6px 0 6px 20px;">
+            <li>I have recent experience of working in a hotel reception where I had to deal with many diferent guests.</li>
+            <li>I am reliable and friendly.</li>
+            <li>My English is level B1.</li>
+            <li>I know the city very well. I live here for three years now.</li>
+            <li>I have a smartphone.</li>
+            <li>I could start immediately.</li>
+          </ul>
+          <p style="margin-top:10px;">I have three questions. Is it necessary to have my own bike or will you provide that? Am I supposed to work every evening or am I allowed to choose the days I work? Do I need to wear a uniform?</p>
+          <p style="margin-top:10px;">I look forward to discuss my application and I will phone on Monday to check?</p>
+          <p style="margin-top:10px;">Best wishes,<br>Xavier DuPont</p>
+        </div>
+      </div>
+  
+      <button class="reveal-btn" onclick="show(this)">Show answer (9A)</button>
+      <div class="answer">Xavier is applying for the <b>Delivery Rider</b> job at KwikClickFood in Dublin — he mentions having a smartphone, knowing the city well, asking about a bike, and choosing working days.</div>
+  
+      <h3>9B. Number the sections (a–e) in the correct order. Then look at the email and check.</h3>
+      <div class="two-col">
+        <div class="box" style="font-size:0.93rem;line-height:2;">
+          <p><strong>a</strong> Ask questions (if you have any). <input class="gap" style="width:50px;" placeholder="___"></p>
+          <p><strong>b</strong> Close the letter, saying when you'll contact them. <input class="gap" style="width:50px;" placeholder="___"></p>
+          <p><strong>c</strong> State the reason for writing. <span style="color:var(--blue);font-weight:700;">1</span></p>
+          <p><strong>d</strong> Say why you think you're qualified. <input class="gap" style="width:50px;" placeholder="___"></p>
+          <p><strong>e</strong> Say why you're interested in the job. <input class="gap" style="width:50px;" placeholder="___"></p>
+        </div>
+        <div>
+          <button class="reveal-btn" onclick="show(this)">Show answer</button>
+          <div class="answer">c = 1 · e = 2 · d = 3 · a = 4 · b = 5</div>
+        </div>
+      </div>
+  
+      <h3>9C. Look at the email again. Find and correct:</h3>
+      <div class="two-col">
+        <ol style="font-size:0.93rem;line-height:1.9;">
+          <li>two mistakes in the <strong>grammar</strong></li>
+          <li>two mistakes in the <strong>punctuation</strong></li>
+          <li>two mistakes in the <strong>spelling</strong></li>
+        </ol>
+        <div>
+          <button class="reveal-btn" onclick="show(this)">Show answers</button>
+          <div class="answer">
+            <strong>Grammar:</strong><br>
+            1 "I look forward to <u>discuss</u>" → <b>to discussing</b><br>
+            2 "I live here for <u>three years now</u>" → <b>I have lived here for three years</b><br><br>
+            <strong>Punctuation:</strong><br>
+            1 "I believe I am a good candidate because<u>.</u>" → <b>because:</b> (colon, not full stop)<br>
+            2 "I will phone on Monday to check<u>?</u>" → <b>check.</b> (full stop, not question mark)<br><br>
+            <strong>Spelling:</strong><br>
+            1 "<u>beleive</u>" → <b>believe</b><br>
+            2 "<u>diferent</u>" → <b>different</b>
+          </div>
+        </div>
+      </div>
+  
+      <h3>10A. Write a cover email for the other job or for a job you would like to apply for. Pay attention to the organisation of the email.</h3>
+      <div class="box box-blue" style="margin-bottom:10px;font-size:0.88rem;">
+        <p style="font-weight:700;margin-bottom:6px;">Email structure (use the order from Ex 9B):</p>
+        <p>1 State the reason for writing · 2 Say why you're interested · 3 Say why you're qualified · 4 Ask questions · 5 Close</p>
+      </div>
+      <textarea class="write-area" rows="14" placeholder="Dear ...,&#10;&#10;I am applying for the job as a ...&#10;&#10;I am very interested in this job because ...&#10;&#10;I believe I am a good candidate because:&#10;•&#10;•&#10;•&#10;&#10;I have a few questions. ...&#10;&#10;I look forward to hearing from you.&#10;&#10;Best wishes,&#10;..."></textarea>
+  
+      <h3>10B. Check your email carefully for mistakes.</h3>
+      <div class="speak-q">Check: grammar · punctuation · spelling · email structure (does it follow the order from 9B?)</div>
+  
+    </div>
+  </div>
+
+
+
+
+
+  <div class="unit-divider" style="background:linear-gradient(135deg,#1a5090,#2a70c0);margin-top:16px;">
+    <h3>3C · Good Question</h3><span>How to take part in an interview</span>
+  </div>
+  
+  <div class="phase c-voc">
+    <div class="phase-head" onclick="toggle(this)">
+      <div class="ph-stripe"></div><div class="ph-num">1</div>
+      <div class="ph-title">
+        <h2>Vocabulary — Personality Adjectives (1)</h2>
+        <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary · reading</span><span class="arrow">▼</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+  
+      <h3>1A. Discuss the questions.</h3>
+      <div class="speak-q">1 Have you ever had an interview for a college/university course or a job? Were there any questions that surprised you?</div>
+      <div class="speak-q">2 How would you answer these interview questions?
+        <ul style="margin-top:6px;">
+          <li><strong>a</strong> Which magic power would you most like to have?</li>
+          <li><strong>b</strong> How do you fit an elephant into a fridge?</li>
+          <li><strong>c</strong> If you could rob a bank without being caught, would you do it?</li>
+        </ul>
+      </div>
+      <div class="speak-q">3 Why do you think interviewers might ask questions like this?</div>
+      <button class="reveal-btn" onclick="show(this)">Show answer (1A — Q3)</button>
+      <div class="answer">These surprising questions are sometimes asked to assess a candidate's ability to respond on the spot, to be creative, and to show some of their personality.</div>
+  
+      <h3>1B. Read about an interview and look at the questions the interviewee answered badly. How would you answer them differently?</h3>
+  
+      <div class="article-card">
+        <div class="article-card-head" style="background:#f0f4f8;">
+          <h3 style="color:var(--navy);font-size:1.15rem;">My terrible interview</h3>
+        </div>
+        <div class="article-card-body" style="font-size:0.92rem;">
+          <p>I had prepared answers to tricky questions that would show how creative and practical I am, but instead my interview was very straightforward. It went something like this.</p>
+  
+          <p style="margin-top:14px;font-weight:700;color:var(--navy);">Interviewer: Why do you want this job?</p>
+          <p>Me: Well, mainly because I need the money.</p>
+  
+          <p style="margin-top:10px;font-weight:700;color:var(--navy);">Interviewer: What three words would your closest friend use to describe you?</p>
+          <p>Me: Erm, I don't really know. I'll need to think about that.</p>
+  
+          <p style="margin-top:10px;font-weight:700;color:var(--navy);">Interviewer: How much of a team player are you?</p>
+          <p>Me: I'd say I'm very <strong>independent</strong>, I like to do things on my own. So I don't need to ask for help.</p>
+  
+          <p style="margin-top:10px;font-weight:700;color:var(--navy);">Interviewer: Why are you the best person for this job?</p>
+          <p>Me: Well, I don't know the other applicants, but it seems pretty easy, so I think I might be as good as anyone.</p>
+  
+          <p style="margin-top:10px;font-weight:700;color:var(--navy);">Interviewer: What's your biggest weakness?</p>
+          <p>Me: Maybe I'm too <strong>sensitive</strong>, I get very emotional when people give me negative feedback. And I'm not all that <strong>flexible</strong>. I like to do things my way. I don't like change, but I am <strong>enthusiastic</strong>. I get very excited and interested in new ideas.</p>
+  
+          <p style="margin-top:10px;font-weight:700;color:var(--navy);">Interviewer: How do you fit an elephant into a fridge?</p>
+          <p>Me: I'm so glad you asked that …</p>
+  
+          <p style="margin-top:14px;color:var(--muted);font-style:italic;">Of course I didn't get the job, but I learned a few important lessons. Prepare for the basics. Remember why you're there. And be honest, but not too honest.</p>
+        </div>
+      </div>
+  
+      <div class="speak-q">How would you answer the interviewer's questions differently? Give at least two better answers.</div>
+      <button class="reveal-btn" onclick="show(this)">Show example answers (1B)</button>
+      <div class="answer">
+        <b>Why do you want this job?</b> Because I want to progress my career. / Because I'd like a new challenge. / Because your company has a very good reputation.<br><br>
+        <b>What three words would your closest friend use?</b> That's an interesting question. I think they'd say I'm [3 realistic positive adjectives].<br><br>
+        <b>How much of a team player are you?</b> I'm a good team player. I enjoy working with other people and they seem to like working with me.<br><br>
+        <b>What's your biggest weakness?</b> Some people have said that I'm too enthusiastic and I take on too much. I'm working on that.<br><br>
+        <b>How do you fit an elephant into a fridge?</b> I'll be honest and say I have absolutely no idea! Let me think… put some nice fresh fruit in there?
+      </div>
+  
+      <h3>2A. Which four words in the box does the interviewee use?</h3>
+      <div class="wordbox">
+        <span class="chip">confident</span><span class="chip">enthusiastic</span><span class="chip">flexible</span>
+        <span class="chip">independent</span><span class="chip">professional</span><span class="chip">responsible</span>
+        <span class="chip">sensitive</span><span class="chip">willing</span>
+      </div>
+      <button class="reveal-btn" onclick="show(this)">Show answer</button>
+      <div class="answer"><b>independent · sensitive · flexible · enthusiastic</b></div>
+  
+      <h3>2B. Find the phrases in the text that give the meaning of those four words in Ex 2A.</h3>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        <b>independent:</b> "I like to do things on my own. So I don't need to ask for help."<br>
+        <b>sensitive:</b> "I get very emotional when people give me negative feedback."<br>
+        <b>flexible:</b> "I'm not all that flexible. I like to do things my way. I don't like change…" (→ flexible = the opposite: you can do things other people's way)<br>
+        <b>enthusiastic:</b> "I get very excited and interested in new ideas."
+      </div>
+  
+      <h3>2C. Complete the sentences (1–4) with the other four words in Ex 2A.</h3>
+      <div class="col-7-5" style="align-items:start;">
+        <ol style="font-size:0.93rem;line-height:2;">
+          <li>If you are <input class="gap" placeholder="...">, you are sure you can do something very well.</li>
+          <li>If you are <input class="gap" placeholder="...">, you do very high-quality work.</li>
+          <li>If you are <input class="gap" placeholder="..."> to do something, you will do it if someone else asks you.</li>
+          <li>If you are <input class="gap" placeholder="...">, people can trust you. You behave in a sensible way.</li>
+        </ol>
+        <div>
+          <button class="reveal-btn" onclick="show(this)">Show answers</button>
+          <div class="answer">1 confident · 2 professional · 3 willing · 4 responsible</div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+
+  <div class="phase c-pron">
+    <div class="phase-head" onclick="toggle(this)">
+      <div class="ph-stripe"></div><div class="ph-num">2</div>
+      <div class="ph-title">
+        <h2>Pronunciation — Word Stress in Personality Adjectives</h2>
+        <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">pronunciation · vocabulary</span><span class="arrow">▼</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+  
+      <h3>3A. Look at the words in Ex 2A. How many syllables are there in each word? Which syllable is stressed?</h3>
+      <div class="two-col">
+        <ol style="font-size:0.93rem;line-height:2;">
+          <li>confident</li>
+          <li>enthusiastic</li>
+          <li>flexible</li>
+          <li>independent</li>
+        </ol>
+        <ol start="5" style="font-size:0.93rem;line-height:2;">
+          <li>professional</li>
+          <li>responsible</li>
+          <li>sensitive</li>
+          <li>willing</li>
+        </ol>
+      </div>
+  
+      <h3>3B. Listen and check your answers.</h3>
+      <audio controls><source src="3_06.mp3" type="audio/mpeg"></audio>
+      <button class="reveal-btn" onclick="show(this)">Show answers (3A + 3B)</button>
+      <div class="answer">
+        1 <b>CON</b>-fi-dent (3 syllables) &nbsp;·&nbsp; 2 en-thu-si-<b>AS</b>-tic (5 syllables)<br>
+        3 <b>FLEX</b>-i-ble (3 syllables) &nbsp;·&nbsp; 4 in-de-<b>PEN</b>-dent (4 syllables)<br>
+        5 pro-<b>FES</b>-sion-al (4 syllables) &nbsp;·&nbsp; 6 re-<b>SPON</b>-si-ble (4 syllables)<br>
+        7 <b>SEN</b>-si-tive (3 syllables) &nbsp;·&nbsp; 8 <b>WILL</b>-ing (2 syllables)
+      </div>
+  
+      <h3>3C. Listen again and repeat.</h3>
+      <audio controls><source src="3_06.mp3" type="audio/mpeg"></audio>
+  
+      <h3>3D. Discuss.</h3>
+      <div class="speak-q">1 Which words in Ex 2A describe you best? Give examples for each.</div>
+      <div class="speak-q">2 Which qualities would you like to develop most? Why?</div>
+      <div class="speak-q">3 Think of a person you admire. Which of these qualities do they have?</div>
+  
+      <h3>4A. Which word in Ex 2A has a negative prefix? What prefixes do the other adjectives take to make them negative?</h3>
+      <button class="reveal-btn" onclick="show(this)">Show answers</button>
+      <div class="answer">
+        Word with a negative prefix already: <b>independent</b> (in- + dependent)<br><br>
+        Negative forms of the others:<br>
+        unconfident · unenthusiastic · inflexible · unprofessional · irresponsible · insensitive · unwilling
+      </div>
+  
+      <div class="box box-blue" style="margin-top:12px;font-size:0.88rem;">
+        <p><strong>4B.</strong> Check your ideas in the Vocabulary Bank — page 133 <em>negative prefixes</em>.</p>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+  <div class="phase c-read">
+    <div class="phase-head" onclick="toggle(this)">
+      <div class="ph-stripe"></div><div class="ph-num">3</div>
+      <div class="ph-title">
+        <h2>How to … Take Part in an Interview</h2>
+        <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">listening · how to</span><span class="arrow">▼</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+  
+      <h3>5A. Look at the job advert and answer the questions.</h3>
+  
+      <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:12px 0;max-width:600px;">
+        <div style="background:#f5f8fc;border-bottom:1px solid var(--border);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;">
+          <p style="font-weight:700;font-size:1rem;margin:0;">Programmer needed</p>
+          <span style="font-size:1rem;color:var(--muted);">🔖 ↗</span>
+        </div>
+        <div style="padding:14px 16px;font-size:0.91rem;line-height:1.7;">
+          <p>We're looking for a programmer to join our team. This person will work on-site and remotely, and will be responsible for developing company software. Knowledge of JavaScript and two years' coding experience are required. Good communication skills and a high level of creativity are also essential.</p>
+          <p style="margin-top:10px;">Salary will depend on the level and type of experience. Full-time is preferred, but part-time may be considered.</p>
+        </div>
+      </div>
+  
+      <ol style="font-size:0.93rem;line-height:1.9;">
+        <li>What sort of person would answer this job advert?</li>
+        <li>Would this job interest you?</li>
+        <li>What questions might the interviewer ask?</li>
+      </ol>
+      <button class="reveal-btn" onclick="show(this)">Possible interview questions (5A Q3)</button>
+      <div class="answer">
+        Why do you want / are you interested in this job? · Why do you want to leave your present job?<br>
+        Which programs do you have experience with? · Can you work independently?<br>
+        What experience do you have working as part of a team? · What experience working remotely?<br>
+        What is your home office like? What equipment do you have?
+      </div>
+  
+      <h3>5B. Listen to the interview. Which of the questions in the text in Ex 1B does the interviewer ask?</h3>
+      <audio controls><source src="3_07.mp3" type="audio/mpeg"></audio>
+      <button class="reveal-btn" onclick="show(this)">Show answer</button>
+      <div class="answer"><b>Why do you want this job?</b></div>
+  
+      <h3>6A. Complete the sentences by adding TWO words to each gap.</h3>
+      <div class="col-7-5" style="align-items:start;">
+        <div class="box" style="font-size:0.92rem;line-height:2.1;">
+          <p><strong>1</strong> A: So, <sup>1</sup><strong>tell me</strong> <input class="gap" style="width:90px;" placeholder="2 words"> about yourself.<br>
+          B: Oh, erm, <sup>2</sup><strong>where should</strong> <input class="gap" style="width:90px;" placeholder="2 words">?<br>
+          A: Let's keep it work-related. B: All right.</p>
+  
+          <p style="margin-top:8px;"><strong>2</strong> A: So why are you here today?<br>
+          B: <sup>3</sup><strong>How do</strong> <input class="gap" style="width:90px;" placeholder="2 words">?<br>
+          A: <sup>4</sup><strong>Why do you want</strong> <input class="gap" style="width:80px;" placeholder="2 words">?<br>
+          B: <sup>5</sup><strong>I</strong> <input class="gap" style="width:80px;" placeholder="2 words"> some research about the company and I think it's …</p>
+  
+          <p style="margin-top:8px;"><strong>3</strong> B: I want to be part of that, and <sup>6</sup><strong>I think I have a lot</strong> <input class="gap" style="width:80px;" placeholder="2 words">.<br>
+          A: OK, so <sup>7</sup><strong>what will you</strong> <input class="gap" style="width:80px;" placeholder="2 words"> the company?<br>
+          B: <sup>8</sup><strong>I think one of my</strong> <input class="gap" style="width:110px;" placeholder="2 words"> is that I have a problem-solving mind …</p>
+  
+          <p style="margin-top:8px;"><strong>4</strong> A: I have more questions, but let's turn things around. <sup>9</sup><strong>What questions do you have</strong> <input class="gap" style="width:80px;" placeholder="2 words">?<br>
+          B: <sup>10</sup><strong>About</strong> <input class="gap" style="width:80px;" placeholder="2 words">?<br>
+          A: About the position, the company, anything.</p>
+        </div>
+        <div>
+          <button class="reveal-btn" onclick="show(this)">Show answers (6A)</button>
+          <div class="answer">
+            1 a bit · 2 I start · 3 you mean<br>
+            4 this job · 5 've done · 6 to offer<br>
+            7 bring to · 8 main strengths<br>
+            9 for me · 10 the job
+          </div>
+        </div>
+      </div>
+  
+      <h3>6B. Listen and check your ideas.</h3>
+      <audio controls><source src="3_08.mp3" type="audio/mpeg"></audio>
+  
+      <h3>6C. Match the phrases (1–10) in Ex 6A with the correct category.</h3>
+      <div class="two-col">
+        <div class="box" style="font-size:0.93rem;line-height:1.9;">
+          <p><strong>Interviewer's questions</strong> — phrase number(s): <input class="gap" placeholder="..."></p>
+          <p><strong>Phrases to check</strong> — phrase number(s): <input class="gap" placeholder="..."></p>
+          <p><strong>Interviewee's answers</strong> — phrase number(s): <input class="gap" placeholder="..."></p>
+        </div>
+        <div>
+          <button class="reveal-btn" onclick="show(this)">Show answers</button>
+          <div class="answer">
+            Interviewer's questions: <b>1, 4, 7, 9</b><br>
+            Phrases to check: <b>2, 3, 10</b><br>
+            Interviewee's answers: <b>5, 6, 8</b>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="phase c-gram">
+    <div class="phase-head" onclick="toggle(this)">
+      <div class="ph-stripe"></div><div class="ph-num">4</div>
+      <div class="ph-title">
+        <h2>Future Skills — Job Interviewing</h2>
+        <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">future skills · grammar</span><span class="arrow">▼</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+  
+      <h3>7A. Read the Future Skills box and do the task.</h3>
+  
+      <div class="future-skills" style="background:#e6f4f4;border:2px solid #5ba8a8;border-radius:10px;padding:16px 18px;margin:14px 0;">
+        <p style="color:#2a7070;font-weight:700;font-size:0.72rem;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:4px;">Future Skills</p>
+        <p style="color:#1a5050;font-weight:700;font-size:1rem;margin:0 0 10px;">Job interviewing</p>
+        <p>In a job interview, as in any conversation, it's important to make completely sure you understand a question before you answer it. You can do this by asking for clarification, repeating the question in your own words or asking another question.</p>
+        <p style="margin-top:10px;font-weight:600;">Look at audioscript 3.07 on page 160 and find three more examples of the interviewee doing this.</p>
+      </div>
+  
+      <button class="reveal-btn" onclick="show(this)">Show examples (7A)</button>
+      <div class="answer">
+        1 "Can I use an example from (university)?"<br>
+        2 "Are you asking (what criticisms they might have)?"<br>
+        3 "Is it true that (I'm not very flexible)?"
+      </div>
+  
+      <div class="box box-blue" style="margin-top:14px;">
+        <p><strong>7B.</strong> Learn and practise. Go to the Grammar Bank — page 113.</p>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+
+
+  <div class="phase c-spk">
+    <div class="phase-head" onclick="toggle(this)">
+      <div class="ph-stripe"></div><div class="ph-num">5</div>
+      <div class="ph-title">
+        <h2>Speaking — Interview Practice</h2>
+        <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+  
+      <h3>8. For each question below, use a checking phrase to clarify it before you answer.</h3>
+  
+      <div class="box box-teal" style="margin-bottom:14px;font-size:0.9rem;">
+        <p style="font-weight:700;margin-bottom:6px;">Checking phrases:</p>
+        <p>How do you mean? &nbsp;·&nbsp; Where should I start? &nbsp;·&nbsp; Are you asking…? &nbsp;·&nbsp; What do you mean by…? &nbsp;·&nbsp; Can I give an example from…?</p>
+      </div>
+  
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:flex-start;">
+          <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:0 12px 12px 12px;padding:10px 16px;max-width:65%;font-size:0.92rem;font-weight:600;color:var(--teal-dark);">How would a colleague or classmate describe you?</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="background:var(--blue-light);border:1px solid var(--blue-border);border-radius:12px 0 12px 12px;padding:10px 16px;max-width:65%;font-size:0.92rem;font-weight:600;color:var(--blue);">What are your main strengths?</div>
+        </div>
+        <div style="display:flex;justify-content:flex-start;">
+          <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:0 12px 12px 12px;padding:10px 16px;max-width:65%;font-size:0.92rem;font-weight:600;color:var(--teal-dark);">Tell me about a time that you learnt from a mistake.</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="background:var(--blue-light);border:1px solid var(--blue-border);border-radius:12px 0 12px 12px;padding:10px 16px;max-width:65%;font-size:0.92rem;font-weight:600;color:var(--blue);">What motivates you, and what makes you feel unmotivated?</div>
+        </div>
+        <div style="display:flex;justify-content:flex-start;">
+          <div style="background:var(--teal-light);border:1px solid var(--teal-border);border-radius:0 12px 12px 12px;padding:10px 16px;max-width:65%;font-size:0.92rem;font-weight:600;color:var(--teal-dark);">How well do you deal with stressful situations?</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="background:var(--blue-light);border:1px solid var(--blue-border);border-radius:12px 0 12px 12px;padding:10px 16px;max-width:65%;font-size:0.92rem;font-weight:600;color:var(--blue);">What are your long-term goals?</div>
+        </div>
+      </div>
+  
+      <h3 style="margin-top:20px;">9. Roleplay a job interview for one of the jobs in Ex 8 (3B) or for a job of your choice.</h3>
+      <div class="speak-q">Choose a job. Prepare 4–5 questions as the interviewer. Then switch — you are the candidate. Use checking phrases from Ex 8 before answering.</div>
+  
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><!-- .wrap -->
+
+<footer>Speakout B1+ · Unit 3B · Good Question</footer>
+
+<script>
+function toggle(h){h.parentElement.classList.toggle('collapsed');}
+function show(btn){
+  const a=btn.nextElementSibling;
+  a.classList.toggle('show');
+  btn.textContent=a.classList.contains('show')?'Hide answers':btn.textContent.replace('Hide','Show');
+}
+
+function checkLetter(el, correct){
+  if(el.value === ''){el.classList.remove('correct','wrong');return;}
+  if(el.value === correct){el.classList.add('correct');el.classList.remove('wrong');}
+  else{el.classList.add('wrong');el.classList.remove('correct');}
+}
+function showLadder(){
+  const answers = ['L','T','L','A'];
+  document.querySelectorAll('.wl-input').forEach((el,i)=>{
+    el.value = answers[i];
+    el.classList.add('correct');el.classList.remove('wrong');
+  });
+}
+
+function fbPick(el,val){
+  el.closest('.freebut-opts').querySelectorAll('.fb-opt').forEach(o=>{
+    o.classList.remove('yes','no');
+  });
+  el.classList.add(val);
+}
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const app = initializeApp({
+    databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+  });
+  const db = getDatabase(app);
+
+  // ID уроку — міняй для кожного файлу
+  const LESSON_ID = "sofia_lesson16";
+
+  // Зберігаємо при введенні
+ // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+    const key = `field_${i}`;
+
+    // Завантажуємо збережене
+    onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+  if (snap.exists()) {
+    const val = snap.val();
+    if (document.activeElement !== el) el.value = val;
+  }
+});
+    // Зберігаємо при зміні
+    el.addEventListener('input', () => {
+      set(ref(db, `${LESSON_ID}/${key}`), el.value);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Slop</title>
+<style>
+/* ═══════════════ NORMAL MODE VARS ═══════════════ */
+:root {
+  --bg:#f4f8fc; --card:#ffffff; --text:#1a1f2e; --muted:#5a6070; --border:#d0dce8;
+  --navy:#1d2d50; --blue:#1a5090; --blue-light:#e8f2fb; --blue-border:#90b8e0;
+  --green:#2a8a5c; --green-light:#e8f5ee; --teal:#0097b3; --teal-light:#e0f5f8;
+  --teal-border:#80d0e0; --teal-dark:#006f85; --amber:#c8700a; --amber-light:#fef3e8;
+  --reveal-bg:#1a5090; --reveal-hover:#1d2d50;
+  --answer-bg:#e8f5ee; --answer-border:#2a8a5c;
+  --ph-bg:#e8ecf4;
+  --font-head:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  --shadow:0 2px 8px rgba(0,0,0,0.06);
+  --radius:12px;
+}
+
+/* ═══════════════ PRANK MODE VARS ═══════════════ */
+body.prank {
+  --bg:#0d0020; --card:#120030; --text:#e8e8ff; --muted:#c0a0ff; --border:#ff00ff33;
+  --navy:#1a0040; --blue:#ff00aa; --blue-light:#2a0050; --blue-border:#ff00ff;
+  --green:#39ff14; --green-light:#001a10; --teal:#00ffff; --teal-light:#001a2a;
+  --teal-border:#00ffff; --teal-dark:#00cccc; --amber:#ffff00; --amber-light:#1a1a00;
+  --reveal-bg:#ff0090; --reveal-hover:#cc0070;
+  --answer-bg:#001a10; --answer-border:#39ff14;
+  --ph-bg:#1a0030;
+  --font-head:'Comic Sans MS','Comic Sans',cursive;
+  --shadow:0 0 20px rgba(255,0,144,0.3);
+  --radius:4px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+  transition:background 0.4s,color 0.4s;
+  min-height:100vh;
+}
+
+body.prank {
+  background-image:
+    radial-gradient(ellipse at 15% 50%,#ff009025 0%,transparent 55%),
+    radial-gradient(ellipse at 85% 20%,#39ff1420 0%,transparent 55%),
+    radial-gradient(ellipse at 50% 85%,#00ffff18 0%,transparent 55%);
+}
+
+/* ═══════════════ TOGGLE BUTTON ═══════════════ */
+#toggle-btn {
+  position:fixed;top:14px;right:14px;z-index:9999;
+  padding:10px 20px;border:none;border-radius:30px;
+  font-size:0.88rem;font-weight:700;cursor:pointer;
+  background:#ff0090;color:white;
+  box-shadow:0 0 20px #ff009080;
+  animation:pulse 1.8s ease-in-out infinite;
+  transition:background 0.3s;
+}
+body:not(.prank) #toggle-btn {
+  background:var(--navy);
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  animation:none;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 15px #ff009070;}50%{box-shadow:0 0 35px #ff0090cc,0 0 70px #ff009030;}}
+
+/* ═══════════════ SIDE PANELS ═══════════════ */
+.slop-panel {
+  position:fixed;top:0;bottom:0;width:170px;
+  display:flex;flex-direction:column;gap:3px;
+  overflow:hidden;z-index:100;
+  transition:opacity 0.4s,transform 0.4s;
+}
+.slop-panel-left{left:0;transform-origin:left;}
+.slop-panel-right{right:0;transform-origin:right;}
+.slop-panel .sp-slot {
+  flex:1;min-height:80px;
+  background:var(--ph-bg);
+  border:1px solid #ff00ff20;
+  display:flex;align-items:center;justify-content:center;
+  color:#ff00ff60;font-size:0.7rem;text-align:center;padding:6px;
+  overflow:hidden;
+}
+.slop-panel .sp-slot img{width:100%;height:100%;object-fit:cover;display:block;}
+body:not(.prank) .slop-panel {
+  opacity:0;pointer-events:none;transform:scaleX(0);
+}
+
+/* ═══════════════ WRAP ═══════════════ */
+.wrap {
+  max-width:1280px;margin:0 auto;padding:20px 40px;
+  transition:margin 0.4s;
+}
+body.prank .wrap{margin:0 180px;max-width:none;}
+
+/* ═══════════════ BANNER ═══════════════ */
+.banner-area{
+  width:100%;margin-bottom:24px;border-radius:var(--radius);overflow:hidden;
+  transition:box-shadow 0.3s,border 0.3s;
+  min-height:90px;background:var(--ph-bg);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:0.85rem;
+  border:2px dashed var(--border);
+}
+body.prank .banner-area{border:3px solid #ff00ff;box-shadow:0 0 25px #ff00ff50;color:#ff00ff80;}
+.banner-area img{width:100%;display:block;}
+
+/* ═══════════════ PHASE ═══════════════ */
+.phase{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);margin-top:18px;
+  overflow:hidden;box-shadow:var(--shadow);
+  transition:all 0.3s;
+}
+body.prank .phase:nth-child(odd){border:2px solid #ff009060;}
+body.prank .phase:nth-child(even){border:2px solid #39ff1460;}
+
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.ph-stripe{width:6px;flex-shrink:0;}
+.ph-num{
+  color:white;font-weight:800;font-size:0.95rem;
+  padding:14px 18px;display:flex;align-items:center;
+  justify-content:center;min-width:52px;
+  font-family:var(--font-head);transition:box-shadow 0.3s;
+}
+.ph-title{flex:1;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ph-title h2{font-size:1rem;font-weight:700;color:var(--text);margin:0;font-family:var(--font-head);transition:color 0.3s,text-shadow 0.3s;}
+body.prank .ph-title h2{text-shadow:0 0 10px currentColor;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;background:var(--blue-light);color:var(--blue);}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+/* Phase colours — normal */
+.c-w   .ph-stripe,.c-w   .ph-num{background:#d43878;}
+.c-pre .ph-stripe,.c-pre .ph-num{background:#c8700a;}
+.c-r1  .ph-stripe,.c-r1  .ph-num{background:#1a5090;}
+.c-r2  .ph-stripe,.c-r2  .ph-num{background:#2a6040;}
+.c-r3  .ph-stripe,.c-r3  .ph-num{background:#b84010;}
+.c-r4  .ph-stripe,.c-r4  .ph-num{background:#6b3fa0;}
+.c-r5  .ph-stripe,.c-r5  .ph-num{background:#bb1919;}
+.c-lang .ph-stripe,.c-lang .ph-num{background:#0097b3;}
+.c-spk  .ph-stripe,.c-spk  .ph-num{background:#2a8a5c;}
+.c-write .ph-stripe,.c-write .ph-num{background:#c8700a;}
+
+/* Phase colours — prank */
+body.prank .c-w    .ph-stripe,body.prank .c-w    .ph-num{background:#ff0090;box-shadow:0 0 18px #ff009099;}
+body.prank .c-pre  .ph-stripe,body.prank .c-pre  .ph-num{background:#ffff00;color:#000;box-shadow:0 0 18px #ffff0099;}
+body.prank .c-r1   .ph-stripe,body.prank .c-r1   .ph-num{background:#39ff14;color:#000;box-shadow:0 0 18px #39ff1499;}
+body.prank .c-r2   .ph-stripe,body.prank .c-r2   .ph-num{background:#00ffff;color:#000;box-shadow:0 0 18px #00ffff99;}
+body.prank .c-r3   .ph-stripe,body.prank .c-r3   .ph-num{background:#ff6600;box-shadow:0 0 18px #ff660099;}
+body.prank .c-r4   .ph-stripe,body.prank .c-r4   .ph-num{background:#df00ff;box-shadow:0 0 18px #df00ff99;}
+body.prank .c-r5   .ph-stripe,body.prank .c-r5   .ph-num{background:#ff2200;box-shadow:0 0 18px #ff220099;}
+body.prank .c-lang .ph-stripe,body.prank .c-lang .ph-num{background:#00ffff;color:#000;box-shadow:0 0 18px #00ffff99;}
+body.prank .c-spk  .ph-stripe,body.prank .c-spk  .ph-num{background:#39ff14;color:#000;box-shadow:0 0 18px #39ff1499;}
+body.prank .c-write .ph-stripe,body.prank .c-write .ph-num{background:#ffff00;color:#000;box-shadow:0 0 18px #ffff0099;}
+
+/* ═══════════════ ELEMENTS ═══════════════ */
+.box{background:var(--blue-light);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.box-teal{background:var(--teal-light);border-left-color:var(--teal);}
+.box-amber{background:var(--amber-light);border-left-color:var(--amber);}
+body.prank .box{border-color:var(--border);background:var(--blue-light);}
+
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--blue-light);border:1px solid var(--blue-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:var(--card);border:1px solid var(--blue);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+body.prank .chip{border-color:#ff00ff;color:#ff00ff;box-shadow:0 0 6px #ff00ff40;}
+
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+body.prank .speak-q{background:#001a10;border-left-color:#39ff14;box-shadow:0 0 8px #39ff1420;}
+
+input.gap{background:var(--blue-light);border:none;border-bottom:2px dotted var(--blue);color:var(--text);font-size:1rem;width:140px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--blue);}
+body.prank input.gap{background:transparent;border-bottom-color:#ff00ff;color:#ff00ff;}
+
+textarea.write-area{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:inherit;font-size:0.93rem;resize:vertical;background:var(--card);color:var(--text);min-height:130px;}
+textarea.write-area:focus{outline:none;border-color:var(--blue);}
+
+.reveal-btn{background:var(--reveal-bg);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;transition:background 0.2s;}
+.reveal-btn:hover{background:var(--reveal-hover);}
+body.prank .reveal-btn{box-shadow:0 0 14px #ff009070;animation:pulse 2s infinite;}
+
+.answer{display:none;background:var(--answer-bg);border-left:3px solid var(--answer-border);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+body.prank .answer{box-shadow:0 0 8px #39ff1420;}
+
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+h3{color:var(--text);font-size:0.95rem;font-weight:700;margin:18px 0 8px;font-family:var(--font-head);transition:color 0.3s,text-shadow 0.3s;}
+body.prank h3{color:#00ffff;text-shadow:0 0 8px #00ffff50;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:20px;margin:14px 0;}
+
+.match-table{width:100%;border-collapse:collapse;font-size:0.93rem;margin:10px 0;}
+.match-table td,.match-table th{padding:8px 12px;border:1px solid var(--border);text-align:left;}
+.match-table th{background:var(--navy);color:white;font-weight:700;}
+body.prank .match-table th{background:#1a0040;color:#ff00ff;text-shadow:0 0 8px #ff00ff;}
+body.prank .match-table td{border-color:#ff00ff20;}
+
+.quote-block{background:var(--blue-light);border-left:4px solid var(--blue);padding:14px 18px;border-radius:4px;font-style:italic;font-size:0.93rem;margin:12px 0;line-height:1.7;}
+body.prank .quote-block{background:#1a0030;border-left-color:#ff00ff;color:#e0c0ff;}
+
+.disc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.disc-bubble{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:10px;padding:12px 14px;font-size:0.92rem;}
+body.prank .disc-bubble{background:#001a2a;border-color:#00ffff;color:#a0ffff;box-shadow:0 0 8px #00ffff18;}
+
+.comic-img{width:100%;border-radius:8px;border:1px solid var(--border);display:block;background:var(--ph-bg);min-height:160px;}
+body.prank .comic-img{border:3px solid #ff00ff;box-shadow:0 0 25px #ff00ff50;}
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:1280px;margin:40px auto 0;}
+body.prank footer{color:#ff0090;border-top-color:#ff009030;text-shadow:0 0 8px #ff009050;}
+
+@media(max-width:1000px){
+  body.prank .wrap{margin:0 10px;}
+  .slop-panel{display:none!important;}
+  .two-col,.col-7-5,.disc-grid{grid-template-columns:1fr;}
+  .wrap{padding:16px 18px;}
+  #toggle-btn{top:8px;right:8px;font-size:0.8rem;}
+}
+</style>
+</head>
+<body class="prank">
+
+<!-- ══ TOGGLE ══ -->
+<button id="toggle-btn" onclick="toggleMode()">REST YOUR EYES</button>
+<button id="hide-slop-btn" onclick="toggleSlop()" style="position:fixed;top:14px;right:220px;z-index:9999;padding:10px 20px;border:none;border-radius:30px;font-size:0.88rem;font-weight:700;cursor:pointer;background:#7700ff;color:white;box-shadow:0 0 20px #7700ff80;">🙈 Hide pics</button>
+
+<!-- ══ SIDE PANELS (AI slop images — insert src="..." for each) ══ -->
+<div class="slop-panel slop-panel-left">
+  <div class="sp-slot"><img src="https://i.guim.co.uk/img/media/800aa5723961b8cc9264bdd5a19f816569c165fc/190_72_823_721/master/823.jpg?width=465&dpr=1&s=none&crop=none"></div>
+  <div class="sp-slot"><img src="https://images.indianexpress.com/2025/12/AI-Slop.jpg?w=640"></div>
+  <div class="sp-slot"><img src="https://pbs.twimg.com/profile_images/1782075322457862144/dYsfVLZe_400x400.jpg"></div>
+  <div class="sp-slot"><img src="https://s3.amazonaws.com/media.mediapost.com/dam/cropped/2026/02/18/aislop-chatgpt52-600_sJS3Yd2.jpg"></div>
+  <div class="sp-slot"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAANUMWqawUkPil7ZwXSfFMlybwYIvcbeetc4Gz8W1fj7s874-jJkxkN56&s=10"></div>
+  <div class="sp-slot"><img src="https://www.ohio.edu/sites/ohio.edu.news/files/styles/max_1300x1300/public/2026-05/AI%20Slop%20Example%202.jpg?itok=58Y1YIAl"></div>
+</div>
+<div class="slop-panel slop-panel-right">
+  <div class="sp-slot"><img src="https://miro.medium.com/0*qOVNYnupXcn6DjXL"></div>
+  <div class="sp-slot"><img src="https://i0.wp.com/www.technollama.co.uk/wp-content/uploads/2026/05/drsrtrangellama.jpg?fit=1200%2C655&ssl=1"></div>
+  <div class="sp-slot"><img src="https://ichef.bbci.co.uk/images/ic/480xn/p0jkcwhs.jpg.webp"></div>
+  <div class="sp-slot"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpU-1qH8OOuKwrLfUB8vL3vE2w0cZJXrn5xa9TPgwqgosCk_IezlkPgMdl&s=10"></div>
+  <div class="sp-slot"><img src="https://upload.wikimedia.org/wikipedia/commons/5/57/Shrimp_Jesus_example.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"></div>
+  <div class="sp-slot"><img src="https://play-lh.googleusercontent.com/nrqMW-rqpSbid7mCC29Pt6_gJIAaEC1LjW_-ojGLGyT_Xc7yHHallaJXsaiNjHQWRPivyqy9MjwEl0xaJ61xRQ=w240-h480-rw"></div>
+</div>
+
+<div class="wrap">
+
+<!-- ══ BANNER ══ -->
+<div class="banner-area" id="banner-area">
+<img src="ai.png">
+</div>
+
+<!-- ══ WARM-UP ══ -->
+<div class="phase c-w">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-title">
+      <h2>Warm-up — The Shrimp Scampy Incident</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <img src="comic_ai.jpg" alt="AI Slop comic strip" class="comic-img" style="margin-bottom:16px;">
+  
+<div style="display:grid;grid-template-columns:1fr auto 1fr;gap:14px;margin:16px 0;align-items:center;">
+  <img src="scampi.png" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:4/3;border:3px solid #ff00ff;box-shadow:0 0 18px #ff00ff70;">
+  <span style="font-size:1.8rem;font-weight:900;color:#ffff00;text-shadow:0 0 15px #ffff00,0 0 30px #ffff0080;font-family:'Comic Sans MS',cursive;">VS</span>
+  <img src="https://www.allrecipes.com/thmb/yt6gIlc2mgqZ-P3-8MjWD6YhcIY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ALR-recipe-19508-shrimp-scampi-VAT-hero-01-2x1-6ff29365341b471a8c9b0e4dc758ba4c.jpg" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:4/3;border:3px solid #00ffff;box-shadow:0 0 18px #00ffff70;">
+</div>
+
+    <h3>Look at the comic strip and answer:</h3>
+    <ol>
+      <li>What is the man ordering? What does he expect to receive?</li>
+      <li>What does "false advertising" mean?</li>
+      <li>Who or what is Grok?</li>
+      <li>What does the last line suggest about Grok's other work?</li>
+    </ol>
+    <div class="speak-q" style="margin-top:14px;">Have you ever ordered something based on a photo and been disappointed by what arrived? What happened?</div>
+  </div>
+</div>
+
+<!-- ══ PRE-READING ══ -->
+<div class="phase c-pre">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">V</div>
+    <div class="ph-title">
+      <h2>Pre-Reading — Vocabulary</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <h3>Match the words (1–6) with their meanings (a–f).</h3>
+    <div class="two-col">
+      <div class="box">
+        <ol style="font-size:0.93rem;line-height:2;">
+          <li>unappetizing</li>
+          <li>abomination</li>
+          <li>trypophobia</li>
+          <li>AI slop</li>
+          <li>hallucinate <em>(AI)</em></li>
+          <li>exploit</li>
+        </ol>
+      </div>
+      <div class="box">
+        <ol type="a" style="font-size:0.93rem;line-height:2;">
+          <li>when an AI produces confidently wrong or made-up information</li>
+          <li>something that causes a feeling of disgust or horror</li>
+          <li>low-quality AI-generated content produced quickly and carelessly</li>
+          <li>not looking or smelling good enough to eat</li>
+          <li>to take unfair advantage of someone for your own benefit</li>
+          <li>extreme discomfort triggered by patterns of small holes or bumps</li>
+        </ol>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 → d &nbsp;·&nbsp; 2 → b &nbsp;·&nbsp; 3 → f &nbsp;·&nbsp; 4 → c &nbsp;·&nbsp; 5 → a &nbsp;·&nbsp; 6 → e</div>
+  </div>
+</div>
+
+<!-- ══ READING 1 ══ -->
+<div class="phase c-r1">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R1</div>
+    <div class="ph-title">
+      <h2>Reading 1 — AI Food Images</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">reading</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="box" style="font-size:0.93rem;line-height:1.75;font-style:italic;">
+      <p>"I am absolutely sick of AI sucking the joy out of everything. It's ruining art, music, writing, and now, for reasons I literally cannot explain, it's coming for our food. AI-generated food images are popping up absolutely everywhere — in restaurant windows, on packaging, on menus. Some of these images give people trypophobia. They kind of look like they were 3D printed in a lab.</p>
+      <p style="margin-top:10px;">I get it. Maybe you're too busy running a restaurant to hire a food photographer. But stock images exist. I typed 'breakfast burrito' into Google Images and found thousands of appetizing, normal photos. So why would you generate this abomination instead?"</p>
+      <p>And it's just horrifying how every single aspect of food is being literally sloppied by AI. But of course, first we have to start with the AI renditions of food because those seem to be popping up absolutely everywhere. Like this one somebody found in Japan. (X post lower) I'm going to be real with you guys. I've seen crime scene photos less disturbing than whatever this abomination is because at least a crime scene was, you know, humanmade. This this violates the laws of physics. It violates science and I feel like it mocks life itself. </p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;">
+      <img src="aifood1.png" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:4/3;border:3px solid #ff00ff;box-shadow:0 0 18px #ff00ff70;">
+      <img src="aifood2.png" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:4/3;border:3px solid #00ffff;box-shadow:0 0 18px #00ffff70;">
+    </div>
+    <blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">Saw the most disgusting AI poster the other day, completely unappetizing?? Just take a photo of the sandwich you make in the store Jesus Christ https://t.co/whUL0qG1UH</p>&mdash; capsulebunny (@capsulebutt) <a href="https://x.com/capsulebutt/status/2089570278825476409?ref_src=twsrc%5Etfw">August 18, 2026</a></blockquote>
+<script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+    <h3>True / False / Not Mentioned:</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol style="font-size:0.93rem;line-height:2.2;">
+        <li>The author thinks AI is only a problem for the food industry. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+        <li>AI food images sometimes appear on restaurant menus. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+        <li>AI images have caused some people to lose their appetite permanently. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+        <li>The author suggests stock photography as a reasonable alternative. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+        <li>The author has worked as a food photographer. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 F &nbsp;·&nbsp; 2 T &nbsp;·&nbsp; 3 NM &nbsp;·&nbsp; 4 T &nbsp;·&nbsp; 5 NM</div>
+      </div>
+    </div>
+    <h3>Comprehension:</h3>
+    <div class="speak-q">1 What does "for reasons I literally cannot explain" mean here? Why does she use this phrase?</div>
+    <div class="speak-q">2 Why does she mention typing "breakfast burrito" into Google Images?</div>
+    <div class="speak-q">3 What is the overall tone — angry, humorous, or both? Find two examples from the text.</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:16px 0;align-items:center;">
+      <img src="https://pbs.twimg.com/media/HQz-Rl9XEAAULci?format=webp&name=large" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:/3;border:3px solid #ff00ff;box-shadow:0 0 18px #ff00ff70;">
+      <div style="font-size:0.93rem;line-height:1.75;">
+        Now, obviously AI food pictures don't always look this horrifying. Sometimes they're subtle and you have to like really zoom in and use a little bit of like forensic analysis to see what's wrong with them. kind of like here. Like if you zoom in on the eggs, they're like, "Why do they all look identical? And why do they all have little buttholes?" And it really makes you wonder, how do we even get here?
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ READING 2 ══ -->
+<div class="phase c-r2">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R2</div>
+    <div class="ph-title">
+      <h2>Reading 2 — Food Used to Be Art</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">reading</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="box" style="font-size:0.93rem;line-height:1.75;font-style:italic;">
+      <p>"Believe it or not, there was a time when looking at a picture of food didn't make you want to throw up. Food used to actually be considered an art.</p>
+      <p style="margin-top:8px;">Back in the 16th century, painting food became a massive trend. Artists would spend hours arranging plates of bread, meat, cheese and fruit just to show off their skills. A display like that wasn't just a painting — it was a flex. A succulent spread of food on your wall meant that you had money and you wanted everybody who walked through your front door to know it.</p>
+      <p style="margin-top:8px;">Eventually, we invented cameras. Early food photography was kind of a nightmare — black and white, with dramatic shadows just to make a potato look like a potato. By the 1940s, colour photography exploded. By the 60s and 70s, we had food stylists using glue for milk, motor oil for syrup, and mashed potatoes for ice cream — because real food melts under studio lights.</p>
+      <p style="margin-top:8px;">Then we got smartphones, and suddenly the camera ate first. Restaurants stopped caring about how food tasted and started plating things purely for Instagram.</p>
+      <p style="margin-top:8px;">And today? Instead of appreciating food as a true art form, we've turned it into cheap, low-quality digital slop. We went from artists spending months on a single loaf of bread to computers flooding our feeds with eerily geometric digital illusions that evoke a sense of horror."</p>
+    </div>
+
+    <div style="margin:20px 0;">
+
+      <!-- ERA 1 -->
+      <div style="display:grid;grid-template-columns:140px 4px 1fr;gap:0 20px;margin-bottom:10px;align-items:start;">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIw1NFMQbh49_C3cIr4iV65-drZGdDcGYJFvKRjuXOKg&s=10" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:1/1;border:2px solid #ff00ff;box-shadow:0 0 12px #ff00ff60;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#ff00ff;box-shadow:0 0 10px #ff00ff;flex-shrink:0;"></div>
+          <div style="flex:1;width:2px;background:linear-gradient(#ff00ff,#df00ff);min-height:60px;"></div>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:0.95rem;color:#ff00ff;text-shadow:0 0 8px #ff00ff;font-family:'Comic Sans MS',cursive;margin-bottom:4px;">16th century</div>
+          </div>
+      </div>
+    
+      <!-- ERA 2 -->
+      <div style="display:grid;grid-template-columns:140px 4px 1fr;gap:0 20px;margin-bottom:10px;align-items:start;">
+        <img src="https://www.worldfoodphotographyawards.com/media/Picture3.jpg" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:1/1;border:2px solid #df00ff;box-shadow:0 0 12px #df00ff60;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#df00ff;box-shadow:0 0 10px #df00ff;flex-shrink:0;"></div>
+          <div style="flex:1;width:2px;background:linear-gradient(#df00ff,#7700ff);min-height:60px;"></div>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:0.95rem;color:#df00ff;text-shadow:0 0 8px #df00ff;font-family:'Comic Sans MS',cursive;margin-bottom:4px;">1820s–1930s</div>
+          </div>
+      </div>
+    
+      <!-- ERA 3 -->
+      <div style="display:grid;grid-template-columns:140px 4px 1fr;gap:0 20px;margin-bottom:10px;align-items:start;">
+        <img src="https://aperture.org/wp-content/uploads/2020/07/Feast-for-the-Eyes-06.jpg" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:1/1;border:2px solid #7700ff;box-shadow:0 0 12px #7700ff60;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#7700ff;box-shadow:0 0 10px #7700ff;flex-shrink:0;"></div>
+          <div style="flex:1;width:2px;background:linear-gradient(#7700ff,#0077ff);min-height:60px;"></div>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:0.95rem;color:#7700ff;text-shadow:0 0 8px #7700ff;font-family:'Comic Sans MS',cursive;margin-bottom:4px;">1940s</div>
+        </div>
+      </div>
+    
+      <!-- ERA 4 -->
+      <div style="display:grid;grid-template-columns:140px 4px 1fr;gap:0 20px;margin-bottom:10px;align-items:start;">
+        <img src="https://i.pinimg.com/236x/f8/15/86/f81586c945adacd145c7e49ac0be5353.jpg" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:1/1;border:2px solid #0077ff;box-shadow:0 0 12px #0077ff60;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#0077ff;box-shadow:0 0 10px #0077ff;flex-shrink:0;"></div>
+          <div style="flex:1;width:2px;background:linear-gradient(#0077ff,#00ffff);min-height:60px;"></div>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:0.95rem;color:#0077ff;text-shadow:0 0 8px #0077ff;font-family:'Comic Sans MS',cursive;margin-bottom:4px;">1960s–70s</div>
+          </div>
+      </div>
+    
+      <!-- ERA 5 -->
+      <div style="display:grid;grid-template-columns:140px 4px 1fr;gap:0 20px;margin-bottom:10px;align-items:start;">
+        <img src="https://assets.lightspeedhq.com/img/2019/07/db9a4083-mg_4246-copy-e1484761744984-960x540.jpg" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:1/1;border:2px solid #00ffff;box-shadow:0 0 12px #00ffff60;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#00ffff;box-shadow:0 0 10px #00ffff;flex-shrink:0;"></div>
+          <div style="flex:1;width:2px;background:linear-gradient(#00ffff,#39ff14);min-height:60px;"></div>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:0.95rem;color:#00ffff;text-shadow:0 0 8px #00ffff;font-family:'Comic Sans MS',cursive;margin-bottom:4px;">2010s</div>
+          </div>
+      </div>
+    
+      <!-- ERA 6 — last, no line -->
+      <div style="display:grid;grid-template-columns:140px 4px 1fr;gap:0 20px;align-items:start;">
+        <img src="https://i.redd.it/amzkty1nqzih1.jpg" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:1/1;border:2px solid #39ff14;box-shadow:0 0 12px #39ff1460;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#39ff14;box-shadow:0 0 10px #39ff14;flex-shrink:0;"></div>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:0.95rem;color:#39ff14;text-shadow:0 0 8px #39ff14;font-family:'Comic Sans MS',cursive;margin-bottom:4px;">Now</div>
+          </div>
+      </div>
+    
+    </div>
+    <h3>Match the era with the description (A–F):</h3>
+    <table class="match-table">
+      <tr><th>Era</th><th>Your answer</th></tr>
+      <tr><td>16th century</td><td><input class="gap" style="width:50px;" placeholder="A–F"></td></tr>
+      <tr><td>1820s–1930s</td><td><input class="gap" style="width:50px;" placeholder="A–F"></td></tr>
+      <tr><td>1940s</td><td><input class="gap" style="width:50px;" placeholder="A–F"></td></tr>
+      <tr><td>1960s–70s</td><td><input class="gap" style="width:50px;" placeholder="A–F"></td></tr>
+      <tr><td>2010s</td><td><input class="gap" style="width:50px;" placeholder="A–F"></td></tr>
+      <tr><td>Now</td><td><input class="gap" style="width:50px;" placeholder="A–F"></td></tr>
+    </table>
+    <div class="box box-teal" style="font-size:0.88rem;margin-top:8px;">
+      <strong>A</strong> — black and white photography, dramatic shadows &nbsp;·&nbsp; <strong>B</strong> — fake food made from household materials<br>
+      <strong>C</strong> — food paintings as a status symbol &nbsp;·&nbsp; <strong>D</strong> — food plated purely for social media<br>
+      <strong>E</strong> — colour photography becomes widespread &nbsp;·&nbsp; <strong>F</strong> — AI-generated images replace real food
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">16th century → C &nbsp;·&nbsp; 1820s–1930s → A &nbsp;·&nbsp; 1940s → E &nbsp;·&nbsp; 1960s–70s → B &nbsp;·&nbsp; 2010s → D &nbsp;·&nbsp; Now → F</div>
+    <h3>Discussion:</h3>
+    <div class="speak-q">1 The author says a still life painting was "a flex." What does she mean? Would you hang a food painting on your wall?</div>
+    <div class="speak-q">2 Food stylists used motor oil for syrup and glue for milk. Is that dishonest — or just practical? What's the difference?</div>
+    <div class="speak-q">3 "The camera ate first" — what does this phrase mean? Is it still true today?</div>
+  </div>
+</div>
+
+<!-- ══ READING 3 ══ -->
+<div class="phase c-r3">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R3</div>
+    <div class="ph-title">
+      <h2>Reading 3 — AI-Generated Recipes</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">reading</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="box" style="font-size:0.93rem;line-height:1.75;font-style:italic;">
+      <p>"If you thought AI-generated food images were bad, wait until you find out about AI-generated recipes. A TikToker found a pastrami baguette that proudly stated on its packaging that its recipe was generated by AI. And it wasn't just the pastrami baguette — the same company also used AI to create a chicken sandwich recipe. Which is, honestly, kind of shocking, considering sandwiches have been around for roughly 2,000 years.</p>
+      <p style="margin-top:8px;">When the company was asked about this choice, they responded: 'The AI serves merely as a tool for implementing market trends. Although AI plays a central role in recipe development, it is ultimately our employees who recognise these trends and refine the recipes. The statement on the packaging that the recipe is AI-generated serves to emphasise our innovative approach and create transparency for customers.'</p>
+      <p style="margin-top:8px;">Online criticism didn't seem to deter them. They anticipated high demand — and their pastrami baguette actually became a bestseller.</p>
+      <p style="margin-top:8px;">But here's the thing: AI models constantly get ingredients wrong. They hallucinate and create recipes based on vibes. They are not a reliable recipe creator. AI doesn't have taste buds. It cannot tell you which sandwich will actually taste good. That's what chefs are for."</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;">
+      <img src="https://preview.redd.it/pastrami-artificial-intelligence-v0-ou6xp0dtnebe1.jpeg?width=1080&crop=smart&auto=webp&s=a8dcb88892410c6b82754f0d56f75d6a59650e64" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:4/3;border:3px solid #ff00ff;box-shadow:0 0 18px #ff00ff70;">
+      <img src="https://preview.redd.it/this-sandwich-is-being-advertised-as-having-its-recipe-v0-1v75gq0mtjte1.jpeg?auto=webp&s=6ff920e886b5c9b2d170b710e7edfdb9a699cadd" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:4/3;border:3px solid #00ffff;box-shadow:0 0 18px #00ffff70;">
+    </div>
+    <h3>Comprehension:</h3>
+    <ol style="font-size:0.93rem;line-height:1.9;">
+      <li>What wrong with the pastrami baguette's packaging?</li>
+      <li>How did the company explain their decision to use AI for recipes?</li>
+      <li>What happened to sales despite the online criticism and why do you think that is?</li>
+      <li>What does the author mean when she says AI creates recipes "based on vibes"?</li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show notes</button>
+    <div class="answer">
+      1 The packaging stated the recipe was AI-generated.<br>
+      2 They said AI implements market trends, employees refine the result, and the label creates transparency.<br>
+      3 The product became a bestseller despite the criticism.<br>
+      4 AI guesses based on patterns in data — not on actually tasting things — so results may be random or unreliable.
+    </div>
+    <h3>Gap fill — use the words from the box:</h3>
+    <div class="wordbox"><span class="chip">generated</span><span class="chip">addiction</span><span class="chip">recorded</span><span class="chip">packaging</span><span class="chip">taste buds</span><span class="chip">sandwich</span></div>
+    <div class="box" style="font-size:0.93rem;line-height:2.3;">
+      <p>1 The product's <input class="gap" placeholder="..."> stated that its recipe was AI-<input class="gap" placeholder="...">.</p>
+      <p>2 The Earl of Sandwich invented his meal because of his gambling <input class="gap" placeholder="...">.</p>
+      <p>3 The first <input class="gap" placeholder="..."> <input class="gap" placeholder="..."> was made in the first century.</p>
+      <p>4 AI cannot tell you which food tastes good because it doesn't have <input class="gap" placeholder="...">.</p>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 packaging / generated &nbsp;·&nbsp; 2 addiction &nbsp;·&nbsp; 3 recorded sandwich &nbsp;·&nbsp; 4 taste buds</div>
+    <h3>Discussion:</h3>
+    <div class="speak-q">The company says "it is ultimately our employees who refine the recipes." Does this make it better or worse in your opinion?</div>
+    <div class="speak-q">The product became a bestseller despite the criticism. What does that tell us about consumers?</div>
+    <div class="speak-q">"If AI is creating the recipe and the branding — where is my discount?" — do you think AI-made products should be cheaper? Why / why not?</div>
+    <div class="speak-q">Would you buy a product if the packaging said "recipe generated by AI"? Would it make you more or less likely to trust it?</div>
+  </div>
+</div>
+
+<!-- ══ READING 4 ══ -->
+<div class="phase c-r4">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R4</div>
+    <div class="ph-title">
+      <h2>Reading 4 — AI-Generated Soda</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">reading</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="box" style="font-size:0.93rem;line-height:1.75;font-style:italic;">
+      <p>"In 2023, a Swiss company created a soda called Viv Nova that was fully generated by AI. ChatGPT was responsible for the recipe, the can design was created using the image AI Midjourney, and even the name was AI-generated — with just two requirements: it had to start with 'Viv' and have eight letters.</p>
+      <p style="margin-top:8px;">The AI was tasked with creating a vegan recipe with health benefits. The entire development took only two days, thanks to AI.</p>
+      <p style="margin-top:8px;">Unsurprisingly, the drink was eventually pulled from the market. The CEO stated that 'the initial hype quickly faded.' But critics pointed out a more fundamental problem: if AI is handling the recipe, the design, the name, and the entire branding — why isn't the product cheaper? That should be the pitch: less overhead, less labour, fewer people to hire. A more affordable product. Instead, Viv Nova was priced the same as any other soft drink on the shelf.</p>
+      <p style="margin-top:8px;">And that, perhaps, is the real issue with AI products. Not just that they look or taste wrong — but that consumers get all the downsides of AI and none of the benefits."</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;">
+      <img src="https://media.20min.ch/7/image/2023/12/27/98a4a3ec-bcd7-445b-ba9c-cb657ef49b52.jpeg?s=1123a20bbea9b6746c4608198b466e76" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:4/3;border:3px solid #ff00ff;box-shadow:0 0 18px #ff00ff70;">
+      <img src="https://media.20min.ch/6/image/2023/12/22/a66ef2ad-941f-4dae-bd1a-e89b4716bbe6.jpeg?auto=format%2Ccompress%2Cenhance&fit=max&w=1200&h=1200&rect=0%2C0%2C1638%2C2048&s=ae3deb1aa22941ff6bc94185fada50b0" style="width:100%;border-radius:8px;object-fit:cover;aspect-ratio:4/3;border:3px solid #00ffff;box-shadow:0 0 18px #00ffff70;">
+    </div>
+    <h3>True / False / Not Mentioned:</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol style="font-size:0.93rem;line-height:2.1;">
+        <li>The name "Viv Nova" was chosen by the company's marketing team. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+        <li>The drink was vegan. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+        <li>Viv Nova won a design award for its packaging. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+        <li>The product was sold at a lower price than similar drinks. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+        <li>The CEO admitted the product tasted bad. <input class="gap" style="width:60px;" placeholder="T/F/NM"></li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 F &nbsp;·&nbsp; 2 T &nbsp;·&nbsp; 3 NM &nbsp;·&nbsp; 4 F &nbsp;·&nbsp; 5 F</div>
+      </div>
+    </div>
+    <h3>Find words in the text that mean:</h3>
+    <div class="col-7-5" style="align-items:start;">
+      <ol style="font-size:0.93rem;line-height:2.1;">
+        <li>money saved by spending less on staff or production</li>
+        <li>the excitement around a new product when it first launches</li>
+        <li>removed from sale</li>
+        <li>the total image and identity of a product</li>
+      </ol>
+      <div>
+        <button class="reveal-btn" onclick="show(this)">Show answers</button>
+        <div class="answer">1 overhead &nbsp;·&nbsp; 2 initial hype &nbsp;·&nbsp; 3 pulled from the market &nbsp;·&nbsp; 4 branding</div>
+      </div>
+    </div>
+    <h3>Discussion:</h3>
+    <div class="speak-q">The product took only two days to develop. Is speed a good argument for using AI — or a red flag?</div>
+    <div class="speak-q">The author argues the product should have been cheaper. Do you think this is a fair point? Who benefits if AI reduces costs but prices stay the same?</div>
+    <div class="speak-q">"Consumers get all the downsides of AI and none of the benefits." Do you agree? Can you think of a case where AI actually does benefit the consumer?</div>
+    <div class="speak-q" style="margin-top:12px;"><strong>Compare:</strong> The pastrami baguette (R3) became a bestseller. Viv Nova was pulled from shelves. What made the difference?</div>
+  </div>
+</div>
+
+<!-- ══ READING 5 ══ -->
+<div class="phase c-r5">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">R5</div>
+    <div class="ph-title">
+      <h2>Reading 5 — The CEO Who Lets AI Choose His Food</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">reading · speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="quote-block">
+      "90% of my meals are AI-derived. AI tells me what to eat for breakfast, lunch and dinner. A lot of people take joy in choosing what to eat, but based on my own personal experience — I love it. I can't imagine having to think about what I want to eat.<br><br>
+      AI knows the ingredients you like and comes up with different meals. It remembers every great meal you've ever had. If I rated something 9.5 six months ago, I forgot it two weeks later. AI doesn't forget. That's the future."
+    </div>
+    <h3>Reaction questions:</h3>
+    <div class="speak-q">1 What does "AI-derived" mean in this context?</div>
+    <div class="speak-q">2 He says "I can't imagine having to think about what I want to eat." What does this tell you about him?</div>
+    <div class="speak-q">3 He mentions AI remembering your ratings. What's one advantage and one disadvantage of this?</div>
+    <div class="speak-q">4 The author responds: "At this point, why even be alive?" — fair criticism or an overreaction?</div>
+    <h3 style="margin-top:18px;">Wonder Create — the AI restaurant builder:</h3>
+    <div class="quote-block">
+      "Anyone in the world will be able to create their own restaurant for $10 a month. You just type: 'Build me a fast casual Mexican restaurant for Gen Z for people that love cycling.' AI will build the entire restaurant — brand it, name it. You own the restaurant. You can publish it in two minutes and push it to Uber Eats, DoorDash, Grubhub."
+    </div>
+    <div class="speak-q">5 The interviewer asks who this is for — and the CEO ignores the question. Why do you think he does that?</div>
+    <div class="speak-q">6 "Build me a fast casual Mexican restaurant for Gen Z for people that love cycling." What's wrong with this as a business concept?</div>
+    <div class="speak-q">7 The author compares Wonder Create to an MLM. What does she mean by that?</div>
+  </div>
+</div>
+
+<!-- ══ LANGUAGE FOCUS ══ -->
+<div class="phase c-lang">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">L</div>
+    <div class="ph-title">
+      <h2>Language Focus — Phrases from the Texts</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">vocabulary · language</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <h3>Match each phrase (1–6) with what it means in context (a–f).</h3>
+    <div class="two-col">
+      <div class="box" style="font-size:0.93rem;line-height:2.2;">
+        <p>1 <em>"For reasons I literally cannot explain"</em></p>
+        <p>2 <em>"I'm going to be real with you"</em></p>
+        <p>3 <em>"Did nobody stop you and say, 'Hey, what the…?'"</em></p>
+        <p>4 <em>"How did we even get here?"</em></p>
+        <p>5 <em>"It was a flex"</em></p>
+        <p>6 <em>"Addiction is truly the mother of invention"</em></p>
+      </div>
+      <div class="box" style="font-size:0.93rem;line-height:2.2;">
+        <p>a — a rhetorical question expressing disbelief at how a situation developed</p>
+        <p>b — something done to show off wealth or status</p>
+        <p>c — a humorous twist on "necessity is the mother of invention"</p>
+        <p>d — an expression of bafflement — there's no logical explanation</p>
+        <p>e — I'm going to say something honest and direct now</p>
+        <p>f — disbelief that no one questioned a bad decision</p>
+      </div>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 → d &nbsp;·&nbsp; 2 → e &nbsp;·&nbsp; 3 → f &nbsp;·&nbsp; 4 → a &nbsp;·&nbsp; 5 → b &nbsp;·&nbsp; 6 → c</div>
+    <h3>Now use any THREE of these phrases in sentences about something from your own life or the news.</h3>
+    <textarea class="write-area" rows="5" placeholder="Write your three sentences here..."></textarea>
+  </div>
+</div>
+
+<!-- ══ SPEAKING ══ -->
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">S</div>
+    <div class="ph-title">
+      <h2>Speaking — Discussion</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <h3>Round 1 — Agree / Disagree / It depends:</h3>
+    <div class="disc-grid">
+      <div class="disc-bubble">AI food images should be banned in advertising.</div>
+      <div class="disc-bubble">Using AI to write a recipe is no different from using a cookbook.</div>
+      <div class="disc-bubble">People who care about "authentic" food are just being snobby.</div>
+      <div class="disc-bubble">Wonder (the AI restaurant) is a genuinely useful idea.</div>
+    </div>
+    <h3 style="margin-top:20px;">Round 2 — Bigger questions:</h3>
+    <div class="speak-q">1 Where do you draw the line between AI as a <em>tool</em> and AI <em>replacing</em> something?</div>
+    <div class="speak-q">2 The video is about food — but the same argument applies to art, music, writing. Is food different? Why?</div>
+    <div class="speak-q">3 Would you eat at a restaurant if you knew everything about it — the name, the menu, the branding — was AI-generated?</div>
+    <div class="speak-q">4 The CEO says he can't imagine having to think about what he wants to eat. What would be lost if we all let AI make these small daily decisions for us?</div>
+  </div>
+</div>
+
+<!-- ══ WRITING ══ -->
+<div class="phase c-write">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">WR</div>
+    <div class="ph-title">
+      <h2>Writing — Opinion Post</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">writing</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="box box-amber">
+      <p>Write a short social media post (150–200 words) responding to this statement:</p>
+      <p style="font-style:italic;margin-top:8px;font-weight:600;">"AI is just a tool. Using it for food images, recipes, or restaurant branding is no different from using Photoshop or a blender."</p>
+      <p style="margin-top:8px;color:var(--muted);">Agree, disagree, or find a middle ground. Use at least two examples from what you read today.</p>
+    </div>
+    <textarea class="write-area" rows="10" placeholder="Write your opinion post here..."></textarea>
+  </div>
+</div>
+<br>
+<hr>
+<p>The lesson is based on the video of shira: <em style="color: #ff00aa;">https://youtu.be/O3aybGjkrVY?si=F0l63hNEVA-LMmeO</em></p>
+
+</div><!-- .wrap -->
+
+<footer>AI Slop — Fun Lesson</footer>
+
+<script>
+function toggle(h){ h.parentElement.classList.toggle('collapsed'); }
+function show(btn){
+  const a = btn.nextElementSibling;
+  a.classList.toggle('show');
+  btn.textContent = a.classList.contains('show') ? 'Hide answers' : btn.textContent.replace('Hide','Show');
+}
+function toggleMode(){
+  const body = document.body;
+  const btn = document.getElementById('toggle-btn');
+  if(body.classList.contains('prank')){
+    body.classList.remove('prank');
+    btn.textContent = 'BACK TO PAIN';
+  } else {
+    body.classList.add('prank');
+    btn.textContent = 'REST YOUR EYES';
+  }
+}
+function toggleSlop(){
+  const panels = document.querySelectorAll('.slop-panel');
+  const btn = document.getElementById('hide-slop-btn');
+  const hidden = panels[0].style.opacity === '0';
+  panels.forEach(p => {
+    p.style.opacity = hidden ? '1' : '0';
+    p.style.pointerEvents = hidden ? 'auto' : 'none';
+    p.style.transform = hidden ? '' : 'scaleX(0)';
+  });
+  btn.textContent = hidden ? '🙈 Hide pics' : '👀 Show pics';
+}
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const app = initializeApp({
+    databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+  });
+  const db = getDatabase(app);
+
+  // ID уроку — міняй для кожного файлу
+  const LESSON_ID = "sofia_lesson17";
+
+  // Зберігаємо при введенні
+ // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+    const key = `field_${i}`;
+
+    // Завантажуємо збережене
+    onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+  if (snap.exists()) {
+    const val = snap.val();
+    if (document.activeElement !== el) el.value = val;
+  }
+});
+    // Зберігаємо при зміні
+    el.addEventListener('input', () => {
+      set(ref(db, `${LESSON_ID}/${key}`), el.value);
+    });
+  });
+</script>
+</body>
+</html>

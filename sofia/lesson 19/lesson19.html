@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 3C–3D — Sofia</title>
+<style>
+:root{
+  --bg:#f4f8fc;--card:#fff;--text:#1a1f2e;--muted:#5a6070;--border:#d0dce8;
+  --navy:#1d2d50;--blue:#1a5090;--blue-light:#e8f2fb;--blue-border:#90b8e0;
+  --green:#2a8a5c;--green-light:#e8f5ee;--teal:#0097b3;--teal-light:#e0f5f8;
+  --teal-border:#80d0e0;--amber:#c8700a;--amber-light:#fef3e8;
+  --purple:#6b3fa0;--purple-light:#f0ebf8;--purple-border:#b090d0;
+  --reveal-bg:#1a5090;--reveal-hover:#1d2d50;
+  --answer-bg:#e8f5ee;--answer-border:#2a8a5c;
+  --shadow:0 2px 8px rgba(0,0,0,0.06);--radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;padding-bottom:60px;}
+.wrap{max-width:960px;margin:0 auto;padding:24px 32px;}
+
+/* BANNER */
+.banner-area{width:100%;margin-bottom:24px;border-radius:var(--radius);overflow:hidden;min-height:80px;background:#e8ecf4;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.85rem;border:2px dashed var(--border);}
+.banner-area img{width:100%;display:block;}
+
+/* PHASE */
+.phase{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-top:18px;overflow:hidden;box-shadow:var(--shadow);}
+.phase-head{cursor:pointer;display:flex;align-items:stretch;user-select:none;}
+.ph-stripe{width:6px;flex-shrink:0;}
+.ph-num{color:#fff;font-weight:800;font-size:0.95rem;padding:14px 18px;display:flex;align-items:center;justify-content:center;min-width:52px;}
+.ph-title{flex:1;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ph-title h2{font-size:1rem;font-weight:700;color:var(--text);margin:0;}
+.pbadge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;background:var(--blue-light);color:var(--blue);}
+.arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.25s;margin-left:10px;}
+.phase.collapsed .arrow{transform:rotate(-90deg);}
+.phase-body{padding:26px 32px 30px;}
+.phase.collapsed .phase-body{display:none;}
+
+.c-w   .ph-stripe,.c-w   .ph-num{background:#d43878;}
+.c-3c  .ph-stripe,.c-3c  .ph-num{background:var(--purple);}
+.c-3d  .ph-stripe,.c-3d  .ph-num{background:var(--navy);}
+.c-gr  .ph-stripe,.c-gr  .ph-num{background:var(--teal);}
+.c-spk .ph-stripe,.c-spk .ph-num{background:var(--green);}
+.c-wr  .ph-stripe,.c-wr  .ph-num{background:var(--amber);}
+
+/* ELEMENTS */
+.box{background:var(--blue-light);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:8px;padding:14px 16px;margin:10px 0;}
+.box-green{background:var(--green-light);border-left-color:var(--green);}
+.box-teal{background:var(--teal-light);border-left-color:var(--teal);}
+.box-amber{background:var(--amber-light);border-left-color:var(--amber);}
+.box-purple{background:var(--purple-light);border-left-color:var(--purple);}
+
+.wordbox{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--blue-light);border:1px solid var(--blue-border);border-radius:8px;margin:10px 0 14px;}
+.chip{background:var(--card);border:1px solid var(--blue);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:0.87rem;font-weight:600;}
+.chip-purple{border-color:var(--purple);color:var(--purple);}
+
+.speak-q{background:var(--green-light);border-left:3px solid var(--green);padding:10px 14px;margin:8px 0;border-radius:4px;font-size:0.95rem;}
+.speak-q-purple{background:var(--purple-light);border-left-color:var(--purple);}
+
+input.gap{background:var(--blue-light);border:none;border-bottom:2px dotted var(--blue);color:var(--text);font-size:1rem;width:120px;padding:2px 4px;font-family:inherit;}
+input.gap:focus{outline:none;border-bottom:2px solid var(--blue);}
+input.gap-sm{width:70px;}
+input.gap.purple{border-bottom-color:var(--purple);background:var(--purple-light);}
+
+textarea.write-area{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:inherit;font-size:0.93rem;resize:vertical;background:var(--card);color:var(--text);min-height:130px;}
+textarea.write-area:focus{outline:none;border-color:var(--blue);}
+
+.reveal-btn{background:var(--reveal-bg);border:none;color:#fff;padding:7px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin:12px 0;transition:background 0.2s;}
+.reveal-btn:hover{background:var(--reveal-hover);}
+.reveal-btn.purple{background:var(--purple);}
+.reveal-btn.purple:hover{background:#5a2e90;}
+
+.answer{display:none;background:var(--answer-bg);border-left:3px solid var(--answer-border);padding:10px 14px;border-radius:4px;font-size:0.93rem;margin:8px 0;}
+.answer.show{display:block;}
+
+ol,ul{padding-left:22px;}
+li{margin:7px 0;}
+p{margin:8px 0;}
+h3{color:var(--text);font-size:0.95rem;font-weight:700;margin:18px 0 8px;}
+h4{font-size:0.88rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 6px;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:14px 0;}
+
+/* PERSON CARDS */
+.person-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0;}
+.person-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;text-align:center;box-shadow:var(--shadow);}
+.person-card img{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:top;display:block;}
+.person-card .pname{font-size:0.8rem;font-weight:700;color:#fff;background:var(--navy);padding:4px 8px;}
+
+.person-duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;max-width:480px;}
+
+/* BBC STYLE HEADER */
+.bbc-header{background:var(--navy);border-radius:10px;padding:20px 24px;margin-bottom:20px;color:#fff;display:flex;align-items:center;gap:24px;}
+.bbc-logo{background:#bb1919;padding:6px 10px;border-radius:4px;font-weight:900;font-size:1.1rem;letter-spacing:2px;flex-shrink:0;}
+.bbc-title h1{font-size:2rem;font-weight:900;line-height:1.1;color:#fff;margin:0;}
+.bbc-meta{font-size:0.8rem;color:#a0b0c8;margin-top:8px;}
+.bbc-meta span{display:inline-block;margin-right:16px;}
+.bbc-meta strong{color:#e0e8f0;}
+
+/* GRAMMAR BOX */
+.grammar-box{background:#1d2d50;color:#fff;border-radius:10px;padding:18px 22px;margin:14px 0;}
+.grammar-box h3{color:#a0d8f0;margin-top:0;}
+.grammar-box table{width:100%;border-collapse:collapse;margin-top:10px;font-size:0.9rem;}
+.grammar-box td,.grammar-box th{padding:7px 12px;border:1px solid #2d4070;text-align:left;}
+.grammar-box th{background:#2d4070;color:#a0d8f0;}
+.grammar-box .hl{color:#7dd8ff;font-weight:700;}
+
+/* KEY PHRASES */
+.key-phrases{background:var(--teal-light);border:2px solid var(--teal);border-radius:10px;padding:16px 20px;margin:14px 0;}
+.key-phrases h4{color:var(--teal-dark,#006f85);margin:0 0 10px;}
+.key-phrases ul{padding-left:18px;}
+.key-phrases li{font-size:0.9rem;margin:5px 0;color:var(--text);}
+
+/* DISCUSSION BOARD */
+.disc-board{margin:14px 0;}
+.disc-post{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin:8px 0;font-size:0.92rem;line-height:1.65;}
+.disc-post .poster{font-weight:700;color:var(--blue);font-size:0.85rem;margin-bottom:6px;}
+
+/* NUMBER BADGE */
+.ex-badge{display:inline-block;background:var(--navy);color:#fff;font-weight:800;font-size:0.85rem;padding:3px 10px;border-radius:6px;margin-right:8px;}
+.ex-badge.purple{background:var(--purple);}
+
+/* PREFIX TABLE */
+.prefix-table{width:100%;border-collapse:collapse;font-size:0.93rem;margin:10px 0;}
+.prefix-table td,.prefix-table th{padding:8px 12px;border:1px solid var(--border);text-align:left;}
+.prefix-table th{background:var(--purple);color:#fff;font-weight:700;}
+.prefix-table tr:nth-child(even) td{background:var(--purple-light);}
+
+footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:20px 40px;border-top:1px solid var(--border);max-width:960px;margin:40px auto 0;}
+
+@media(max-width:700px){
+  .two-col,.three-col,.person-grid,.person-duo{grid-template-columns:1fr;}
+  .wrap{padding:16px 16px;}
+  .bbc-header{flex-direction:column;gap:12px;}
+  .bbc-title h1{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div style="background:linear-gradient(135deg,#1d2d50 0%,#2a4a80 100%);border-radius:14px;padding:28px 36px;color:#fff;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+  <div>
+    <div style="font-size:0.75rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#90b8e0;margin-bottom:6px;">Unit 3 · Lesson C–D</div>
+    <div style="font-size:2rem;font-weight:900;line-height:1.1;">Negative Prefixes<br>&amp; This or That?</div>
+    <div style="font-size:0.85rem;color:#a0bcd8;margin-top:6px;">Vocabulary · Grammar · Speaking · Writing</div>
+  </div>
+  <div style="font-size:5rem;opacity:0.12;font-weight:900;line-height:1;">3</div>
+</div>
+
+<!-- ══════════ WARM-UP ══════════ -->
+<div class="phase c-w">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">W</div>
+    <div class="ph-title">
+      <h2>Warm-up — This or That?</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <h3>Quick fire round — answer without thinking too long!</h3>
+    <div class="two-col">
+      <div>
+        <div class="speak-q">📱 Call or text?</div>
+        <div class="speak-q">🌙 Night owl or early bird?</div>
+        <div class="speak-q">🎧 Music or silence when you work?</div>
+        <div class="speak-q">🏖️ Beach holiday or city trip?</div>
+      </div>
+      <div>
+        <div class="speak-q">📺 Binge a series or watch one episode a week?</div>
+        <div class="speak-q">🌧️ Rain or extreme heat?</div>
+        <div class="speak-q">📚 E-book or real book?</div>
+        <div class="speak-q">✈️ Window or aisle seat?</div>
+      </div>
+    </div>
+    <div class="box box-teal" style="margin-top:16px;">
+      <strong>Follow-up:</strong> Pick one of your answers and explain it in 2–3 sentences. Use: <em>I'd much rather… / I prefer… because… / I can't really explain why, it just suits me more.</em>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 3C NEGATIVE PREFIXES ══════════ -->
+<div class="phase c-3c">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">3C</div>
+    <div class="ph-title">
+      <h2>Vocabulary — Negative Prefixes</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge purple" style="background:var(--purple-light);color:var(--purple);">vocabulary</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <!-- Ex 1A -->
+    <h3><span class="ex-badge purple">1A</span> Add the prefix to make the adjectives negative. Use <em>in-</em>, <em>ir-</em> or <em>un-</em>.</h3>
+
+    <div class="three-col">
+      <div>
+        <ol style="font-size:0.93rem;line-height:2.3;">
+          <li><input class="gap gap-sm purple" placeholder="prefix">appropriate</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">certain</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">clear</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">confident</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">dependent</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">employed</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">enthusiastic</li>
+        </ol>
+      </div>
+      <div>
+        <ol start="8" style="font-size:0.93rem;line-height:2.3;">
+          <li><input class="gap gap-sm purple" placeholder="prefix">expensive</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">fair</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">flexible</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">formal</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">healthy</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">lucky</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">necessary</li>
+        </ol>
+      </div>
+      <div>
+        <ol start="15" style="font-size:0.93rem;line-height:2.3;">
+          <li><input class="gap gap-sm purple" placeholder="prefix">popular</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">professional</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">regular</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">responsible</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">sensitive</li>
+          <li><input class="gap gap-sm purple" placeholder="prefix">willing</li>
+        </ol>
+      </div>
+    </div>
+    <div style="margin:12px 0;">
+      <audio controls style="width:100%;border-radius:8px;">
+        <source src="VB3_01.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+    <button class="reveal-btn purple" onclick="show(this)">Show answers</button>
+    
+    <div class="answer">
+      1 in<b>appropriate</b> · 2 un<b>certain</b> · 3 un<b>clear</b> · 4 un<b>confident</b> · 5 in<b>dependent</b> · 6 un<b>employed</b> · 7 un<b>enthusiastic</b> · 8 in<b>expensive</b> · 9 un<b>fair</b> · 10 in<b>flexible</b> · 11 in<b>formal</b> · 12 un<b>healthy</b> · 13 un<b>lucky</b> · 14 un<b>necessary</b> · 15 un<b>popular</b> · 16 un<b>professional</b> · 17 ir<b>regular</b> · 18 ir<b>responsible</b> · 19 in<b>sensitive</b> · 20 un<b>willing</b>
+    </div>
+
+    <!-- Ex 2 -->
+    <h3 style="margin-top:24px;"><span class="ex-badge purple">2</span> Choose the correct words to complete the rule.</h3>
+    <div class="box box-purple">
+      We usually <strong>stress / don't stress</strong> the negative prefix.<br>
+      <button class="reveal-btn purple" style="margin:8px 0 0;" onclick="show(this)">Show answer</button>
+      <div class="answer">We usually <strong>don't stress</strong> the negative prefix. The stress stays on the main word: un<u>FAIR</u>, ir<u>REGU</u>lar.</div>
+    </div>
+
+    <!-- Ex 3 -->
+    <h3 style="margin-top:24px;"><span class="ex-badge purple">3</span> Complete the sentences using a word with a negative prefix from Ex 1A.</h3>
+    <ol style="font-size:0.93rem;line-height:2.5;">
+      <li>He doesn't want to do it. He's <input class="gap purple" placeholder="..."> to do it.</li>
+      <li>I don't have any work at the moment. I'm <input class="gap purple" placeholder="...">.</li>
+      <li>That wasn't the right thing to say in that situation. It was totally <input class="gap purple" placeholder="...">.</li>
+      <li>You really don't handle change well, do you? You're really <input class="gap purple" placeholder="...">.</li>
+      <li>You didn't need to do that. It was <input class="gap purple" placeholder="...">.</li>
+      <li>It was gorgeous weather all summer except on your wedding day. That's a bit <input class="gap purple" placeholder="...">.</li>
+      <li>He used to be everyone's favourite politician, but now he's really <input class="gap purple" placeholder="...">.</li>
+      <li>I'm not sure what will happen next year. I'm <input class="gap purple" placeholder="..."> about my future.</li>
+      <li>There's no need to dress up. You can wear <input class="gap purple" placeholder="..."> clothes.</li>
+      <li>I suggested a party, but no one seemed very interested. They were <input class="gap purple" placeholder="...">.</li>
+      <li>They left their young kids home by themselves. That's completely <input class="gap purple" placeholder="...">.</li>
+      <li>I don't understand everything she says. She's very <input class="gap purple" placeholder="...">.</li>
+    </ol>
+    <button class="reveal-btn purple" onclick="show(this)">Show answers</button>
+    <div class="answer">
+      1 unwilling · 2 unemployed · 3 inappropriate · 4 inflexible · 5 unnecessary · 6 unlucky · 7 unpopular · 8 uncertain · 9 informal · 10 unenthusiastic · 11 irresponsible · 12 unclear
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ 3D — NEW TOPIC ══════════ -->
+<div class="phase c-3d">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">3D</div>
+    <div class="ph-title">
+      <h2>BBC Street Interviews — This or That?</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">new topic</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <!-- BBC header -->
+    <div class="bbc-header">
+      <div class="bbc-logo">BBC</div>
+      <div class="bbc-title">
+        <h1>This or that?</h1>
+        <div class="bbc-meta">
+          <span><strong>Grammar</strong> expressing preferences</span>
+          <span><strong>Speaking</strong> 'This or That?' questions</span>
+          <span><strong>Writing</strong> a discussion board post</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <h4>▌ PREVIEW</h4>
+    <h3><span class="ex-badge">1</span> Answer the questions.</h3>
+    <div class="speak-q">1 What did you want to be when you were growing up?</div>
+    <div class="speak-q">2 Look at the jobs in the box. Which ones would suit you most now? Which would suit you least? Why?</div>
+    <div class="wordbox">
+      <span class="chip">actor</span><span class="chip">astronaut</span><span class="chip">astronomer</span><span class="chip">doctor</span><span class="chip">electrician</span><span class="chip">fashion designer</span><span class="chip">footballer</span><span class="chip">lawyer</span><span class="chip">musician</span><span class="chip">photographer</span>
+    </div>
+
+    <div style="margin:12px 0;border-radius:10px;overflow:hidden;">
+      <video controls style="width:100%;display:block;">
+        <source src="whenigrowup.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- VIEW — people photos -->
+    <h4 style="margin-top:24px;">▌ VIEW</h4>
+    <div class="person-duo">
+      <div class="person-card">
+        <img src="lesson_imgs/dara.png" alt="Dara">
+        <div class="pname">Dara</div>
+      </div>
+      <div class="person-card">
+        <img src="lesson_imgs/monica.png" alt="Monica">
+        <div class="pname">Monica</div>
+      </div>
+    </div>
+
+    <h3><span class="ex-badge">2</span> Watch the first part of the video. How many speakers talk about more than one job? Who wanted to work in something connected to sports or entertainment?</h3>
+    <textarea class="write-area" rows="3" placeholder="Your notes..."></textarea>
+
+    <div class="person-grid" style="margin-top:20px;">
+      <div class="person-card">
+        <img src="des.png" alt="Des">
+        <div class="pname">Des</div>
+      </div>
+      <div class="person-card">
+        <img src="rohan.png" alt="Rohan">
+        <div class="pname">Rohan</div>
+      </div>
+      <div class="person-card">
+        <img src="sky.png" alt="Sky">
+        <div class="pname">Sky</div>
+      </div>
+      <div class="person-card">
+        <img src="daniel.png" alt="Daniel">
+        <div class="pname">Daniel</div>
+      </div>
+      <div class="person-card">
+        <img src="anais.png" alt="Anais">
+        <div class="pname">Anaïs</div>
+      </div>
+      <div class="person-card">
+        <img src="tian_eva.png" alt="Tian & Eva" style="object-position:center;">
+        <div class="pname">Tian &amp; Eva</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:20px;"><span class="ex-badge">3A</span> Watch the second part of the video. Which job does each speaker prefer?</h3>
+    <div class="two-col">
+      <ol style="font-size:0.93rem;line-height:2.5;">
+        <li>Dara &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+        <li>Monica &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+        <li>Des &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+        <li>Eva &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+        <li>Tian &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+      </ol>
+      <ol start="6" style="font-size:0.93rem;line-height:2.5;">
+        <li>Daniel &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+        <li>Sky &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+        <li>Rohan &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+        <li>Anaïs &nbsp;<input class="gap" style="width:160px;" placeholder="job..."></li>
+      </ol>
+    </div>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 a teacher · 2 environment/climate · 3 author (write books) · 4 doctor · 5 working with people · 6 own research · 7 outside/nature · 8 photography · 9 cool stuff/things</div>
+
+    <h3 style="margin-top:20px;"><span class="ex-badge">3B</span> Complete the things that the speakers say. Then watch and check.</h3>
+    <ol style="font-size:0.93rem;line-height:2.6;">
+      <li>Dara: I like <input class="gap" placeholder="..."> and I'm quite used to working with <input class="gap" placeholder="...">.</li>
+      <li>Monica: I'm very interested with what's happening with the <input class="gap" placeholder="...">.</li>
+      <li>Des: I think I could reach more <input class="gap" placeholder="..."> by writing books and I could work from <input class="gap" placeholder="...">.</li>
+      <li>Eva: I don't like <input class="gap" placeholder="..."> with people.</li>
+      <li>Tian: I like <input class="gap" placeholder="..."> with people.</li>
+      <li>Daniel: I do my own <input class="gap" placeholder="..."> and I really enjoy it.</li>
+      <li>Sky: I like being outside in <input class="gap" placeholder="...">.</li>
+      <li>Rohan: I love <input class="gap" placeholder="..."> and I would love to share a good <input class="gap" placeholder="..."> as well.</li>
+      <li>Anaïs: I think it would just be pretty cool to make some cool <input class="gap" placeholder="...">.</li>
+    </ol>
+
+  </div>
+</div>
+
+<!-- ══════════ GRAMMAR ══════════ -->
+<div class="phase c-gr">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">GR</div>
+    <div class="ph-title">
+      <h2>Grammar — Expressing Preferences</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge" style="background:var(--teal-light);color:var(--teal);">grammar</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="grammar-box">
+      <h3>Expressing preferences</h3>
+      <table>
+        <tr><th>Structure</th><th>Example</th></tr>
+        <tr><td><span class="hl">I'd prefer</span> + infinitive</td><td>I'd prefer <em>to be</em> a journalist.</td></tr>
+        <tr><td><span class="hl">I'd rather</span> + bare infinitive</td><td>I'd rather <em>be</em> a teacher.</td></tr>
+        <tr><td><span class="hl">I'd go for</span> + noun</td><td>I'd definitely go for <em>writing</em>.</td></tr>
+        <tr><td><span class="hl">I had rather</span> (formal)</td><td>I had rather <em>be</em> a teacher.</td></tr>
+      </table>
+      <p style="margin-top:10px;font-size:0.85rem;color:#a0b8d0;">⚠️ <em>I'd rather</em> + bare infinitive (no <strong>to</strong>) · <em>I'd prefer</em> + <strong>to</strong> + infinitive</p>
+    </div>
+
+    <h3><span class="ex-badge">4A</span> Choose the correct words to complete the sentences.</h3>
+    <ol style="font-size:0.93rem;line-height:2.3;">
+      <li>I'd <strong>prefer / rather</strong> be a journalist. &nbsp;<input class="gap gap-sm" placeholder="prefer/rather"></li>
+      <li>I <strong>would / had</strong> rather be a teacher. &nbsp;<input class="gap gap-sm" placeholder="would/had"></li>
+      <li>I'd <strong>prefer / rather</strong> to be a farmer. &nbsp;<input class="gap gap-sm" placeholder="prefer/rather"></li>
+      <li>I'd definitely <strong>be for / go for</strong> an author. &nbsp;<input class="gap" placeholder="be for/go for"></li>
+    </ol>
+    <button class="reveal-btn" onclick="show(this)">Show answers</button>
+    <div class="answer">1 rather · 2 would · 3 prefer · 4 go for</div>
+
+  </div>
+</div>
+
+<!-- ══════════ SPEAKING ══════════ -->
+<div class="phase c-spk">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">S</div>
+    <div class="ph-title">
+      <h2>Speaking — 'This or That?' Questions</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge">speaking</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <div class="key-phrases">
+      <h4>Key Phrases</h4>
+      <ul>
+        <li>I'd much rather / prefer to …</li>
+        <li>I'd prefer to …</li>
+        <li>I'd go for …</li>
+        <li>I can't really explain why.</li>
+        <li>I've always wanted to …</li>
+        <li>It just suits me more.</li>
+        <li>I wish I had that choice.</li>
+        <li>If I had to choose, I would say …</li>
+      </ul>
+    </div>
+
+    <h3><span class="ex-badge">5A</span> Look at the 'This or That?' questions. Write a full question for each one.</h3>
+    <div class="box box-teal" style="font-size:0.88rem;margin-bottom:14px;">
+      <strong>Example:</strong> Dentist or vet? → <em>Which would you rather be, a dentist or a vet?</em>
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="font-size:0.9rem;font-weight:600;color:var(--muted);margin-bottom:6px;">Student A</p>
+        <div class="speak-q speak-q-purple">🍬 Sweet or salty?</div>
+        <div class="speak-q speak-q-purple">🏕️ Hotel or campsite?</div>
+        <div class="speak-q speak-q-purple">🏊 Swimming pool or lake?</div>
+        <div class="speak-q speak-q-purple">📱 E-book or real book?</div>
+        <div class="speak-q speak-q-purple">🦸 Be able to fly or be able to disappear?</div>
+      </div>
+      <div>
+        <p style="font-size:0.9rem;font-weight:600;color:var(--muted);margin-bottom:6px;">Student B</p>
+        <div class="speak-q">🚿 Shower or bath?</div>
+        <div class="speak-q">🏠 Apartment or house?</div>
+        <div class="speak-q">🚲 E-bike or real bike?</div>
+        <div class="speak-q">👤 Alone or in a big group?</div>
+        <div class="speak-q">✈️ Travel by plane or by boat?</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:20px;"><span class="ex-badge">6</span> Ask and answer more 'This or That?' questions. Use the Key Phrases in your answers.</h3>
+    <div class="speak-q">City or country? · Cats or dogs? · Mountain or beach? · Chocolate or vanilla?</div>
+
+  </div>
+</div>
+
+<!-- ══════════ WRITING ══════════ -->
+<div class="phase c-wr">
+  <div class="phase-head" onclick="toggle(this)">
+    <div class="ph-stripe"></div><div class="ph-num">WR</div>
+    <div class="ph-title">
+      <h2>Writing — A Discussion Board Post</h2>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="pbadge" style="background:var(--amber-light);color:var(--amber);">writing</span><span class="arrow">▼</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+
+    <h3><span class="ex-badge">7A</span> Read the comments on a website. Which replies do you agree with the most?</h3>
+
+    <div style="background:var(--navy);border-radius:10px;padding:16px 20px;margin-bottom:14px;">
+      <h3 style="color:#fff;font-size:1.3rem;margin-bottom:4px;">Driver or passenger?</h3>
+      <p style="color:#a0b8d0;font-size:0.85rem;margin:0;">Which do you prefer?</p>
+    </div>
+
+    <div class="disc-board">
+      <div class="disc-post">
+        <div class="poster">User 1</div>
+        I'd much rather drive than be a passenger. I get bored when I'm a passenger, and to be honest I don't like the way most people drive. I suppose I like to be in control.
+      </div>
+      <div class="disc-post">
+        <div class="poster">User 2</div>
+        Passenger. I much prefer looking out of the window at the scenery to staring at the road ahead of me. How much nicer to relax and watch the world go by. Driving actually makes me nervous, because I don't feel free to look around.
+      </div>
+      <div class="disc-post">
+        <div class="poster">User 3</div>
+        I drive for a living — I'm a taxi driver — so I feel pretty strongly about being the one in control. Driving is a big responsibility, and people see it as a game, like they don't have to concentrate. I'm extremely uncomfortable in a car with a driver like that. So I'd always choose to be the driver.
+      </div>
+      <div class="disc-post">
+        <div class="poster">User 4</div>
+        That's easy, because I don't have a choice. I want to learn how to drive, but it's too expensive, so I'm always the passenger. If I had the choice, I'd go for being the driver, but only because it would be a nice change for me.
+      </div>
+    </div>
+
+    <h3 style="margin-top:20px;"><span class="ex-badge">7B</span> Write a 'This or That?' question of your own. Then write your answer and give reasons.</h3>
+    <div class="wordbox"><span class="chip">entertainment</span><span class="chip">food and drink</span><span class="chip">travel</span></div>
+    <textarea class="write-area" rows="3" placeholder="Your 'This or That?' question..."></textarea>
+    <textarea class="write-area" rows="6" placeholder="Your answer with reasons (use Key Phrases)..."></textarea>
+
+  </div>
+</div>
+
+</div><!-- .wrap -->
+<footer>Unit 3C–3D · Sofia · Speakout B1+</footer>
+
+<script>
+function toggle(h){ h.parentElement.classList.toggle('collapsed'); }
+function show(btn){
+  const a = btn.nextElementSibling;
+  a.classList.toggle('show');
+  btn.textContent = a.classList.contains('show') ? 'Hide answers' : btn.textContent.replace('Hide','Show');
+}
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const app = initializeApp({
+    databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+  });
+  const db = getDatabase(app);
+
+  // ID уроку — міняй для кожного файлу
+  const LESSON_ID = "sofia_lesson19";
+
+  // Зберігаємо при введенні
+ // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+
+document.querySelectorAll('input, textarea').forEach((el, i) => {
+    const key = `field_${i}`;
+
+    // Завантажуємо збережене
+    onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+  if (snap.exists()) {
+    const val = snap.val();
+    if (document.activeElement !== el) el.value = val;
+  }
+});
+    // Зберігаємо при зміні
+    el.addEventListener('input', () => {
+      set(ref(db, `${LESSON_ID}/${key}`), el.value);
+    });
+  });
+</script>
+</body>
+</html>

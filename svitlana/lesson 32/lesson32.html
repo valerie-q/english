@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 32</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red:#c8362d;--red-dk:#9e2820;--red-lt:#fdf1f0;
+      --dark:#2e2e2e;--mid:#5f5f5f;--grey:#f5f5f3;--border:#dedede;--white:#fff;
+      --green:#2a6e1a;--blue:#1a3a5c;--amber:#b06a00;--purple:#6a1a8c;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--dark);line-height:1.6;}
+
+
+
+    /* ROLE CARDS */
+    .role-card{background:#f4f4f2;border:1px solid var(--border);border-top:3px solid var(--red);border-radius:0 0 4px 4px;overflow:hidden;margin:12px 0;}
+    .role-card.b{border-top-color:var(--blue);}
+    .role-card.c{border-top-color:var(--green);}
+    .rc-head{padding:14px 18px 4px;}
+    .rc-eye{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);font-weight:700;}
+    .role-card.b .rc-eye{color:var(--blue);}
+    .role-card.c .rc-eye{color:var(--green);}
+    .rc-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--dark);margin-top:2px;}
+    .rc-sub{font-size:13px;font-weight:600;color:var(--dark);margin-top:4px;line-height:1.5;}
+    .rc-body{padding:8px 18px 18px;font-size:13px;color:var(--mid);line-height:1.7;}
+    .rc-body ul{padding-left:18px;margin:6px 0;}
+    .rc-model{color:var(--blue);font-style:italic;margin:6px 0;}
+    .rc-tbl{width:100%;border-collapse:collapse;background:#fff;margin-top:10px;font-size:13px;}
+    .rc-tbl th{background:#e4e4e1;color:var(--dark);text-align:left;padding:8px 12px;border:1px solid #c9c9c5;font-size:12px;}
+    .rc-tbl td{padding:8px 12px;border:1px solid #c9c9c5;vertical-align:top;color:var(--mid);line-height:1.6;}
+    .rc-tbl td:first-child{font-weight:600;color:var(--dark);width:110px;}
+    .rc-tbl .rc-model{display:block;margin:4px 0 0;}
+    .bubbles{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0 16px;}
+    .bubble{position:relative;background:#fff;border:1px solid var(--border);border-radius:14px;padding:8px 18px;font-size:13px;color:var(--dark);}
+    .bubble::after{content:'';position:absolute;left:22px;bottom:-7px;width:12px;height:12px;background:#fff;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transform:rotate(45deg);}
+    .bubble.r::after{left:auto;right:22px;}
+    .unit-div.u54::before{content:'5.4';}
+    .unit-div.ubw::before{content:'BW';}
+
+
+
+
+
+    .hdr{background:var(--dark);color:#fff;padding:52px 48px 44px;position:relative;overflow:hidden;}
+    .hdr::before{content:'30';position:absolute;right:36px;top:50%;transform:translateY(-50%);
+      font-family:'Playfair Display',serif;font-size:200px;font-weight:900;
+      color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;}
+    .hdr-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+    .hdr-title{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,52px);font-weight:900;line-height:1.05;}
+    .hdr-sub{font-size:15px;color:rgba(255,255,255,0.45);margin-top:6px;}
+    .hdr-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);}
+    .hdr-chip{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);}
+    .hdr-chip strong{color:#fff;}
+
+    .wrap{max-width:940px;margin:0 auto;padding:0 44px 80px;}
+
+    /* SECTION */
+    .ed{border-top:2.5px solid var(--red);margin-top:44px;}
+    .ed-hdr{display:flex;align-items:center;gap:18px;padding:14px 0 0;cursor:pointer;user-select:none;}
+    .ed-tag{background:var(--dark);color:#fff;font-family:'DM Mono',monospace;font-size:9px;
+      letter-spacing:2.5px;text-transform:uppercase;padding:7px 14px;white-space:nowrap;flex-shrink:0;}
+    .ed-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;flex:1;}
+    .ed-toggle{color:var(--mid);font-size:16px;margin-left:8px;transition:transform .3s;}
+    .ed.closed .ed-toggle{transform:rotate(-90deg);}
+    .ed-body{padding:22px 0 8px;}
+    .ed.closed .ed-body{display:none;}
+
+    /* EXERCISE */
+    .ex{margin-bottom:26px;}
+    .ex-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+    .ex-num{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:10px;
+      font-weight:700;width:22px;height:22px;border-radius:50%;display:inline-flex;
+      align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-ltr{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--red);flex-shrink:0;width:18px;}
+    .ex-instr{font-size:14px;font-weight:500;color:var(--dark);flex:1;}
+    .ex-src{font-family:'DM Mono',monospace;font-size:9px;color:var(--mid);background:var(--grey);
+      padding:3px 9px;border-radius:2px;white-space:nowrap;margin-left:auto;}
+
+    /* INPUT */
+    input[type=text]{border:none;border-bottom:1.5px solid var(--border);background:transparent;
+      font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);padding:2px 5px;outline:none;transition:border-color .2s;}
+    input[type=text]:focus{border-bottom-color:var(--red);}
+    textarea.warea{width:100%;min-height:180px;border:1.5px solid var(--border);border-radius:3px;
+      padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);
+      background:#fff;resize:vertical;outline:none;line-height:1.85;}
+    textarea.warea:focus{border-color:var(--red);}
+
+    /* LISTS */
+    ol.nl{list-style:none;padding:0;margin:8px 0;counter-reset:c;}
+    ol.nl li{display:flex;align-items:baseline;gap:10px;padding:8px 0;
+      border-bottom:1px solid var(--border);font-size:14px;color:var(--mid);counter-increment:c;}
+    ol.nl li::before{content:counter(c);font-family:'DM Mono',monospace;font-size:10px;
+      color:var(--red);font-weight:700;flex-shrink:0;width:18px;}
+    ol.nl li:last-child{border-bottom:none;}
+    ol.alpha{list-style:lower-alpha;padding-left:20px;margin:8px 0;}
+    ol.alpha li{font-size:14px;color:var(--mid);padding:7px 0;border-bottom:1px solid var(--border);}
+    ol.alpha li:last-child{border-bottom:none;}
+
+    /* REVEAL */
+    .rev-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+      background:none;border:1px solid var(--border);color:var(--mid);padding:5px 14px;
+      border-radius:2px;cursor:pointer;margin-top:10px;transition:all .2s;display:inline-block;}
+    .rev-btn:hover{border-color:var(--red);color:var(--red);}
+    .rev-body{display:none;margin-top:10px;}
+    .rev-body.open{display:block;}
+    .ans-box{background:var(--grey);border-left:3px solid var(--red);padding:12px 16px;font-size:13px;}
+    .ans-box .ak{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+    .ans-box ol,.ans-box ul{padding-left:18px;}
+    .ans-box li{padding:3px 0;color:var(--mid);}
+    .ans-box li strong{color:var(--red-dk);}
+    .ans-box p{color:var(--mid);font-size:13px;line-height:1.7;}
+
+    /* NOTE */
+    .note{background:var(--grey);border-left:3px solid var(--border);padding:10px 14px;
+      font-size:13px;color:var(--mid);margin:10px 0;line-height:1.6;}
+    .note.red{border-left-color:var(--red);}
+    .note.blue{border-left-color:var(--blue);}
+    .note.amber{border-left-color:var(--amber);}
+
+    /* WORD BOX */
+    .wbox{border:1.5px solid var(--border);border-radius:3px;padding:10px 14px;margin:10px 0;
+      display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--grey);}
+    .wbox-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--mid);width:100%;margin-bottom:4px;}
+    .chip{background:var(--dark);color:#fff;font-size:12px;font-weight:500;padding:4px 11px;border-radius:2px;white-space:nowrap;}
+
+    /* GRAMMAR BOX */
+    .g-box{border:1px solid var(--border);border-top:2px solid var(--red);border-radius:0 0 3px 3px;overflow:hidden;margin:14px 0;}
+    .g-head{background:var(--dark);color:#fff;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;}
+    .g-head span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+    .g-head .g-ref{font-size:9px;opacity:.5;font-weight:400;}
+    .g-body{background:#fff;padding:16px;}
+    .g-row{display:flex;gap:10px;padding:5px 0;border-bottom:1px dotted var(--border);font-size:14px;align-items:baseline;}
+    .g-row:last-child{border-bottom:none;}
+    .g-plus{color:var(--green);font-weight:700;flex-shrink:0;width:14px;}
+    .g-minus{color:var(--red-dk);font-weight:700;flex-shrink:0;width:14px;}
+    .g-q{color:var(--blue);font-weight:700;flex-shrink:0;width:14px;}
+    .g-ex{font-style:italic;color:var(--blue);}
+    .g-ex strong{font-weight:700;}
+    .g-note{font-size:13px;color:var(--mid);line-height:1.65;margin:6px 0;}
+
+    /* GRAMMAR TABLES */
+    .gram-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0;}
+    .gram-tbl th{background:var(--dark);color:#fff;padding:7px 12px;text-align:left;font-size:11px;}
+    .gram-tbl td{padding:7px 12px;border:1px solid var(--border);color:var(--mid);}
+    .gram-tbl td.subj{font-weight:600;color:var(--dark);}
+    .gram-tbl td.aux{color:var(--red-dk);font-weight:700;}
+    .gram-tbl td.gt{color:var(--blue);font-weight:700;}
+    .gram-tbl td.verb{color:var(--green);font-style:italic;font-weight:600;}
+    .gram-tbl-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0;}
+
+    /* MATCH TABLE */
+    .match-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0;}
+    .match-tbl th{background:var(--dark);color:#fff;padding:8px 14px;text-align:left;font-size:11px;}
+    .match-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--mid);}
+    .match-tbl tr:last-child td{border-bottom:none;}
+    .match-tbl tr:hover td{background:var(--grey);}
+    .match-tbl .qn{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);font-weight:700;width:28px;}
+    .match-tbl .ans-col{width:70px;text-align:center;}
+
+    /* IMAGE PLACEHOLDER */
+    .img-ph{border:2px dashed var(--border);border-radius:3px;background:var(--grey);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      color:var(--mid);text-align:center;padding:20px;}
+    .img-ph .ph-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-top:6px;}
+
+    /* AUDIO PLACEHOLDER */
+    .audio-ph{background:var(--dark);padding:14px 18px;margin:12px 0;display:flex;align-items:center;gap:14px;}
+    .audio-ph .ap-icon{font-size:20px;}
+    .audio-ph .ap-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+    .audio-ph .ap-title{font-size:13px;color:#fff;font-weight:600;}
+
+    /* VIDEO PLACEHOLDER */
+    .vid-ph{position:relative;padding-bottom:56.25%;border-radius:3px;overflow:hidden;background:var(--dark);margin:14px 0;}
+    .vid-ph-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);}
+    .vid-ph-inner .vi-icon{font-size:36px;margin-bottom:8px;}
+    .vid-ph-inner .vi-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;}
+
+    /* TRAVEL CARD (yellow) */
+    .travel-card{background:#fff9e0;border:1px solid #d4bc3a;border-radius:3px;padding:16px;font-size:14px;color:var(--dark);line-height:1.9;}
+    .travel-card .tc-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:#a59837;margin-bottom:10px;}
+
+    /* EMAIL CARDS */
+    .email-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;font-size:14px;margin:10px 0;}
+    .ec-hdr{background:var(--grey);padding:8px 14px;border-bottom:1px solid var(--border);font-size:12px;color:var(--mid);}
+    .ec-body{padding:14px 16px;color:var(--mid);line-height:1.85;}
+    .ec-body p{margin-bottom:8px;}
+    .ec-body p:last-child{margin-bottom:0;}
+    .ec-body .gt{font-weight:700;color:var(--dark);}
+
+    /* REPLY (blue-grey card) */
+    .reply-card{background:#f0f4f8;border:1px solid #b0c4de;border-radius:10px;padding:14px 16px;font-size:14px;color:var(--dark);line-height:1.85;margin:10px 0;max-width:420px;margin-left:auto;}
+
+    /* CHAT BUBBLES */
+    .chat-pair{margin:10px 0;}
+    .chat-from{font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+    .chat-bubble{border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.7;max-width:480px;}
+    .chat-karl .chat-from{color:var(--blue);}
+    .chat-karl .chat-bubble{background:#e8f0f8;color:var(--dark);border-bottom-left-radius:3px;}
+    .chat-alex .chat-from{color:var(--green);text-align:right;}
+    .chat-alex .chat-bubble{background:#e8f5e3;color:var(--dark);margin-left:auto;border-bottom-right-radius:3px;}
+
+    /* TABS */
+    .tabs{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin:14px 0;}
+    .tab-bar{display:flex;background:var(--grey);border-bottom:1px solid var(--border);}
+    .t-btn{flex:1;padding:12px;border:none;background:transparent;cursor:pointer;
+      font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--mid);
+      border-bottom:2.5px solid transparent;transition:all .2s;}
+    .t-btn:hover{background:rgba(0,0,0,0.03);}
+    .t-btn.on{color:var(--dark);background:#fff;border-bottom-color:var(--red);}
+    .t-body{display:none;padding:20px;}
+    .t-body.on{display:block;}
+
+    /* CALENDAR TABLE */
+    .cal-tbl{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0;}
+    .cal-tbl th{background:var(--dark);color:#fff;padding:7px 10px;text-align:center;font-size:10px;letter-spacing:0.5px;}
+    .cal-tbl th:first-child{text-align:left;width:80px;}
+    .cal-tbl td{padding:8px 10px;border:1px solid var(--border);color:var(--mid);vertical-align:top;}
+    .cal-tbl td:first-child{font-weight:700;color:var(--dark);background:var(--grey);font-size:10px;text-transform:uppercase;letter-spacing:0.5px;}
+    .cal-tbl .cancelled{color:var(--red-dk);text-decoration:line-through;font-style:italic;}
+    .cal-tbl .highlight{color:var(--blue);font-weight:600;}
+    .cal-tbl .note-cell{font-size:11px;font-style:italic;color:var(--mid);}
+
+    /* CHECKBOX GRID */
+    .cbx-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 24px;margin:12px 0;}
+    .cbx-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);cursor:pointer;padding:4px 0;}
+    .cbx-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--red);flex-shrink:0;}
+
+    /* DIARY TABLE */
+    .diary-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0;}
+    .diary-tbl th{background:var(--dark);color:#fff;padding:8px 12px;text-align:center;font-size:11px;}
+    .diary-tbl th:first-child{text-align:left;width:90px;}
+    .diary-tbl td{padding:10px 12px;border:1px solid var(--border);color:var(--mid);vertical-align:top;min-height:48px;}
+    .diary-tbl td:first-child{font-weight:600;color:var(--dark);background:var(--grey);font-size:12px;}
+    .diary-tbl .given{color:var(--blue);font-style:italic;font-size:12px;}
+    .diary-tbl input[type=text]{width:100%;}
+
+    /* UNIT DIVIDER */
+    .unit-div{background:var(--dark);color:#fff;padding:24px 44px;margin:56px -44px 0;position:relative;overflow:hidden;}
+    .unit-div::before{content:'5.1';position:absolute;right:32px;top:50%;transform:translateY(-50%);
+      font-family:'Playfair Display',serif;font-size:120px;font-weight:900;color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;}
+    .ud-eye{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+    .ud-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;}
+    .ud-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;}
+
+    /* REVISION SCENARIOS */
+    .scenario-grid{display:grid;gap:10px;margin:14px 0;}
+    .scenario-card{border:1px solid var(--border);border-radius:3px;padding:12px 16px;font-size:14px;}
+    .sc-n{font-family:'DM Mono',monospace;font-size:10px;color:var(--red);font-weight:700;margin-bottom:5px;}
+    .sc-problem{color:var(--mid);margin-bottom:8px;}
+    .sc-input{display:flex;gap:12px;align-items:baseline;color:var(--mid);font-size:13px;}
+    .sc-lbl{font-weight:600;color:var(--dark);flex-shrink:0;width:120px;}
+
+    /* WARM-UP SCENARIOS */
+    .wu-scenarios{display:grid;gap:12px;margin:14px 0;}
+    .wu-s{border:1px solid var(--border);border-radius:3px;padding:14px 16px;}
+    .ws-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--red);font-weight:700;margin-bottom:6px;}
+    .ws-scene{font-size:14px;color:var(--dark);font-weight:500;margin-bottom:10px;line-height:1.5;}
+    .ws-row{display:flex;gap:10px;align-items:baseline;margin-top:6px;}
+    .ws-lbl{font-size:12px;color:var(--mid);font-weight:600;flex-shrink:0;width:180px;}
+
+    /* TWO COL */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;}
+
+    @media(max-width:700px){
+      .wrap{padding:0 16px 60px;}.hdr{padding:32px 20px;}.hdr::before{display:none;}
+      .gram-tbl-wrap,.two-col,.cbx-grid{grid-template-columns:1fr;}
+      .unit-div{margin:40px -16px 0;padding:20px 16px;}
+    }
+    .unit-div.u5wb::before{content:'WB5';}
+    .unit-div.u61::before{content:'6.1';}
+  </style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-eye">Unit 5 Revision + Unit 6</div>
+  <div class="hdr-title">Lesson 32<br><em style="font-style:italic;color:rgba(255,255,255,0.7);">6.1 — Future Products</em></div>
+</div>
+
+<div class="wrap">
+
+
+
+
+
+
+<!-- ══ READING — 6.1 ══ -->
+<div class="ed" id="s-rd61">
+  <div class="ed-hdr" onclick="toggle('s-rd61')">
+    <div class="ed-tag">Reading</div>
+    <div class="ed-title">Products of the Future</div>
+    <span class="ed-toggle">▾</span>
+  </div>
+  <div class="ed-body">
+
+    <!-- Ex 4A -->
+    <div class="ex">
+      <div class="ex-head">
+        <span class="ex-num">4</span>
+        <span class="ex-ltr">A</span>
+        <span class="ex-instr">Read the article about products of the future. Match the pictures (A–C) with the correct part of the article (1–3).</span>
+        <span class="ex-src">BP p.58</span>
+      </div>
+
+      <!-- Pictures A–C -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:14px;">
+        <div style="position:relative;">
+          <span style="position:absolute;top:6px;left:6px;background:var(--red);color:#fff;font-weight:700;font-size:13px;padding:2px 9px;z-index:1;">A</span>
+          <div class="img-ph" style="padding:0;margin:0;overflow:hidden;">
+            <img src="https://media.istockphoto.com/id/947127956/ru/фото/женщина-наслаждается-своим-досугом-в-то-время-как-робот-делает-работу-в-семье-aai-пылесосить-пол.jpg?s=1024x1024&w=is&k=20&c=G-bKmhCP0pl4Tav9KTxBh7n60_dmFDDdKyJcbUpY__I=" alt="Picture A — robot vacuum" style="width:100%;height:140px;object-fit:cover;display:block;">
+          </div>
+        </div>
+        <div style="position:relative;">
+          <span style="position:absolute;top:6px;left:6px;background:var(--red);color:#fff;font-weight:700;font-size:13px;padding:2px 9px;z-index:1;">B</span>
+          <div class="img-ph" style="padding:0;margin:0;overflow:hidden;">
+            <img src="https://i.iplsc.com/0009MOWPOF5GV1JL-C323-F4.webp" alt="Picture B — paying by phone" style="width:100%;height:140px;object-fit:cover;display:block;">
+          </div>
+        </div>
+        <div style="position:relative;">
+          <span style="position:absolute;top:6px;left:6px;background:var(--red);color:#fff;font-weight:700;font-size:13px;padding:2px 9px;z-index:1;">C</span>
+          <div class="img-ph" style="padding:0;margin:0;overflow:hidden;">
+            <img src="https://cloudfront-eu-central-1.images.arcpublishing.com/irishtimes/EJRCDWAOX4JL7NZTNPPOS6RDEE.jpg" alt="Picture C — plastic water bottle" style="width:100%;height:140px;object-fit:cover;display:block;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Article -->
+      <div class="email-card">
+        <div class="ec-hdr" style="background:var(--red-lt);">
+          <strong style="font-size:16px;color:var(--red);">Products of the future</strong><br>
+          <span style="font-size:13px;">Technology and the environment are changing the products we use every day. We talked to some experts about the products of the future.</span>
+        </div>
+        <div class="ec-body">
+
+          <div style="display:flex;gap:14px;align-items:flex-start;padding-bottom:12px;border-bottom:1px dashed var(--border);">
+            <div class="img-ph" style="padding:0;margin:0;width:70px;height:70px;flex-shrink:0;border-radius:50%;overflow:hidden;">
+              <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTiTZyBf52et54vK3YOBBUIyf5tPCzi138wmC0mlcEC-BzhzAAL" alt="Paul Kumar" style="width:100%;height:100%;object-fit:cover;display:block;">
+            </div>
+            <div>
+              <div><strong>1</strong> <input type="text" style="width:40px;text-align:center;"></div>
+              <div style="color:var(--red);font-weight:600;">Paul Kumar, Product Designer</div>
+              <p>Everyone <strong>will use</strong> their mobiles to pay for things. I <strong>don't think</strong> we <strong>will need</strong> cash and bank cards soon. But we <strong>will need</strong> better online security.</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px dashed var(--border);">
+            <div class="img-ph" style="padding:0;margin:0;width:70px;height:70px;flex-shrink:0;border-radius:50%;overflow:hidden;">
+              <img src="https://www.r3-0.org/wp-content/uploads/2021/07/Jef-Teugels-2021-BR-BG-2-292x300.jpeg" alt="Andrew Winter" style="width:100%;height:100%;object-fit:cover;display:block;">
+            </div>
+            <div>
+              <div><strong>2</strong> <input type="text" style="width:40px;text-align:center;"></div>
+              <div style="color:var(--red);font-weight:600;">Andrew Winter, Green Business Consultant</div>
+              <p>Consumers want to help the environment. I <strong>think</strong> many products we buy <strong>will change</strong>. One day we <strong>might not see</strong> plastic bags, packaging and water bottles in supermarkets. I <strong>think there will be</strong> more electric cars soon. And companies <strong>will use</strong> electric trucks and drones to deliver our products.</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:14px;align-items:flex-start;padding-top:12px;">
+            <div class="img-ph" style="padding:0;margin:0;width:70px;height:70px;flex-shrink:0;border-radius:50%;overflow:hidden;">
+              <img src="https://media.licdn.com/dms/image/v2/D4E03AQEmgTHLtyhMCw/profile-displayphoto-shrink_200_200/B4EZSjRfOtG0Ag-/0/1737906058967?e=2147483647&v=beta&t=KlGN-nv58ZqwyLTubuhq7r2mibBhSmDVDWta40kGaHI" alt="Mia Schröder" style="width:100%;height:100%;object-fit:cover;display:block;">
+            </div>
+            <div>
+              <div><strong>3</strong> <input type="text" style="width:40px;text-align:center;"></div>
+              <div style="color:var(--red);font-weight:600;">Mia Schröder, Digital Engineer</div>
+              <p>Smart machines <strong>will have</strong> a big impact on our lives. Today we use LED lights and soon we <strong>might use</strong> technology to save energy in our homes. I <strong>think</strong> we <strong>will buy</strong> more robots for our homes. Robots <strong>will do</strong> more jobs in factories as well. Many jobs we do today <strong>won't exist</strong> in future.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <button class="rev-btn" onclick="reveal('u61-4a')">show answers ▾</button>
+      <div class="rev-body" id="u61-4a">
+        <div class="ans-box"><div class="ak">Answers</div>
+          <p>1–<strong>B</strong> · 2–<strong>C</strong> · 3–<strong>A</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ex 4B -->
+    <div class="ex">
+      <div class="ex-head">
+        <span class="ex-ltr">B</span>
+        <span class="ex-instr">Which jobs do you think will / might disappear in the future? Why?</span>
+      </div>
+      <textarea class="warea" style="min-height:80px;" placeholder="I think… will disappear because… / … might disappear…"></textarea>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ GRAMMAR — 6.1 ══ -->
+<div class="ed" id="s-gr61">
+  <div class="ed-hdr" onclick="toggle('s-gr61')">
+    <div class="ed-tag">Grammar</div>
+    <div class="ed-title">Speculating about the Future: will, won't, might</div>
+    <span class="ed-toggle">▾</span>
+  </div>
+  <div class="ed-body">
+
+    <!-- Communicative grammar box -->
+    <div class="g-box">
+      <div class="g-head">
+        <span>Speculating about the future</span>
+        <span class="g-ref">→ Grammar reference p.109</span>
+      </div>
+      <div class="g-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px 24px;">
+        <div>
+          <p class="g-note" style="color:var(--green);font-weight:600;">✅ Certain</p>
+          <div class="g-row"><span class="g-ex">Everyone <strong>will use</strong> their mobiles to pay for things.</span></div>
+          <div class="g-row"><span class="g-ex">I <strong>think</strong> we <strong>will buy</strong> more robots for our homes.</span></div>
+          <div class="g-row"><span class="g-ex">I <strong>think there will be</strong> more electric cars.</span></div>
+        </div>
+        <div>
+          <p class="g-note" style="color:var(--red-dk);font-weight:600;">❌ Impossible</p>
+          <div class="g-row"><span class="g-ex">I <strong>don't think</strong> we <strong>will need</strong> cash.</span></div>
+          <div class="g-row"><span class="g-ex">Many jobs we do today <strong>won't exist</strong> in future.</span></div>
+          <p class="g-note" style="color:var(--blue);font-weight:600;margin-top:10px;">🤔 Possible</p>
+          <div class="g-row"><span class="g-ex">We <strong>might use</strong> technology to save energy.</span></div>
+          <div class="g-row"><span class="g-ex">We <strong>might not see</strong> plastic bags in supermarkets.</span></div>
+        </div>
+      </div>
+    </div>
+        <!-- Grammar Reference 6.1 -->
+        <div style="border-top:2px dashed var(--border);margin:24px 0 16px;padding-top:4px;">
+          <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Grammar Reference — p.109</p>
+        </div>
+    
+        <div class="g-box">
+          <div class="g-head"><span>6.1 — Speculating about the future</span></div>
+          <div class="g-body">
+            <p class="g-note">We use <strong>will / won't / might / might not</strong> to speculate about the future.<br>
+              <span class="g-ex">There will be more electric cars soon.</span><br>
+              <span class="g-ex">Robots might help with everyday tasks.</span><br>
+              <span class="g-ex">We won't need more cash.</span></p>
+            <p class="g-note">We use <strong>will</strong> when we are <strong>certain</strong> about something happening in future; <strong>won't</strong> when we think something is <strong>impossible</strong> in future; and <strong>might / might not</strong> when we think something is <strong>possible</strong> in future, but we don't know for certain.</p>
+    
+            <!-- Scale -->
+            <div style="max-width:520px;margin:16px 0 18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                <span style="border:2px solid var(--green);color:var(--green);font-weight:700;padding:3px 12px;background:#fff;">will</span>
+                <span style="display:flex;gap:4px;">
+                  <span style="border:2px solid var(--blue);color:var(--blue);font-weight:700;padding:3px 12px;background:#fff;">might</span>
+                  <span style="border:2px solid var(--blue);color:var(--blue);font-weight:700;padding:3px 12px;background:#fff;">might not</span>
+                </span>
+                <span style="border:2px solid var(--red);color:var(--red);font-weight:700;padding:3px 12px;background:#fff;">won't</span>
+              </div>
+              <div style="position:relative;height:2px;background:var(--red);margin:12px 6px;">
+                <span style="position:absolute;left:-6px;top:-5px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:8px solid var(--red);"></span>
+                <span style="position:absolute;right:-6px;top:-5px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:8px solid var(--red);"></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--mid);font-family:'DM Mono',monospace;letter-spacing:1px;">
+                <span>certain</span><span>possible</span><span>impossible</span>
+              </div>
+            </div>
+    
+            <p class="g-note">We can use <strong>I think</strong> and <strong>I don't think</strong> at the start of a sentence to speculate about the future. It is more natural to say <em>I don't think we will…</em> than <em>I think we won't…</em><br>
+              <span class="g-ex">I <strong>think</strong> there <strong>will be</strong> more electric cars soon.</span><br>
+              <span class="g-ex">I <strong>don't think</strong> we <strong>will</strong> need cash.</span></p>
+    
+            <div class="gram-tbl-wrap">
+              <div>
+                <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;">will / won't</p>
+                <table class="gram-tbl">
+                  <thead><tr><th></th><th>subject</th><th>will / won't</th><th>infinitive</th></tr></thead>
+                  <tbody>
+                    <tr><td rowspan="2"><strong>+</strong></td><td class="subj">I/You/He/She/It/We/They</td><td class="aux" rowspan="2">will</td><td class="verb"><strong>use</strong> more robots.</td></tr>
+                    <tr><td class="subj">There</td><td class="verb"><strong>be</strong> more electric cars.</td></tr>
+                    <tr><td rowspan="2"><strong>−</strong></td><td class="subj">I/You/He/She/It/We/They</td><td class="aux" rowspan="2">won't /<br>will not</td><td class="verb"><strong>want</strong> these jobs.</td></tr>
+                    <tr><td class="subj">There</td><td class="verb"><strong>be</strong> many shops.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;">might / might not</p>
+                <table class="gram-tbl">
+                  <thead><tr><th></th><th>subject</th><th>might / might not</th><th>verb</th></tr></thead>
+                  <tbody>
+                    <tr><td rowspan="2"><strong>+</strong></td><td class="subj">I/You/He/She/It/We/They</td><td class="aux" rowspan="2">might</td><td class="verb"><strong>use</strong> more robots.</td></tr>
+                    <tr><td class="subj">There</td><td class="verb"><strong>be</strong> more electric cars.</td></tr>
+                    <tr><td rowspan="2"><strong>−</strong></td><td class="subj">I/You/He/She/It/We/They</td><td class="aux" rowspan="2">might not</td><td class="verb"><strong>do</strong> these jobs.</td></tr>
+                    <tr><td class="subj">There</td><td class="verb"><strong>be</strong> many shops.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Ref Ex 1 -->
+        <div class="ex">
+          <div class="ex-head">
+            <span class="ex-num">1</span>
+            <span class="ex-instr">Put the words in the correct order to make sentences.</span>
+            <span class="ex-src">p.109</span>
+          </div>
+          <ol class="nl">
+            <li><em>might / in / Robots / offices / work</em><br><input type="text" style="width:100%;max-width:520px;margin-top:5px;"></li>
+            <li><em>think / might / many / disappear / I / shops</em><br><input type="text" style="width:100%;max-width:520px;margin-top:5px;"></li>
+            <li><em>exist / in / the future / jobs / won't / Many</em><br><input type="text" style="width:100%;max-width:520px;margin-top:5px;"></li>
+            <li><em>people / from / think / most / will / home / I / work</em><br><input type="text" style="width:100%;max-width:520px;margin-top:5px;"></li>
+            <li><em>might / be / many / There / drivers / not</em><br><input type="text" style="width:100%;max-width:520px;margin-top:5px;"></li>
+            <li><em>think / petrol / I / there / any / be / will / don't</em><br><input type="text" style="width:100%;max-width:520px;margin-top:5px;"></li>
+            <li><em>I / be / there / more / think / electric vehicles / will</em><br><input type="text" style="width:100%;max-width:520px;margin-top:5px;"></li>
+          </ol>
+          <button class="rev-btn" onclick="reveal('u61-ref1')">show answers ▾</button>
+          <div class="rev-body" id="u61-ref1">
+            <div class="ans-box"><div class="ak">Answers</div>
+              <ol>
+                <li><strong>Robots might work in offices.</strong></li>
+                <li><strong>I think many shops might disappear.</strong></li>
+                <li><strong>Many jobs won't exist in the future.</strong></li>
+                <li><strong>I think most people will work from home.</strong></li>
+                <li><strong>There might not be many drivers.</strong></li>
+                <li><strong>I don't think there will be any petrol.</strong></li>
+                <li><strong>I think there will be more electric vehicles.</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+    <!-- Ex 5A -->
+    <div class="ex" style="margin-top:20px;">
+      <div class="ex-head">
+        <span class="ex-num">5</span>
+        <span class="ex-ltr">A</span>
+        <span class="ex-instr">Use <em>will/'ll, won't, might</em> or <em>might not</em> to complete the sentences with your ideas.</span>
+        <span class="ex-src">BP p.59</span>
+      </div>
+      <div class="note blue" style="font-weight:600;margin-bottom:10px;">In the next five years …</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;">
+        <div>
+          <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">My company</p>
+          <ol class="nl">
+            <li>There <input type="text" style="width:90px;"> more competition. (be)</li>
+            <li>There <input type="text" style="width:90px;"> more staff. (be)</li>
+            <li>We <input type="text" style="width:90px;"> to a new location. (move)</li>
+          </ol>
+        </div>
+        <div>
+          <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">My job</p>
+          <ol class="nl" start="4">
+            <li>I <input type="text" style="width:90px;"> the same job. (have)</li>
+            <li>A robot <input type="text" style="width:90px;"> my job. (do)</li>
+            <li>I <input type="text" style="width:90px;"> from home. (work)</li>
+          </ol>
+        </div>
+        <div>
+          <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">Products / services I use / buy</p>
+          <ol class="nl" start="7">
+            <li>I <input type="text" style="width:90px;"> an electric car. (buy)</li>
+            <li>I <input type="text" style="width:90px;"> smart technology at home. (use)</li>
+            <li>I <input type="text" style="width:90px;"> more things. (recycle)</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ex 5B -->
+    <div class="ex">
+      <div class="ex-head">
+        <span class="ex-ltr">B</span>
+        <span class="ex-instr">Compare your ideas with me.</span>
+      </div>
+      <div class="chat-pair chat-karl"><div class="chat-from">A</div><div class="chat-bubble">There will be more competition in our industry.</div></div>
+      <div class="chat-pair chat-alex"><div class="chat-from">B</div><div class="chat-bubble">I don't think there will.</div></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ VIDEO — 6.1 ══ -->
+<div class="ed" id="s-vid61">
+  <div class="ed-hdr" onclick="toggle('s-vid61')">
+    <div class="ed-tag">Video</div>
+    <div class="ed-title">Products of the Future — 6.1.1</div>
+    <span class="ed-toggle">▾</span>
+  </div>
+  <div class="ed-body">
+
+    <!-- Ex 6A -->
+    <div class="ex">
+      <div class="ex-head">
+        <span class="ex-num">6</span>
+        <span class="ex-ltr">A</span>
+        <span class="ex-instr">Watch the video. Which speaker (Leona, Steve, Kate or Lisa) talks about these things? Sometimes more than one answer is possible.</span>
+        <span class="ex-src">BP p.59</span>
+      </div>
+
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Iog_qJoB8jI?si=I6BfLYye1QF5U2Ws" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+      <div class="two-col">
+        <table class="match-tbl">
+          <tbody>
+            <tr><td>Apps</td><td class="ans-col"><input type="text" style="width:110px;"></td></tr>
+            <tr><td>Electric</td><td class="ans-col"><input type="text" style="width:110px;"></td></tr>
+            <tr><td>Mobile phones</td><td class="ans-col"><input type="text" style="width:110px;"></td></tr>
+            <tr><td>Packaging</td><td class="ans-col"><em style="color:var(--blue);">Leona</em></td></tr>
+          </tbody>
+        </table>
+        <table class="match-tbl">
+          <tbody>
+            <tr><td>Pollution / Waste</td><td class="ans-col"><input type="text" style="width:110px;"></td></tr>
+            <tr><td>Renting / Sharing</td><td class="ans-col"><input type="text" style="width:110px;"></td></tr>
+            <tr><td>Robots</td><td class="ans-col"><input type="text" style="width:110px;"></td></tr>
+            <tr><td>Smart technology</td><td class="ans-col"><input type="text" style="width:110px;"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="rev-btn" onclick="reveal('u61-6a')">show answers ▾</button>
+      <div class="rev-body" id="u61-6a">
+        <div class="ans-box"><div class="ak">Answers</div>
+          <!-- ВПИШИ ВІДПОВІДІ -->
+          <p>Apps: … · Electric: … · Mobile phones: … · Packaging: <strong>Leona</strong> · Pollution/Waste: … · Renting/Sharing: … · Robots: … · Smart technology: …</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ex 6B -->
+    <div class="ex">
+      <div class="ex-head">
+        <span class="ex-ltr">B</span>
+        <span class="ex-instr">Complete the sentences with a word from the box. Watch the video again and check.</span>
+      </div>
+      <div class="wbox">
+        <div class="wbox-lbl">Words</div>
+        <span class="chip">cars</span><span class="chip">cash</span><span class="chip">colour</span><span class="chip">energy</span>
+        <span class="chip">electric</span><span class="chip">food</span><span class="chip">packaging</span><span class="chip">products</span>
+        <span class="chip">recycled</span><span class="chip">rent</span><span class="chip">room</span><span class="chip">share</span>
+      </div>
+      <div class="email-card">
+        <div class="ec-body" style="line-height:2.3;">
+          <p><strong>Speaker 1:</strong> <input type="text" style="width:90px;"><br>
+            There will be more online shopping. People will still want to touch and feel <sup>1</sup><input type="text" style="width:90px;"> . <sup>2</sup><input type="text" style="width:90px;"> will become less popular. There will be less <sup>3</sup><input type="text" style="width:90px;"> on products.</p>
+          <p><strong>Speaker 2:</strong> <input type="text" style="width:90px;"><br>
+            In the next five to ten years <sup>4</sup><input type="text" style="width:90px;"> cars and motorbikes will become very popular. Many people will choose to <sup>5</sup><input type="text" style="width:90px;"> cars. There might be driverless <sup>6</sup><input type="text" style="width:90px;"> in five to ten years.</p>
+          <p><strong>Speaker 3:</strong> <input type="text" style="width:90px;"><br>
+            Clothes will change <sup>7</sup><input type="text" style="width:90px;"> and size in the future. Manufacturers will use <sup>8</sup><input type="text" style="width:90px;"> materials. People won't buy many clothes. We might <sup>9</sup><input type="text" style="width:90px;"> clothes instead!</p>
+          <p><strong>Speaker 4:</strong> <input type="text" style="width:90px;"><br>
+            Hotel guests will open the door to their <sup>10</sup><input type="text" style="width:90px;"> with an app. Robots might deliver <sup>11</sup><input type="text" style="width:90px;"> to their rooms. Smart technology will also help hotels to save <sup>12</sup><input type="text" style="width:90px;"> .</p>
+        </div>
+      </div>
+      <button class="rev-btn" onclick="reveal('u61-6b')">show answers ▾</button>
+      <div class="rev-body" id="u61-6b">
+        <div class="ans-box"><div class="ak">Answers</div>
+          <!-- ПЕРЕВІР 5 і 9 (share / rent) З ВІДЕО -->
+          <p>1.<strong>products</strong> · 2.<strong>Cash</strong> · 3.<strong>packaging</strong> · 4.<strong>electric</strong> · 5.<strong>share</strong> · 6.<strong>cars</strong> · 7.<strong>colour</strong> · 8.<strong>recycled</strong> · 9.<strong>rent</strong> · 10.<strong>room</strong> · 11.<strong>food</strong> · 12.<strong>energy</strong></p>
+          <!-- ВПИШИ ІМЕНА СПІКЕРІВ (Speaker 1 = Leona) -->
+          <p>Speaker 1: <strong>Leona</strong> · Speaker 2: … · Speaker 3: … · Speaker 4: …</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ex 6C -->
+    <div class="ex">
+      <div class="ex-head">
+        <span class="ex-ltr">C</span>
+        <span class="ex-instr">Write the name of each speaker 1–4 in Exercise 6B. Do you agree with their ideas?</span>
+      </div>
+      <textarea class="warea" style="min-height:70px;" placeholder="I agree with… because… / I don't think…"></textarea>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ TASK — 6.1 ══ -->
+<div class="ed" id="s-task61">
+  <div class="ed-hdr" onclick="toggle('s-task61')">
+    <div class="ed-tag">Task</div>
+    <div class="ed-title">The Future of Products, Technology and the Environment</div>
+    <span class="ed-toggle">▾</span>
+  </div>
+  <div class="ed-body">
+
+    <!-- Ex 7A -->
+    <div class="ex">
+      <div class="ex-head">
+        <span class="ex-num">7</span>
+        <span class="ex-ltr">A</span>
+        <span class="ex-instr">Complete each sentence about the future of products, technology and the environment. Then write four sentences of your own using <em>will, won't, might</em> or <em>might not</em>.</span>
+        <span class="ex-src">BP p.59</span>
+      </div>
+      <div style="display:grid;gap:8px;font-size:14px;color:var(--mid);">
+        <div>I think there will <input type="text" style="width:100%;max-width:400px;"> .</div>
+        <div>I don't think there will <input type="text" style="width:100%;max-width:380px;"> .</div>
+        <div>There might / might not <input type="text" style="width:100%;max-width:390px;"> .</div>
+        <div>People will / won't <input type="text" style="width:100%;max-width:420px;"> .</div>
+      </div>
+      <p style="font-size:13px;color:var(--mid);margin:14px 0 6px;">My own sentences:</p>
+      <ol class="nl">
+        <li><input type="text" style="width:100%;max-width:520px;"></li>
+        <li><input type="text" style="width:100%;max-width:520px;"></li>
+        <li><input type="text" style="width:100%;max-width:520px;"></li>
+        <li><input type="text" style="width:100%;max-width:520px;"></li>
+      </ol>
+    </div>
+
+    <!-- Ex 7B -->
+    <div class="ex">
+      <div class="ex-head">
+        <span class="ex-ltr">B</span>
+        <span class="ex-instr">Discuss your ideas about the future with me.</span>
+      </div>
+      <div class="note red" style="font-size:13px;">
+        <em>I think… · I don't think… · I agree. · You're right, but… · Really? I think it might…</em>
+      </div>
+    </div>
+
+  </div>
+</div>
+  
+  </div><!-- /wrap -->
+  
+  <script>
+  function toggle(id){
+    const el=document.getElementById(id);
+    el.classList.toggle('closed');
+    el.querySelector('.ed-toggle').textContent=el.classList.contains('closed')?'▸':'▾';
+  }
+  function reveal(id){
+    const el=document.getElementById(id);
+    el.classList.toggle('open');
+    const btn=el.previousElementSibling;
+    const open=el.classList.contains('open');
+    btn.textContent=open
+      ?btn.textContent.replace('show','hide').replace('▾','▴')
+      :btn.textContent.replace('hide','show').replace('▴','▾');
+  }
+  function tab(btn,group,id){
+    const wrapper=btn.closest('.tabs');
+    wrapper.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('on'));
+    wrapper.querySelectorAll('.t-body').forEach(c=>c.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById(group+'-'+id).classList.add('on');
+  }
+  </script>
+  <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    
+      const app = initializeApp({
+        databaseURL: "https://english-951-default-rtdb.europe-west1.firebasedatabase.app"
+      });
+      const db = getDatabase(app);
+    
+      // ID уроку — міняй для кожного файлу
+      const LESSON_ID = "svitlana_lesson32";
+    
+      // Зберігаємо при введенні
+     // Спочатку розкриваємо всі секції, потім ініціалізуємо поля
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('collapsed'));
+  
+  document.querySelectorAll('input, textarea').forEach((el, i) => {
+      const key = `field_${i}`;
+    
+        // Завантажуємо збережене
+        onValue(ref(db, `${LESSON_ID}/${key}`), snap => {
+    if (snap.exists()) {
+      const val = snap.val();
+      if (document.activeElement !== el) el.value = val;
+    }
+  });
+      // Зберігаємо при зміні
+      el.addEventListener('input', () => {
+        set(ref(db, `${LESSON_ID}/${key}`), el.value);
+      });
+    });
+  </script>
+
+</body>
+</html>  
